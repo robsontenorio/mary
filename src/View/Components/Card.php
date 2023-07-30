@@ -36,7 +36,7 @@ class Card extends Component
                                 <div class="grid grid-flow-col">
                                     <div>
                                         @if($title)
-                                            <h3>{{ $title }}</h3>
+                                            <div class="text-2xl font-bold">{{ $title }}</div>
                                         @endif
                                         @if($subtitle)
                                             <div class="text-gray-500 text-sm mt-1">{{ $subtitle }}</div>
