@@ -1,6 +1,6 @@
 # Mary
 
-:warning: Work in progress  
+:warning: **Work in progress**
 
 Blade components for Livewire 3 based on Tailwind + Daisy UI.
 
