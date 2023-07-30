@@ -118,9 +118,3 @@ composer require robsontenorio/mary
 ```bash
 yarn dev
 ```
- 
-
-## Credits
-
-- [Robson Tenório][link-author]
-- [All Contributors][link-contributors]
