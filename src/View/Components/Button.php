@@ -18,9 +18,9 @@ class Button extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <button wire:key="{{ $uuid }}" {{ $attributes }} {{ $attributes->class(['btn capitalize']) }}>
+                <button wire:key="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['btn capitalize']) }}>
                     @if($icon)
-                        @svg($icon, '')                        
+                        @svg($icon)                        
                     @endif
                     {{ $label }}
                     {{ $slot }}

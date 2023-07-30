@@ -17,7 +17,7 @@ class Form extends Component
     {
         return <<<'HTML'
                 <div>
-                    <form {{ $attributes }} {{ $attributes->class(['grid grid-flow-row auto-rows-min gap-5']) }}>
+                    <form {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['grid grid-flow-row auto-rows-min gap-5']) }}>
                         {{ $slot }}
                         <hr />
                         <div class="flex justify-end gap-3">                            

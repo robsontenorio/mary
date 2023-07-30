@@ -28,14 +28,14 @@ class Input extends Component
                     <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
                     <div class="relative">
                         @if($icon)
-                            @svg($icon, 'mt-3 ml-3 w-5 h-5 text-gray-400 absolute')                        
+                            @svg($icon, 'mt-3 ml-3 text-gray-400 absolute')                        
                         @endif
                         
                         @if($prefix)
-                            <span class="mt-3 ml-3 w-5 h-5 text-gray-400 absolute">{{ $prefix }}</span>                            
+                            <span class="mt-3 ml-3 text-gray-400 absolute">{{ $prefix }}</span>                            
                         @endif
 
-                        <input {{ $attributes }} @if($money) x-mask:dynamic="$money($input, ',', '.')" @endif {{ $attributes->class(['input input-primary w-full', 'pl-10' => ($icon || $prefix), 'input-error' => $errors->has($name)]) }} >
+                        <input {{ $attributes->whereDoesntStartWith('class') }} @if($money) x-mask:dynamic="$money($input, ',', '.')" @endif {{ $attributes->class(['input input-primary w-full', 'pl-10' => ($icon || $prefix), 'input-error' => $errors->has($name)]) }} >
                                                 
                         @error($name)
                             <span class="text-red-500 label-text-alt pl-1">{{ $message }}</span>

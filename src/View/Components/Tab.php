@@ -23,8 +23,8 @@ class Tab extends Component
     {
         return <<<'HTML'
                     <div wire:key="{{ $uuid }}">
-                        <a @click.prevent="selected = '{{ $name }}'" :class="{ 'tab-active': selected === '{{ $name }}' }"  wire:key="{{ $uuid }}" {{ $attributes }} {{ $attributes->class(['tab tab-bordered font-semibold'])}}"> 
-                            @if($icon) @svg($icon, 'mr-2 h-5 h-5') @endif
+                        <a @click.prevent="selected = '{{ $name }}'" :class="{ 'tab-active': selected === '{{ $name }}' }"  wire:key="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['tab tab-bordered font-semibold'])}}"> 
+                            @if($icon) @svg($icon, 'mr-2') @endif
                             {{ $label }} 
                         </a>                       
                     
