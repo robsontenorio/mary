@@ -20,7 +20,7 @@ class Button extends Component
         return <<<'HTML'
                 <button wire:key="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['btn capitalize']) }}>
                     @if($icon)
-                        @svg($icon)                        
+                        <x-icon :name="$icon"  />            
                     @endif
                     {{ $label }}
                     {{ $slot }}

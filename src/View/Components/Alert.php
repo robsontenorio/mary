@@ -25,7 +25,7 @@ class Alert extends Component
         return <<<'HTML'
                 <div wire:key="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['alert rounded-md', 'shadow-md' => $shadow])}}>
                     @if($icon)
-                        @svg($icon)                        
+                        <x-icon :name="$icon"  />
                     @endif
                     @if($title)
                     <div>

@@ -28,7 +28,7 @@ class Input extends Component
                     <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
                     <div class="relative">
                         @if($icon)
-                            @svg($icon, 'mt-3 ml-3 text-gray-400 absolute')                        
+                            <x-icon :name="$icon" class="mt-3 ml-3 text-gray-400 absolute" />
                         @endif
                         
                         @if($prefix)

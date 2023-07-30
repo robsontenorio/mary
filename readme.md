@@ -64,6 +64,8 @@ Add `@mary` on your blade layout.
 
 ### Header
 
+### Icon
+
 ### Input
 
 ### ListItem

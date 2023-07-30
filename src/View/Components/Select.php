@@ -30,7 +30,7 @@ class Select extends Component
                 <label class="label label-text font-semibold">{{ $label }}</label>
                     <div class="relative">
                     @if($icon)
-                        @svg($icon, 'mt-3 ml-3 text-gray-400 absolute')                        
+                        <x-icon :name="$icon" class="mt-3 ml-3 text-gray-400 absolute" />                     
                     @endif
                     <select {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['select select-primary w-full font-normal', 'pl-10' => $icon]) }}>
                         <option value="">{{ $placeholder }}</option>

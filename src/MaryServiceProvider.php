@@ -11,6 +11,7 @@ use Mary\View\Components\Card;
 use Mary\View\Components\Drawer;
 use Mary\View\Components\Form;
 use Mary\View\Components\Header;
+use Mary\View\Components\Icon;
 use Mary\View\Components\Input;
 use Mary\View\Components\ListItem;
 use Mary\View\Components\Modal;
@@ -27,7 +28,7 @@ class MaryServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerBladeDirective();
+        $this->registerBladeDirectives();
         $this->registerComponents();
 
         // Publishing is only necessary when using the CLI.
@@ -45,6 +46,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('form', Form::class);
         Blade::component('header', Header::class);
         Blade::component('input', Input::class);
+        Blade::component('icon', Icon::class);
         Blade::component('list-item', ListItem::class);
         Blade::component('modal', Modal::class);
         Blade::component('nav', Nav::class);
@@ -54,7 +56,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('toggle', Toggle::class);
     }
 
-    public function registerBladeDirective()
+    public function registerBladeDirectives()
     {
         try {
             $manifest = File::json(public_path().'/build/manifest.json');
