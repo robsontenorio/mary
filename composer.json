@@ -1,0 +1,48 @@
+{
+    "name": "robsontenorio/mary",
+    "description": "Laravel blade components for Livewire 3",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Robson Tenório",
+            "email": "rrtenorio@gmail.com",
+            "homepage": "https://github.com/robsontenorio"
+        }
+    ],
+    "homepage": "https://github.com/robsontenorio/mary",
+    "keywords": [
+        "Laravel",
+        "Livewire",
+        "Blade",
+        "Components",
+        "Mary",
+        "UI"
+    ],
+    "require": {
+        "illuminate/support": "~10"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.2",
+        "orchestra/testbench": "^8.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mary\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mary\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mary\\MaryServiceProvider"
+            ],
+            "aliases": {
+                "Mary": "Mary\\Facades\\Mary"
+            }
+        }
+    }
+}
