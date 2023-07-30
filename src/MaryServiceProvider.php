@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Mary\View\Components\Alert;
 use Mary\View\Components\Button;
 use Mary\View\Components\Card;
+use Mary\View\Components\Drawer;
 use Mary\View\Components\Form;
 use Mary\View\Components\Header;
 use Mary\View\Components\Input;
@@ -40,6 +41,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('alert', Alert::class);
         Blade::component('button', Button::class);
         Blade::component('card', Card::class);
+        Blade::component('drawer', Drawer::class);
         Blade::component('form', Form::class);
         Blade::component('header', Header::class);
         Blade::component('input', Input::class);
@@ -64,7 +66,7 @@ class MaryServiceProvider extends ServiceProvider
             });
         } catch (\Throwable $th) {
 
-            // If there is a error means there is no build files on app, so wire empty content
+            // An erro means there is no build files on main app, so write empty content
             Blade::directive('mary', function (string $expression) {
                 return '';
             });

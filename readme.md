@@ -2,16 +2,15 @@
 
 :warning: **Work in progress**
 
-Blade components for Livewire 3 based on Tailwind + Daisy UI.
+Laravel blade components for Livewire / DaisyUI / Tailwind.
 
 
 ## Requirements
 
-- Laravel 10 >=
-- Vite
+- Laravel 10+
 - Livewire 3
-- Tailwind
 - Daisy UI
+- Tailwind
 
 ## Installation
 
@@ -37,10 +36,12 @@ Add `@mary` on your blade layout.
 ```html
 <html>
     <head>
+        ...
+
+        @vite(['resources/css/app.css', 'resources/js/app.js'])       
         
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-                
-        @mary  <!-- add this  -->
+        <!-- add this  -->
+        @mary  
     </head>
 
     <body>
@@ -56,6 +57,8 @@ Add `@mary` on your blade layout.
 ### Button
 
 ### Card
+
+### Drawer
 
 ### Form
 
@@ -85,18 +88,18 @@ composer test
 
 ## Contributing
 
-:warning: Make sure your run this steps **ON YOUR OWN APP.**
+:warning: Make sure your run this steps **INSIDE YOUR OWN APP.**
 
-- Clone this repository into some folder  **on your own app**.
+- Clone this repository into some folder.
 
-- On **your own app** `composer.json` add this settings.
+- Change `composer.json`
 
 ```json
-"minimum-stability": "dev", // <---- change to "dev"
+"minimum-stability": "dev",      // <- change to "dev"
 "repositories": {
     "robsontenorio/mary": {
         "type": "path",
-        "url": "/path/to/mary", // <--- change the path
+        "url": "/path/to/mary",  // <- change the path
         "options": {
             "symlink": true
         }
@@ -110,7 +113,7 @@ composer test
 composer require robsontenorio/mary
 ```
 
-- Start vite 
+- Start dev  
 
 ```bash
 yarn dev
