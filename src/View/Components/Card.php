@@ -26,14 +26,14 @@ class Card extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div wire:key="{{ $uuid }}" {{ $attributes->class(['bg-base-100 rounded-lg p-8', 'shadow-sm' => $shadow])}}>
+                <div wire:key="{{ $uuid }}" {{ $attributes->class(['card bg-base-100 rounded-lg', 'shadow-sm' => $shadow])}}>
                     <figure>
                         {{ $figure }}
                     </figure>
                     
                         @if($title || $subtitle)
-                            <div class="pb-5">
-                                <div class="grid grid-flow-col">
+                            <div class="px-5 pt-5">
+                                <div class="flex justify-between items-center">
                                     <div>
                                         @if($title)
                                             <div class="text-2xl font-bold">{{ $title }}</div>
@@ -50,12 +50,12 @@ class Card extends Component
                                 @if($separator) <hr class="mt-3" /> @endif 
                             </div>                                                
                         @endif                                        
-                    <div class="">                        
+                    <div class="p-5">                        
                         {{ $slot }}
                     </div>
                     @if($actions)                                            
                         @if($separator) <hr class="mt-5" /> @endif
-                        <div class="flex justify-end gap-3 pt-3">                            
+                        <div class="flex justify-end gap-3 p-3">                            
                             {{ $actions }}
                         </div>
                     @endif

@@ -20,7 +20,7 @@ class Drawer extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div class="drawer @if($right) drawer-end @endif">
+                <div class="drawer absolute z-50 @if($right) drawer-end @endif">
                     <!-- Toggle visibility  -->
                     <input id="{{ $id }}" type="checkbox" class="drawer-toggle" {{ $attributes->whereStartsWith('wire:model') }} />
 
