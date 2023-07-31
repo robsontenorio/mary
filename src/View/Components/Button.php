@@ -22,8 +22,12 @@ class Button extends Component
                     @if($icon)
                         <x-icon :name="$icon"  />            
                     @endif
-                    {{ $label }}
-                    {{ $slot }}
+                    
+                    @if($label)
+                        {{ $label }}
+                    @else
+                        {{ $slot }}
+                    @endif  
                 </button>
             HTML;
     }

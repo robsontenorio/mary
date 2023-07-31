@@ -14,6 +14,7 @@ use Mary\View\Components\Header;
 use Mary\View\Components\Icon;
 use Mary\View\Components\Input;
 use Mary\View\Components\ListItem;
+use Mary\View\Components\Main;
 use Mary\View\Components\Modal;
 use Mary\View\Components\Nav;
 use Mary\View\Components\Select;
@@ -28,7 +29,6 @@ class MaryServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerBladeDirectives();
         $this->registerComponents();
 
         // Publishing is only necessary when using the CLI.
@@ -49,30 +49,12 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('icon', Icon::class);
         Blade::component('list-item', ListItem::class);
         Blade::component('modal', Modal::class);
+        Blade::component('main', Main::class);
         Blade::component('nav', Nav::class);
         Blade::component('select', Select::class);
         Blade::component('tab', Tab::class);
         Blade::component('tabs', Tabs::class);
         Blade::component('toggle', Toggle::class);
-    }
-
-    public function registerBladeDirectives()
-    {
-        try {
-            $manifest = File::json(public_path().'/build/manifest.json');
-            $file = $manifest['vendor/robsontenorio/mary/resources/css/mary.css']['file'];
-            $content = public_path().'/build/'.$file;
-
-            Blade::directive('mary', function (string $expression) use ($file, $content) {
-                return '<style data="'.$file.'">'.file_get_contents($content).'</style>';
-            });
-        } catch (\Throwable $th) {
-
-            // An erro means there is no build files on main app, so write empty content
-            Blade::directive('mary', function (string $expression) {
-                return '';
-            });
-        }
     }
 
     /**

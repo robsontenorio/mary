@@ -12,7 +12,7 @@ class Header extends Component
         public string $title = '',
         public string $subtitle = '',
         public bool $separator = false,
-        public string $size = '4xl',
+        public string $size = 'text-4xl',
         public mixed $actions = ''
     ) {
 
@@ -24,7 +24,7 @@ class Header extends Component
                 <div class="mb-5">
                     <div class="flex justify-between items-center">
                         <div>
-                            <div class="text-{{$size}} font-bold">{{ $title }}</div>
+                            <div class="{{$size}} font-bold">{{ $title }}</div>
                             <div class="text-gray-500 text-sm mt-1">{{ $subtitle }}</div>
                         </div>
                         <div>

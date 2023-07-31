@@ -1,6 +1,6 @@
 {
     "name": "robsontenorio/mary",
-    "description": "Laravel blade components for Livewire 3",
+    "description": "Livewire blade components using daisyUI / Tailwind",
     "license": "MIT",
     "authors": [
         {
