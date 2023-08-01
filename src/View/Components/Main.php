@@ -11,6 +11,7 @@ class Main extends Component
     public function __construct(
         public mixed $sidebar = '',
         public mixed $content = '',
+        public mixed $footer = '',
 
     ) {
         //
@@ -30,8 +31,14 @@ class Main extends Component
                         @endif
                         <div {{ $content->attributes->class(["pt-12 overflow-auto flex-1 mx-auto w-full  lg:max-w-4xl"]) }}>
                             {{ $content }}
-                        </div>
+                            
+                        </div>                        
+                    </div>                  
+                    @if($footer)  
+                    <div {{ $footer->attributes->class(["max-w-screen-2xl w-full mx-auto px-5"]) }}>
+                        {{ $footer }}
                     </div>
+                    @endif                    
                 </main>                
                 HTML;
     }
