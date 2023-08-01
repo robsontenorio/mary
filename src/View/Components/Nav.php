@@ -24,7 +24,7 @@ class Nav extends Component
                 <div class="sticky top-0 z-10"> 
                 @endif
                     <header class="backdrop-blur-2xl border-gray-200 border-b">                        
-                        <div class="max-w-screen-2xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
+                        <div class="max-w-screen-2xl mx-auto px-6 py-3 flex items-center justify-between gap-6">
                             <div class="flex-1">                        
                                 {{ $brand }}                        
                             </div>

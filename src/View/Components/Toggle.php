@@ -18,7 +18,7 @@ class Toggle extends Component
         return <<<'HTML'
             <div>
                 <label class="label label-text font-semibold">{{ $label}}</label>
-                <input type="checkbox" {{ $attributes }} {{ $attributes->merge(['class' => 'toggle toggle-primary']) }}  />
+                <input type="checkbox" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['toggle toggle-primary']) }}  />
             </div>
         HTML;
     }

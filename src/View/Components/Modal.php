@@ -21,13 +21,13 @@ class Modal extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <dialog id="{{ $id }}" class="modal">
+                <dialog id="{{ $id }}" {{ $attributes->class(["modal"]) }} x-data>
                     <div class="modal-box">
                         @if($title)
-                            <x-header :title="$title" :subtitle="$subtitle" size="h3" :separator="$separator" />
+                            <x-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" />
                         @endif
 
-                        <p class="pb-4">
+                        <p class="">
                             {{ $slot }}
                         </p>
                         @if($separator) <hr /> @endif

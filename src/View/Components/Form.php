@@ -17,10 +17,12 @@ class Form extends Component
     {
         return <<<'HTML'
                 <div>
-                    <form {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['grid grid-flow-row auto-rows-min gap-5']) }}>
+                    <form {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['grid grid-flow-row auto-rows-min gap-2']) }}>
                         {{ $slot }}
-                        <hr />
-                        <div class="flex justify-end gap-3">                            
+                        
+                        <hr class="my-3" />
+
+                        <div class="flex justify-end gap-5">                            
                             {{ $actions}}                            
                         </div>
                     </form>
