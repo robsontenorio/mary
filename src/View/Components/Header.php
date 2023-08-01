@@ -24,7 +24,7 @@ class Header extends Component
                 <div class="mb-5">
                     <div class="flex justify-between items-center">
                         <div>
-                            <div class="{{$size}} font-bold">{{ $title }}</div>
+                            <div class="{{$size}} font-extrabold">{{ $title }}</div>
                             <div class="text-gray-500 text-sm mt-1">{{ $subtitle }}</div>
                         </div>
                         <div>
