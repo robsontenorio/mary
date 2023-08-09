@@ -27,7 +27,7 @@ class ListItem extends Component
     {
         return <<<'HTML'
             <div wire:key="{{ $uuid }}">                            
-                <div {{ $attributes->class(["grid  grid-flow-col grid-cols-[auto_minmax(auto,1fr)] items-center w-full gap-4 hover:bg-gray-100 p-3"]) }}>
+                <div {{ $attributes->class(["grid  grid-flow-col grid-cols-[auto_minmax(auto,1fr)] items-center w-full gap-4 hover:bg-base-200 p-3"]) }}>
                     @if($item->$avatar)
                     <div>
                         @if($link) <a href="{{ $link }}" wire:navigate> @endif                            

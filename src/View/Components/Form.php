@@ -22,7 +22,7 @@ class Form extends Component
                         
                         <hr class="my-3" />
 
-                        <div class="flex justify-end gap-5">                            
+                        <div class="flex justify-end gap-3">                            
                             {{ $actions}}                            
                         </div>
                     </form>
