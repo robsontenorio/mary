@@ -15,6 +15,7 @@ class Select extends Component
         public ?string $name = null,
         public ?string $label = null,
         public ?string $icon = null,
+        public ?string $hint = null,
         public ?string $placeholder = '---',
         public ?string $key = 'id',
         public ?string $value = 'name',
@@ -39,9 +40,14 @@ class Select extends Component
                         @endforeach
                     </select>
                 </div>
+
                 @error($name)
                     <div class="text-red-500">{{ $message }}</div>
                 @enderror
+
+                @if($hint)
+                    <div class="label-text-alt text-gray-400 pl-1 mt-2">{{ $hint }}</div>
+                @endif
             </div>
         HTML;
     }

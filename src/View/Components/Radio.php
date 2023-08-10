@@ -13,6 +13,7 @@ class Radio extends Component
 
     public function __construct(
         public ?string $label = null,
+        public ?string $hint = null,
         public ?string $key = 'id',
         public ?string $value = 'name',
         public Collection $options = new Collection(),
@@ -42,8 +43,16 @@ class Radio extends Component
                             {{ $attributes->whereStartsWith('wire:model') }}
                             {{ $attributes->class(["join-item capitalize btn input-bordered input bg-base-200"]) }}
                             />                    
-                    @endforeach
+                    @endforeach                    
                 </div>
+
+                @error($name)
+                    <div class="text-red-500 label-text-alt pl-1">{{ $message }}</div>
+                @enderror
+                
+                @if($hint)
+                    <div class="label-text-alt text-gray-400 pl-1 mt-2">{{ $hint }}</div>
+                @endif
             HTML;
     }
 }
