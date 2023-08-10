@@ -6,11 +6,11 @@ https://mary-ui.com
 
 ## Contributing
 
-:warning: Make sure your run this steps **INSIDE YOUR OWN APP.**
 
-- Clone this repository into some folder.
-
-- Change `composer.json`
+- Clone the repositoy `git clone git@github.com:robsontenorio/mary.git`
+  into some folder **inside your app**.
+  
+- Change `composer.json` from **your app**
 
 ```json
 "minimum-stability": "dev",      // <- change to "dev"
