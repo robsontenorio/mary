@@ -11,8 +11,7 @@ class Main extends Component
     public function __construct(
         public mixed $sidebar = '',
         public mixed $content = '',
-        public mixed $footer = '',
-
+        public mixed $footer = ''
     ) {
         //
     }
@@ -20,25 +19,28 @@ class Main extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                 <main class="overflow-hidden lg:flex lg:flex-1 lg:flex-col">
-                    <div {{ $attributes->class(["max-w-screen-2xl w-full mx-auto px-6 flex flex-wrap justify-between gap-10"]) }}>
-                        <div
-                            {{ $sidebar->attributes->class(["-mx-3 overflow-y-auto custom-scrollbar max-h-[calc(100%-74px)] hidden lg:block py-14 lg:max-w-[240px] lg:w-full", "fixed" => $sidebar->attributes->has('sticky')]) }}>
+                 <main class="flex flex-col">
+                    <div class="w-full mx-auto max-w-screen-2xl flex">
+                        @if($sidebar)
+                        <div {{ $sidebar->attributes->class(["max-w-[280px] w-full pt-5"]) }}>
                             {{ $sidebar }}
                         </div>
-                        @if($sidebar->attributes->has('sticky'))
-                        <div class="hidden lg:block lg:max-w-[240px] lg:w-full"></div>
                         @endif
-                        <div {{ $content->attributes->class(["pt-12 overflow-auto flex-1 mx-auto w-full  lg:max-w-4xl"]) }}>
+                        <div {{ $content->attributes->class(["min-h-screen flex-1 mx-auto w-full p-10"]) }}>
                             {{ $content }}
-                            
                         </div>                        
                     </div>                  
                     @if($footer)  
-                    <div {{ $footer->attributes->class(["max-w-screen-2xl w-full mx-auto px-5"]) }}>
+                    <div {{ $footer->attributes->class(["max-w-screen-2xl mx-auto w-full"]) }}>
                         {{ $footer }}
                     </div>
-                    @endif                    
+                    @endif              
+
+                    @if($sidebar->attributes['drawer']) 
+                    <x-drawer id="{{ $sidebar->attributes['drawer'] }}"> 
+                        {{ $sidebar }}
+                    </x-drawer>                        
+                    @endif
                 </main>                
                 HTML;
     }

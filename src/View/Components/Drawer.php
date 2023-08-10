@@ -29,7 +29,7 @@ class Drawer extends Component
                         <label for="{{ $id }}" class="drawer-overlay"></label>
 
                         <!-- Content -->
-                        <div {{ $attributes->class(['bg-base-100 h-full w-auto']) }}>
+                        <div {{ $attributes->class(['bg-base-100 min-h-screen']) }}>
                             {{ $slot }}
                         </div>
                     </div>

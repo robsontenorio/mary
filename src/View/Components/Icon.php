@@ -17,7 +17,7 @@ class Icon extends Component
 
     public function classes(): string
     {
-        return $this->attributes->class(['w-5 h-5'])['class'];
+        return $this->attributes->class(['w-5 h-5 inline'])['class'];
     }
 
     public function render(): View|Closure|string

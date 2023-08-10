@@ -9,9 +9,8 @@ use Illuminate\View\Component;
 class Nav extends Component
 {
     public function __construct(
-        public string $background = 'bg-base-100',
-        public mixed $brand = '',
         public bool $sticky = false,
+        public mixed $brand = '',
         public mixed $actions = ''
     ) {
         //
@@ -23,12 +22,12 @@ class Nav extends Component
                 @if($sticky) 
                 <div class="sticky top-0 z-10"> 
                 @endif
-                    <header class="backdrop-blur-2xl border-gray-200 border-b">                        
-                        <div class="max-w-screen-2xl mx-auto px-6 py-3 flex items-center justify-between gap-6">
-                            <div class="flex-1">                        
+                    <header {{ $attributes->class(["bg-base-100 border-gray-100 border-b"]) }}>
+                        <div class="max-w-screen-2xl mx-auto px-6 py-5 flex items-center">
+                            <div {{ $attributes->class(["flex-1 flex items-center"]) }}>                        
                                 {{ $brand }}                        
                             </div>
-                            <div class="flex-none gap-8">
+                            <div {{ $attributes->class(["flex items-center gap-4 lg:gap-8"]) }}>
                                 {{ $actions }}
                             </div>
                         </div>
