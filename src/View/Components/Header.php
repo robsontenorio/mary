@@ -13,7 +13,10 @@ class Header extends Component
         public ?string $subtitle = null,
         public ?bool $separator = false,
         public ?string $size = 'text-4xl',
-        public mixed $actions = null
+
+        // Slots
+        public mixed $middle = null,
+        public mixed $actions = null,
     ) {
 
     }
@@ -25,9 +28,14 @@ class Header extends Component
                     <div class="flex justify-between items-center">
                         <div>
                             <div class="{{$size}} font-extrabold">{{ $title }}</div>
-                            <div class="text-gray-500 text-sm mt-1">{{ $subtitle }}</div>
+                            @if($subtitle)
+                                <div class="text-gray-500 text-sm mt-1">{{ $subtitle }}</div>
+                            @endif
                         </div>
-                        <div>
+                        <div class="flex items-center gap-3">
+                            {{ $middle }}
+                        </div>
+                        <div class="flex items-center gap-3">
                             {{ $actions}}
                         </div>                                
                     </div>

@@ -15,6 +15,8 @@ class Card extends Component
         public ?string $subtitle = null,
         public ?bool $separator = false,
         public ?bool $shadow = false,
+
+        // Slots
         public mixed $menu = null,
         public mixed $actions = null,
         public mixed $figure = null,

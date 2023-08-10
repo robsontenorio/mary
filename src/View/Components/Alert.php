@@ -15,6 +15,8 @@ class Alert extends Component
         public ?string $icon = null,
         public ?string $description = null,
         public ?bool $shadow = false,
+
+        // Slots
         public mixed $actions = null
     ) {
         $this->uuid = md5(serialize($this));

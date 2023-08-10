@@ -9,6 +9,8 @@ use Illuminate\View\Component;
 class Main extends Component
 {
     public function __construct(
+
+        // Slots
         public mixed $sidebar = null,
         public mixed $content = null,
         public mixed $footer = null

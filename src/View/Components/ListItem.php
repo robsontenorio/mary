@@ -18,6 +18,8 @@ class ListItem extends Component
         public ?string $subValue = null,
         public ?bool $noSeparator = false,
         public ?string $link = null,
+
+        // Slots
         public mixed $action = null,
     ) {
         $this->uuid = Str::uuid();

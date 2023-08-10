@@ -26,7 +26,9 @@ class Input extends Component
         return <<<'HTML'
                 <div wire:key="{{ $uuid }}">         
                     
-                    <label class="pt-0 label label-text font-semibold">{{ $label }}</label> 
+                    @if($label)
+                        <label class="pt-0 label label-text font-semibold">{{ $label }}</label> 
+                    @endif
 
                     <div class="relative">
                         @if($icon)

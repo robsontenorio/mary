@@ -13,6 +13,8 @@ class Modal extends Component
         public ?string $title = null,
         public ?string $subtitle = null,
         public ?bool $separator = false,
+
+        // Slots
         public ?string $actions = null
     ) {
         //

@@ -10,6 +10,8 @@ class Nav extends Component
 {
     public function __construct(
         public bool $sticky = false,
+
+        // Slots
         public mixed $brand = null,
         public mixed $actions = null
     ) {
