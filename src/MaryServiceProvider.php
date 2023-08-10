@@ -3,7 +3,6 @@
 namespace Mary;
 
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Mary\View\Components\Alert;
 use Mary\View\Components\Button;
@@ -20,6 +19,7 @@ use Mary\View\Components\MenuItem;
 use Mary\View\Components\MenuSeparator;
 use Mary\View\Components\Modal;
 use Mary\View\Components\Nav;
+use Mary\View\Components\Radio;
 use Mary\View\Components\Select;
 use Mary\View\Components\Tab;
 use Mary\View\Components\Tabs;
@@ -57,6 +57,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('menu-separator', MenuSeparator::class);
         Blade::component('main', Main::class);
         Blade::component('nav', Nav::class);
+        Blade::component('radio', Radio::class);
         Blade::component('select', Select::class);
         Blade::component('tab', Tab::class);
         Blade::component('tabs', Tabs::class);
