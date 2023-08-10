@@ -22,11 +22,11 @@ class Main extends Component
                  <main class="flex flex-col">
                     <div class="w-full mx-auto max-w-screen-2xl flex">
                         @if($sidebar)
-                        <div {{ $sidebar->attributes->class(["max-w-[280px] w-full pt-5"]) }}>
+                        <div {{ $sidebar->attributes->class(["hidden lg:block max-w-[280px] w-full pt-5"]) }}>
                             {{ $sidebar }}
                         </div>
                         @endif
-                        <div {{ $content->attributes->class(["min-h-screen flex-1 mx-auto w-full p-10"]) }}>
+                        <div {{ $content->attributes->class(["min-h-screen flex-1 mx-auto w-full p-5 lg:p-10"]) }}>
                             {{ $content }}
                         </div>                        
                     </div>                  
