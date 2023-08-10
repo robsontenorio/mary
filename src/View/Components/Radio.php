@@ -14,8 +14,8 @@ class Radio extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
-        public ?string $key = 'id',
-        public ?string $value = 'name',
+        public ?string $optionValue = 'id',
+        public ?string $optionLabel = 'name',
         public Collection $options = new Collection(),
     ) {
         $this->uuid = md5(serialize($this));
@@ -38,8 +38,8 @@ class Radio extends Component
                         <input                             
                             type="radio" 
                             name="{{ $name }}"
-                            value="{{ $option->$key }}"
-                            aria-label="{{ $option->$value }}" 
+                            value="{{ $option->$optionValue }}"
+                            aria-label="{{ $option->$optionLabel }}" 
                             {{ $attributes->whereStartsWith('wire:model') }}
                             {{ $attributes->class(["join-item capitalize btn input-bordered input bg-base-200"]) }}
                             />                    

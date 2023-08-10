@@ -12,16 +12,20 @@ class Select extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $name = null,
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $hint = null,
         public ?string $placeholder = '---',
-        public ?string $key = 'id',
-        public ?string $value = 'name',
+        public ?string $optionValue = 'id',
+        public ?string $optionLabel = 'name',
         public Collection $options = new Collection(),
     ) {
         $this->uuid = md5(serialize($this));
+    }
+
+    public function name(): string
+    {
+        return $this->attributes->whereStartsWith('wire:model')->first();
     }
 
     public function render(): View|Closure|string
@@ -36,7 +40,7 @@ class Select extends Component
                     <select {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['select select-primary w-full font-normal', 'pl-10' => $icon]) }}>
                         <option value="">{{ $placeholder }}</option>
                         @foreach ($options as $option)
-                            <option value="{{ $option->$key }}">{{ $option->$value }}</option>
+                            <option value="{{ $option->$optionValue }}">{{ $option->$optionLabel }}</option>
                         @endforeach
                     </select>
                 </div>
