@@ -12,7 +12,7 @@ class Drawer extends Component
 
     public function __construct(
         public string $id,
-        public bool $right = false
+        public ?bool $right = false
     ) {
         $this->uuid = md5(serialize($this));
     }
@@ -22,7 +22,11 @@ class Drawer extends Component
         return <<<'HTML'
                 <div class="drawer absolute z-50 @if($right) drawer-end @endif">
                     <!-- Toggle visibility  -->
-                    <input id="{{ $id }}" type="checkbox" class="drawer-toggle" {{ $attributes->whereStartsWith('wire:model') }} />
+                    <input 
+                        id="{{ $id }}" 
+                        type="checkbox" 
+                        class="drawer-toggle" 
+                        {{ $attributes->whereStartsWith('wire:model') }} />
 
                     <div class="drawer-side">
                         <!-- Overlay effect , click outside -->                        

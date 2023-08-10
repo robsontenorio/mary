@@ -10,8 +10,8 @@ class Nav extends Component
 {
     public function __construct(
         public bool $sticky = false,
-        public mixed $brand = '',
-        public mixed $actions = ''
+        public mixed $brand = null,
+        public mixed $actions = null
     ) {
         //
     }
@@ -20,8 +20,9 @@ class Nav extends Component
     {
         return <<<'HTML'
                 @if($sticky) 
-                <div class="sticky top-0 z-10"> 
+                    <div class="sticky top-0 z-10"> 
                 @endif
+
                     <header {{ $attributes->class(["bg-base-100 border-gray-100 border-b"]) }}>
                         <div class="max-w-screen-2xl mx-auto px-6 py-5 flex items-center">
                             <div {{ $attributes->class(["flex-1 flex items-center"]) }}>                        
@@ -32,8 +33,9 @@ class Nav extends Component
                             </div>
                         </div>
                     </header>
+                    
                 @if($sticky) 
-                </div>                
+                    </div>                
                 @endif
                 HTML;
     }

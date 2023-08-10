@@ -12,12 +12,12 @@ class Select extends Component
     public string $uuid;
 
     public function __construct(
-        public string $name = '',
-        public string $label = '',
-        public string $icon = '',
-        public string $placeholder = '---',
-        public string $key = 'id',
-        public string $value = 'name',
+        public ?string $name = null,
+        public ?string $label = null,
+        public ?string $icon = null,
+        public ?string $placeholder = '---',
+        public ?string $key = 'id',
+        public ?string $value = 'name',
         public Collection $options = new Collection(),
     ) {
         $this->uuid = md5(serialize($this));

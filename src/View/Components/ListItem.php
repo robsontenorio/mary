@@ -15,10 +15,10 @@ class ListItem extends Component
         public object $item,
         public string $avatar = 'avatar',
         public string $value = 'name',
-        public string $subValue = '',
-        public bool $noSeparator = false,
-        public string $link = '',
-        public mixed $action = '',
+        public ?string $subValue = null,
+        public ?bool $noSeparator = false,
+        public ?string $link = null,
+        public mixed $action = null,
     ) {
         $this->uuid = Str::uuid();
     }
@@ -26,34 +26,49 @@ class ListItem extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <div wire:key="{{ $uuid }}">                            
-                <div {{ $attributes->class(["grid  grid-flow-col grid-cols-[auto_minmax(auto,1fr)] items-center w-full gap-4 hover:bg-base-200 p-3"]) }}>
+            <div wire:key="{{ $uuid }}">  
+                @if($link) 
+                    <a href="{{ $link }}" wire:navigate> 
+                @endif
+
+                <div 
+                    {{ $attributes->class(["flex justify-start items-center gap-4 hover:bg-base-200 p-3"]) }}>
+                    
+                    <!-- AVATAR -->
                     @if($item->$avatar)
-                    <div>
-                        @if($link) <a href="{{ $link }}" wire:navigate> @endif                            
+                        <div>                                                    
                             <div class="avatar">
                                 <div class="w-11 rounded-full">
                                     <img src="{{ $item->$avatar }}" />
                                 </div>
-                            </div>
-                        @if($link)</a>@endif
-                    </div>
+                            </div>                                                        
+                        </div>
                     @endif
-                    <div>
-                        @if($link) <a href="{{ $link }}" wire:navigate> @endif
-                            <div class="font-semibold">
-                                {{ $item->$value }}
-                            </div>
-                            <div class="text-gray-400 text-sm">
-                                {{ $item->$subValue }}
-                            </div>
-                        @if($link)</a>@endif
+
+                    <!-- CONTENT -->
+                    <div class="flex-1">
+                        <div class="font-semibold">
+                            {{ $item->$value }}
+                        </div>
+
+                        <div class="text-gray-400 text-sm">
+                            {{ is_string($subValue) ? $item->$subValue : $subValue }}
+                        </div>                        
                     </div>
+
+                    <!-- ACTION -->
                     <div>
                         {{ $action }}                        
                     </div>
                 </div>
-                @if(!$noSeparator) <hr /> @endif
+                
+                @if($link)
+                    </a>
+                @endif
+
+                @if(!$noSeparator) 
+                    <hr /> 
+                @endif
             </div>
         HTML;
     }

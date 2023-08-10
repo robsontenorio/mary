@@ -9,11 +9,11 @@ use Illuminate\View\Component;
 class Header extends Component
 {
     public function __construct(
-        public string $title = '',
-        public string $subtitle = '',
-        public bool $separator = false,
-        public string $size = 'text-4xl',
-        public mixed $actions = ''
+        public ?string $title = null,
+        public ?string $subtitle = null,
+        public ?bool $separator = false,
+        public ?string $size = 'text-4xl',
+        public mixed $actions = null
     ) {
 
     }
@@ -31,7 +31,10 @@ class Header extends Component
                             {{ $actions}}
                         </div>                                
                     </div>
-                    @if($separator) <hr class="my-5" /> @endif 
+
+                    @if($separator) 
+                        <hr class="my-5" /> 
+                    @endif 
                 </div>                        
                 HTML;
     }

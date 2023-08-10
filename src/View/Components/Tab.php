@@ -12,9 +12,9 @@ class Tab extends Component
     public string $uuid;
 
     public function __construct(
-        public string $name = '',
-        public string $label = '',
-        public string $icon = ''
+        public ?string $name = null,
+        public ?string $label = null,
+        public ?string $icon = null
     ) {
         $this->uuid = Str::uuid();
     }
@@ -23,19 +23,25 @@ class Tab extends Component
     {
         return <<<'HTML'
                     <div wire:key="{{ $uuid }}">
-                        <a @click.prevent="selected = '{{ $name }}'" :class="{ 'tab-active': selected === '{{ $name }}' }"  wire:key="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['tab tab-bordered font-semibold'])}}"> 
+                        <a 
+                            wire:key="{{ $uuid }}" 
+                            @click.prevent="selected = '{{ $name }}'" 
+                            :class="{ 'tab-active': selected === '{{ $name }}' }"                              
+                            {{ $attributes->whereDoesntStartWith('class') }} 
+                            {{ $attributes->class(['tab tab-bordered font-semibold'])}}"> 
+                            
                             @if($icon)
-                            <x-icon :name="$icon" class="mr-2" />  
+                                <x-icon :name="$icon" class="mr-2" />  
                             @endif
 
                             {{ $label }} 
                         </a>                       
                     
-                        @teleport('#tab-content')
-                        <div class="py-5" x-show="selected === '{{ $name }}'">
-                            {{ $slot }}
-                        </div>
-                        @endteleport
+                        <template x-teleport='#tab-content'>
+                            <div class="py-5" x-show="selected === '{{ $name }}'">
+                                {{ $slot }}
+                            </div>
+                        </template>
                     </div>        
                 HTML;
     }

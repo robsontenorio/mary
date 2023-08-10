@@ -11,7 +11,7 @@ class Tabs extends Component
     public string $uuid;
 
     public function __construct(
-        public string $selected = '',
+        public ?string $selected = null,
     ) {
         $this->uuid = md5(serialize($this));
     }

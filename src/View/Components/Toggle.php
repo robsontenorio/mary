@@ -8,8 +8,10 @@ use Illuminate\View\Component;
 
 class Toggle extends Component
 {
-    public function __construct(public string $label = '')
-    {
+    public function __construct(
+        public ?string $label = null,
+        public ?bool $right = false
+    ) {
 
     }
 
@@ -17,8 +19,19 @@ class Toggle extends Component
     {
         return <<<'HTML'
             <div>
-                <label class="label label-text font-semibold">{{ $label}}</label>
-                <input type="checkbox" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['toggle toggle-primary']) }}  />
+                <label class="label label-text font-semibold"> 
+                    
+                    @if(!$right) 
+                        {{ $label}} 
+                    @endif
+                    
+                    <input type="checkbox" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['toggle toggle-primary']) }}  />                
+
+                    @if($right) 
+                        {{ $label}} 
+                    @endif
+                    
+                </label>
             </div>
         HTML;
     }

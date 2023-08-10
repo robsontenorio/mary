@@ -10,10 +10,10 @@ class Modal extends Component
 {
     public function __construct(
         public string $id,
-        public string $title = '',
-        public string $subtitle = '',
-        public bool $separator = false,
-        public string $actions = ''
+        public ?string $title = null,
+        public ?string $subtitle = null,
+        public ?bool $separator = false,
+        public ?string $actions = null
     ) {
         //
     }
@@ -21,7 +21,7 @@ class Modal extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <dialog id="{{ $id }}" {{ $attributes->class(["modal"]) }} x-data>
+                <dialog id="{{ $id }}" {{ $attributes->class(["modal"]) }}>
                     <div class="modal-box">
                         @if($title)
                             <x-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" />
@@ -30,7 +30,11 @@ class Modal extends Component
                         <p class="">
                             {{ $slot }}
                         </p>
-                        @if($separator) <hr /> @endif
+
+                        @if($separator) 
+                            <hr /> 
+                        @endif
+
                         <div class="modal-action">
                             {{ $actions }}
                         </div>

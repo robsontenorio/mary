@@ -10,8 +10,10 @@ class Icon extends Component
 {
     public string $uuid;
 
-    public function __construct(public string $name, public string $prefix = 'heroicon')
-    {
+    public function __construct(
+        public string $name,
+        public string $prefix = 'heroicon'
+    ) {
         $this->uuid = md5(serialize($this));
     }
 

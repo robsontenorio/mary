@@ -11,11 +11,11 @@ class Alert extends Component
     public string $uuid;
 
     public function __construct(
-        public string $title = '',
-        public string $icon = '',
-        public string $description = '',
-        public bool $shadow = false,
-        public mixed $actions = ''
+        public ?string $title = null,
+        public ?string $icon = null,
+        public ?string $description = null,
+        public ?bool $shadow = false,
+        public mixed $actions = null
     ) {
         $this->uuid = md5(serialize($this));
     }
@@ -23,19 +23,25 @@ class Alert extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div wire:key="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['alert rounded-md', 'shadow-md' => $shadow])}}>
-                    @if($icon)
-                        <x-icon :name="$icon" />
+                <div 
+                    wire:key="{{ $uuid }}" 
+                    {{ $attributes->whereDoesntStartWith('class') }} 
+                    {{ $attributes->class(['alert rounded-md', 'shadow-md' => $shadow])}}
+                >
+                    @if($icon) 
+                        <x-icon :name="$icon" /> 
                     @endif
+
                     @if($title)
-                    <div>
-                        <div class="font-bold">{{ $title }}</div>
-                        <div class="text-xs">{{ $description }}</div>
-                    </div>
+                        <div>
+                            <div class="font-bold">{{ $title }}</div>
+                            <div class="text-xs">{{ $description }}</div>
+                        </div>
                     @else
                         <span>{{ $slot }}</span>
                     @endif
-                    <div>
+
+                    <div class="flex items-center gap-3">
                         {{ $actions }}
                     </div>
                 </div>
