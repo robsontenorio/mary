@@ -41,7 +41,7 @@ class Main extends Component
                         </div>
                     @endif              
 
-                    @if($sidebar->attributes['drawer']) 
+                    @if($sidebar?->attributes['drawer']) 
                         <x-drawer id="{{ $sidebar->attributes['drawer'] }}"> 
                             {{ $sidebar }}
                         </x-drawer>                        

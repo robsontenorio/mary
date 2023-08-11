@@ -42,7 +42,7 @@ class Input extends Component
                         <input 
                             {{ $attributes->whereDoesntStartWith('class') }}                             
                             {{ $attributes->class(['input input-primary w-full', 'pl-10' => ($icon || $prefix), 'input-error' => $errors->has($name)]) }} 
-                            @if($money) x-mask:dynamic="$money($input, ',', '.')" @endif >
+                            @if($money) x-mask:dynamic="$money($input, ',', '.')" x-data @endif >
                                                 
                         @error($name)
                             <span class="text-red-500 label-text-alt pl-1">{{ $message }}</span>
