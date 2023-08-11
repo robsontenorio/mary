@@ -34,7 +34,7 @@ class ListItem extends Component
                 @endif
 
                 <div 
-                    {{ $attributes->class(["flex justify-start items-center gap-4 hover:bg-base-200 p-3"]) }}>
+                    {{ $attributes->class(["flex justify-start items-center gap-4 hover:bg-base-200/50 p-3"]) }}>
                     
                     <!-- AVATAR -->
                     @if($item->$avatar)
