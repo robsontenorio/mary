@@ -12,7 +12,8 @@ class Button extends Component
 
     public function __construct(
         public ?string $label = null,
-        public ?string $icon = null
+        public ?string $icon = null,
+        public ?string $spinner = null
     ) {
         $this->uuid = md5(serialize($this));
     }
@@ -24,7 +25,12 @@ class Button extends Component
                     wire:key="{{ $uuid }}" 
                     {{ $attributes->whereDoesntStartWith('class') }} 
                     {{ $attributes->class(['btn capitalize']) }}
+                    {{ $attributes->merge(['type' => 'button']) }}
                     >
+
+                    @if($spinner)
+                    <span wire:loading wire:target="{{ $spinner }}" class="loading loading-spinner"></span>
+                    @endif
 
                     @if($icon)
                         <x-icon :name="$icon"  />
