@@ -22,12 +22,18 @@ class Tab extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
+                    @aware(['tabContainer' =>  '', 'selected' => ''])                    
                     <a 
-                        wire:key="{{ $uuid }}" 
-                        @click.prevent="selected = '{{ $name }}'" 
+                        @click="
+                            @if($selected)
+                                selected = '{{ $name }}'
+                            @else
+                                $wire.selectedTab = '{{ $name }}'
+                            @endif
+                            "                             
                         :class="{ 'tab-active': selected === '{{ $name }}' }"                              
                         {{ $attributes->whereDoesntStartWith('class') }} 
-                        {{ $attributes->class(['tab tab-bordered flex-none font-semibold'])}}"> 
+                        {{ $attributes->class(['tab tab-bordered flex-none font-semibold']) }}> 
                         
                         @if($icon)
                             <x-icon :name="$icon" class="mr-2" />  
@@ -36,7 +42,7 @@ class Tab extends Component
                         {{ $label }} 
                     </a>                       
                 
-                    <template x-teleport='#tab-content'>
+                    <template x-teleport="#{{ $tabContainer }}">
                         <div class="py-5" x-show="selected === '{{ $name }}'">
                             {{ $slot }}
                         </div>
