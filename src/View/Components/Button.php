@@ -34,14 +34,17 @@ class Button extends Component
                     wire:key="{{ $uuid }}" 
                     {{ $attributes->whereDoesntStartWith('class') }} 
                     {{ $attributes->class(['btn normal-case']) }}
-                    {{ $attributes->merge(['type' => 'button']) }} >
+                    {{ $attributes->merge(['type' => 'button']) }} 
+                    wire:loading.attr="disabled"
+                    >
+                    
 
                     @if($spinner)
                         <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner"></span>
                     @endif
 
                     @if($icon)
-                        <x-icon :name="$icon"  />
+                        <x-icon :name="$icon"   />
                     @endif
                     
                     {{ $label ?? $slot }}

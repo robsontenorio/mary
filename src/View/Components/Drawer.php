@@ -11,7 +11,7 @@ class Drawer extends Component
     public string $uuid;
 
     public function __construct(
-        public string $id,
+        public ?string $id = null,
         public ?bool $right = false
     ) {
         $this->uuid = md5(serialize($this));
@@ -20,6 +20,10 @@ class Drawer extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
+                @php 
+                    $id = $id ?? $attributes?->whereStartsWith('wire:model')->first() 
+                @endphp
+
                 <div class="drawer absolute z-50 @if($right) drawer-end @endif">
                     <!-- Toggle visibility  -->
                     <input 

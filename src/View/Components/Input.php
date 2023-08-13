@@ -45,7 +45,7 @@ class Input extends Component
                         @endif
 
                         @if($money)
-                            <div x-data="{display: ''}" x-init="display = $wire.{{ $name() }}.replace('.', '{{ $fractionSeparator }}')" >                                
+                            <div x-data="{display: ''}" x-init="display = $wire.{{ $name() }}?.replace('.', '{{ $fractionSeparator }}')" >                                
                                 <input                                    
                                     :value="display"
                                     {{
