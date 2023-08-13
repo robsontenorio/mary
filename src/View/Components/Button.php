@@ -35,7 +35,9 @@ class Button extends Component
                     {{ $attributes->whereDoesntStartWith('class') }} 
                     {{ $attributes->class(['btn normal-case']) }}
                     {{ $attributes->merge(['type' => 'button']) }} 
-                    wire:loading.attr="disabled"
+                    
+                    wire:target="{{ $spinnerTarget() }}"
+                    wire:loading.attr="disabled"                    
                     >
                     
 
