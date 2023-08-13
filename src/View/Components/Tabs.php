@@ -19,7 +19,7 @@ class Tabs extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                    <div class="tabs" x-data="{ selected: '{{ $selected }}' }">
+                    <div class="flex overflow-x-auto" x-data="{ selected: '{{ $selected }}' }">                        
                         {{ $slot }}
                     </div>
                     <hr/>
