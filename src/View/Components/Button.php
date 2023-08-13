@@ -18,18 +18,26 @@ class Button extends Component
         $this->uuid = md5(serialize($this));
     }
 
+    public function spinnerTarget(): ?string
+    {
+        if ($this->spinner == 1) {
+            return $this->attributes->whereStartsWith('wire:click')->first();
+        }
+
+        return $this->spinner;
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'HTML'
                 <button 
                     wire:key="{{ $uuid }}" 
                     {{ $attributes->whereDoesntStartWith('class') }} 
-                    {{ $attributes->class(['btn capitalize']) }}
-                    {{ $attributes->merge(['type' => 'button']) }}
-                    >
+                    {{ $attributes->class(['btn normal-case']) }}
+                    {{ $attributes->merge(['type' => 'button']) }} >
 
                     @if($spinner)
-                    <span wire:loading wire:target="{{ $spinner }}" class="loading loading-spinner"></span>
+                        <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner"></span>
                     @endif
 
                     @if($icon)

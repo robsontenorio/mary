@@ -15,7 +15,9 @@ class Input extends Component
         public ?string $icon = null,
         public ?string $hint = null,
         public ?string $prefix = null,
-        public bool $money = false
+        public bool $money = false,
+        public string $thousandsSeparator = ',',
+        public string $fractionSeparator = '.',
     ) {
         $this->uuid = md5(serialize($this));
     }
@@ -42,26 +44,43 @@ class Input extends Component
                             <span class="mt-3 ml-3 text-gray-400 absolute">{{ $prefix }}</span>                            
                         @endif
 
-                        <div x-data>
-                            <input 
-                                type="text"
-                                                                
-                                {{ $attributes->except('wire:model')->class([
+                        @if($money)
+                            <div x-data="{display: ''}" x-init="display = $wire.{{ $name() }}.replace('.', '{{ $fractionSeparator }}')" >                                
+                                <input                                    
+                                    :value="display"
+                                    {{
+                                         $attributes
+                                            ->merge(['type' => 'text'])
+                                            ->except('wire:model')
+                                            ->class([
+                                                'input input-primary w-full', 
+                                                'pl-10' => ($icon || $prefix), 
+                                                'input-error' => $errors->has($name())
+                                            ]) 
+                                    }}                                         
+                                    
+                                    x-mask:dynamic="$money($input, '{{ $fractionSeparator}}', '{{ $thousandsSeparator }}')" 
+                                    
+                                    @input="$wire.{{ $name() }} = $el.value.replaceAll('{{ $thousandsSeparator }}', '').replaceAll('{{ $fractionSeparator }}', '.')" 
+                                />
+                                
+                                <input                               
+                                    type="hidden"                                
+                                    {{ $attributes->only('wire:model') }}
+                                />              
+                            </div>       
+                        @else
+                            <input                                                
+                                {{ 
+                                    $attributes
+                                        ->merge(['type' => 'text'])
+                                        ->class([
                                             'input input-primary w-full', 
                                             'pl-10' => ($icon || $prefix), 
-                                            'input-error' => $errors->has($name())]) }} 
-
-                                @if($money) 
-                                    x-mask:dynamic="$money($input, ',', '.')" 
-                                    @input="$wire.{{ $name() }} = $el.value.replaceAll('.', '').replaceAll(',', '.')"
-                                @endif                                
+                                            'input-error' => $errors->has($name())]) 
+                                }}
                             />
-                            
-                            <input                               
-                                type="hidden"                                
-                                {{ $attributes->only('wire:model') }}
-                            />              
-                        </div>              
+                        @endif
 
                         @error($name())
                             <span class="text-red-500 label-text-alt pl-1">{{ $message }}</span>
