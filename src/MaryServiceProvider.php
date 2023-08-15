@@ -22,6 +22,7 @@ use Mary\View\Components\Modal;
 use Mary\View\Components\Nav;
 use Mary\View\Components\Radio;
 use Mary\View\Components\Select;
+use Mary\View\Components\Stat;
 use Mary\View\Components\Tab;
 use Mary\View\Components\Tabs;
 use Mary\View\Components\Toggle;
@@ -61,6 +62,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('nav', Nav::class);
         Blade::component('radio', Radio::class);
         Blade::component('select', Select::class);
+        Blade::component('stat', Stat::class);
         Blade::component('tab', Tab::class);
         Blade::component('tabs', Tabs::class);
         Blade::component('toggle', Toggle::class);
