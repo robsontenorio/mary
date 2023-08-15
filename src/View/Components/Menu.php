@@ -21,8 +21,7 @@ class Menu extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <ul class="menu rounded-md">
-                    
+                <ul {{ $attributes->class(["menu rounded-md"]) }} >
                     @if($title)
                         <li class="menu-title uppercase">
                             <div class="flex items-center gap-2">

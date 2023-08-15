@@ -15,10 +15,10 @@ class Select extends Component
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $hint = null,
-        public ?string $placeholder = '---',
+        public ?string $placeholder = null,
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
-        public Collection $options = new Collection(),
+        public Collection|array $options = new Collection(),
     ) {
         $this->uuid = md5(serialize($this));
     }
@@ -32,15 +32,21 @@ class Select extends Component
     {
         return <<<'HTML'
             <div wire:key="{{ $uuid }}">
+                @if($label)
                 <label class="label label-text font-semibold">{{ $label }}</label>
-                    <div class="relative">
+                @endif
+                
+                <div class="relative">
                     @if($icon)
                         <x-icon :name="$icon" class="mt-3 ml-3 text-gray-400 absolute" />                     
                     @endif
                     <select {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['select select-primary w-full font-normal', 'pl-10' => $icon]) }}>
-                        <option value="">{{ $placeholder }}</option>
+                        @if($placeholder)
+                            <option>{{ $placeholder }}</option>
+                        @endif
+
                         @foreach ($options as $option)
-                            <option value="{{ $option->$optionValue }}">{{ $option->$optionLabel }}</option>
+                            <option value="{{ $option[$optionValue] }}">{{ $option[$optionLabel] }}</option>
                         @endforeach
                     </select>
                 </div>

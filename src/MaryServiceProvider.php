@@ -5,6 +5,7 @@ namespace Mary;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Mary\View\Components\Alert;
+use Mary\View\Components\Badge;
 use Mary\View\Components\Button;
 use Mary\View\Components\Card;
 use Mary\View\Components\Drawer;
@@ -43,6 +44,7 @@ class MaryServiceProvider extends ServiceProvider
     public function registerComponents()
     {
         Blade::component('alert', Alert::class);
+        Blade::component('badge', Badge::class);
         Blade::component('button', Button::class);
         Blade::component('card', Card::class);
         Blade::component('drawer', Drawer::class);

@@ -47,6 +47,13 @@ class ListItem extends Component
                         </div>
                     @endif
 
+                    @if(!is_string($avatar))
+                    <div class="py-3">
+                        {{ $avatar }}
+                    </div>
+                    @endif                    
+
+
                     @if($link)
                         </a>
                     @endif
@@ -58,7 +65,7 @@ class ListItem extends Component
                         @endif
                         
                         <div class="font-semibold">
-                            {{ $item->$value }}
+                            {{ is_string($value) ? $item->$value : $value }}
                         </div>
 
                         <div class="text-gray-400 text-sm">
@@ -71,9 +78,11 @@ class ListItem extends Component
                     </div>                    
 
                     <!-- ACTION -->
-                    <div class="py-3">
-                        {{ $action }}                        
-                    </div>
+                    @if($action)
+                        <div class="py-3">
+                            {{ $action }}                        
+                        </div>
+                    @endif
                 </div>                            
 
                 @if(!$noSeparator) 

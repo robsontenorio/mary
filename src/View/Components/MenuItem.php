@@ -25,7 +25,7 @@ class MenuItem extends Component
         return <<<'HTML'
                 <li>
                     <a 
-                        {{ $attributes->class(["my-0.5", "active" => $active ]) }}
+                        {{ $attributes->class(["my-0.5 hover:text-inherit", "active" => $active ]) }}
                         @if($link) 
                             href="{{ $link }}" wire:navigate 
                         @endif  

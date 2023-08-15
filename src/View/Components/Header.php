@@ -24,7 +24,7 @@ class Header extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div class="mb-5">
+                <div class="mb-10">
                     <div class="flex justify-between items-center">
                         <div>
                             <div class="{{$size}} font-extrabold">{{ $title }}</div>
