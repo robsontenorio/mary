@@ -16,6 +16,7 @@ class Select extends Component
         public ?string $icon = null,
         public ?string $hint = null,
         public ?string $placeholder = null,
+        public ?bool $inline = false,
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
@@ -32,15 +33,29 @@ class Select extends Component
     {
         return <<<'HTML'
             <div wire:key="{{ $uuid }}">
-                @if($label)
-                <label class="label label-text font-semibold">{{ $label }}</label>
+                
+                @if($label && !$inline)
+                    <label class="label label-text font-semibold">{{ $label }}</label>
                 @endif
                 
                 <div class="relative">
                     @if($icon)
-                        <x-icon :name="$icon" class="mt-3 ml-3 text-gray-400 absolute" />                     
+                        <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 ml-3 text-gray-400" />                     
                     @endif
-                    <select {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['select select-primary w-full font-normal', 'pl-10' => $icon]) }}>
+
+                    <select 
+                        {{ $attributes->whereDoesntStartWith('class') }} 
+                        {{ $attributes->class([
+                                    'select select-primary w-full font-normal', 
+                                    'pl-10' => ($icon), 
+                                    'h-14' => ($inline),
+                                    'pt-3' => ($inline && $label),
+                                    'border border-dashed' => $attributes->has('readonly')
+                                ]) 
+                        }}
+                        
+                    >
+
                         @if($placeholder)
                             <option>{{ $placeholder }}</option>
                         @endif
@@ -49,6 +64,12 @@ class Select extends Component
                             <option value="{{ $option[$optionValue] }}">{{ $option[$optionLabel] }}</option>
                         @endforeach
                     </select>
+
+                    @if($label && $inline)                        
+                        <label class="absolute text-gray-500 duration-300 transform -translate-y-1 scale-75 top-2 z-10 origin-[0] bg-white rounded dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
+                            {{ $label }}                                
+                        </label>                                                 
+                    @endif
                 </div>
 
                 @error($name)
