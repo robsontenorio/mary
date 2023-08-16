@@ -31,35 +31,44 @@ class Input extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                    <div class="relative">
-                        @if($label && !$inline)
-                        <label class="pt-0 label label-text font-semibold">{{ $label }}</label> 
-                        @endif
+            <div>
+                @if($label && !$inline)
+                    <label class="pt-0 label label-text font-semibold">{{ $label }}</label> 
+                @endif
 
+                @if($prefix)
+                    <div class="flex">
+                        <div class="rounded-l-lg py-2.5 px-4 bg-base-200 border border-base-300">
+                            {{ $prefix }}
+                        </div>
+                @endif
+
+                <div class="flex-1 relative">                                        
                         @if($icon)
                             <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 ml-3 text-gray-400 " />
                         @endif
                         
-                        @if($prefix)
-                            <span class="top-1/2 -translate-y-1/2 ml-3 text-gray-400">{{ $prefix }}</span>                            
-                        @endif
-
+                        
                         @if($money)
-                            <div x-data="{display: ''}" x-init="display = $wire.{{ $name() }}?.replace('.', '{{ $fractionSeparator }}')" >                                
+                            <div x-data="{display: ''}" x-init="display = $wire.{{ $name() }}?.replace('.', '{{ $fractionSeparator }}')">                                
                                 <input                
                                     id="{{ $uuid }}"                    
+                                    placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "     
                                     :value="display"
                                     x-mask:dynamic="$money($input, '{{ $fractionSeparator}}', '{{ $thousandsSeparator }}')"                                     
                                     @input="$wire.{{ $name() }} = $el.value.replaceAll('{{ $thousandsSeparator }}', '').replaceAll('{{ $fractionSeparator }}', '.')"
+
                                     {{
                                          $attributes
-                                            ->merge(['type' => 'text', 'placeholder' => "."])
+                                            ->merge(['type' => 'text'])
                                             ->except('wire:model')
                                             ->class([
-                                                'input input-primary w-full', 
-                                                'pl-10' => ($icon || $prefix), 
+                                                'input input-primary w-full peer', 
+                                                'pl-10' => ($icon), 
                                                 'h-14' => ($inline),
-                                                'pt-3' => ($inline && $label),
+                                                'pt-3' => ($inline && $label),     
+                                                'rounded-l-none' => $prefix,
+                                                'border border-dashed' => $attributes->has('readonly'),
                                                 'input-error' => $errors->has($name())
                                             ]) 
                                     }}                                    
@@ -68,7 +77,13 @@ class Input extends Component
                                 <input                               
                                     type="hidden"                                
                                     {{ $attributes->only('wire:model') }}
-                                />              
+                                />          
+                                
+                                @if($label && $inline)
+                                    <label for="{{ $uuid }}" class="absolute text-gray-400 duration-300 transform -translate-y-1 scale-75 top-2 z-10 origin-[0] bg-white rounded dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
+                                        {{ $label }}
+                                    </label> 
+                                @endif
                             </div>       
                         @else
                             <input            
@@ -77,33 +92,39 @@ class Input extends Component
                                 
                                 {{ 
                                     $attributes                                        
+                                        ->merge(['type' => 'text'])
                                         ->class([
                                             'input input-primary w-full peer', 
-                                            'pl-10' => ($icon || $prefix), 
+                                            'pl-10' => ($icon), 
                                             'h-14' => ($inline),
-                                            'pt-3' => ($inline && $label),
+                                            'pt-3' => ($inline && $label),     
+                                            'rounded-l-none' => $prefix,
                                             'border border-dashed' => $attributes->has('readonly'),
                                             'input-error' => $errors->has($name())
-                                        ]) 
-                                        ->merge(['type' => 'text'])
+                                        ])                                         
                                 }}
                             />
-                        @endif
 
-                        @if($label && $inline)
-                            <label for="{{ $uuid }}" class="absolute text-gray-400 duration-300 transform -translate-y-1 scale-75 top-2 z-10 origin-[0] bg-white rounded dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
-                                {{ $label }}
-                            </label> 
+                            @if($label && $inline)
+                                <label for="{{ $uuid }}" class="absolute text-gray-400 duration-300 transform -translate-y-1 scale-75 top-2 z-10 origin-[0] bg-white rounded dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
+                                    {{ $label }}
+                                </label> 
+                            @endif
                         @endif
+                </div>
 
-                        @error($name())
-                            <span class="text-red-500 label-text-alt pl-1">{{ $message }}</span>
-                        @enderror
-                        
-                        @if($hint)
-                            <span class="label-text-alt text-gray-400 pl-1">{{ $hint }}</span>
-                        @endif
+                @if($prefix)
                     </div>
+                @endif
+
+                @error($name())
+                    <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
+                @enderror
+                
+                @if($hint)
+                    <div class="label-text-alt text-gray-400 p-1">{{ $hint }}</div>
+                @endif      
+            </div>
             HTML;
     }
 }
