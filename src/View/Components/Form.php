@@ -21,7 +21,7 @@ class Form extends Component
         return <<<'HTML'
                 <form 
                     {{ $attributes->whereDoesntStartWith('class') }} 
-                    {{ $attributes->class(['grid grid-flow-row auto-rows-min gap-2']) }}
+                    {{ $attributes->class(['grid grid-flow-row auto-rows-min gap-3']) }}
                 >
                     
                     {{ $slot }}
