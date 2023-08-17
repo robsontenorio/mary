@@ -62,7 +62,7 @@ class Table extends Component
                                             {{ ${"cell_".$header['key']}($row)  }}
                                         </td>                                                                    
                                     @else
-                                        <td>{{ $header['key'] }}  - {{ $row[$header['key']] }}</td>                                
+                                        <td>{{ $row[$header['key']] }}</td>                                
                                     @endif
                                 @endforeach
                                 
