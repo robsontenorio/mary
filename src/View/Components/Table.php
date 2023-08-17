@@ -55,14 +55,19 @@ class Table extends Component
                         <tbody>                                                                                
                             @foreach($rows as $row)                                                  
                                 <tr class="hover:bg-base-200/50" @click="$dispatch('row-click', {{ $row }});">                                                        
-                                @foreach($headers as $header)   
-
-                                    @if(isset(${"cell_".$header['key']}))
+                                @foreach($headers as $header)    
+                                    @php 
+                                        # Scoped slot`s name like `user.city` are compiled to `user___city` through `@scope / @endscope`.
+                                        # So we user current `$header` key  to find that slot on context.
+                                        $temp_key = str_replace('.', '___', $header['key']) 
+                                    @endphp
+                                    
+                                    @if(isset(${"cell_".$temp_key}))
                                         <td>
-                                            {{ ${"cell_".$header['key']}($row)  }}
+                                            {{ ${"cell_".$temp_key}($row)  }}
                                         </td>                                                                    
                                     @else
-                                        <td>{{ $row[$header['key']] }}</td>                                
+                                        <td>{{ data_get($row, $header['key']) }}</td>                                
                                     @endif
                                 @endforeach
                                 

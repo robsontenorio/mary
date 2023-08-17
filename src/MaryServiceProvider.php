@@ -77,30 +77,29 @@ class MaryServiceProvider extends ServiceProvider
          * All credits from this blade directive goes to Konrad Kalemba.
          * https://github.com/konradkalemba/blade-components-scoped-slots
          *
-         * Just copied and renamed directive to a shorter sintaxe `@scope` / `@endscope`.
-         * I really would wish to be possible a `<x-scoped-slot>` sintaxe, but is "impossible" right now.
+         * Just copied and modified for my very specifc use case.
          */
-        $parameters = [];
-
-        Blade::directive('scope', function ($expression) use (&$parameters) {
+        Blade::directive('scope', function ($expression) {
 
             // Split the expression by `top-level` commas (not in parentheses)
             $directiveArguments = preg_split("/,(?![^\(\(]*[\)\)])/", $expression);
             $directiveArguments = array_map('trim', $directiveArguments);
 
-            // Ensure that the directive's arguments array has 3 elements - otherwise fill with `null`
-            $directiveArguments = array_pad($directiveArguments, 3, null);
+            [$name, $functionArguments] = $directiveArguments;
 
-            // Extract values from the directive's arguments array
-            [$name, $functionArguments, $params] = $directiveArguments;
-
-            $parameters = array_filter(explode(',', trim($params, '()')), 'strlen')[0] ?? 'null';
+            /**
+             *  Slot names can`t contains dot , eg: `user.city`.
+             *  So we convert `user.city` to `user___city`
+             *
+             *  Later, on component you must replace it back.
+             */
+            $name = str_replace('.', '___', $name);
 
             return "<?php \$__env->slot({$name}, function({$functionArguments}) use (\$__env) { ?>";
         });
 
-        Blade::directive('endscope', function () use (&$parameters) {
-            return '<?php }, '.$parameters.'); ?>';
+        Blade::directive('endscope', function () {
+            return '<?php }); ?>';
         });
     }
 
