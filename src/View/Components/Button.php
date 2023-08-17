@@ -40,13 +40,14 @@ class Button extends Component
                     wire:loading.attr="disabled"                    
                     >
                     
-
                     @if($spinner)
-                        <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner"></span>
+                        <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
                     @endif
 
                     @if($icon)
-                        <x-icon :name="$icon"   />
+                        <span wire:loading.remove wire:target="{{ $spinnerTarget() }}">
+                            <x-icon :name="$icon" />
+                        </span>
                     @endif
                     
                     {{ $label ?? $slot }}

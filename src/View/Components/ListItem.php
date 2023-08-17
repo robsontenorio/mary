@@ -20,7 +20,7 @@ class ListItem extends Component
         public ?string $link = null,
 
         // Slots
-        public mixed $action = null,
+        public mixed $actions = null,
     ) {
         $this->uuid = Str::uuid();
     }
@@ -30,7 +30,11 @@ class ListItem extends Component
         return <<<'HTML'
             <div wire:key="{{ $uuid }}">                  
                 <div 
-                    {{ $attributes->class(["flex justify-start items-center gap-4 hover:bg-base-200/50 px-3"]) }}>
+                    {{ $attributes->class([
+                        "flex justify-start items-center gap-4 hover:bg-base-200/50 px-3", 
+                        "cursor-pointer" => $link]) 
+                    }}
+                >
                     
                     @if($link) 
                         <a href="{{ $link }}" wire:navigate> 
@@ -48,9 +52,9 @@ class ListItem extends Component
                     @endif
 
                     @if(!is_string($avatar))
-                    <div class="py-3">
-                        {{ $avatar }}
-                    </div>
+                        <div class="py-3">
+                            {{ $avatar }}
+                        </div>
                     @endif                    
 
 
@@ -78,10 +82,18 @@ class ListItem extends Component
                     </div>                    
 
                     <!-- ACTION -->
-                    @if($action)
-                        <div class="py-3">
-                            {{ $action }}                        
-                        </div>
+                    @if($actions)
+                        @if($link && !Str::of($actions)->contains([':click', '@click' , 'href']))
+                            <a href="{{ $link }}" wire:navigate> 
+                        @endif
+                            
+                            <div class="py-3 flex items-center gap-3">                            
+                                    {{ $actions }}                        
+                            </div>
+                       
+                        @if($link && !Str::of($actions)->contains([':click', '@click' , 'href']))
+                            </a>
+                        @endif
                     @endif
                 </div>                            
 

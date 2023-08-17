@@ -24,6 +24,7 @@ use Mary\View\Components\Radio;
 use Mary\View\Components\Select;
 use Mary\View\Components\Stat;
 use Mary\View\Components\Tab;
+use Mary\View\Components\Table;
 use Mary\View\Components\Tabs;
 use Mary\View\Components\Toggle;
 
@@ -35,6 +36,7 @@ class MaryServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerComponents();
+        $this->registerBladeDirectives();
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -63,9 +65,43 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('radio', Radio::class);
         Blade::component('select', Select::class);
         Blade::component('stat', Stat::class);
+        Blade::component('table', Table::class);
         Blade::component('tab', Tab::class);
         Blade::component('tabs', Tabs::class);
         Blade::component('toggle', Toggle::class);
+    }
+
+    public function registerBladeDirectives()
+    {
+        /**
+         * All credits from this blade directive goes to Konrad Kalemba.
+         * https://github.com/konradkalemba/blade-components-scoped-slots
+         *
+         * Just copied and renamed directive to a shorter sintaxe `@scope` / `@endscope`.
+         * I really would wish to be possible a `<x-scoped-slot>` sintaxe, but is "impossible" right now.
+         */
+        $parameters = [];
+
+        Blade::directive('scope', function ($expression) use (&$parameters) {
+
+            // Split the expression by `top-level` commas (not in parentheses)
+            $directiveArguments = preg_split("/,(?![^\(\(]*[\)\)])/", $expression);
+            $directiveArguments = array_map('trim', $directiveArguments);
+
+            // Ensure that the directive's arguments array has 3 elements - otherwise fill with `null`
+            $directiveArguments = array_pad($directiveArguments, 3, null);
+
+            // Extract values from the directive's arguments array
+            [$name, $functionArguments, $params] = $directiveArguments;
+
+            $parameters = array_filter(explode(',', trim($params, '()')), 'strlen')[0] ?? 'null';
+
+            return "<?php \$__env->slot({$name}, function({$functionArguments}) use (\$__env) { ?>";
+        });
+
+        Blade::directive('endscope', function () use (&$parameters) {
+            return '<?php }, '.$parameters.'); ?>';
+        });
     }
 
     /**

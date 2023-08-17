@@ -74,7 +74,7 @@ class Input extends Component
                         {{
                             $attributes
                             ->merge(['type' => 'text'])
-                            ->except('wire:model')
+                            ->except($money ? 'wire:model' : '')
                             ->class([
                                 'input input-primary w-full peer', 
                                 'pl-10' => ($icon), 
