@@ -33,7 +33,7 @@ class Input extends Component
     {
         return <<<'HTML'
             <div>
-                <!-- TRADICIONAL LABEL -->
+                <!-- STANDARD LABEL -->
                 @if($label && !$inline)
                     <label class="pt-0 label label-text font-semibold">{{ $label }}</label> 
                 @endif
@@ -61,6 +61,7 @@ class Input extends Component
                         <div x-data="{display: ''}" x-init="display = $wire.{{ $name() }}?.replace('.', '{{ $fractionSeparator }}')">                                
                     @endif
 
+                    <!-- INPUT -->
                     <input                
                         id="{{ $uuid }}"                    
                         placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "     
@@ -95,13 +96,11 @@ class Input extends Component
                         </label> 
                     @endif         
                         
-                    <!-- MONEY HIDDEN INPUT + END MONEY SETUP -->
+                    <!-- HIDDEN MONEY INPUT + END MONEY SETUP -->
                     @if($money)
                             <input type="hidden" {{ $attributes->only('wire:model') }} />    
                         </div>      
-                    @endif                                                   
-
-                                   
+                    @endif                                                                                      
                 </div>
 
                 <!-- SUFIX -->

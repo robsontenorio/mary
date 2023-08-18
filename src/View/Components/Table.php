@@ -14,7 +14,7 @@ class Table extends Component
     public function __construct(
         public array $headers,
         public Collection $rows,
-        public ?bool $zebra = false,
+        public ?bool $striped = false,
 
         // Slots
         public mixed $actions = null,
@@ -31,7 +31,7 @@ class Table extends Component
                     <table 
                         {{ $attributes->class([
                                 'table', 
-                                'table-zebra' => $zebra,
+                                'table-zebra' => $striped,
                                 'cursor-pointer' => $attributes->has('@row-click')]) 
                         }} 
                     >
