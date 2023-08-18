@@ -1,6 +1,9 @@
-# Mary
 
-:warning: **Work in progress**
+<p align="center">
+  <img src="https://github.com/robsontenorio/mary-ui.com/blob/main/public/mary-banner.png?raw=true">  
+</p>
+
+## Documentation
 
 https://mary-ui.com
 
