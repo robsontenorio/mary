@@ -11,7 +11,7 @@ class Stat extends Component
     public string $uuid;
 
     public function __construct(
-        public string $value = '',
+        public ?string $value = null,
         public ?string $icon = null,
         public ?string $color = 'text-primary',
         public ?string $title = null,
@@ -37,7 +37,7 @@ class Stat extends Component
                                 <div class="text-xs text-gray-500 whitespace-nowrap">{{ $title }}</div>
                             @endif
 
-                            <div class="font-bold text-xl">{{ $value }}</div>
+                            <div class="font-bold text-xl">{{ $value ?? $slot }}</div>
                             
                             @if($description)
                                 <div class="stat-desc">{{ $description }}</div>
