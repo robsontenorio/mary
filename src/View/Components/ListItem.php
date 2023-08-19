@@ -15,7 +15,7 @@ class ListItem extends Component
         public object $item,
         public string $avatar = 'avatar',
         public string $value = 'name',
-        public ?string $subValue = null,
+        public ?string $subValue = '',
         public ?bool $noSeparator = false,
         public ?string $link = null,
 
@@ -71,11 +71,11 @@ class ListItem extends Component
                         @endif
                         
                         <div class="py-3">
-                            <div {{ $value->attributes->class(["font-semibold truncate"]) }}>
+                            <div @if(!is_string($value)) {{ $value->attributes->class(["font-semibold truncate"]) }} @else class="font-semibold truncate" @endif>
                                 {{ is_string($value) ? $item->$value : $value }}
                             </div>
 
-                            <div {{ $subValue->attributes->class(["text-gray-400 text-sm truncate"]) }}>
+                            <div @if(!is_string($subValue))  {{ $subValue->attributes->class(["text-gray-400 text-sm truncate"]) }} @else class="text-gray-400 text-sm truncate" @endif>
                                 {{ is_string($subValue) ? $item->$subValue : $subValue }}
                             </div>                        
                         </div>
