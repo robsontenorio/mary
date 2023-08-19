@@ -37,7 +37,8 @@ class ListItem extends Component
                 >
                     
                     @if($link) 
-                        <a href="{{ $link }}" wire:navigate> 
+                        <div>
+                            <a href="{{ $link }}" wire:navigate> 
                     @endif
 
                     <!-- AVATAR -->
@@ -59,22 +60,25 @@ class ListItem extends Component
 
 
                     @if($link)
-                        </a>
+                            </a>
+                        </div>
                     @endif
 
                     <!-- CONTENT -->                
-                    <div class="flex-1 py-3">
+                    <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0">
                         @if($link) 
                             <a href="{{ $link }}" wire:navigate> 
                         @endif
                         
-                        <div class="font-semibold">
-                            {{ is_string($value) ? $item->$value : $value }}
-                        </div>
+                        <div class="py-3">
+                            <div {{ $value->attributes->class(["font-semibold truncate"]) }}>
+                                {{ is_string($value) ? $item->$value : $value }}
+                            </div>
 
-                        <div class="text-gray-400 text-sm">
-                            {{ is_string($subValue) ? $item->$subValue : $subValue }}
-                        </div>                        
+                            <div {{ $subValue->attributes->class(["text-gray-400 text-sm truncate"]) }}>
+                                {{ is_string($subValue) ? $item->$subValue : $subValue }}
+                            </div>                        
+                        </div>
 
                         @if($link)
                             </a>
