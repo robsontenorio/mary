@@ -36,8 +36,10 @@ class Button extends Component
                     {{ $attributes->class(['btn normal-case']) }}
                     {{ $attributes->merge(['type' => 'button']) }} 
                     
-                    wire:target="{{ $spinnerTarget() }}"
-                    wire:loading.attr="disabled"                    
+                    @if($spinner)
+                        wire:target="{{ $spinnerTarget() }}"
+                        wire:loading.attr="disabled"                    
+                    @endif
                     >
                     
                     @if($spinner)
@@ -45,7 +47,7 @@ class Button extends Component
                     @endif
 
                     @if($icon)
-                        <span wire:loading.remove wire:target="{{ $spinnerTarget() }}">
+                        <span @if($spinner) wire:loading.remove wire:target="{{ $spinnerTarget() }}" @endif>
                             <x-icon :name="$icon" />
                         </span>
                     @endif

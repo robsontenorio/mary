@@ -24,20 +24,20 @@ class Stat extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div {{ $attributes->class(["bg-base-100 rounded-lg px-5 py-3 w-full"]) }} >
-                    <div class="flex items-center gap-3">
+                <div {{ $attributes->class(["bg-base-100 rounded-lg px-5 py-4  w-full"]) }} >
+                    <div class="flex items-center gap-5">
                         @if($icon)
                             <div class="  {{ $color }}">
-                                <x-icon :name="$icon" class="w-8 h-8" />
+                                <x-icon :name="$icon" class="w-9 h-9" />
                             </div>
                         @endif
                         
-                        <div>
+                        <div class="text-left">
                             @if($title)
                                 <div class="text-xs text-gray-500 whitespace-nowrap">{{ $title }}</div>
                             @endif
 
-                            <div class="font-bold text-xl">{{ $value ?? $slot }}</div>
+                            <div class="font-black text-xl">{{ $value ?? $slot }}</div>
                             
                             @if($description)
                                 <div class="stat-desc">{{ $description }}</div>
