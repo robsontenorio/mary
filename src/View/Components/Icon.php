@@ -4,7 +4,6 @@ namespace Mary\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
 class Icon extends Component
@@ -13,8 +12,6 @@ class Icon extends Component
 
     public function __construct(
         public string $name,
-        public ?string $class = null,
-        private string $defaultClasses = 'w-5 h-5 inline'
     ) {
         $this->uuid = md5(serialize($this));
     }
@@ -24,19 +21,18 @@ class Icon extends Component
         return "heroicon-{$this->name}";
     }
 
-    public function classes(): string
-    {
-        if (Str::contains($this->class, ['w-', 'h-'])) {
-            return "inline {$this->class}";
-        }
-
-        return "{$this->defaultClasses} {$this->class}";
-    }
-
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <x-svg :name="$icon()" :class="$classes()" />
+                <x-svg 
+                    :name="$icon()" 
+                    {{ 
+                        $attributes->class([
+                            'inline',
+                            'w-5 h-5' => !Str::contains($attributes->get('class'), ['w-', 'h-'])
+                        ]) 
+                     }} 
+                />
             HTML;
     }
 }
