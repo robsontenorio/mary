@@ -19,6 +19,11 @@ class Icon extends Component
         $this->uuid = md5(serialize($this));
     }
 
+    public function icon(): string
+    {
+        return "heroicon-{$this->name}";
+    }
+
     public function classes(): string
     {
         if (Str::contains($this->class, ['w-', 'h-'])) {
@@ -31,7 +36,7 @@ class Icon extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                @svg("heroicon-{$name}", "$classes()")
+                <x-svg :name="$icon()" :class="$classes()" />
             HTML;
     }
 }

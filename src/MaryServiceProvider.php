@@ -48,6 +48,9 @@ class MaryServiceProvider extends ServiceProvider
 
     public function registerComponents()
     {
+        // Just rename <x-icon> provided from BladeUI to <x-svg> to not collide with ours
+        Blade::component('BladeUI\Icons\Components\Icon', 'svg');
+
         Blade::component('alert', Alert::class);
         Blade::component('badge', Badge::class);
         Blade::component('button', Button::class);

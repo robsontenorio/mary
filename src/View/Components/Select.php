@@ -39,17 +39,7 @@ class Select extends Component
                     <label class="label label-text font-semibold">{{ $label }}</label>
                 @endif
                 
-                <div class="relative">
-                    <!-- ICON -->
-                    @if($icon)
-                        <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 ml-3 text-gray-400" />                     
-                    @endif
-
-                    <!-- RIGHT ICON  -->
-                    @if($iconRight)
-                        <x-icon :name="$iconRight" class="absolute top-1/2 right-8 -translate-y-1/2 text-gray-400 " />
-                    @endif
-
+                <div class="relative">                 
                     <select 
                         {{ $attributes->whereDoesntStartWith('class') }} 
                         {{ $attributes->class([
@@ -70,6 +60,16 @@ class Select extends Component
                             <option value="{{ $option[$optionValue] }}">{{ $option[$optionLabel] }}</option>
                         @endforeach
                     </select>
+
+                    <!-- ICON -->
+                    @if($icon)
+                        <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400" />                     
+                    @endif
+
+                    <!-- RIGHT ICON  -->
+                    @if($iconRight)
+                        <x-icon :name="$iconRight" class="absolute top-1/2 right-8 -translate-y-1/2 text-gray-400 " />
+                    @endif
 
                     <!-- INLINE LABEL -->
                     @if($label && $inline)                        
