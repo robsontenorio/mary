@@ -19,15 +19,16 @@ class Checkbox extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <label class="@if(!$tight) label @else flex items-center gap-3 py-2 px-1 @endif label-text font-semibold"> 
-                    
-                    @if(!$right) 
-                        {{ $label}} 
+                <label class="flex items-center gap-3 cursor-pointer">                     
+                    @if($right) 
+                        <span @class(["flex-1" => !$tight])>
+                            {{ $label}} 
+                        </span>
                     @endif
                     
                     <input type="checkbox" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['checkbox checkbox-primary']) }}  />                
 
-                    @if($right) 
+                    @if(!$right) 
                         {{ $label}} 
                     @endif
                     

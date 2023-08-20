@@ -13,6 +13,7 @@ class Input extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $icon = null,
+        public ?string $iconRight = null,
         public ?string $hint = null,
         public ?string $prefix = null,
         public ?string $sufix = null,
@@ -20,11 +21,15 @@ class Input extends Component
         public bool $money = false,
         public string $thousandsSeparator = ',',
         public string $fractionSeparator = '.',
+
+        // Slots
+        public mixed $prepend = null,
+        public mixed $append = null
     ) {
         $this->uuid = md5(serialize($this));
     }
 
-    public function name(): ?string
+    public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
     }
@@ -38,15 +43,15 @@ class Input extends Component
                     <label class="pt-0 label label-text font-semibold">{{ $label }}</label> 
                 @endif
 
-                <!-- PREFIX/SUFIX CONTAINER -->
-                @if($prefix || $sufix)
+                <!-- PREFIX/SUFIX/PREPEND/APPEND CONTAINER -->
+                @if($prefix || $sufix || $prepend || $append)
                     <div class="flex">                        
                 @endif
 
-                <!-- PREFIX -->
-                @if($prefix)
-                    <div class="rounded-l-lg px-4 flex items-center bg-base-200 border border-base-300">
-                        {{ $prefix }}
+                <!-- PREFIX / PREPEND -->
+                @if($prefix || $prepend)
+                    <div class="rounded-l-lg flex items-center bg-base-200 @if($prefix) border border-base-300 px-4 @endif">
+                        {{ $prepend ?? $prefix }}
                     </div>
                 @endif
 
@@ -55,10 +60,15 @@ class Input extends Component
                     @if($icon)
                         <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 ml-3 text-gray-400 " />
                     @endif
+
+                    <!-- RIGHT ICON  -->
+                    @if($iconRight)
+                        <x-icon :name="$iconRight" class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 " />
+                    @endif
                     
                     <!-- MONEY SETUP -->
                     @if($money)
-                        <div x-data="{display: ''}" x-init="display = $wire.{{ $name() }}?.replace('.', '{{ $fractionSeparator }}')">                                
+                        <div x-data="{display: ''}" x-init="display = $wire.{{ $modelName() }}?.replace('.', '{{ $fractionSeparator }}')">                                
                     @endif
 
                     <!-- INPUT -->
@@ -69,7 +79,7 @@ class Input extends Component
                         @if($money)
                             :value="display"
                             x-mask:dynamic="$money($input, '{{ $fractionSeparator}}', '{{ $thousandsSeparator }}')"                                     
-                            @input="$wire.{{ $name() }} = $el.value.replaceAll('{{ $thousandsSeparator }}', '').replaceAll('{{ $fractionSeparator }}', '.')"
+                            @input="$wire.{{ $modelName() }} = $el.value.replaceAll('{{ $thousandsSeparator }}', '').replaceAll('{{ $fractionSeparator }}', '.')"
                         @endif
 
                         {{
@@ -81,10 +91,10 @@ class Input extends Component
                                 'pl-10' => ($icon), 
                                 'h-14' => ($inline),
                                 'pt-3' => ($inline && $label),     
-                                'rounded-l-none' => $prefix,
-                                'rounded-r-none' => $sufix,
+                                'rounded-l-none' => $prefix || $prepend,
+                                'rounded-r-none' => $sufix || $append,
                                 'border border-dashed' => $attributes->has('readonly'),
-                                'input-error' => $errors->has($name())
+                                'input-error' => $errors->has($modelName())
                             ]) 
                         }}                                    
                     />
@@ -103,26 +113,26 @@ class Input extends Component
                     @endif                                                                                      
                 </div>
 
-                <!-- SUFIX -->
-                @if($sufix)
-                    <div class="rounded-r-lg py-3.5 px-4 bg-base-200 border border-base-300">
-                        {{ $sufix }}
+                <!-- SUFIX/APPEND -->
+                @if($sufix || $append)
+                    <div class="rounded-r-lg flex items-center bg-base-200 @if($sufix) border border-base-300 px-4 @endif">
+                        {{ $append ?? $sufix }}
                     </div>
                 @endif
 
-                <!-- END: PREFIX / SUFIX CONTAINER  -->
-                @if($prefix || $sufix)
+                <!-- END: PREFIX/SUFIX/APPEND/PREPEND CONTAINER  -->
+                @if($prefix || $sufix || $prepend || $append)
                     </div>
                 @endif
 
                 <!-- ERROR -->
-                @error($name())
+                @error($modelName())
                     <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                 @enderror
                 
                 <!-- HINT -->
                 @if($hint)
-                    <div class="label-text-alt text-gray-400 p-1">{{ $hint }}</div>
+                    <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
                 @endif      
             </div>
             HTML;

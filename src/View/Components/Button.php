@@ -13,6 +13,7 @@ class Button extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $icon = null,
+        public ?string $iconRight = null,
         public ?string $spinner = null
     ) {
         $this->uuid = md5(serialize($this));
@@ -40,12 +41,14 @@ class Button extends Component
                         wire:target="{{ $spinnerTarget() }}"
                         wire:loading.attr="disabled"                    
                     @endif
-                    >
+                >
                     
+                    <!-- SPINNER -->
                     @if($spinner)
                         <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
                     @endif
 
+                    <!-- ICON -->
                     @if($icon)
                         <span @if($spinner) wire:loading.remove wire:target="{{ $spinnerTarget() }}" @endif>
                             <x-icon :name="$icon" />
@@ -53,6 +56,13 @@ class Button extends Component
                     @endif
                     
                     {{ $label ?? $slot }}
+
+                    <!-- ICON RIGHT -->                    
+                    @if($iconRight)
+                        <span @if($spinner) wire:loading.remove wire:target="{{ $spinnerTarget() }}" @endif>
+                            <x-icon :name="$iconRight" />
+                        </span>
+                    @endif
                 </button>
             HTML;
     }

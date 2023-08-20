@@ -14,6 +14,7 @@ class Select extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $icon = null,
+        public ?string $iconRight = null,
         public ?string $hint = null,
         public ?string $placeholder = null,
         public ?bool $inline = false,
@@ -32,15 +33,21 @@ class Select extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <div wire:key="{{ $uuid }}">
-                
+            <div wire:key="{{ $uuid }}">                
+                <!-- STANDARD LABEL -->
                 @if($label && !$inline)
                     <label class="label label-text font-semibold">{{ $label }}</label>
                 @endif
                 
                 <div class="relative">
+                    <!-- ICON -->
                     @if($icon)
                         <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 ml-3 text-gray-400" />                     
+                    @endif
+
+                    <!-- RIGHT ICON  -->
+                    @if($iconRight)
+                        <x-icon :name="$iconRight" class="absolute top-1/2 right-8 -translate-y-1/2 text-gray-400 " />
                     @endif
 
                     <select 
@@ -55,7 +62,6 @@ class Select extends Component
                         }}
                         
                     >
-
                         @if($placeholder)
                             <option>{{ $placeholder }}</option>
                         @endif
@@ -65,6 +71,7 @@ class Select extends Component
                         @endforeach
                     </select>
 
+                    <!-- INLINE LABEL -->
                     @if($label && $inline)                        
                         <label class="absolute text-gray-500 duration-300 transform -translate-y-1 scale-75 top-2 z-10 origin-[0] bg-white rounded dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
                             {{ $label }}                                
@@ -72,10 +79,12 @@ class Select extends Component
                     @endif
                 </div>
 
+                <!-- ERROR -->
                 @error($name)
                     <div class="text-red-500">{{ $message }}</div>
                 @enderror
 
+                <!-- HINT -->
                 @if($hint)
                     <div class="label-text-alt text-gray-400 pl-1 mt-2">{{ $hint }}</div>
                 @endif

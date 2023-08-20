@@ -19,15 +19,17 @@ class Toggle extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <label class="@if(!$tight) label @else flex items-center gap-3 py-2 px-1 @endif label-text font-semibold"> 
+                <label class="flex items-center gap-3 cursor-pointer"> 
                     
-                    @if(!$right) 
-                        {{ $label}} 
+                    @if($right) 
+                        <span @class(["flex-1" => !$tight])>
+                            {{ $label}} 
+                        </span>
                     @endif
                     
                     <input type="checkbox" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['toggle toggle-primary']) }}  />                
 
-                    @if($right) 
+                    @if(!$right) 
                         {{ $label}} 
                     @endif
                     

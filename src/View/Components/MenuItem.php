@@ -35,7 +35,7 @@ class MenuItem extends Component
                         <x-icon :name="$icon" /> 
                     @endif
 
-                    {{ $title }}
+                    {{ $title ?? $slot }}
                     </a>
                 </li>
             HTML;
