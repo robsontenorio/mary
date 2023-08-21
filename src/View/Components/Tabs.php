@@ -38,7 +38,7 @@ class Tabs extends Component
                             selected:
                                 @if($selected) 
                                     '{{ $selected }}'
-                                    @else  
+                                @else  
                                     @entangle($attributes->wire('model')).live 
                                 @endif 
                         }"
