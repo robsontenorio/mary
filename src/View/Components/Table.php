@@ -79,6 +79,11 @@ class Table extends Component
                             @endforeach
                         </tbody>
                     </table>
+                    @php
+                        # TODO: workaround for bug when using slot with @scope on tables.
+                        # It seems it loses start/end context with @scope/@endscope. So I am just placing any hidden component here. 
+                    @endphp
+                    <x-alert style="display:none" />
                 </div>
             HTML;
     }

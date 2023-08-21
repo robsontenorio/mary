@@ -9,7 +9,7 @@ use Illuminate\View\Component;
 class Modal extends Component
 {
     public function __construct(
-        public string $id,
+        public ?string $id = '',
         public ?string $title = null,
         public ?string $subtitle = null,
         public ?bool $separator = false,
@@ -23,7 +23,18 @@ class Modal extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <dialog id="{{ $id }}" {{ $attributes->class(["modal"]) }}>
+                <dialog 
+                    {{ $attributes->class(["modal"]) }}
+
+                    @if($id)
+                        id="{{ $id }}"
+                    @else
+                        x-data="{open: @entangle($attributes->wire('model')).live }"                         
+                        :class="{'modal-open': open}"
+                        :open="open"
+                        @keydown.escape.window = "$wire.{{ $attributes->wire('model')->value() }} = false"
+                    @endif
+                >
                     <div class="modal-box">
                         @if($title)
                             <x-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" />
