@@ -72,11 +72,11 @@ class ListItem extends Component
                         
                         <div class="py-3">
                             <div @if(!is_string($value)) {{ $value->attributes->class(["font-semibold truncate"]) }} @else class="font-semibold truncate" @endif>
-                                {{ is_string($value) ? $item->$value : $value }}
+                                {{ is_string($value) ? data_get($item, $value) : $value }}
                             </div>
 
                             <div @if(!is_string($subValue))  {{ $subValue->attributes->class(["text-gray-400 text-sm truncate"]) }} @else class="text-gray-400 text-sm truncate" @endif>
-                                {{ is_string($subValue) ? $item->$subValue : $subValue }}
+                                {{ is_string($subValue) ? data_get($item, $subValue) : $subValue }}
                             </div>                        
                         </div>
 

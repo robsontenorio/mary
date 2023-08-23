@@ -13,8 +13,15 @@ class Choices extends Component
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $hint = null,
+        public ?string $optionValue = 'id',
+        public ?string $optionLabel = 'name',
+        public ?string $optionSubLabel = 'description',
+        public ?string $optionAvatar = 'avatar',
         public bool $inline = false,
         public Collection|array $options = new Collection(),
+
+        // slots
+        public mixed $item = null
     ) {
     }
 
@@ -32,7 +39,9 @@ class Choices extends Component
                     <label class="pt-0 label label-text font-semibold">{{ $label }}</label> 
                 @endif            
             
-                <div x-data="{ open: false, display: ''}" @click.outside="open = false" class="relative">                    
+                <div x-data="{ open: false, display: ''}" @click.outside="open = false" class="relative">    
+                    <span x-text="display"></span>  /
+                    <span x-text="$wire.{{ $modelName() }}"></span>                
                     <div class="relative">
 
                         <!-- SELECTION DISPLAY -->
@@ -80,10 +89,15 @@ class Choices extends Component
                         <div class="absolute w-full bg-base-100 z-10 top-2 border border-base-300 shadow-lg cursor-pointer rounded-lg">                        
                             @forelse($options as $option)
                                 <div 
-                                    @click="$wire.{{ $modelName() }} = {{ $option->id }}; display = '{{ $option->name }}'"
-                                    :class="$wire.{{ $modelName() }} == {{ $option->id }} && 'bg-base-200'"
-                                >                    
-                                    <x-list-item :item="$option"  />
+                                    @click="$wire.{{ $modelName() }} = {{ $option->{$optionValue} }}; display = '{{ $option->{$optionLabel} }}'"
+                                    :class="$wire.{{ $modelName() }} == {{ $option->{$optionValue} }} && 'bg-base-200'"
+                                >                
+                                    <!-- ITEM SLOT -->
+                                    @if($item)
+                                        {{ $item($option) }}
+                                    @else
+                                        <x-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar"  />
+                                    @endif
                                 </div>
                             @empty
                             <div class="p-3">No results</div>
