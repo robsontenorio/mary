@@ -43,13 +43,11 @@ class Choices extends Component
                 @endif            
             
                 <div x-data="{ open: false, display: ''}" @click.outside="open = false" class="relative">    
-                    <span x-text="display"></span>  /
-                    <span x-text="$wire.{{ $modelName() }}"></span>                
                     <div class="relative">
 
                         <!-- SELECTION DISPLAY -->
                         <span 
-                            class="bg-base-100 top-2 pt-1.5 h-8 @if($icon) left-8 @else left-3 @endif px-2 rounded-md font-semibold text-sm underline decoration-dotted hover:bg-base-300 cursor-pointer absolute" 
+                            class="bg-base-100 top-2 pt-1.5 h-8 @if($icon) left-8 @else left-3 @endif px-2 rounded-md font-semibold text-sm underline decoration-dashed hover:bg-base-300 cursor-pointer absolute" 
                             x-show="!open && display"
                             x-text="display"
                             @click="open = true; @if($searchable) $refs.searchInput.focus(); @endif">
