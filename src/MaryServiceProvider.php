@@ -10,6 +10,7 @@ use Mary\View\Components\Button;
 use Mary\View\Components\Card;
 use Mary\View\Components\Checkbox;
 use Mary\View\Components\Choices;
+use Mary\View\Components\DateTime;
 use Mary\View\Components\Drawer;
 use Mary\View\Components\Dropdown;
 use Mary\View\Components\Form;
@@ -59,6 +60,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('checkbox', Checkbox::class);
         Blade::component('choices', Choices::class);
         Blade::component('drawer', Drawer::class);
+        Blade::component('datetime', DateTime::class);
         Blade::component('dropdown', Dropdown::class);
         Blade::component('form', Form::class);
         Blade::component('header', Header::class);

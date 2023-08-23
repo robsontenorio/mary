@@ -17,10 +17,10 @@ class Input extends Component
         public ?string $hint = null,
         public ?string $prefix = null,
         public ?string $sufix = null,
-        public bool $inline = false,
-        public bool $money = false,
-        public string $thousandsSeparator = ',',
-        public string $fractionSeparator = '.',
+        public ?bool $inline = false,
+        public ?bool $money = false,
+        public ?string $thousandsSeparator = ',',
+        public ?string $fractionSeparator = '.',
 
         // Slots
         public mixed $prepend = null,
