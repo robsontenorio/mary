@@ -102,7 +102,7 @@ class ListItem extends Component
                 </div>                            
 
                 @if(!$noSeparator) 
-                    <hr /> 
+                    <hr class="border-base-300"/> 
                 @endif
             </div>
         HTML;
