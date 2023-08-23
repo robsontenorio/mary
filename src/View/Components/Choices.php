@@ -13,11 +13,14 @@ class Choices extends Component
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $hint = null,
+        public ?bool $inline = false,
+        public ?bool $searchable = false,
+        public ?bool $single = false,
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public ?string $optionSubLabel = 'description',
         public ?string $optionAvatar = 'avatar',
-        public bool $inline = false,
+        public ?string $noResultText = null,
         public Collection|array $options = new Collection(),
 
         // slots
@@ -49,16 +52,21 @@ class Choices extends Component
                             class="bg-base-100 top-2 pt-1.5 h-8 @if($icon) left-8 @else left-3 @endif px-2 rounded-md font-semibold text-sm underline decoration-dotted hover:bg-base-300 cursor-pointer absolute" 
                             x-show="!open && display"
                             x-text="display"
-                            @click="open = true; $refs.searchInput.focus()">
+                            @click="open = true; @if($searchable) $refs.searchInput.focus(); @endif">
                         </span>
 
                         <!-- SEARCH INPUT  -->
                         <input         
                             x-ref="searchInput"
-                            wire:keyup.debounce="search($el.value)"
                             @focus="open = true;"
                             :value="display"
-                            placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
+                            placeholder="{{ $attributes->whereStartsWith('placeholder')->first() }} "
+
+                            @if($searchable)
+                                wire:keyup.debounce="search($el.value)"
+                            @else
+                                readonly
+                            @endif
                             
                             {{ 
                                 $attributes
@@ -81,28 +89,30 @@ class Choices extends Component
                             
                     <!-- OPTIONS CONTAINER -->
                     <div x-show="open" @click="open = false" class="relative">        
-                        
+
                         <!-- PROGRESS -->
                         <progress wire:loading.delay wire:target="search" class="progress absolute progress-primary h-0.5"></progress>
                         
                         <!-- OPTIONS -->
-                        <div class="absolute w-full bg-base-100 z-10 top-2 border border-base-300 shadow-lg cursor-pointer rounded-lg">                        
-                            @forelse($options as $option)
-                                <div 
-                                    @click="$wire.{{ $modelName() }} = {{ $option->{$optionValue} }}; display = '{{ $option->{$optionLabel} }}'"
-                                    :class="$wire.{{ $modelName() }} == {{ $option->{$optionValue} }} && 'bg-base-200'"
-                                >                
-                                    <!-- ITEM SLOT -->
-                                    @if($item)
-                                        {{ $item($option) }}
-                                    @else
-                                        <x-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar"  />
-                                    @endif
-                                </div>
-                            @empty
-                            <div class="p-3">No results</div>
-                            @endforelse
-                        </div>
+                        @if($options->count() || $noResultText)
+                            <div class="absolute w-full bg-base-100 z-10 top-2 border border-base-300 shadow-xl cursor-pointer rounded-lg">                        
+                                @forelse($options as $option)
+                                    <div 
+                                        @click="$wire.{{ $modelName() }} = {{ $option->{$optionValue} }}; display = '{{ $option->{$optionLabel} }}'"
+                                        :class="$wire.{{ $modelName() }} == {{ $option->{$optionValue} }} && 'bg-base-200'"
+                                    >                
+                                        <!-- ITEM SLOT -->
+                                        @if($item)
+                                            {{ $item($option) }}
+                                        @else
+                                            <x-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar"  />
+                                        @endif
+                                    </div>
+                                @empty
+                                <div class="p-3">{{ $noResultText }}</div>
+                                @endforelse
+                            </div>
+                        @endif
                     </div>
 
                     <!-- HIDDEN SELECTED VALUE -->
