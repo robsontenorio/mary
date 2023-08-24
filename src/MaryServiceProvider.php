@@ -10,6 +10,7 @@ use Mary\View\Components\Button;
 use Mary\View\Components\Card;
 use Mary\View\Components\Checkbox;
 use Mary\View\Components\Choices;
+use Mary\View\Components\DatePicker;
 use Mary\View\Components\DateTime;
 use Mary\View\Components\Drawer;
 use Mary\View\Components\Dropdown;
@@ -61,6 +62,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('choices', Choices::class);
         Blade::component('drawer', Drawer::class);
         Blade::component('datetime', DateTime::class);
+        Blade::component('datepicker', DatePicker::class);
         Blade::component('dropdown', Dropdown::class);
         Blade::component('form', Form::class);
         Blade::component('header', Header::class);
@@ -111,6 +113,19 @@ class MaryServiceProvider extends ServiceProvider
 
         Blade::directive('endscope', function () {
             return '<?php }); ?>';
+        });
+
+        Blade::directive('assets', function ($expression) {
+            $expression = str_replace("'", '', $expression);
+
+            return '
+                    <!-- Inject assets for '.$expression.' -->
+                    <style>'.
+                        file_get_contents(__DIR__."/../libs/{$expression}/{$expression}.css").
+                    '</style>
+                    <script>'.
+                        file_get_contents(__DIR__."/../libs/{$expression}/{$expression}.js").
+                    '</script>';
         });
     }
 

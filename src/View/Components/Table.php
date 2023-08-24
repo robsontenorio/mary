@@ -38,9 +38,13 @@ class Table extends Component
                         <!-- HEADERS -->
                         <thead class="text-black">
                             <tr>
-                                @foreach($headers as $index => $header)
-                                    <th @class(["w-1" => $index == 0])>
-                                        {{ $header['label'] }}
+                                @foreach($headers as $header)
+                                    <th class="{{ $header['class'] ?? ' ' }}">
+                                        @if(isset(${"header_".$header['key']}))
+                                            {{ ${"header_".$header['key']}($header)  }}                                      
+                                        @else
+                                            {{ $header['label'] }}
+                                        @endif                                        
                                     </th>
                                 @endforeach
 
@@ -67,7 +71,9 @@ class Table extends Component
                                             {{ ${"cell_".$temp_key}($row)  }}
                                         </td>                                                                    
                                     @else
-                                        <td>{{ data_get($row, $header['key']) }}</td>                                
+                                        <td>
+                                            {{ data_get($row, $header['key']) }}
+                                        </td>
                                     @endif
                                 @endforeach
                                 
