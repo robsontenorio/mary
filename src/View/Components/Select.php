@@ -25,7 +25,7 @@ class Select extends Component
         $this->uuid = md5(serialize($this));
     }
 
-    public function name(): string
+    public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
     }
@@ -47,7 +47,8 @@ class Select extends Component
                                     'pl-10' => ($icon), 
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
-                                    'border border-dashed' => $attributes->has('readonly')
+                                    'border border-dashed' => $attributes->has('readonly'),
+                                    'select-error' => $errors->has($modelName())
                                 ]) 
                         }}
                         
@@ -79,9 +80,9 @@ class Select extends Component
                     @endif
                 </div>
 
-                <!-- ERROR -->
-                @error($name)
-                    <div class="text-red-500">{{ $message }}</div>
+                 <!-- ERROR -->
+                 @error($modelName())
+                    <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                 @enderror
 
                 <!-- HINT -->
