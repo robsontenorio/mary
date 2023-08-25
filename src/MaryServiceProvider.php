@@ -114,19 +114,6 @@ class MaryServiceProvider extends ServiceProvider
         Blade::directive('endscope', function () {
             return '<?php }); ?>';
         });
-
-        Blade::directive('assets', function ($expression) {
-            $expression = str_replace("'", '', $expression);
-
-            return '
-                    <!-- Inject assets for '.$expression.' -->
-                    <style>'.
-                        file_get_contents(__DIR__."/../libs/{$expression}/{$expression}.css").
-                    '</style>
-                    <script>'.
-                        file_get_contents(__DIR__."/../libs/{$expression}/{$expression}.js").
-                    '</script>';
-        });
     }
 
     /**

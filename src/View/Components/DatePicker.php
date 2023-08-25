@@ -39,16 +39,11 @@ class DatePicker extends Component
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
-
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            @once
-                @assets('flatpickr')
-            @endonce
-
             <div wire:key="{{ rand() }}">                
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
