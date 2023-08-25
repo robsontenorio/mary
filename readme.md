@@ -25,13 +25,15 @@ You can read the official documentation on the [Mary website](https://mary-ui.co
 Clone the repositoy into some folder **inside your app**.
 
 ```bash
-git clone git@github.com:robsontenorio/mary.git`
+git clone git@github.com:robsontenorio/mary.git
 ```
   
 Change `composer.json` from **your app**
 
 ```json
 "minimum-stability": "dev",      // <- change to "dev"
+
+// Add this
 "repositories": {
     "robsontenorio/mary": {
         "type": "path",
