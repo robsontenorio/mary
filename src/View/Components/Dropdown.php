@@ -40,7 +40,7 @@ class Dropdown extends Component
                         <x-icon :name="$icon" />                        
                     </summary>                                                        
                 @endif                        
-                <ul @click="open = false" class="dropdown-content p-2 shadow menu z-[1] bg-base-100 rounded-box whitespace-nowrap">
+                <ul @click="open = false" class="dropdown-content p-2 shadow menu z-[1] bg-base-100 dark:bg-base-200 rounded-box whitespace-nowrap">
                     {{ $slot }}
                 </ul>
             </details>             
