@@ -58,7 +58,7 @@ class Table extends Component
                         <!-- ROWS -->
                         <tbody>                                                                                
                             @foreach($rows as $row)                                                  
-                                <tr class="hover:bg-base-200/50" @click="$dispatch('row-click', {{ $row }});">                                                        
+                                <tr class="hover:bg-base-200/50" @click="$dispatch('row-click', @js($row));">                                                        
                                 @foreach($headers as $header)    
                                     @php 
                                         # Scoped slot`s name like `user.city` are compiled to `user___city` through `@scope / @endscope`.
