@@ -12,7 +12,7 @@ class ListItem extends Component
     public string $uuid;
 
     public function __construct(
-        public object $item,
+        public object|array $item,
         public string $avatar = 'avatar',
         public string $value = 'name',
         public ?string $subValue = '',
@@ -42,11 +42,11 @@ class ListItem extends Component
                     @endif
 
                     <!-- AVATAR -->
-                    @if($item->$avatar)
+                    @if(data_get($item, $avatar))
                         <div class="py-3">                                                    
                             <div class="avatar">
                                 <div class="w-11 rounded-full">
-                                    <img src="{{ $item->$avatar }}" />
+                                    <img src="{{ data_get($item, $avatar) }}" />
                                 </div>
                             </div>                                                        
                         </div>

@@ -131,17 +131,17 @@ class Choices extends Component
                     <div x-show="open" class="relative" wire:key="options-container">   
                         
                         <!-- PROGRESS -->
-                        <progress wire:loading.delay wire:target="search" class="progress absolute progress-primary h-0.5"></progress>
+                        <progress wire:loading.delay wire:target="search" class="progress absolute -top-1 progress-primary h-0.5"></progress>
                         
                         <!-- OPTIONS -->
-                        @if($options->count() || $noResultText)
-                            <div class="absolute w-full bg-base-100 z-10 top-2 pb-0.5 border border-base-300 shadow-xl cursor-pointer rounded-lg">
+                        @if(count($options) || $noResultText)
+                            <div class="absolute w-full bg-base-100 z-10 pb-0.5 border border-base-300 shadow-xl cursor-pointer rounded-lg">
                                 @foreach($options as $option)
                                     <div        
-                                        wire:key="option-{{ $option->{$optionValue} }}"
+                                        wire:key="option-{{ data_get($option, $optionValue) }}"
                                         @click="
                                             $refs.inputSearch.value = '';
-                                            toggle({{ $option }});
+                                            toggle(@js($option));
                                             
                                             @if($single)                                                     
                                                 open = false;         
@@ -153,9 +153,9 @@ class Choices extends Component
                                         "
                                         :class="
                                             @if($single)
-                                                selection == {{ $option->{$optionValue} }} && 'bg-primary/5'
+                                                selection == {{ data_get($option, $optionValue) }} && 'bg-primary/5'
                                             @else
-                                                selection.includes({{ $option->{$optionValue} }}) && 'bg-primary/5'
+                                                selection.includes({{ data_get($option, $optionValue) }}) && 'bg-primary/5'
                                             @endif
                                         "
                                     >                
@@ -167,7 +167,7 @@ class Choices extends Component
                                         @endif
                                     </div>
                                 @endforeach
-                                @if($options->count() == 0 && $noResultText)
+                                @if(count($options) == 0 && $noResultText)
                                     <div class="p-3">{{ $noResultText }}</div>
                                 @endif
                             </div>
