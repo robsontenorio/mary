@@ -103,7 +103,7 @@ class Calendar extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <div x-data x-init="const calendar = new VanillaCalendar($el, {{ $setup() }}); calendar.init()">
+            <div x-data x-init="const calendar = new VanillaCalendar($el, {{ $setup() }}); calendar.init()" class="w-fit">
             </div>   
             HTML;
     }
