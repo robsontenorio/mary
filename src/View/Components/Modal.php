@@ -24,13 +24,13 @@ class Modal extends Component
     {
         return <<<'HTML'
                 <dialog 
-                    {{ $attributes->class(["modal"]) }}
-
+                    {{ $attributes->except('wire:model')->class(["modal"]) }}
+                    
                     @if($id)
                         id="{{ $id }}"
                     @else
                         x-data="{open: @entangle($attributes->wire('model')).live }"                         
-                        :class="{'modal-open': open}"
+                        :class="{'modal-open !animate-none': open}"
                         :open="open"
                         @keydown.escape.window = "$wire.{{ $attributes->wire('model')->value() }} = false"
                     @endif

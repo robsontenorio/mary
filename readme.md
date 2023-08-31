@@ -2,10 +2,10 @@
 
 <p align="center">
     <a href="https://packagist.org/packages/robsontenorio/mary">
-        <img src="https://poser.pugx.org/robsontenorio/mary/d/total.svg">
+        <img src="https://img.shields.io/packagist/dt/robsontenorio/mary?cacheSeconds=60">
     </a>
     <a href="https://packagist.org/packages/robsontenorio/mary">
-        <img src="https://poser.pugx.org/robsontenorio/mary/v/stable.svg">
+        <img src="https://img.shields.io/packagist/v/robsontenorio/mary?label=stable&color=blue&cacheSeconds=60">
     </a>
     <a href="https://packagist.org/packages/robsontenorio/mary">
         <img src="https://poser.pugx.org/robsontenorio/mary/license.svg">
