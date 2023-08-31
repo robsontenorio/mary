@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Mary\View\Components\Alert;
 use Mary\View\Components\Badge;
 use Mary\View\Components\Button;
+use Mary\View\Components\Calendar;
 use Mary\View\Components\Card;
 use Mary\View\Components\Checkbox;
 use Mary\View\Components\Choices;
@@ -51,12 +52,13 @@ class MaryServiceProvider extends ServiceProvider
 
     public function registerComponents()
     {
-        // Just rename <x-icon> provided from BladeUI to <x-svg> to not collide with ours
+        // Just rename <x-icon> provided by BladeUI Icons to <x-svg> to not collide with ours
         Blade::component('BladeUI\Icons\Components\Icon', 'svg');
 
         Blade::component('alert', Alert::class);
         Blade::component('badge', Badge::class);
         Blade::component('button', Button::class);
+        Blade::component('calendar', Calendar::class);
         Blade::component('card', Card::class);
         Blade::component('checkbox', Checkbox::class);
         Blade::component('choices', Choices::class);
@@ -88,9 +90,9 @@ class MaryServiceProvider extends ServiceProvider
     {
         /**
          * All credits from this blade directive goes to Konrad Kalemba.
-         * https://github.com/konradkalemba/blade-components-scoped-slots
-         *
          * Just copied and modified for my very specifc use case.
+         *
+         * https://github.com/konradkalemba/blade-components-scoped-slots
          */
         Blade::directive('scope', function ($expression) {
 
