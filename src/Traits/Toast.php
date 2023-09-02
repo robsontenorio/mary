@@ -61,15 +61,11 @@ trait Toast
             'timeout' => $timeout,
         ];
 
-        // Flash strategy if it has redirect url
-        if ($redirectTo) {
-            session()->flash('mary-flash', ['toast' => $toast]);
+        $this->js('toast('.json_encode(['toast' => $toast]).')');
 
+        if ($redirectTo) {
             return $this->redirect($redirectTo, navigate: true);
         }
-
-        // Event strategy if it has not redirect url
-        $this->dispatch('mary-toast', toast: $toast);
     }
 
     private function config($type): array
