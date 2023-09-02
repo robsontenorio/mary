@@ -4,6 +4,8 @@ namespace Mary;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
+use Mary\Livewire\Toast as ToastLivewire;
 use Mary\View\Components\Alert;
 use Mary\View\Components\Badge;
 use Mary\View\Components\Button;
@@ -32,6 +34,7 @@ use Mary\View\Components\Stat;
 use Mary\View\Components\Tab;
 use Mary\View\Components\Table;
 use Mary\View\Components\Tabs;
+use Mary\View\Components\Toast;
 use Mary\View\Components\Toggle;
 
 class MaryServiceProvider extends ServiceProvider
@@ -55,6 +58,10 @@ class MaryServiceProvider extends ServiceProvider
         // Just rename <x-icon> provided by BladeUI Icons to <x-svg> to not collide with ours
         Blade::component('BladeUI\Icons\Components\Icon', 'svg');
 
+        // Livewire
+        Livewire::component('mary::toast', ToastLivewire::class);
+
+        // Blade
         Blade::component('alert', Alert::class);
         Blade::component('badge', Badge::class);
         Blade::component('button', Button::class);
@@ -83,6 +90,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('table', Table::class);
         Blade::component('tab', Tab::class);
         Blade::component('tabs', Tabs::class);
+        Blade::component('toast', Toast::class);
         Blade::component('toggle', Toggle::class);
     }
 
