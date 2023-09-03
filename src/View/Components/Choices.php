@@ -39,7 +39,8 @@ class Choices extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <div x-data="{
+            <div
+                x-data="{
                     open: false, 
                     focused: false, 
                     items: [],
@@ -81,6 +82,14 @@ class Choices extends Component
                             @endif                                                                    
                         }                        
                     }" 
+
+                    x-init="
+                            @if ($single)
+                                items = options.filter(i => i.{{ $optionValue }} == selection);
+                            @else
+                                items = options.filter(i => selection.includes(i.{{ $optionValue }}));
+                            @endif 
+                    "
 
                     @click.outside="open = false"                     
                     class="relative"
