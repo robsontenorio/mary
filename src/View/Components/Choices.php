@@ -94,57 +94,53 @@ class Choices extends Component
                     @click.outside="open = false"                     
                     class="relative"
                 >                   
+                    
+                    <!-- DISPLAY SELECTION + INPUT  -->
+                    <div @click="$refs.inputSearch.focus(); open = true" class="select select-primary py-2 w-full h-fit inline-block">                                                        
+                        
+                       <!-- DISPLAY SELECTION  -->
+                       <span @if($single && $searchable) x-show="!focused" @endif x-transition class="break-all">
+                            <template x-for="item in selectedItems" :key="item.{{ $optionValue }}">
+                                <span 
+                                    x-text="item.{{ $optionLabel}}"
+                                    class="bg-base-200 hover:bg-base-300 rounded px-2 py-1 mr-2 leading-8 font-semibold text-sm cursor-pointer"                                        
+                                    
+                                    @if(!$single)
+                                        @click.stop="toggle(item)" 
+                                    @endif
+                                >
+                                </span>
+                            </template>      
+                        </span>  
 
-                    <div @click="$refs.inputSearch.focus(); open = true">
-                       
-                        <!-- DISPLAY SELECTION + INPUT  -->
-                        <div class="peer absolute top-3 left-4" :class="{'focused-input': focused}">                            
-                            
-                            <!-- DISPLAY SELECTION  -->
-                            <span @if($single && $searchable) x-show="!focused" @endif x-transition>
-                                <template x-for="item in selectedItems" :key="item.{{ $optionValue }}">
-                                    <span 
-                                        x-text="item.{{ $optionLabel}}"
-                                        class="bg-base-200 hover:bg-base-300 rounded px-2 py-1 mr-2 font-semibold text-sm cursor-pointer"                                        
-                                        
-                                        @if(!$single)
-                                            @click.stop="toggle(item)" 
-                                        @endif
-                                    >
-                                    </span>
-                                </template>      
-                            </span>  
+                        <!-- INPUT -->                        
+                        <input                          
+                            x-transition
+                            x-ref="inputSearch" 
+                            @focus="focused = true" 
+                            @blur="focused = false; $el.value = ''"
+                            @class([
+                                    "outline-none bg-transparent",
+                                    "hidden" => !$searchable
+                                ])
 
-                            <!-- INPUT -->                        
-                            <input                          
-                                x-transition
-                                x-ref="inputSearch" 
-                                @focus="focused = true" 
-                                @blur="focused = false; $el.value = ''"
-                                class="outline-none bg-transparent"
-
-                                @if(!$searchable)
-                                    readonly
-                                @else
-                                    wire:keydown.debounce="{{ $searchFunction }}($el.value);"
-                                @endif
-                            />
-                        </div>
-
-                        <!-- FAKE INPUT CONTAINER -->
-                        <div class="select select-primary w-full peer-[.focused-input]:border-2"></div>                                            
+                            @if(!$searchable)
+                                readonly
+                            @else
+                                wire:keydown.debounce="{{ $searchFunction }}($el.value);"
+                            @endif
+                        />
                     </div>
-
                     
                     <!-- OPTIONS CONTAINER -->
                     <div x-show="open" class="relative" wire:key="options-container">   
                         
                         <!-- PROGRESS -->
-                        <progress wire:loading.delay wire:target="search" class="progress absolute -top-1 progress-primary h-0.5"></progress>
+                        <progress wire:loading.delay wire:target="{{ $searchFunction }}" class="progress absolute progress-primary top-1 h-0.5"></progress>
                         
                         <!-- OPTIONS -->
                         @if(count($options) || $noResultText)
-                            <div class="absolute w-full bg-base-100 z-10 pb-0.5 border border-base-300 shadow-xl cursor-pointer rounded-lg overflow-y-scroll max-h-64">
+                            <div class="absolute w-full bg-base-100 mt-2 z-10 pb-0.5 border border-base-300 shadow-xl cursor-pointer rounded-lg overflow-y-scroll max-h-64">
                                 @foreach($options as $option)
                                     <div        
                                         wire:key="option-{{ data_get($option, $optionValue) }}"
