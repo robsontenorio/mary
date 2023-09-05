@@ -37,7 +37,7 @@ class Radio extends Component
                     @foreach ($options as $option)
                         <input                             
                             type="radio" 
-                            name="{{ $name }}"
+                            name="{{ $name() }}"
                             value="{{ $option->$optionValue }}"
                             aria-label="{{ $option->$optionLabel }}" 
                             {{ $attributes->whereStartsWith('wire:model') }}
@@ -46,7 +46,7 @@ class Radio extends Component
                     @endforeach                    
                 </div>
 
-                @error($name)
+                @error($name())
                     <div class="text-red-500 label-text-alt pl-1">{{ $message }}</div>
                 @enderror
                 
