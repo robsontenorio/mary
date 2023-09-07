@@ -31,7 +31,7 @@ class Main extends Component
                     
                     <!-- SIDEBAR -->
                     @if($sidebar)                        
-                        <div @class(["h-screen sticky top-0", "top-24" => $withNav])>                                      
+                        <div @class(["h-screen sticky top-0", "top-20" => $withNav])>                                      
                             <div>                                                                
                                 <div 
                                     x-data="
@@ -50,6 +50,7 @@ class Main extends Component
                                         {{ 
                                             $sidebar->attributes->class([
                                                 "hidden lg:block h-screen overflow-y-scroll overflow-x-hidden",
+                                                "pb-24" => $withNav,
                                                 "w-[70px] [&_.mary-hideable]:hidden [&_.display-when-collapsed]:block [&_.hidden-when-collapsed]:hidden" => cache('mary-sidebar-collapsed') == 'true',
                                                 "w-[270px] [&_.mary-hideable]:block [&_.hidden-when-collapsed]:block [&_.display-when-collapsed]:hidden" => cache('mary-sidebar-collapsed') != 'true'
                                             ]) 
@@ -58,7 +59,7 @@ class Main extends Component
                                         {{ $sidebar }}
 
                                         @if($sidebar->attributes['collapsible'])
-                                            <x-menu class="sticky bottom-0 hidden bg-inherit lg:block">
+                                            <x-menu class="fixed bottom-0 hidden bg-inherit lg:block">
                                                 <x-menu-item 
                                                     @click="toggle"
                                                     icon="o-bars-3-bottom-right"
