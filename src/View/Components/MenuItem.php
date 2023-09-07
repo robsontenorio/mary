@@ -4,6 +4,8 @@ namespace Mary\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
 class MenuItem extends Component
@@ -20,22 +22,37 @@ class MenuItem extends Component
         $this->uuid = md5(serialize($this));
     }
 
+    public function routeMatches(): bool
+    {
+        $link = Str::start($this->link ?? '', '/');
+        $route = Str::start(Route::current()->uri(), '/');
+
+        return $route == $link;
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'HTML'
+                @aware(['activateByRoute' => false, 'activeBgColor' => 'bg-base-300'])
+
                 <li>
                     <a 
-                        {{ $attributes->class(["my-0.5 hover:text-inherit", "active" => $active ]) }}
+                        {{ 
+                            $attributes->class([
+                                "my-0.5 hover:text-inherit rounded-md", 
+                                $activeBgColor => ($active || ($activateByRoute &&$routeMatches())) 
+                            ]) 
+                        }}
+
                         @if($link) 
                             href="{{ $link }}" wire:navigate 
                         @endif  
                     >
-                    
-                    @if($icon) 
-                        <x-icon :name="$icon" /> 
-                    @endif
+                        @if($icon) 
+                            <x-icon :name="$icon" /> 
+                        @endif
 
-                    {{ $title ?? $slot }}
+                            <span class="mary-hideable">{{ $title ?? $slot }}</span>
                     </a>
                 </li>
             HTML;

@@ -9,7 +9,8 @@ use Illuminate\View\Component;
 class Nav extends Component
 {
     public function __construct(
-        public bool $sticky = false,
+        public ?bool $sticky = false,
+        public ?bool $fullWidth = false,
 
         // Slots
         public mixed $brand = null,
@@ -26,7 +27,7 @@ class Nav extends Component
                 @endif
 
                     <header {{ $attributes->class(["bg-base-100 border-gray-100 border-b"]) }}>
-                        <div class="max-w-screen-2xl mx-auto px-6 py-5 flex items-center">
+                        <div class="mx-auto px-6 py-5 flex items-center @if(!$fullWidth) max-w-screen-2xl @endif">
                             <div {{ $attributes->class(["flex-1 flex items-center"]) }}>                        
                                 {{ $brand }}                        
                             </div>

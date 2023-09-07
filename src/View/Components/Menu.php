@@ -13,7 +13,9 @@ class Menu extends Component
     public function __construct(
         public ?string $title = null,
         public ?string $icon = null,
-        public ?bool $separator = false
+        public ?bool $separator = false,
+        public ?bool $activateByRoute = false,
+        public ?string $activeBgColor = 'bg-base-300',
     ) {
         $this->uuid = md5(serialize($this));
     }
