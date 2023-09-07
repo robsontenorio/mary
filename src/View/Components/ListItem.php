@@ -17,6 +17,7 @@ class ListItem extends Component
         public string $value = 'name',
         public ?string $subValue = '',
         public ?bool $noSeparator = false,
+        public ?bool $noHover = false,
         public ?string $link = null,
 
         // Slots
@@ -31,8 +32,10 @@ class ListItem extends Component
             <div wire:key="{{ $uuid }}">                  
                 <div 
                     {{ $attributes->class([
-                        "flex justify-start items-center gap-4 hover:bg-base-200/50 px-3", 
-                        "cursor-pointer" => $link]) 
+                            "flex justify-start items-center gap-4 px-3", 
+                            "hover:bg-base-200/50" => !$noHover,
+                            "cursor-pointer" => $link
+                        ]) 
                     }}
                 >
                     
@@ -65,7 +68,7 @@ class ListItem extends Component
                     @endif
 
                     <!-- CONTENT -->                
-                    <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0">
+                    <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0 mary-hideable">
                         @if($link) 
                             <a href="{{ $link }}" wire:navigate> 
                         @endif
@@ -91,7 +94,7 @@ class ListItem extends Component
                             <a href="{{ $link }}" wire:navigate> 
                         @endif
                             
-                            <div class="py-3 flex items-center gap-3">                            
+                            <div class="py-3 flex items-center gap-3 mary-hideable">                            
                                     {{ $actions }}                        
                             </div>
                        

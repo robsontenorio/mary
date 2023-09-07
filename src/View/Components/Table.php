@@ -4,6 +4,7 @@ namespace Mary\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class Table extends Component
@@ -12,7 +13,7 @@ class Table extends Component
 
     public function __construct(
         public array $headers,
-        public mixed $rows,
+        public Collection|array $rows,
         public ?bool $striped = false,
 
         // Slots

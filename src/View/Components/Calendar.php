@@ -5,6 +5,7 @@ namespace Mary\View\Components;
 use Carbon\CarbonPeriod;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Carbon;
 use Illuminate\View\Component;
 
 class Calendar extends Component
@@ -81,12 +82,12 @@ class Calendar extends Component
                 $period = CarbonPeriod::create($range[0], $range[1]);
 
                 foreach ($period as $date) {
-                    $dates[] = $date->toDateString();
+                    $dates[] = Carbon::parse($date)->format('Y-m-d');
                 }
             }
 
             if (isset($event['date'])) {
-                $dates = [$event['date']];
+                $dates = [Carbon::parse($event['date'])->format('Y-m-d')];
             }
 
             return collect($dates)->flatMap(function ($date) use ($event) {

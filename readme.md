@@ -19,6 +19,8 @@ Mary is a set of gorgeous Laravel blade components made for Livewire 3 and style
 ## Official Documentation
 You can read the official documentation on the [Mary website](https://mary-ui.com).
 
+## Sponsor
+Let's keep pushing it, [sponsor me](https://github.com/sponsors/robsontenorio) ❤️
 
 ## Contributing
 
