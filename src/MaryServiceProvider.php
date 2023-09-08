@@ -4,6 +4,7 @@ namespace Mary;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Mary\Console\Commands\MaryInstallCommand;
 use Mary\View\Components\Alert;
 use Mary\View\Components\Badge;
 use Mary\View\Components\Button;
@@ -154,5 +155,7 @@ class MaryServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/mary.php' => config_path('mary.php'),
         ], 'mary.config');
+
+        $this->commands([MaryInstallCommand::class]);
     }
 }
