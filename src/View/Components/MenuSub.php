@@ -43,7 +43,7 @@ class MenuSub extends Component
                     }"
                 >
                     <details :open="show" @if($submenuActive) open @endif>
-                        <summary @click.prevent="toggle()" class="hover:text-inherit text-inherit" @class([$activeBgColor => $submenuActive])>
+                        <summary @click.prevent="toggle()" @class(["hover:text-inherit text-inherit", $activeBgColor => $submenuActive])>
                             @if($icon)
                                 <x-icon :name="$icon" class="inline-flex"  />
                             @endif    
