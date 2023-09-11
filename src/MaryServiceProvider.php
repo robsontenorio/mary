@@ -25,6 +25,7 @@ use Mary\View\Components\Main;
 use Mary\View\Components\Menu;
 use Mary\View\Components\MenuItem;
 use Mary\View\Components\MenuSeparator;
+use Mary\View\Components\MenuSub;
 use Mary\View\Components\Modal;
 use Mary\View\Components\Nav;
 use Mary\View\Components\Radio;
@@ -79,6 +80,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('menu', Menu::class);
         Blade::component('menu-item', MenuItem::class);
         Blade::component('menu-separator', MenuSeparator::class);
+        Blade::component('menu-sub', MenuSub::class);
         Blade::component('main', Main::class);
         Blade::component('nav', Nav::class);
         Blade::component('radio', Radio::class);

@@ -40,7 +40,7 @@ class MenuItem extends Component
                         {{ 
                             $attributes->class([
                                 "my-0.5 hover:text-inherit rounded-md", 
-                                $activeBgColor => ($active || ($activateByRoute &&$routeMatches())) 
+                                "mary-active-menu $activeBgColor" => ($active || ($activateByRoute && $routeMatches())) 
                             ]) 
                         }}
 

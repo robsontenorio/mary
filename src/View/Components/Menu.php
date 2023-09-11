@@ -25,7 +25,7 @@ class Menu extends Component
         return <<<'HTML'
                 <ul {{ $attributes->class(["menu rounded-md"]) }} >
                     @if($title)
-                        <li class="menu-title uppercase">
+                        <li class="menu-title text-inherit uppercase">
                             <div class="flex items-center gap-2">
                                 
                                 @if($icon)

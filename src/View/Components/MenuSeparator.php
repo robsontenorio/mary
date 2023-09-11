@@ -23,7 +23,7 @@ class MenuSeparator extends Component
                 <hr class="my-3"/>     
                      
                 @if($title)
-                    <li {{ $attributes->class(["menu-title uppercase"]) }}>
+                    <li {{ $attributes->class(["menu-title text-inherit uppercase"]) }}>
                         <div class="flex items-center gap-2">
                             
                             @if($icon)
