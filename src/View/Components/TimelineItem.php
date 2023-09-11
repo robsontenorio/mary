@@ -30,9 +30,9 @@ class TimelineItem extends Component
                     <div @class(["border-l-2 border-l-base-300 h-5 -mb-5" => $last, "!border-l-primary" => !$pending])>
                     </div>       
                 
-                    <div @class(["border-l-2 border-l-base-300 pl-8 py-3", "!border-l-primary" => !$pending, "pt-0" => $first, "border-l-0" => $last])>                    
+                    <div @class(["border-l-2 border-l-base-300 pl-8 py-3", "!border-l-primary" => !$pending, "pt-0" => $first, "!border-l-0" => $last])>                    
                 
-                        <div @class(["w-4 h-4 -mb-5 -ml-[41px] rounded-full bg-base-300", "bg-primary" => !$pending, "-ml-[39px]" => $last])></div>
+                        <div @class(["w-4 h-4 -mb-5 -ml-[41px] rounded-full bg-base-300", "bg-primary" => !$pending, "!-ml-[39px]" => $last])></div>
                                         
                         <div @class(["font-bold mb-1"])>{{ $title }}</div>            
 
