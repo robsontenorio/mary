@@ -34,6 +34,7 @@ use Mary\View\Components\Stat;
 use Mary\View\Components\Tab;
 use Mary\View\Components\Table;
 use Mary\View\Components\Tabs;
+use Mary\View\Components\TimelineItem;
 use Mary\View\Components\Toast;
 use Mary\View\Components\Toggle;
 
@@ -89,6 +90,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('table', Table::class);
         Blade::component('tab', Tab::class);
         Blade::component('tabs', Tabs::class);
+        Blade::component('timeline-item', TimelineItem::class);
         Blade::component('toast', Toast::class);
         Blade::component('toggle', Toggle::class);
     }
