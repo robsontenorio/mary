@@ -5,7 +5,6 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
 class MenuItem extends Component
@@ -24,8 +23,8 @@ class MenuItem extends Component
 
     public function routeMatches(): bool
     {
-        $link = Str::start($this->link ?? '', '/');
-        $route = Str::start(Route::current()->uri(), '/');
+        $link = url($this->link ?? '');
+        $route = url(Route::current()->uri());
 
         return $route == $link;
     }
