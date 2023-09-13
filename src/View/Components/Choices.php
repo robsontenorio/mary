@@ -103,7 +103,7 @@ class Choices extends Component
                             <template x-for="item in selectedItems" :key="item.{{ $optionValue }}">
                                 <span 
                                     x-text="item.{{ $optionLabel}}"
-                                    class="bg-base-200 hover:bg-base-300 rounded px-2 py-1 mr-2 leading-8 font-semibold text-sm cursor-pointer"                                        
+                                    class="bg-base-200 hover:bg-base-300 rounded px-2 py-1 mr-2 font-semibold text-sm cursor-pointer"                                        
                                     
                                     @if(!$single)
                                         @click.stop="toggle(item)" 
