@@ -52,7 +52,7 @@ class Main extends Component
 
                                         {{ 
                                             $sidebar->attributes->class([
-                                                "hidden lg:block h-screen transition-all duration-100 ease-out overflow-y-scroll overflow-x-hidden",
+                                                "hidden lg:block h-screen transition-all duration-100 ease-out overflow-y-auto overflow-x-hidden",
                                                 "pb-24" => $withNav,
                                                 "w-[70px] [&>*_summary::after]:hidden [&_.mary-hideable]:hidden [&_.display-when-collapsed]:block [&_.hidden-when-collapsed]:hidden" => cache('mary-sidebar-collapsed') == 'true',
                                                 "w-[270px] [&>*_summary::after]:block [&_.mary-hideable]:block [&_.hidden-when-collapsed]:block [&_.display-when-collapsed]:hidden" => cache('mary-sidebar-collapsed') != 'true'
