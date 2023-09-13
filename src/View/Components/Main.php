@@ -67,7 +67,7 @@ class Main extends Component
                                                 <x-menu-item 
                                                     @click="toggle"
                                                     icon="o-bars-3-bottom-right"
-                                                    title="{{ $collapseText }}" />
+                                                    title="{{ $sidebar->attributes['collapse-text'] ?? $collapseText }}" />
                                             </x-menu>
                                         @endif
                                     </div>                    
