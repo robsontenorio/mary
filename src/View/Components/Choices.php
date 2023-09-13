@@ -140,7 +140,7 @@ class Choices extends Component
                         
                         <!-- OPTIONS -->
                         @if(count($options) || $noResultText)
-                            <div class="absolute w-full bg-base-100 mt-2 z-10 pb-0.5 border border-base-300 shadow-xl cursor-pointer rounded-lg overflow-y-scroll max-h-64">
+                            <div class="absolute w-full bg-base-100 mt-2 z-10 pb-0.5 border border-base-300 shadow-xl cursor-pointer rounded-lg overflow-y-auto max-h-64">
                                 @foreach($options as $option)
                                     <div        
                                         wire:key="option-{{ data_get($option, $optionValue) }}"
