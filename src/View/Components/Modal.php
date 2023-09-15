@@ -37,7 +37,7 @@ class Modal extends Component
                 >
                     <div class="modal-box">
                         @if($title)
-                            <x-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" />
+                            <x-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" class="mb-5" />
                         @endif
 
                         <p class="">
@@ -45,7 +45,7 @@ class Modal extends Component
                         </p>
 
                         @if($separator) 
-                            <hr /> 
+                            <hr class="mt-5" /> 
                         @endif
 
                         <div class="modal-action">
