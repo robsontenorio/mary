@@ -5,6 +5,7 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
 class MenuItem extends Component
@@ -26,7 +27,7 @@ class MenuItem extends Component
         $link = url($this->link ?? '');
         $route = url(Route::current()->uri());
 
-        return $route == $link;
+        return Str::startsWith($route, $link);
     }
 
     public function render(): View|Closure|string
