@@ -45,7 +45,7 @@ class Toast extends Component
                 </div>                           
                 
                 <!-- Force Tailwind compile alert types -->
-                <span class="hidden alert-info alert-success alert-warning alert-error alert"></span>
+                <span class="hidden alert-info top-10 right-10 alert-success alert-warning alert-error alert"></span>
 
                 <script>
                     window.toast = function(payload){
