@@ -24,6 +24,10 @@ class MenuItem extends Component
 
     public function routeMatches(): bool
     {
+        if ($this->link == null) {
+            return false;
+        }
+
         $link = url($this->link ?? '');
         $route = url(Route::current()->uri());
 
