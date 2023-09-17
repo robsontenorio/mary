@@ -29,7 +29,7 @@ class Textarea extends Component
             <div>
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
-                    <label class="pt-0 label label-text font-semibold">{{ $label }}</label> 
+                    <label class="label label-text font-semibold">{{ $label }}</label> 
                 @endif
 
                 <div class="flex-1 relative">                                                              
@@ -43,7 +43,7 @@ class Textarea extends Component
                                 'textarea textarea-primary w-full peer',                                 
                                 'pt-5' => ($inline && $label),                                     
                                 'border border-dashed' => $attributes->has('readonly'),
-                                'input-error' => $errors->has($modelName())
+                                'textarea-error' => $errors->has($modelName())
                             ]) 
                         }}                                    
                     ></textarea>                                        
