@@ -58,7 +58,7 @@ class Select extends Component
                         @endif
 
                         @foreach ($options as $option)
-                            <option value="{{ $option[$optionValue] }}">{{ $option[$optionLabel] }}</option>
+                            <option value="{{ $option[$optionValue] }}" @if(isset($option['disabled'])) disabled @endif>{{ $option[$optionLabel] }}</option>
                         @endforeach
                     </select>
 
