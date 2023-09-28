@@ -24,7 +24,7 @@ class Choices extends Component
         public ?string $optionSubLabel = 'description',
         public ?string $optionAvatar = 'avatar',
         public ?string $noResultText = null,
-        public ArrayAccess $options = new Collection(),
+        public Collection|array|ArrayAccess $options = new Collection(),
 
         // slots
         public mixed $item = null

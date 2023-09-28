@@ -17,7 +17,7 @@ class Radio extends Component
         public ?string $hint = null,
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
-        public ArrayAccess $options = new Collection(),
+        public Collection|array|ArrayAccess $options = new Collection(),
     ) {
         $this->uuid = md5(serialize($this));
     }

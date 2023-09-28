@@ -5,6 +5,7 @@ namespace Mary\View\Components;
 use ArrayAccess;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class Table extends Component
@@ -12,8 +13,8 @@ class Table extends Component
     public string $uuid;
 
     public function __construct(
-        public ArrayAccess $headers,
-        public ArrayAccess $rows,
+        public array|ArrayAccess $headers,
+        public Collection|array|ArrayAccess $rows,
         public ?bool $striped = false,
 
         // Slots
