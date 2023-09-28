@@ -16,34 +16,33 @@ class Dropdown extends Component
         //Slots
         public mixed $trigger = null
     ) {
-
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <details 
-                class="dropdown @if($right) dropdown-end @endif" 
-                x-data="{open: false}" 
-                @click.outside="open = false" 
+            <details
+                class="dropdown @if($right) dropdown-end @endif"
+                x-data="{open: false}"
+                @click.outside="open = false"
                 :open="open"
-            >                
-                <!-- CUSTOM TRIGGER -->                        
+            >
+                <!-- CUSTOM TRIGGER -->
                 @if($trigger)
                     <summary @click.prevent="open = !open">
-                        {{ $trigger }}                                               
+                        {{ $trigger }}
                     </summary>
                 @else
                     <!-- DEFAULT TRIGGER -->
                     <summary @click.prevent="open = !open" {{ $attributes->class(["btn normal-case"]) }}>
                         {{ $label }}
-                        <x-icon :name="$icon" />                        
-                    </summary>                                                        
-                @endif                        
+                        <x-icon :name="$icon" />
+                    </summary>
+                @endif
                 <ul @click="open = false" class="dropdown-content p-2 shadow menu z-[1] bg-base-100 dark:bg-base-200 rounded-box whitespace-nowrap">
                     {{ $slot }}
                 </ul>
-            </details>             
+            </details>
         HTML;
     }
 }

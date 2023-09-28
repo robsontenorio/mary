@@ -31,18 +31,18 @@ class Button extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <button 
-                    wire:key="{{ $uuid }}" 
-                    {{ $attributes->whereDoesntStartWith('class') }} 
+                <button
+                    wire:key="{{ $uuid }}"
+                    {{ $attributes->whereDoesntStartWith('class') }}
                     {{ $attributes->class(['btn normal-case']) }}
-                    {{ $attributes->merge(['type' => 'button']) }} 
-                    
+                    {{ $attributes->merge(['type' => 'button']) }}
+
                     @if($spinner)
                         wire:target="{{ $spinnerTarget() }}"
-                        wire:loading.attr="disabled"                    
+                        wire:loading.attr="disabled"
                     @endif
                 >
-                    
+
                     <!-- SPINNER -->
                     @if($spinner)
                         <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
@@ -54,10 +54,10 @@ class Button extends Component
                             <x-icon :name="$icon" />
                         </span>
                     @endif
-                    
+
                     {{ $label ?? $slot }}
 
-                    <!-- ICON RIGHT -->                    
+                    <!-- ICON RIGHT -->
                     @if($iconRight)
                         <span @if($spinner) wire:loading.remove wire:target="{{ $spinnerTarget() }}" @endif>
                             <x-icon :name="$iconRight" />

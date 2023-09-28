@@ -18,7 +18,6 @@ class Header extends Component
         public mixed $middle = null,
         public mixed $actions = null,
     ) {
-
     }
 
     public function render(): View|Closure|string
@@ -37,13 +36,13 @@ class Header extends Component
                         </div>
                         <div class="flex items-center gap-3">
                             {{ $actions}}
-                        </div>                                
+                        </div>
                     </div>
 
-                    @if($separator) 
-                        <hr class="my-5" /> 
-                    @endif 
-                </div>                        
+                    @if($separator)
+                        <hr class="my-5" />
+                    @endif
+                </div>
                 HTML;
     }
 }

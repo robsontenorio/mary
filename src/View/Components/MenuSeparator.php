@@ -20,20 +20,20 @@ class MenuSeparator extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <hr class="my-3"/>     
-                     
+                <hr class="my-3"/>
+
                 @if($title)
                     <li {{ $attributes->class(["menu-title text-inherit uppercase"]) }}>
                         <div class="flex items-center gap-2">
-                            
+
                             @if($icon)
                                 <x-icon :name="$icon"  />
                             @endif
 
                             {{ $title }}
                         </div>
-                    </li>        
-                @endif                      
+                    </li>
+                @endif
             HTML;
     }
 }

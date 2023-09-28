@@ -20,20 +20,20 @@ class Drawer extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                @php 
-                    $id = $id ?? $attributes?->whereStartsWith('wire:model')->first() 
+                @php
+                    $id = $id ?? $attributes?->whereStartsWith('wire:model')->first()
                 @endphp
 
                 <div class="drawer absolute z-50 @if($right) drawer-end @endif">
                     <!-- Toggle visibility  -->
-                    <input 
-                        id="{{ $id }}" 
-                        type="checkbox" 
-                        class="drawer-toggle" 
+                    <input
+                        id="{{ $id }}"
+                        type="checkbox"
+                        class="drawer-toggle"
                         {{ $attributes->whereStartsWith('wire:model') }} />
 
                     <div class="drawer-side">
-                        <!-- Overlay effect , click outside -->                        
+                        <!-- Overlay effect , click outside -->
                         <label for="{{ $id }}" class="drawer-overlay"></label>
 
                         <!-- Content -->

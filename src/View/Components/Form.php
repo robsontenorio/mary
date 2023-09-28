@@ -19,8 +19,8 @@ class Form extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <form 
-                    {{ $attributes->whereDoesntStartWith('class') }} 
+                <form
+                    {{ $attributes->whereDoesntStartWith('class') }}
                     {{ $attributes->class(['grid grid-flow-row auto-rows-min gap-3']) }}
                 >
 
