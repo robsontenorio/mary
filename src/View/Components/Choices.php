@@ -2,6 +2,7 @@
 
 namespace Mary\View\Components;
 
+use ArrayAccess;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -23,7 +24,7 @@ class Choices extends Component
         public ?string $optionSubLabel = 'description',
         public ?string $optionAvatar = 'avatar',
         public ?string $noResultText = null,
-        public Collection|array $options = new Collection(),
+        public ArrayAccess $options = new Collection(),
 
         // slots
         public mixed $item = null

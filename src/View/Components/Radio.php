@@ -2,6 +2,7 @@
 
 namespace Mary\View\Components;
 
+use ArrayAccess;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -16,7 +17,7 @@ class Radio extends Component
         public ?string $hint = null,
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
-        public Collection|array $options = new Collection(),
+        public ArrayAccess $options = new Collection(),
     ) {
         $this->uuid = md5(serialize($this));
     }
