@@ -31,26 +31,26 @@ class Radio extends Component
     {
         return <<<'HTML'
                 @if($label)
-                    <label class="label label-text font-semibold">{{ $label }}</label>  
-                @endif 
+                    <label class="label label-text font-semibold">{{ $label }}</label>
+                @endif
 
                 <div class="join">
                     @foreach ($options as $option)
-                        <input                             
-                            type="radio" 
+                        <input
+                            type="radio"
                             name="{{ $name() }}"
                             value="{{ data_get($option, $optionValue) }}"
-                            aria-label="{{ data_get($option, $optionLabel) }}" 
+                            aria-label="{{ data_get($option, $optionLabel) }}"
                             {{ $attributes->whereStartsWith('wire:model') }}
                             {{ $attributes->class(["join-item capitalize btn input-bordered input bg-base-200"]) }}
-                            />                    
-                    @endforeach                    
+                            />
+                    @endforeach
                 </div>
 
                 @error($name())
                     <div class="text-red-500 label-text-alt pl-1">{{ $message }}</div>
                 @enderror
-                
+
                 @if($hint)
                     <div class="label-text-alt text-gray-400 pl-1 mt-2">{{ $hint }}</div>
                 @endif
