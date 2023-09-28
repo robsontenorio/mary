@@ -31,14 +31,14 @@ class Stat extends Component
                                 <x-icon :name="$icon" class="w-9 h-9" />
                             </div>
                         @endif
-
+                        
                         <div class="text-left">
                             @if($title)
                                 <div class="text-xs text-gray-500 whitespace-nowrap">{{ $title }}</div>
                             @endif
 
                             <div class="font-black text-xl">{{ $value ?? $slot }}</div>
-
+                            
                             @if($description)
                                 <div class="stat-desc">{{ $description }}</div>
                             @endif

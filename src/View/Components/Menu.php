@@ -27,20 +27,20 @@ class Menu extends Component
                     @if($title)
                         <li class="menu-title text-inherit uppercase">
                             <div class="flex items-center gap-2">
-
+                                
                                 @if($icon)
                                     <x-icon :name="$icon" class="w-4 h-4 inline-flex"  />
-                                @endif
-
-                                {{ $title }}
+                                @endif                        
+                                
+                                {{ $title }}                                
                             </div>
                         </li>
                     @endif
 
-                    @if($separator)
-                        <hr class="mb-3"/>
+                    @if($separator) 
+                        <hr class="mb-3"/> 
                     @endif
-
+                    
                     {{ $slot }}
                 </ul>
             HTML;

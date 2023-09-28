@@ -13,26 +13,27 @@ class Toggle extends Component
         public ?bool $right = false,
         public ?bool $tight = false
     ) {
+
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <label class="flex items-center gap-3 cursor-pointer">
-
-                    @if($right)
+                <label class="flex items-center gap-3 cursor-pointer"> 
+                    
+                    @if($right) 
                         <span @class(["flex-1" => !$tight])>
-                            {{ $label}}
+                            {{ $label}} 
                         </span>
                     @endif
+                    
+                    <input type="checkbox" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['toggle toggle-primary']) }}  />                
 
-                    <input type="checkbox" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['toggle toggle-primary']) }}  />
-
-                    @if(!$right)
-                        {{ $label}}
+                    @if(!$right) 
+                        {{ $label}} 
                     @endif
-
-                </label>
+                    
+                </label>            
         HTML;
     }
 }

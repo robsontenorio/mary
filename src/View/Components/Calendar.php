@@ -105,7 +105,7 @@ class Calendar extends Component
     {
         return <<<'HTML'
             <div x-data x-init="const calendar = new VanillaCalendar($el, {{ $setup() }}); calendar.init()" class="w-fit">
-            </div>
+            </div>   
             HTML;
     }
 }

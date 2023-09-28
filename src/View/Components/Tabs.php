@@ -32,23 +32,23 @@ class Tabs extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                    <div
-                        class="flex overflow-x-auto"
-                        x-data="{
+                    <div 
+                        class="flex overflow-x-auto" 
+                        x-data="{ 
                             selected:
-                                @if($selected)
+                                @if($selected) 
                                     '{{ $selected }}'
-                                @else
-                                    @entangle($attributes->wire('model')).live
-                                @endif
+                                @else  
+                                    @entangle($attributes->wire('model')).live 
+                                @endif 
                         }"
                     >
                         {{ $slot }}
                     </div>
                     <hr/>
                     <div id="{{ $tabContainer }}">
-                            <!-- tab contents will be teleported in here -->
-                    </div>
+                            <!-- tab contents will be teleported in here -->                             
+                    </div>                    
                 HTML;
     }
 }
