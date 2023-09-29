@@ -2,7 +2,6 @@
 
 namespace Mary\View\Components;
 
-use ArrayAccess;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -21,7 +20,7 @@ class Select extends Component
         public ?bool $inline = false,
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
-        public Collection|array|ArrayAccess $options = new Collection(),
+        public Collection|array $options = new Collection(),
     ) {
         $this->uuid = md5(serialize($this));
     }
