@@ -7,48 +7,18 @@ trait Toast
     public function success(
         string $title,
         string $description = null,
-        string $position = 'top-10 right-10',
+        string $position = 'toast-top toast-end',
         int $timeout = 3000,
         string $redirectTo = null
     ) {
         return $this->toast('success', $title, $description, $position, $timeout, $redirectTo);
     }
 
-    public function warning(
-        string $title,
-        string $description = null,
-        string $position = 'top-10 right-10',
-        int $timeout = 3000,
-        string $redirectTo = null
-    ) {
-        return $this->toast('warning', $title, $description, $position, $timeout, $redirectTo);
-    }
-
-    public function error(
-        string $title,
-        string $description = null,
-        string $position = 'top-10 right-10',
-        int $timeout = 3000,
-        string $redirectTo = null
-    ) {
-        return $this->toast('error', $title, $description, $position, $timeout, $redirectTo);
-    }
-
-    public function info(
-        string $title,
-        string $description = null,
-        string $position = 'top-10 right-10',
-        int $timeout = 3000,
-        string $redirectTo = null
-    ) {
-        return $this->toast('info', $title, $description, $position, $timeout, $redirectTo);
-    }
-
     public function toast(
         string $type,
         string $title,
         string $description = null,
-        string $position = 'top-10 right-10',
+        string $position = 'toast-top toast-end',
         int $timeout = 3000,
         string $redirectTo = null
     ) {
@@ -61,7 +31,7 @@ trait Toast
             'timeout' => $timeout,
         ];
 
-        $this->js('toast('.json_encode(['toast' => $toast]).')');
+        $this->js('toast(' . json_encode(['toast' => $toast]) . ')');
 
         session()->flash('mary.toast.title', $title);
         session()->flash('mary.toast.description', $title);
@@ -91,5 +61,35 @@ trait Toast
                 'icon' => 's-x-circle',
             ],
         ][$type] ?? [];
+    }
+
+    public function warning(
+        string $title,
+        string $description = null,
+        string $position = 'toast-top toast-end',
+        int $timeout = 3000,
+        string $redirectTo = null
+    ) {
+        return $this->toast('warning', $title, $description, $position, $timeout, $redirectTo);
+    }
+
+    public function error(
+        string $title,
+        string $description = null,
+        string $position = 'toast-top toast-end',
+        int $timeout = 3000,
+        string $redirectTo = null
+    ) {
+        return $this->toast('error', $title, $description, $position, $timeout, $redirectTo);
+    }
+
+    public function info(
+        string $title,
+        string $description = null,
+        string $position = 'toast-top toast-end',
+        int $timeout = 3000,
+        string $redirectTo = null
+    ) {
+        return $this->toast('info', $title, $description, $position, $timeout, $redirectTo);
     }
 }
