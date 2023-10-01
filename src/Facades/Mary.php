@@ -1,6 +1,6 @@
 <?php
 
-namespace Robsontenorio\Mary\Facades;
+namespace Mary\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
