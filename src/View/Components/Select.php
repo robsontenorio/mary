@@ -36,7 +36,7 @@ class Select extends Component
             <div wire:key="{{ $uuid }}">                
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
-                    <label class="label label-text font-semibold">{{ $label }}</label>
+                    <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
                 @endif
                 
                 <div class="relative">                 
