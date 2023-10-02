@@ -12,24 +12,26 @@
     </a>
 </p>
 
-
 ## Introduction
+
 Mary is a set of gorgeous Laravel blade components made for Livewire 3 and styled with DaisyUI and Tailwind.
 
 ## Official Documentation
+
 You can read the official documentation on the [Mary website](https://mary-ui.com).
 
 ## Sponsor
+
 Let's keep pushing it, [sponsor me](https://github.com/sponsors/robsontenorio) ❤️
 
 ## Contributing
 
-Clone the repositoy into some folder **inside your app**.
+Clone the repository into some folder **inside your app**.
 
 ```bash
 git clone git@github.com:robsontenorio/mary.git
 ```
-  
+
 Change `composer.json` from **your app**
 
 ```json
@@ -53,7 +55,7 @@ Require the package again for local symlink.
 composer require robsontenorio/mary
 ```
 
-Start dev  
+Start dev
 
 ```bash
 yarn dev
