@@ -25,20 +25,20 @@ class Stat extends Component
     {
         return <<<'HTML'
                 <div {{ $attributes->class(["bg-base-100 rounded-lg px-5 py-4  w-full"]) }} >
-                    <div class="flex items-center gap-5">
+                    <div class="flex items-center gap-3">
                         @if($icon)
                             <div class="  {{ $color }}">
                                 <x-icon :name="$icon" class="w-9 h-9" />
                             </div>
                         @endif
-                        
+
                         <div class="text-left">
                             @if($title)
                                 <div class="text-xs text-gray-500 whitespace-nowrap">{{ $title }}</div>
                             @endif
 
                             <div class="font-black text-xl">{{ $value ?? $slot }}</div>
-                            
+
                             @if($description)
                                 <div class="stat-desc">{{ $description }}</div>
                             @endif
