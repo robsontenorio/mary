@@ -10,13 +10,21 @@ class Button extends Component
 {
     public string $uuid;
 
+    public string $tooltipPosition = 'tooltip-top';
+
     public function __construct(
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $iconRight = null,
-        public ?string $spinner = null
+        public ?string $spinner = null,
+        public ?string $tooltip = null,
+        public ?string $tooltipLeft = null,
+        public ?string $tooltipRight = null,
+        public ?string $tooltipBottom = null,
     ) {
         $this->uuid = md5(serialize($this));
+        $this->tooltip = $this->tooltip ?? $this->tooltipLeft ?? $this->tooltipRight ?? $this->tooltipBottom;
+        $this->tooltipPosition = $this->tooltipLeft ? 'tooltip-left' : ($this->tooltipRight ? 'tooltip-right' : ($this->tooltipBottom ? 'tooltip-bottom' : 'tooltip-top'));
     }
 
     public function spinnerTarget(): ?string
@@ -31,18 +39,22 @@ class Button extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <button 
-                    wire:key="{{ $uuid }}" 
-                    {{ $attributes->whereDoesntStartWith('class') }} 
-                    {{ $attributes->class(['btn normal-case']) }}
-                    {{ $attributes->merge(['type' => 'button']) }} 
-                    
+                <button
+                    wire:key="{{ $uuid }}"
+                    {{ $attributes->whereDoesntStartWith('class') }}
+                    {{ $attributes->class(['btn normal-case', "tooltip $tooltipPosition" => $tooltip]) }}
+                    {{ $attributes->merge(['type' => 'button']) }}
+
+                    @if($tooltip)
+                        data-tip="{{ $tooltip }}"
+                    @endif
+
                     @if($spinner)
                         wire:target="{{ $spinnerTarget() }}"
-                        wire:loading.attr="disabled"                    
+                        wire:loading.attr="disabled"
                     @endif
                 >
-                    
+
                     <!-- SPINNER -->
                     @if($spinner)
                         <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
@@ -54,16 +66,18 @@ class Button extends Component
                             <x-icon :name="$icon" />
                         </span>
                     @endif
-                    
+
                     {{ $label ?? $slot }}
 
-                    <!-- ICON RIGHT -->                    
+                    <!-- ICON RIGHT -->
                     @if($iconRight)
                         <span @if($spinner) wire:loading.remove wire:target="{{ $spinnerTarget() }}" @endif>
                             <x-icon :name="$iconRight" />
                         </span>
                     @endif
                 </button>
+                <!--  Force tailwind compile tooltip classes   -->
+                <span class="hidden tooltip tooltip-left tooltip-right tooltip-bottom tooltip-top"></span>
             HTML;
     }
 }
