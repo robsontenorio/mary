@@ -2,11 +2,11 @@
 
 namespace Mary\Console\Commands;
 
-use Arr;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
+use function Laravel\Prompts\select;
 
 class MaryInstallCommand extends Command
 {
@@ -16,37 +16,98 @@ class MaryInstallCommand extends Command
 
     public function handle()
     {
-        $this->info("🔨 Installing Mary...\n");
+        $this->info("🔨 Mary installer");
+
+        $this->warn('
+- Install Livewire
+- Tailwind + daisyUI
+- Add default layout
+- Add "Welcome" Livewire component
+- Route to "Welcome"');
 
         /**
-         * Check for starter kits
+         * Install Volt ?
+         */
+        $shouldInstallVolt = $this->askForVolt();
+
+        /**
+         * Yarn or Npm ?
+         */
+        $packageManagerCommand = $this->askForPackageInstaller();
+
+        /**
+         * Check for existing STARTER KIT packages
          */
         $composerJson = File::get(base_path() . "/composer.json");
         $targets = ['breeze', 'jetstream', 'genesis'];
-
-        if (Str::of($composerJson)->contains($targets)) {
-            $this->error("Automatic install works only for brand-new Laravel projects.");
-            $this->warn("Detected one of these: " . Arr::join($targets, ', ', ' or '));
-
-            return;
-        }
+        $this->checkForExistingPackages($composerJson, $targets);
 
         /**
-         * Check for JS packages
+         * Check for existing JS packages
          */
         $packageJson = File::get(base_path() . "/package.json");
         $targets = ['tailwindcss', 'daisyui'];
+        $this->checkForExistingPackages($packageJson, $targets);
 
-        if (Str::of($packageJson)->contains($targets)) {
-            $this->error("Automatic install works only for brand-new Laravel projects.");
-            $this->warn("Detected one of these: " . Arr::join($targets, ', ', ' or '));
+        /**
+         * Check for stubs
+         */
+        $this->checkForStubs();
 
-            return;
+        /**
+         * Install Livewire
+         */
+        $this->info("\nInstalling Livewire...\n");
+
+        Process::run('composer require livewire/livewire', function (string $type, string $output) {
+            echo $output;
+        })->throw();
+
+        if ($shouldInstallVolt == 'Yes') {
+            $this->info("\nInstalling Livewire Volt...\n");
+
+            Process::run('composer require livewire/volt', function (string $type, string $output) {
+                echo $output;
+            })->throw();
         }
 
         /**
-         * Check for all stubs
+         * Install daisyUI + Tailwind
          */
+        $this->info("\nInstalling daisyUI + Tailwind...\n");
+
+        Process::run("$packageManagerCommand tailwindcss daisyui@latest postcss autoprefixer && npx tailwindcss init -p", function (string $type, string $output) {
+            echo $output;
+        })->throw();
+
+        /**
+         * Copy all stubs
+         */
+        $this->copyStubs();
+
+        $this->info("\n🌟 Done! Run `yarn dev or npm run dev`\n");
+    }
+
+    /**
+     * Check for existing packages
+     */
+    public function checkForExistingPackages(string $content, array $targets): void
+    {
+        collect($targets)->each(function (string $target) use ($content) {
+            if (Str::of($content)->contains($target)) {
+                $this->error("Automatic install works only for brand-new Laravel projects.");
+                $this->warn("Detected: " . $target);
+
+                exit;
+            }
+        });
+    }
+
+    /**
+     * Check for existing stubs
+     */
+    public function checkForStubs(): void
+    {
         collect([
             [
                 'path' => 'resources/views/components/layouts',
@@ -74,28 +135,10 @@ class MaryInstallCommand extends Command
                 exit;
             }
         });
+    }
 
-        /**
-         * Install Livewire
-         */
-        $this->info("\nInstalling Livewire...\n");
-
-        Process::run('composer require livewire/livewire', function (string $type, string $output) {
-            echo $output;
-        })->throw();
-
-        /**
-         * Install daisyUI + Tailwind
-         */
-        $this->info("\nInstalling daisyUI + Tailwind...\n");
-
-        Process::run('yarn add -D tailwindcss daisyui@latest postcss autoprefixer && npx tailwindcss init -p', function (string $type, string $output) {
-            echo $output;
-        })->throw();
-
-        /**
-         * Copy all stubs
-         */
+    public function copyStubs(): void
+    {
         $this->info("Copying stubs...\n");
 
         Process::run('mkdir -p app/Livewire && mkdir -p resources/views/components/layouts', function (string $type, string $output) {
@@ -121,7 +164,44 @@ class MaryInstallCommand extends Command
         Process::run('cp ' . __DIR__ . '/../../../stubs/web.php routes/', function (string $type, string $output) {
             echo $output;
         })->throw();
+    }
 
-        $this->info("\n🌟 Done! Run `yarn dev or npm run dev`\n");
+    public function askForPackageInstaller(): string
+    {
+        $yarn = Process::run('which yarn')->output();
+        $npm = Process::run('which npm')->output();
+
+        $options = [];
+
+        if (Str::of($yarn)->isNotEmpty()) {
+            $options = array_merge($options, ['yarn add -D' => 'yarn']);
+        }
+
+        if (Str::of($npm)->isNotEmpty()) {
+            $options = array_merge($options, ['npm install --dev' => 'npm',]);
+        }
+
+        if (count($options) == 0) {
+            $this->error("You need yarn or npm installed.");
+
+            exit;
+        }
+
+        return select(
+            label: 'Install with ...',
+            options: $options
+        );
+    }
+
+    /**
+     * Also install Volt?
+     */
+    public function askForVolt(): string
+    {
+        return select(
+            'Also install `livewire/volt` ?',
+            ['Yes', 'No'],
+            hint: 'No matter what is your choice, it always installs `livewire/livewire`'
+        );
     }
 }
