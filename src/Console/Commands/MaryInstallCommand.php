@@ -114,10 +114,6 @@ class MaryInstallCommand extends Command
                 'name' => 'app.blade.php'
             ],
             [
-                'path' => 'resources/css/',
-                'name' => 'app.css'
-            ],
-            [
                 'path' => 'app/Livewire/',
                 'name' => 'Welcome.php',
             ],
