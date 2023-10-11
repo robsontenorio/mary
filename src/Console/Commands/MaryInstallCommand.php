@@ -19,11 +19,12 @@ class MaryInstallCommand extends Command
         $this->info("🔨 Mary installer");
 
         $this->warn('
-- Install Livewire
+It will set up:
+- Livewire
 - Tailwind + daisyUI
-- Add default layout
-- Add "Welcome" Livewire component
-- Route to "Welcome"');
+- Default layout
+- Welcome component
+- Route to Welcome');
 
         /**
          * Install Volt ?
