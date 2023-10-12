@@ -60,3 +60,7 @@ Start dev
 ```bash
 yarn dev
 ```
+
+## Follow me
+
+[@robsontenorio](https://twitter.com/robsontenorio)
