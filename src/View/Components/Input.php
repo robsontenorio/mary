@@ -16,7 +16,7 @@ class Input extends Component
         public ?string $iconRight = null,
         public ?string $hint = null,
         public ?string $prefix = null,
-        public ?string $sufix = null,
+        public ?string $suffix = null,
         public ?bool $inline = false,
         public ?bool $money = false,
         public ?string $locale = 'en-US',
@@ -53,7 +53,7 @@ class Input extends Component
                 @endif
 
                 <!-- PREFIX/SUFIX/PREPEND/APPEND CONTAINER -->
-                @if($prefix || $sufix || $prepend || $append)
+                @if($prefix || $suffix || $prepend || $append)
                     <div class="flex">
                 @endif
 
@@ -94,7 +94,7 @@ class Input extends Component
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
                                     'rounded-l-none' => $prefix || $prepend,
-                                    'rounded-r-none' => $sufix || $append,
+                                    'rounded-r-none' => $suffix || $append,
                                     'border border-dashed' => $attributes->has('readonly'),
                                     'input-error' => $errors->has($modelName())
                             ])
@@ -125,15 +125,15 @@ class Input extends Component
                     @endif
                 </div>
 
-                <!-- SUFIX/APPEND -->
-                @if($sufix || $append)
-                    <div class="rounded-r-lg flex items-center bg-base-200 @if($sufix) border border-base-300 px-4 @endif">
-                        {{ $append ?? $sufix }}
+                <!-- SUFFIX/APPEND -->
+                @if($suffix || $append)
+                    <div class="rounded-r-lg flex items-center bg-base-200 @if($suffix) border border-base-300 px-4 @endif">
+                        {{ $append ?? $suffix }}
                     </div>
                 @endif
 
-                <!-- END: PREFIX/SUFIX/APPEND/PREPEND CONTAINER  -->
-                @if($prefix || $sufix || $prepend || $append)
+                <!-- END: PREFIX/SUFFIX/APPEND/PREPEND CONTAINER  -->
+                @if($prefix || $suffix || $prepend || $append)
                     </div>
                 @endif
 
