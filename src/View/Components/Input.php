@@ -52,7 +52,7 @@ class Input extends Component
                     <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
                 @endif
 
-                <!-- PREFIX/SUFIX/PREPEND/APPEND CONTAINER -->
+                <!-- PREFIX/SUFFIX/PREPEND/APPEND CONTAINER -->
                 @if($prefix || $suffix || $prepend || $append)
                     <div class="flex">
                 @endif
