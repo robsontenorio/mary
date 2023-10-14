@@ -15,6 +15,7 @@ class Table extends Component
         public array $headers,
         public ArrayAccess|array $rows,
         public ?bool $striped = false,
+        public ?bool $noHeaders = false,
 
         // Slots
         public mixed $actions = null,
@@ -36,7 +37,7 @@ class Table extends Component
                         }}
                     >
                         <!-- HEADERS -->
-                        <thead class="text-black">
+                        <thead @class(["text-black dark:text-gray-500", "hidden" => $noHeaders])>
                             <tr>
                                 @foreach($headers as $header)
                                      @php
