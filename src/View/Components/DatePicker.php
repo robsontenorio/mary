@@ -19,7 +19,6 @@ class DatePicker extends Component
         public ?array $config = []
     ) {
         $this->uuid = md5(serialize($this));
-
     }
 
     public function setup(): string
@@ -31,7 +30,7 @@ class DatePicker extends Component
         ], $this->config));
 
         // Sets default date as current binded model
-        $config = str_replace('"x"', '$wire.'.$this->modelName(), $config);
+        $config = str_replace('"x"', '$wire.' . $this->modelName(), $config);
 
         return $config;
     }
@@ -44,31 +43,31 @@ class DatePicker extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <div wire:key="{{ rand() }}">                
+            <div wire:key="datepicker-{{ rand() }}">
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
-                    <label class="pt-0 label label-text font-semibold">{{ $label }}</label> 
+                    <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
                 @endif
-                
+
                 <div class="flex-1 relative">
                         <div x-data x-init="flatpickr($refs.input, {{ $setup() }});">
-                            <input 
-                                x-ref="input" 
+                            <input
+                                x-ref="input"
                                 {{
                                     $attributes
                                         ->merge(['type' => 'date'])
                                         ->class([
                                             "input input-primary w-full peer",
-                                            'pl-10' => ($icon), 
+                                            'pl-10' => ($icon),
                                             'h-14' => ($inline),
-                                            'pt-3' => ($inline && $label),     
+                                            'pt-3' => ($inline && $label),
                                             'border border-dashed' => $attributes->has('readonly'),
                                             'input-error' => $errors->has($modelName())
                                         ])
-                                }} 
-                            />                            
+                                }}
+                            />
                         </div>
-                                     
+
                     <!-- ICON  -->
                     @if($icon)
                         <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 " />
@@ -83,8 +82,8 @@ class DatePicker extends Component
                     @if($label && $inline)
                         <label for="{{ $uuid }}" class="absolute text-gray-400 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] bg-white rounded dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
                             {{ $label }}
-                        </label> 
-                    @endif 
+                        </label>
+                    @endif
 
                 </div>
 
@@ -92,13 +91,13 @@ class DatePicker extends Component
                 @error($modelName())
                     <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                 @enderror
-                
+
                 <!-- HINT -->
                 @if($hint)
                     <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
                 @endif
-                
-            </div>            
+
+            </div>
             HTML;
     }
 }

@@ -4,6 +4,7 @@ namespace Mary;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Mary\Console\Commands\MaryInstallCommand;
 use Mary\View\Components\Alert;
 use Mary\View\Components\Badge;
@@ -49,7 +50,8 @@ class MaryServiceProvider extends ServiceProvider
     {
         $this->registerComponents();
         $this->registerBladeDirectives();
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -99,7 +101,14 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('toggle', Toggle::class);
     }
 
-    public function registerBladeDirectives()
+    public function registerBladeDirectives(): void
+    {
+        $this->registerScopeDirective();
+        $this->registerMaryJSDirective();
+        $this->registerMaryCSSDirective();
+    }
+
+    public function registerScopeDirective(): void
     {
         /**
          * All credits from this blade directive goes to Konrad Kalemba.
@@ -108,7 +117,6 @@ class MaryServiceProvider extends ServiceProvider
          * https://github.com/konradkalemba/blade-components-scoped-slots
          */
         Blade::directive('scope', function ($expression) {
-
             // Split the expression by `top-level` commas (not in parentheses)
             $directiveArguments = preg_split("/,(?![^\(\(]*[\)\)])/", $expression);
             $directiveArguments = array_map('trim', $directiveArguments);
@@ -131,12 +139,35 @@ class MaryServiceProvider extends ServiceProvider
         });
     }
 
+    public function registerMaryJSDirective(): void
+    {
+        Blade::directive('maryJS', function ($expression) {
+            $parts = Str::of($expression)->explode(',');
+
+            $name = Str::of($parts->first())->replace("'", "")->replace('"', "");
+
+            $extra = $parts->count() == 2 ? $parts->last() : '';
+            $extra = Str::of($extra)->replace("'", "")->replace('"', "");
+
+            return "<script src='/mary/asset?name=$name' $extra></script>";
+        });
+    }
+
+    public function registerMaryCSSDirective(): void
+    {
+        Blade::directive('maryCSS', function ($expression) {
+            $expression = Str::of($expression)->replace("'", "")->replace('"', "");
+
+            return "<link rel='stylesheet' type='text/css' href='/mary/asset?name=$expression' />";
+        });
+    }
+
     /**
      * Register any package services.
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/mary.php', 'mary');
+        $this->mergeConfigFrom(__DIR__ . '/../config/mary.php', 'mary');
 
         // Register the service the package provides.
         $this->app->singleton('mary', function ($app) {
@@ -161,7 +192,7 @@ class MaryServiceProvider extends ServiceProvider
     {
         // Publishing the configuration file.
         $this->publishes([
-            __DIR__.'/../config/mary.php' => config_path('mary.php'),
+            __DIR__ . '/../config/mary.php' => config_path('mary.php'),
         ], 'mary.config');
 
         $this->commands([MaryInstallCommand::class]);
