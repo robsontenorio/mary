@@ -16,6 +16,8 @@ class MenuItem extends Component
         public ?string $title = null,
         public ?string $icon = null,
         public ?string $link = null,
+        public ?string $badge = null,
+        public ?string $badgeClasses = null,
         public ?bool $active = false,
         public ?bool $separator = false
     ) {
@@ -40,23 +42,33 @@ class MenuItem extends Component
                 @aware(['activateByRoute' => false, 'activeBgColor' => 'bg-base-300'])
 
                 <li>
-                    <a 
-                        {{ 
+                    <a
+                        {{
                             $attributes->class([
-                                "my-0.5 hover:text-inherit rounded-md", 
-                                "mary-active-menu $activeBgColor" => ($active || ($activateByRoute && $routeMatches())) 
-                            ]) 
+                                "my-0.5 hover:text-inherit rounded-md",
+                                "mary-active-menu $activeBgColor" => ($active || ($activateByRoute && $routeMatches()))
+                            ])
                         }}
 
-                        @if($link) 
-                            href="{{ $link }}" wire:navigate 
-                        @endif  
+                        @if($link)
+                            href="{{ $link }}" wire:navigate
+                        @endif
                     >
-                        @if($icon) 
-                            <x-icon :name="$icon" /> 
+                        @if($icon)
+                            <x-icon :name="$icon" />
                         @endif
 
-                            <span class="mary-hideable">{{ $title ?? $slot }}</span>
+                        <span class="mary-hideable">
+                            @if($title)
+                                {{ $title }}
+
+                                @if($badge)
+                                    <span class="badge badge-ghost badge-sm {{ $badgeClasses }}">{{ $badge }}</span>
+                                @endif
+                            @else
+                                {{ $slot }}
+                            @endif
+                        </span>
                     </a>
                 </li>
             HTML;
