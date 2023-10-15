@@ -18,6 +18,7 @@ use Mary\View\Components\DateTime;
 use Mary\View\Components\Diff;
 use Mary\View\Components\Drawer;
 use Mary\View\Components\Dropdown;
+use Mary\View\Components\File;
 use Mary\View\Components\Form;
 use Mary\View\Components\Header;
 use Mary\View\Components\Icon;
@@ -77,6 +78,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('diff', Diff::class);
         Blade::component('drawer', Drawer::class);
         Blade::component('dropdown', Dropdown::class);
+        Blade::component('file', File::class);
         Blade::component('form', Form::class);
         Blade::component('header', Header::class);
         Blade::component('input', Input::class);
