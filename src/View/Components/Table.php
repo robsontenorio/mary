@@ -16,6 +16,7 @@ class Table extends Component
         public array $headers,
         public ArrayAccess|array $rows,
         public ?bool $striped = false,
+        public ?bool $noHeaders = false,
         public ?bool $selectable = false,
         public ?string $selectableKey = 'id',
         public ?bool $expandable = false,
@@ -75,7 +76,7 @@ class Table extends Component
                         }}
                     >
                         <!-- HEADERS -->
-                        <thead class="text-black dark:text-gray-50">
+                        <thead @class(["text-black dark:text-gray-500", "hidden" => $noHeaders])>
                             <tr>
                                 <!-- CHECKBOX -->
                                 @if($selectable)
