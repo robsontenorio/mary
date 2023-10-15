@@ -38,10 +38,10 @@ class Header extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div {{ $attributes->class(["mb-10"]) }}>
+                <div id="{{ $anchor }}" {{ $attributes->class(["mb-10", "mary-header-anchor" => $withAnchor]) }}">
                     <div class="flex flex-wrap gap-5 justify-between items-center">
                         <div>
-                            <div class="{{$size}} font-extrabold mary-header-anchor" id="{{ $anchor }}">
+                            <div class="{{$size}} font-extrabold">
                                 @if($withAnchor)
                                     <a href="#{{ $anchor }}">
                                 @endif
