@@ -20,7 +20,6 @@ class Calendar extends Component
         public ?array $events = [],
     ) {
         $this->uuid = md5(serialize($this));
-
     }
 
     public function setup(): string
@@ -28,6 +27,7 @@ class Calendar extends Component
         $config = json_encode(array_merge([
             'type' => $this->months == 1 ? 'default' : 'multiple',
             'months' => $this->months,
+            'jumpMonths' => $this->months,
             'popups' => $this->popups(),
             'settings' => [
                 'lang' => $this->locale,
@@ -44,7 +44,6 @@ class Calendar extends Component
         ], $this->config));
 
         $config = $this->addCss($config);
-        $config = $this->addAction($config);
 
         return $config;
     }
@@ -53,24 +52,6 @@ class Calendar extends Component
     public function addCss(string $config): string
     {
         return str_replace('"y"', '{"grid":"vanilla-calendar-grid flex flex-wrap justify-around","calendar":"vanilla-calendar"}', $config);
-    }
-
-    // Proper inject javascript function for arrow click work with `months step`
-    public function addAction(string $config): string
-    {
-        $step = $this->months - 1;
-
-        return str_replace('"x"',
-            '{
-                clickArrow(event, year, month) {
-                    const isPrev = event.target.closest(\'[data-calendar-arrow="prev"]\');
-                    const date = new Date(year, month);
-                    date.setMonth(isPrev ? date.getMonth() - '.$step.' : date.getMonth() + '.$step.');
-                    calendar.settings.selected.year = date.getFullYear();
-                    calendar.settings.selected.month = date.getMonth();
-                    calendar.update();
-                }
-            }', $config);
     }
 
     public function popups()
@@ -94,7 +75,7 @@ class Calendar extends Component
                 return [
                     $date => [
                         'modifier' => $event['css'],
-                        'html' => '<div><strong>'.$event['label'].'</strong></div><div>'.($event['description'] ?? null).'</div>',
+                        'html' => '<div><strong>' . $event['label'] . '</strong></div><div>' . ($event['description'] ?? null) . '</div>',
                     ],
                 ];
             });
@@ -105,7 +86,7 @@ class Calendar extends Component
     {
         return <<<'HTML'
             <div x-data x-init="const calendar = new VanillaCalendar($el, {{ $setup() }}); calendar.init()" class="w-fit">
-            </div>   
+            </div>
             HTML;
     }
 }
