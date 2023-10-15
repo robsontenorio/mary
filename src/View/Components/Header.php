@@ -15,6 +15,7 @@ class Header extends Component
         public ?string $title = null,
         public ?string $subtitle = null,
         public ?bool $separator = false,
+        public ?string $progressIndicator = null,
         public ?bool $withAnchor = false,
         public ?string $size = 'text-4xl',
 
@@ -23,6 +24,15 @@ class Header extends Component
         public mixed $actions = null,
     ) {
         $this->anchor = Str::slug($title);
+    }
+
+    public function progressTarget(): ?string
+    {
+        if ($this->progressIndicator == 1) {
+            return $this->attributes->whereStartsWith('progress-indicator')->first();
+        }
+
+        return $this->progressIndicator;
     }
 
     public function render(): View|Closure|string
@@ -59,6 +69,12 @@ class Header extends Component
 
                     @if($separator)
                         <hr class="my-5" />
+
+                        @if($progressIndicator)
+                            <div class="h-0.5 -mt-9 mb-9">
+                                <progress wire:loading @if($progressTarget()) wire:target="{{ $progressTarget() }}"  @endif class="progress w-full h-0.5"></progress>
+                            </div>
+                        @endif
                     @endif
                 </div>
                 HTML;
