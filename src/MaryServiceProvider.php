@@ -44,6 +44,13 @@ use Mary\View\Components\Toggle;
 
 class MaryServiceProvider extends ServiceProvider
 {
+    public static $third_party = [
+        'calendar' => '2.7.0',
+        'currency' => '1.0.0',
+        'diff' => '3.4.24',
+        'flatpickr' => '4.6.13',
+    ];
+
     /**
      * Perform post-registration booting of services.
      */
@@ -146,21 +153,25 @@ class MaryServiceProvider extends ServiceProvider
         Blade::directive('maryJS', function ($expression) {
             $parts = Str::of($expression)->explode(',');
 
-            $name = Str::of($parts->first())->replace("'", "")->replace('"', "");
+            $file = Str::of($parts->first())->replace("'", "")->replace('"', "");
+            $package = Str::of($file)->before('/')->toString();
+            $version = self::$third_party[$package] ?? 'x';
 
             $extra = $parts->count() == 2 ? $parts->last() : '';
             $extra = Str::of($extra)->replace("'", "")->replace('"', "");
 
-            return "<script src='/mary/asset?name=$name' $extra></script>";
+            return "<script src='/mary/asset?name=$file?$version' $extra></script>";
         });
     }
 
     public function registerMaryCSSDirective(): void
     {
         Blade::directive('maryCSS', function ($expression) {
-            $expression = Str::of($expression)->replace("'", "")->replace('"', "");
+            $file = Str::of($expression)->replace("'", "")->replace('"', "");
+            $package = Str::of($file)->before('/')->toString();
+            $version = self::$third_party[$package] ?? 'x';
 
-            return "<link rel='stylesheet' type='text/css' href='/mary/asset?name=$expression' />";
+            return "<link rel='stylesheet' type='text/css' href='/mary/asset?name=$file?$version' />";
         });
     }
 
