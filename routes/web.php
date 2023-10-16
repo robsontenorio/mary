@@ -11,18 +11,30 @@ Route::get('/mary/toogle-sidebar', function (Request $request) {
     }
 });
 
-Route::get('/mary/asset', function (Request $request) {
-    if ($request->name) {
-        $extension = Str::of($request->name)->afterLast('.')->toString();
-
-        $type = match ($extension) {
-            'js' => 'application/javascript',
-            'css' => 'text/css',
-            default => 'text/html'
-        };
-
-        return response(File::get(__DIR__ . "/../libs/{$request->name}"))->header('Content-Type', $type);
+Route::middleware('cache.headers:public;max_age=2628000;etag')->get('/mary/asset', function (Request $request) {
+    if (! $request->name) {
+        abort(404);
     }
 
-    abort(404);
+    if (Str::of($request->name)->contains('..')) {
+        abort(404);
+    }
+
+    $file = Str::of($request->name)->before('?')->toString();
+
+    if (! File::exists(__DIR__ . "/../libs/{$file}")) {
+        abort(404);
+    }
+
+    $extension = Str::of($file)->afterLast('.')->toString();
+
+    $type = match ($extension) {
+        'js' => 'application/javascript',
+        'css' => 'text/css',
+        default => 'text/html'
+    };
+
+    return response(File::get(__DIR__ . "/../libs/{$file}"))->withHeaders([
+        'Content-Type' => $type,
+    ]);
 });
