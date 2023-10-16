@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -34,7 +35,9 @@ Route::middleware('cache.headers:public;max_age=2628000;etag')->get('/mary/asset
         default => 'text/html'
     };
 
-    return response(File::get(__DIR__ . "/../libs/{$file}"))->withHeaders([
-        'Content-Type' => $type,
-    ]);
+    return Cache::rememberForever($request->name, function () use ($file, $type, $request) {
+        return response(File::get(__DIR__ . "/../libs/{$file}"))->withHeaders([
+            'Content-Type' => $type,
+        ]);
+    });
 });
