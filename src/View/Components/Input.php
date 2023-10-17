@@ -82,6 +82,7 @@ class Input extends Component
                         @if($money)
                             :value="amount"
                             @input="$nextTick(() => $wire.{{ $modelName() }} = Currency.getUnmasked())"
+                            inputmode="numeric"
                         @endif
 
                         {{
