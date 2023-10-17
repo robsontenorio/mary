@@ -72,7 +72,13 @@ class Header extends Component
 
                         @if($progressIndicator)
                             <div class="h-0.5 -mt-9 mb-9">
-                                <progress wire:loading @if($progressTarget()) wire:target="{{ $progressTarget() }}"  @endif class="progress w-full h-0.5"></progress>
+                                <progress
+                                    class="progress progress-primary w-full h-0.5 dark:h-1"
+                                    wire:loading
+
+                                    @if($progressTarget())
+                                        wire:target="{{ $progressTarget() }}"
+                                     @endif></progress>
                             </div>
                         @endif
                     @endif

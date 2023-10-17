@@ -58,7 +58,7 @@ class MenuItem extends Component
                             <x-icon :name="$icon" />
                         @endif
 
-                        <span class="mary-hideable">
+                        <span class="mary-hideable whitespace-nowrap">
                             @if($title)
                                 {{ $title }}
 
