@@ -6,6 +6,7 @@ use ArrayAccess;
 use Closure;
 use Exception;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
 class Table extends Component
@@ -21,6 +22,7 @@ class Table extends Component
         public ?string $selectableKey = 'id',
         public ?bool $expandable = false,
         public ?string $expandableKey = 'id',
+        public ?string $link = null,
 
         // Slots
         public mixed $actions = null,
@@ -35,14 +37,32 @@ class Table extends Component
         }
     }
 
+    // Get all ids for selectable and expandable features
     public function getAllIds(): array
     {
         return collect($this->rows)->pluck($this->selectableKey)->all();
     }
 
+    // Calculate colspan size for expandable feature
     public function colspanSize(): int
     {
         return count($this->headers) + ($this->selectable ? 1 : 0) + ($this->expandable ? 1 : 0) + ($this->actions == 1 ? 1 : 0);
+    }
+
+    // Build row link
+    public function redirectLink(mixed $row): string
+    {
+        $link = $this->link;
+
+        // Extract tokens like {id}, {city.name} ...
+        $tokens = Str::of($link)->matchAll('/\{(.*?)\}/');
+
+        // Replace tokens by actual row values
+        $tokens->each(function (string $token) use ($row, &$link) {
+            $link = Str::of($link)->replace("{" . $token . "}", data_get($row, $token))->toString();
+        });
+
+        return $link;
     }
 
     public function render(): View|Closure|string
@@ -71,7 +91,7 @@ class Table extends Component
                                 ->class([
                                     'table',
                                     'table-zebra' => $striped,
-                                    'cursor-pointer' => $attributes->has('@row-click')
+                                    'cursor-pointer' => $attributes->hasAny(['@row-click', 'link'])
                                 ])
                         }}
                     >
@@ -158,12 +178,29 @@ class Table extends Component
 
                                         <!--  HAS CUSTOM SLOT ? -->
                                         @if(isset(${"cell_".$temp_key}))
-                                            <td>
+                                            <td @class(["p-0" => $link])>
+                                                @if($link)
+                                                    <a href="{{ $redirectLink($row) }}" wire:navigate class="block p-4">
+                                                @endif
+
                                                 {{ ${"cell_".$temp_key}($row)  }}
+
+                                                @if($link)
+                                                    </a>
+                                                 @endif
                                             </td>
                                         @else
-                                            <td @class(["hidden" => Str::contains($header['class'] ?? '', 'hidden') ])>
+                                            <td @class(["p-0" => $link, "hidden" => Str::contains($header['class'] ?? '', 'hidden') ])>
+
+                                                @if($link)
+                                                    <a href="{{ $redirectLink($row) }}" wire:navigate class="block p-4">
+                                                @endif
+
                                                 {{ data_get($row, $header['key']) }}
+
+                                                @if($link)
+                                                    </a>
+                                                @endif
                                             </td>
                                         @endif
                                     @endforeach
