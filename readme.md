@@ -24,6 +24,11 @@ You can read the official documentation on the [Mary website](https://mary-ui.co
 
 Let's keep pushing it, [sponsor me](https://github.com/sponsors/robsontenorio) ❤️
 
+## Follow me
+
+[@robsontenorio](https://twitter.com/robsontenorio)
+
+
 ## Contributing
 
 Clone the repository into some folder **inside your app**.
@@ -60,7 +65,3 @@ Start dev
 ```bash
 yarn dev
 ```
-
-## Follow me
-
-[@robsontenorio](https://twitter.com/robsontenorio)
