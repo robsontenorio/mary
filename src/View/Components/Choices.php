@@ -158,7 +158,7 @@ class Choices extends Component
                                         "
                                         :class="
                                             @if($single)
-                                                selection == {{ data_get($option, $optionValue) }} && 'bg-primary/5'
+                                                selection == '{{ data_get($option, $optionValue) }}' && 'bg-primary/5'
                                             @else
                                                 selection.includes({{ data_get($option, $optionValue) }}) && 'bg-primary/5'
                                             @endif
