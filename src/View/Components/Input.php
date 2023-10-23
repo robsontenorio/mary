@@ -96,7 +96,7 @@ class Input extends Component
                                     'pt-3' => ($inline && $label),
                                     'rounded-l-none' => $prefix || $prepend,
                                     'rounded-r-none' => $suffix || $append,
-                                    'border border-dashed' => $attributes->has('readonly'),
+                                    'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                     'input-error' => $errors->has($modelName())
                             ])
                         }}

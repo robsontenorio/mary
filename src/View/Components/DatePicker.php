@@ -26,6 +26,7 @@ class DatePicker extends Component
         $config = json_encode(array_merge([
             'dateFormat' => 'Y-m-d H:i',
             'altInput' => true,
+            'clickOpens' => ! $this->attributes->has('readonly') || $this->attributes->get('readonly') == false,
             'defaultDate' => 'x',
         ], $this->config));
 
@@ -61,7 +62,7 @@ class DatePicker extends Component
                                             'pl-10' => ($icon),
                                             'h-14' => ($inline),
                                             'pt-3' => ($inline && $label),
-                                            'border border-dashed' => $attributes->has('readonly'),
+                                            'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                             'input-error' => $errors->has($modelName())
                                         ])
                                 }}
