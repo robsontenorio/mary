@@ -48,7 +48,6 @@ class Select extends Component
                                     'pl-10' => ($icon),
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
-                                    'border border-dashed' => $attributes->has('readonly'),
                                     'select-error' => $errors->has($modelName())
                                 ])
                         }}
