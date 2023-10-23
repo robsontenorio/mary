@@ -46,7 +46,7 @@ class Textarea extends Component
                                 'textarea-error' => $errors->has($modelName())
                             ])
                         }}
-                    ></textarea>
+                    >{{ $slot }}</textarea>
 
                     <!-- INLINE LABEL -->
                     @if($label && $inline)
