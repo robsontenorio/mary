@@ -17,6 +17,7 @@ class Select extends Component
         public ?string $iconRight = null,
         public ?string $hint = null,
         public ?string $placeholder = null,
+        public ?string $placeholderValue = null,
         public ?bool $inline = false,
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
@@ -54,7 +55,7 @@ class Select extends Component
 
                     >
                         @if($placeholder)
-                            <option>{{ $placeholder }}</option>
+                            <option value="{{ $placeholderValue }}">{{ $placeholder }}</option>
                         @endif
 
                         @foreach ($options as $option)
