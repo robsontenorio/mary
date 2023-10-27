@@ -33,7 +33,7 @@ class Stat extends Component
     {
         return <<<'HTML'
                 <div
-                    {{ $attributes->class(["bg-base-100 rounded-lg px-5 py-4  w-full", "md:tooltip $tooltipPosition" => $tooltip]) }}
+                    {{ $attributes->class(["bg-base-100 rounded-lg px-5 py-4  w-full", "lg:tooltip lg:$tooltipPosition" => $tooltip]) }}
 
                     @if($tooltip)
                         data-tip="{{ $tooltip }}"
@@ -60,7 +60,9 @@ class Stat extends Component
                     </div>
 
                     <!--  Force tailwind compile tooltip classes   -->
-                    <span class="hidden tooltip tooltip-left tooltip-right tooltip-bottom tooltip-top"></span>
+                    <span class="hidden">
+                        <span class="lg:tooltip lg:tooltip-left lg:tooltip-right lg:tooltip-bottom lg:tooltip-top"></span>
+                    </span>
                 </div>
             HTML;
     }
