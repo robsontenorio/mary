@@ -11,6 +11,7 @@ use Mary\View\Components\Badge;
 use Mary\View\Components\Button;
 use Mary\View\Components\Calendar;
 use Mary\View\Components\Card;
+use Mary\View\Components\Chart;
 use Mary\View\Components\Checkbox;
 use Mary\View\Components\Choices;
 use Mary\View\Components\DatePicker;
@@ -78,6 +79,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('button', Button::class);
         Blade::component('calendar', Calendar::class);
         Blade::component('card', Card::class);
+        Blade::component('chart', Chart::class);
         Blade::component('checkbox', Checkbox::class);
         Blade::component('choices', Choices::class);
         Blade::component('datepicker', DatePicker::class);
