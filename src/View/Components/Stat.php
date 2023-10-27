@@ -10,21 +10,35 @@ class Stat extends Component
 {
     public string $uuid;
 
+    public string $tooltipPosition = 'tooltip-top';
+
     public function __construct(
         public ?string $value = null,
         public ?string $icon = null,
         public ?string $color = 'text-primary',
         public ?string $title = null,
         public ?string $description = null,
+        public ?string $tooltip = null,
+        public ?string $tooltipLeft = null,
+        public ?string $tooltipRight = null,
+        public ?string $tooltipBottom = null,
 
     ) {
         $this->uuid = md5(serialize($this));
+        $this->tooltip = $this->tooltip ?? $this->tooltipLeft ?? $this->tooltipRight ?? $this->tooltipBottom;
+        $this->tooltipPosition = $this->tooltipLeft ? 'tooltip-left' : ($this->tooltipRight ? 'tooltip-right' : ($this->tooltipBottom ? 'tooltip-bottom' : 'tooltip-top'));
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div {{ $attributes->class(["bg-base-100 rounded-lg px-5 py-4  w-full"]) }} >
+                <div
+                    {{ $attributes->class(["bg-base-100 rounded-lg px-5 py-4  w-full", "md:tooltip $tooltipPosition" => $tooltip]) }}
+
+                    @if($tooltip)
+                        data-tip="{{ $tooltip }}"
+                    @endif
+                >
                     <div class="flex items-center gap-3">
                         @if($icon)
                             <div class="  {{ $color }}">
@@ -44,6 +58,9 @@ class Stat extends Component
                             @endif
                         </div>
                     </div>
+
+                    <!--  Force tailwind compile tooltip classes   -->
+                    <span class="hidden tooltip tooltip-left tooltip-right tooltip-bottom tooltip-top"></span>
                 </div>
             HTML;
     }
