@@ -43,12 +43,6 @@ class Table extends Component
         return collect($this->rows)->pluck($this->selectableKey)->all();
     }
 
-    // Calculate colspan size for expandable feature
-    public function colspanSize(): int
-    {
-        return count($this->headers) + ($this->selectable ? 1 : 0) + ($this->expandable ? 1 : 0) + ($this->actions == 1 ? 1 : 0);
-    }
-
     // Build row link
     public function redirectLink(mixed $row): string
     {
@@ -70,6 +64,7 @@ class Table extends Component
         return <<<'HTML'
                 <div x-data="{
                                 selection: @entangle($attributes->wire('model')),
+                                colspanSize: 0,
                                 toggleSelection(checked){
                                     checked ? this.selection = @js($getAllIds()) : this.selection = []
                                 },
@@ -80,6 +75,9 @@ class Table extends Component
                                 },
                                 isExpanded(key){
                                     return this.selection.includes(key)
+                                },
+                                init() {
+                                    this.colspanSize = $refs.headers.childElementCount
                                 }
                              }"
                                 class="overflow-x-auto"
@@ -97,7 +95,7 @@ class Table extends Component
                     >
                         <!-- HEADERS -->
                         <thead @class(["text-black dark:text-gray-500", "hidden" => $noHeaders])>
-                            <tr>
+                            <tr x-ref="headers">
                                 <!-- CHECKBOX -->
                                 @if($selectable)
                                     <th class="w-1">
@@ -142,8 +140,8 @@ class Table extends Component
 
                         <!-- ROWS -->
                         <tbody>
-                            @foreach($rows as $row)
-                                <tr class="hover:bg-base-200/50" @click="$dispatch('row-click', @js($row));">
+                            @foreach($rows as $k => $row)
+                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50" @click="$dispatch('row-click', @js($row));">
 
                                     <!-- CHECKBOX -->
                                     @if($selectable)
@@ -213,8 +211,8 @@ class Table extends Component
 
                                 <!-- EXPANSION SLOT -->
                                 @if($expandable)
-                                    <tr :class="isExpanded({{ data_get($row, $expandableKey) }}) || 'hidden'">
-                                        <td colspan="{{ $colspanSize() }}">
+                                    <tr wire:key="{{ $uuid }}-{{ $k }}--expand" :class="isExpanded({{ data_get($row, $expandableKey) }}) || 'hidden'">
+                                        <td :colspan="colspanSize">
                                             {{ $expansion($row) }}
                                         </td>
                                     </tr>
