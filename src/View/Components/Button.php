@@ -49,7 +49,7 @@ class Button extends Component
 
                     wire:key="{{ $uuid }}"
                     {{ $attributes->whereDoesntStartWith('class') }}
-                    {{ $attributes->class(['btn normal-case', "tooltip $tooltipPosition" => $tooltip]) }}
+                    {{ $attributes->class(['btn normal-case', "md:tooltip $tooltipPosition" => $tooltip]) }}
                     {{ $attributes->merge(['type' => 'button']) }}
 
                     @if($link && $external)
