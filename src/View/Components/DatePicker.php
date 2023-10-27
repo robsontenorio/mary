@@ -58,7 +58,7 @@ class DatePicker extends Component
                                     $attributes
                                         ->merge(['type' => 'date'])
                                         ->class([
-                                            "input input-primary w-full peer",
+                                            "input input-primary w-full peer appearance-none",
                                             'pl-10' => ($icon),
                                             'h-14' => ($inline),
                                             'pt-3' => ($inline && $label),
@@ -71,12 +71,12 @@ class DatePicker extends Component
 
                     <!-- ICON  -->
                     @if($icon)
-                        <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 " />
+                        <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
                     @endif
 
                     <!-- RIGHT ICON  -->
                     @if($iconRight)
-                        <x-icon :name="$iconRight" class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 " />
+                        <x-icon :name="$iconRight" class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 pointer-events-none" />
                     @endif
 
                     <!-- INLINE LABEL -->
