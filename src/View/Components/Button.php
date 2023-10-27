@@ -49,7 +49,7 @@ class Button extends Component
 
                     wire:key="{{ $uuid }}"
                     {{ $attributes->whereDoesntStartWith('class') }}
-                    {{ $attributes->class(['btn normal-case', "md:tooltip $tooltipPosition" => $tooltip]) }}
+                    {{ $attributes->class(['btn normal-case', "lg:tooltip lg:$tooltipPosition" => $tooltip]) }}
                     {{ $attributes->merge(['type' => 'button']) }}
 
                     @if($link && $external)
@@ -98,7 +98,9 @@ class Button extends Component
                 @endif
 
                 <!--  Force tailwind compile tooltip classes   -->
-                <span class="hidden tooltip tooltip-left tooltip-right tooltip-bottom tooltip-top"></span>
+                <span class="hidden">
+                    <span class="lg:tooltip lg:tooltip-left lg:tooltip-right lg:tooltip-bottom lg:tooltip-top"></span>
+                </span>
             HTML;
     }
 }
