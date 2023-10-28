@@ -141,7 +141,7 @@ class Table extends Component
                         <!-- ROWS -->
                         <tbody>
                             @foreach($rows as $k => $row)
-                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50" @click="$dispatch('row-click', @js($row));">
+                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50" @click="$dispatch('row-click', {{ json_encode($row) }});">
 
                                     <!-- CHECKBOX -->
                                     @if($selectable)
@@ -151,7 +151,7 @@ class Table extends Component
                                                 class="checkbox checkbox-sm checkbox-primary"
                                                 value="{{ data_get($row, $selectableKey) }}"
                                                 x-model="selection"
-                                                @click="$dispatch('row-selection', { row: @js($row), selected: $el.checked }); $refs.mainCheckbox.checked = false" />
+                                                @click="$dispatch('row-selection', { row: {{ json_encode($row) }}, selected: $el.checked }); $refs.mainCheckbox.checked = false" />
                                         </td>
                                     @endif
 
