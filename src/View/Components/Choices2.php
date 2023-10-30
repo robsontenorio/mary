@@ -57,12 +57,13 @@ class Choices2 extends Component
                             $refs.searchInput.value = ''
                         },
                         pull() {
-                            console.log($refs.searchInput.value)
                             if (this.multiple && $refs.searchInput.value == '') {
-                                this.selection.pop()
+                                const trash = this.selectedOptions.slice(-1)[0]
+                                this.selection = this.selection.filter(i => i !== trash.id)
                             }
                         },
                         get selectedOptions() {
+                            console.log(this.selection)
                             return this.multiple
                                 ? this.options.filter(i => this.selection.includes(i.id))
                                 : this.options.filter(i => i.id == this.selection)
@@ -72,23 +73,24 @@ class Choices2 extends Component
                     @click.outside = "clear()"
                     @keyup.esc = "clear()"
                 >
-                    <div
-                        @click="$refs.searchInput.focus(); focused = true"
-                        class="select select-primary flex items-center"
-                    >
-                        <div wire:key="choices-item-{{ rand() }}">
+                    <!-- MAIN CONTAINER -->
+                    <div @click="$refs.searchInput.focus(); focused = true" class="select select-primary w-full h-fit py-2 inline-block">
+
+                        <!-- SELECTED OPTIONS -->
+                        <span wire:key="choices-item-{{ rand() }}" class="break-all">
                             <template x-for="(option, index) in selectedOptions" :key="option.id">
                                 <span
                                     @click="toggle(option.id)"
-                                    class="bg-base-200 hover:bg-base-300 p-1 mr-2 rounded text-primary pl-2"
-                                    :class="(focused && $refs.searchInput.value == '' && index == selectedOptions.length - 1) && 'bg-base-300'"
+                                    class="bg-primary/5 hover:bg-base-300 p-1 mr-2 rounded text-primary pl-2"
+                                    :class="(focused && $refs.searchInput.value == '' && index == selectedOptions.length - 1) && 'bg-primary/10'"
                                 >
                                     <span x-text="option.name"></span>
                                     <x-icon name="o-x-mark" class="w-3 h-3" />
                                 </span>
                             </template>
-                        </div>
+                        </span>
 
+                        <!-- INPUT SEARCH -->
                         <input
                             x-ref="searchInput"
                             :readonly="!searchable"
@@ -101,6 +103,7 @@ class Choices2 extends Component
                          />
                     </div>
 
+                    <!-- OPTIONS LIST -->
                     <div x-show="focused" class="relative">
                         <div class="max-h-64 w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto">
                             @foreach($options as $option)
