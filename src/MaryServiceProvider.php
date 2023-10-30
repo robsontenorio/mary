@@ -14,6 +14,7 @@ use Mary\View\Components\Card;
 use Mary\View\Components\Chart;
 use Mary\View\Components\Checkbox;
 use Mary\View\Components\Choices;
+use Mary\View\Components\Choices2;
 use Mary\View\Components\DatePicker;
 use Mary\View\Components\DateTime;
 use Mary\View\Components\Diff;
@@ -82,6 +83,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('chart', Chart::class);
         Blade::component('checkbox', Checkbox::class);
         Blade::component('choices', Choices::class);
+        Blade::component('choices2', Choices2::class);
         Blade::component('datepicker', DatePicker::class);
         Blade::component('datetime', DateTime::class);
         Blade::component('diff', Diff::class);
