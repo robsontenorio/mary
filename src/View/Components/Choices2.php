@@ -68,7 +68,7 @@ class Choices2 extends Component
                                 : this.selection.map(i => this.options.filter(o => o.{{ $optionValue }} == i)[0])
                         },
                         get noResults() {
-                            if (!this.isSearchable) {
+                            if (!this.isSearchable || $refs.searchInput.value == '') {
                                 return false
                             }
 
@@ -180,7 +180,7 @@ class Choices2 extends Component
                             <div
                                 x-show="noResults"
                                 wire:key="{{ rand() }}"
-                                class="p-5 decoration-wavy decoration-warning font-bold underline border-l-4 border-l-warning"
+                                class="p-5 decoration-wavy decoration-warning font-bold underline border border-l-4 border-l-warning border-b-base-200"
                             >
                                 {{ $noResultText }}
                             </div>
@@ -189,7 +189,8 @@ class Choices2 extends Component
                                 <div
                                     wire:key="option-{{ data_get($option, $optionValue) }}"
                                     @click="toggle({{ data_get($option, $optionValue) }})"
-                                    :class="isActive({{ data_get($option, $optionValue) }}) && 'bg-primary/5 border-l-4 border-l-primary'"
+                                    class="border-l-4"
+                                    :class="isActive({{ data_get($option, $optionValue) }}) && 'border-l-4 border-l-primary'"
                                 >
                                     <!-- ITEM SLOT -->
                                     @if($item)
