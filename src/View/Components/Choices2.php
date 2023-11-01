@@ -16,14 +16,14 @@ class Choices2 extends Component
         public ?string $icon = null,
         public ?string $hint = null,
         public ?bool $searchable = false,
-        public ?bool $multiple = false,
+        public ?bool $single = false,
         public ?string $searchFunction = 'search',
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public ?string $optionSubLabel = 'description',
         public ?string $optionAvatar = 'avatar',
         public Collection|array $options = new Collection(),
-        public ?string $noResultText = null,
+        public ?string $noResultText = 'No results found.',
 
         // slots
         public mixed $item = null
@@ -32,14 +32,19 @@ class Choices2 extends Component
         $this->uuid = md5(serialize($this));
     }
 
-    public function modelName()
+    public function modelName(): string
     {
         return $this->attributes->wire('model')->value();
     }
 
-    public function isReadonly()
+    public function isReadonly(): bool
     {
         return $this->attributes->has('readonly') && $this->attributes->get('readonly') == true;
+    }
+
+    public function isRequired(): bool
+    {
+        return $this->attributes->has('required') && $this->attributes->get('required') == true;
     }
 
     public function render(): View|Closure|string
@@ -53,43 +58,59 @@ class Choices2 extends Component
                         selection: @entangle($attributes->wire('model')),
                         options: {{ json_encode($options) }},
                         focused: false,
-                        isMultiple: {{ json_encode($multiple) }},
+                        isSingle: {{ json_encode($single) }},
                         isSearchable: {{ json_encode($searchable) }},
                         isReadonly: {{ json_encode($isReadonly()) }},
 
                         get selectedOptions() {
-                            return this.isMultiple
-                                ? this.selection.map(i => this.options.filter(o => o.{{ $optionValue }} == i)[0])
-                                : this.options.filter(i => i.{{ $optionValue }} == this.selection)
+                            return this.isSingle
+                                ? this.options.filter(i => i.{{ $optionValue }} == this.selection)
+                                : this.selection.map(i => this.options.filter(o => o.{{ $optionValue }} == i)[0])
+                        },
+                        get noResults() {
+                            if (!this.isSearchable) {
+                                return false
+                            }
+
+                            return this.isSingle
+                                    ? this.selection && this.options.length  == 1
+                                    : this.options.length <= this.selection.length
                         },
                         clear() {
                             this.focused = false;
                             $refs.searchInput.value = ''
+                        },
+                        reset() {
+                            this.clear();
+                            this.isSingle
+                                ? this.selection = null
+                                : this.selection = []
                         },
                         focus() {
                             if (this.isReadonly) {
                                 return
                             }
 
+                            $refs.searchInput.focus()
                             this.focused = true
                         },
                         isActive(id) {
-                            return this.isMultiple
-                                ? this.selection.includes(id)
-                                : this.selection == id
+                            return this.isSingle
+                                ? this.selection == id
+                                : this.selection.includes(id)
                         },
                         toggle(id) {
                             if (this.isReadonly) {
                                 return
                             }
 
-                            if (this.isMultiple) {
+                            if (this.isSingle) {
+                                this.selection = id
+                                this.focused = false
+                            } else {
                                 this.selection.includes(id)
                                     ? this.selection = this.selection.filter(i => i !== id)
                                     : this.selection.push(id)
-                            } else {
-                                this.selection = id
-                                this.focused = false
                             }
 
                             $refs.searchInput.value = ''
@@ -104,11 +125,15 @@ class Choices2 extends Component
 
                     <!-- SELECTED OPTIONS + INPUT -->
                     <div
-                        @click="$refs.searchInput.focus(); focus()"
+                        @click="focus()"
+
+                        @if($isRequired)
+                            required
+                        @endif
 
                         {{
                             $attributes->except('wire:model')->class([
-                                "select select-bordered select-primary w-full h-fit pb-2 pt-2.5 inline-block cursor-auto relative",
+                                "select select-bordered select-primary w-full h-fit pb-2 pt-2.5 pr-16 inline-block cursor-auto relative",
                                 'border border-dashed' => $isReadonly(),
                                 'select-error' => $errors->has($modelName()),
                                 'pl-10' => $icon,
@@ -121,12 +146,15 @@ class Choices2 extends Component
                             <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
                         @endif
 
+                        <!-- CLEAR ICON  -->
+                        <x-icon @click="reset()"  name="o-x-mark" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+
                         <!-- SELECTED OPTIONS -->
-                        <span wire:key="selected-options-{{ rand() }}" class="break-all">
+                        <span wire:key="selected-options-{{ rand() }}">
                             <template x-for="(option, index) in selectedOptions" :key="option.{{ $optionValue }}">
-                                <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 mr-2 rounded  pl-2 cursor-pointer">
+                                <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 px-2 mr-2 rounded cursor-pointer break-before-all">
                                     <span x-text="option.{{ $optionLabel }}"></span>
-                                    <x-icon @click="toggle(option.{{ $optionValue }})" x-show="! isReadonly && isMultiple" name="o-x-mark" class="w-4 h-4 text-gray-500 hover:text-red-500" />
+                                    <x-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
                                 </span>
                             </template>
                         </span>
@@ -134,8 +162,10 @@ class Choices2 extends Component
                         <!-- INPUT SEARCH -->
                         <input
                             x-ref="searchInput"
-                            class="outline-none bg-transparent"
+                            @input="focus()"
                             :readonly="isReadonly || ! isSearchable"
+                            :class="(isReadonly || !isSearchable) && 'hidden'"
+                            class="outline-none bg-transparent"
 
                             @if($searchable)
                                 wire:keydown.debounce="{{ $searchFunction }}($el.value)"
@@ -146,11 +176,20 @@ class Choices2 extends Component
                     <!-- OPTIONS LIST -->
                     <div x-show="focused" class="relative" wire:key="options-list">
                         <div class="max-h-64 w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto">
+                            <!-- NO RESULTS -->
+                            <div
+                                x-show="noResults"
+                                wire:key="{{ rand() }}"
+                                class="p-5 decoration-wavy decoration-warning font-bold underline border-l-4 border-l-warning"
+                            >
+                                {{ $noResultText }}
+                            </div>
+
                             @foreach($options as $option)
                                 <div
                                     wire:key="option-{{ data_get($option, $optionValue) }}"
                                     @click="toggle({{ data_get($option, $optionValue) }})"
-                                    :class="isActive({{ data_get($option, $optionValue) }}) && 'hidden'"
+                                    :class="isActive({{ data_get($option, $optionValue) }}) && 'bg-primary/5 border-l-4 border-l-primary'"
                                 >
                                     <!-- ITEM SLOT -->
                                     @if($item)
@@ -160,11 +199,6 @@ class Choices2 extends Component
                                     @endif
                                 </div>
                             @endforeach
-
-                            <!-- NO RESULTS -->
-                            @if(count($options) == 0 && $noResultText)
-                                <div class="p-5">{{ $noResultText }}</div>
-                            @endif
                         </div>
                     </div>
 
