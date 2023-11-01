@@ -12,8 +12,16 @@ class Choices2 extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $label = null,
+        public ?string $icon = null,
+        public ?string $hint = null,
         public ?bool $searchable = false,
         public ?bool $multiple = false,
+        public ?string $searchFunction = 'search',
+        public ?string $optionValue = 'id',
+        public ?string $optionLabel = 'name',
+        public ?string $optionSubLabel = 'description',
+        public ?string $optionAvatar = 'avatar',
         public Collection|array $options = new Collection(),
         public ?string $noResultText = null,
 
@@ -24,68 +32,107 @@ class Choices2 extends Component
         $this->uuid = md5(serialize($this));
     }
 
+    public function modelName()
+    {
+        return $this->attributes->wire('model')->value();
+    }
+
+    public function isReadonly()
+    {
+        return $this->attributes->has('readonly') && $this->attributes->get('readonly') == true;
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'HTML'
                 <div
+                    @click.outside = "clear()"
+                    @keyup.esc = "clear()"
+
                     x-data="{
                         selection: @entangle($attributes->wire('model')),
                         options: {{ json_encode($options) }},
-                        multiple: {{ json_encode($multiple) }},
-                        searchable: {{ json_encode($searchable) }},
                         focused: false,
-                        toggle(id) {
-                            if (this.multiple) {
-                                this.selection.includes(id)
-                                    ? this.selection = this.selection.filter(i => i !== id)
-                                    : this.selection.push(id)
-                            } else {
-                                this.selection == id
-                                    ? this.selection = null
-                                    : this.selection = id
+                        isMultiple: {{ json_encode($multiple) }},
+                        isSearchable: {{ json_encode($searchable) }},
+                        isReadonly: {{ json_encode($isReadonly()) }},
 
-                                this.focused = false
-                            }
-                        },
-                        isActive(id) {
-                            return this.multiple
-                                ? this.selection.includes(id)
-                                : this.selection == id
+                        get selectedOptions() {
+                            return this.isMultiple
+                                ? this.options.filter(i => this.selection.includes(i.id))
+                                : this.options.filter(i => i.id == this.selection)
                         },
                         clear() {
                             this.focused = false;
                             $refs.searchInput.value = ''
                         },
-                        pull() {
-                            if (this.multiple && $refs.searchInput.value == '') {
-                                const trash = this.selectedOptions.slice(-1)[0]
-                                this.selection = this.selection.filter(i => i !== trash.id)
+                        focus() {
+                            if (this.isReadonly) {
+                                return
                             }
+
+                            this.focused = true
                         },
-                        get selectedOptions() {
-                            console.log(this.selection)
-                            return this.multiple
-                                ? this.options.filter(i => this.selection.includes(i.id))
-                                : this.options.filter(i => i.id == this.selection)
+                        isActive(id) {
+                            return this.isMultiple
+                                ? this.selection.includes(id)
+                                : this.selection == id
+                        },
+                        toggle(id) {
+                            if (this.isReadonly) {
+                                return
+                            }
+
+                            if (this.isMultiple) {
+                                this.selection.includes(id)
+                                    ? this.selection = this.selection.filter(i => i !== id)
+                                    : this.selection.push(id)
+                            } else {
+                                this.selection = id
+                                this.focused = false
+                            }
+
+                            $refs.searchInput.value = ''
+                            $refs.searchInput.focus()
+                        },
+                        pull() {
+                            if (this.isMultiple && $refs.searchInput.value == '') {
+                                //const trash = this.selectedOptions.slice(-1)[0]
+                                //this.selection = this.selection.filter(i => i !== trash.id)
+                            }
                         }
                     }"
-
-                    @click.outside = "clear()"
-                    @keyup.esc = "clear()"
                 >
-                    <!-- MAIN CONTAINER -->
-                    <div @click="$refs.searchInput.focus(); focused = true" class="select select-primary w-full h-fit py-2 inline-block">
+                    <!-- STANDARD LABEL -->
+                    @if($label)
+                        <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
+                    @endif
+
+                    <!-- SELECTED OPTIONS + INPUT -->
+                    <div
+                        @click="$refs.searchInput.focus(); focus()"
+
+                        {{
+                            $attributes->except('wire:model')->class([
+                                "select select-bordered select-primary w-full h-fit pb-2 pt-2.5 inline-block cursor-auto relative",
+                                'border border-dashed' => $isReadonly(),
+                                'select-error' => $errors->has($modelName()),
+                                'pl-10' => $icon,
+                            ])
+                        }}
+                    >
+
+                        <!-- ICON  -->
+                        @if($icon)
+                            <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
+                        @endif
 
                         <!-- SELECTED OPTIONS -->
-                        <span wire:key="choices-item-{{ rand() }}" class="break-all">
-                            <template x-for="(option, index) in selectedOptions" :key="option.id">
-                                <span
-                                    @click="toggle(option.id)"
-                                    class="bg-primary/5 hover:bg-base-300 p-1 mr-2 rounded text-primary pl-2"
-                                    :class="(focused && $refs.searchInput.value == '' && index == selectedOptions.length - 1) && 'bg-primary/10'"
-                                >
+                        <span wire:key="selected-options-{{ rand() }}" class="break-all">
+                            <template x-for="option in selectedOptions" :key="option.{{ $optionValue }}">
+                                <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 mr-2 rounded  pl-2 cursor-pointer">
                                     <span x-text="option.name"></span>
-                                    <x-icon name="o-x-mark" class="w-3 h-3" />
+                                    <x-icon @click="toggle(option.{{ $optionValue }})" x-show="! isReadonly && isMultiple" name="o-x-mark" class="w-4 h-4 text-gray-500 hover:text-red-500" />
                                 </span>
                             </template>
                         </span>
@@ -93,24 +140,24 @@ class Choices2 extends Component
                         <!-- INPUT SEARCH -->
                         <input
                             x-ref="searchInput"
-                            :readonly="!searchable"
                             @keydown.backspace="pull()"
                             class="outline-none bg-transparent"
+                            :readonly="isReadonly || ! isSearchable"
 
                             @if($searchable)
-                                wire:model.live.debounce="searchTerm"
+                                wire:keydown.debounce="{{ $searchFunction }}($el.value);"
                             @endif
                          />
                     </div>
 
                     <!-- OPTIONS LIST -->
-                    <div x-show="focused" class="relative">
+                    <div x-show="focused" class="relative" wire:key="options-list">
                         <div class="max-h-64 w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto">
                             @foreach($options as $option)
                                 <div
-                                    wire:key="choices-list-{{ $option->id }}"
-                                    :class="isActive({{ $option->id }}) && 'bg-primary/5'"
-                                    @click="toggle({{ $option->id }})"
+                                    wire:key="option-{{ data_get($option, $optionValue) }}"
+                                    @click="toggle({{ data_get($option, $optionValue) }})"
+                                    :class="isActive({{ data_get($option, $optionValue) }}) && 'hidden'"
                                 >
                                     <!-- ITEM SLOT -->
                                     @if($item)
@@ -127,6 +174,16 @@ class Choices2 extends Component
                             @endif
                         </div>
                     </div>
+
+                    <!-- ERROR -->
+                    @error($modelName())
+                        <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
+                    @enderror
+
+                    <!-- HINT -->
+                    @if($hint)
+                        <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
+                    @endif
                 </div>
             HTML;
     }
