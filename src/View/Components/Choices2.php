@@ -53,15 +53,14 @@ class Choices2 extends Component
                         selection: @entangle($attributes->wire('model')),
                         options: {{ json_encode($options) }},
                         focused: false,
-                        willPop: 0,
                         isMultiple: {{ json_encode($multiple) }},
                         isSearchable: {{ json_encode($searchable) }},
                         isReadonly: {{ json_encode($isReadonly()) }},
 
                         get selectedOptions() {
                             return this.isMultiple
-                                ? this.selection.map(i => this.options.filter(o => o.id == i)[0])
-                                : this.options.filter(i => i.id == this.selection)
+                                ? this.selection.map(i => this.options.filter(o => o.{{ $optionValue }} == i)[0])
+                                : this.options.filter(i => i.{{ $optionValue }} == this.selection)
                         },
                         clear() {
                             this.focused = false;
@@ -95,26 +94,6 @@ class Choices2 extends Component
 
                             $refs.searchInput.value = ''
                             $refs.searchInput.focus()
-                        },
-                        search(value) {
-                            console.log('-------------------')
-
-                            value == '' ? this.willPop++ : this.willPop = 0;
-
-                            console.log(this.willPop)
-
-                            if (this.willPop == 2) {
-                                this.selection.pop()
-                                this.willPop = 1
-                            }
-
-                            console.log(this.willPop)
-
-                            if (this.willPop == 0) {
-                                $wire.{{ $searchFunction }}(value);
-                            }
-
-                            console.log(this.willPop)
                         }
                     }"
                 >
@@ -145,11 +124,8 @@ class Choices2 extends Component
                         <!-- SELECTED OPTIONS -->
                         <span wire:key="selected-options-{{ rand() }}" class="break-all">
                             <template x-for="(option, index) in selectedOptions" :key="option.{{ $optionValue }}">
-                                <span
-                                    class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 mr-2 rounded  pl-2 cursor-pointer"
-                                    :class="willPop && 'bg-primary/10'"
-                                >
-                                    <span x-text="option.name"></span>
+                                <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 mr-2 rounded  pl-2 cursor-pointer">
+                                    <span x-text="option.{{ $optionLabel }}"></span>
                                     <x-icon @click="toggle(option.{{ $optionValue }})" x-show="! isReadonly && isMultiple" name="o-x-mark" class="w-4 h-4 text-gray-500 hover:text-red-500" />
                                 </span>
                             </template>
@@ -158,9 +134,12 @@ class Choices2 extends Component
                         <!-- INPUT SEARCH -->
                         <input
                             x-ref="searchInput"
-                            @keyup="search($el.value)"
                             class="outline-none bg-transparent"
                             :readonly="isReadonly || ! isSearchable"
+
+                            @if($searchable)
+                                wire:keydown.debounce="{{ $searchFunction }}($el.value)"
+                            @endif
                          />
                     </div>
 
