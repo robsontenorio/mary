@@ -198,7 +198,7 @@ class Choices2 extends Component
                                     @if($item)
                                         {{ $item($option) }}
                                     @else
-                                        <x-list-item :item="$option" />
+                                        <x-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar"  />
                                     @endif
                                 </div>
                             @endforeach
