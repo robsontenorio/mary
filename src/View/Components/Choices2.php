@@ -56,6 +56,13 @@ class Choices2 extends Component
         return $this->attributes->has('required') && $this->attributes->get('required') == true;
     }
 
+    public function getOptionValue($option): mixed
+    {
+        $value = data_get($option, $this->optionValue);
+
+        return is_numeric($value) ? $value : "'$value'";
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'HTML'
@@ -130,7 +137,7 @@ class Choices2 extends Component
                                 this.focused = false
                             } else {
                                 this.selection.includes(id)
-                                    ? this.selection = this.selection.filter(i => i !== id)
+                                    ? this.selection = this.selection.filter(i => i != id)
                                     : this.selection.push(id)
                             }
 
@@ -174,7 +181,7 @@ class Choices2 extends Component
                                     <span class="font-black" x-text="selectedOptions.length"></span> {{ $compactText }}
                                 </span>
                             @else
-                                <template x-for="(option, index) in selectedOptions" :key="option.{{ $optionValue }}">
+                                <template x-for="(option, index) in selectedOptions" :key="index">
                                     <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 px-2 mr-2 rounded cursor-pointer break-before-all">
                                         <span x-text="option.{{ $optionLabel }}"></span>
                                         <x-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
@@ -229,9 +236,9 @@ class Choices2 extends Component
                             @foreach($options as $option)
                                 <div
                                     wire:key="option-{{ data_get($option, $optionValue) }}"
-                                    @click="toggle('{{ data_get($option, $optionValue) }}')"
+                                    @click="toggle({{ $getOptionValue($option) }})"
+                                    :class="isActive({{ $getOptionValue($option) }}) && 'border-l-4 border-l-primary'"
                                     class="border-l-4"
-                                    :class="isActive('{{ data_get($option, $optionValue) }}') && 'border-l-4 border-l-primary'"
                                 >
                                     <!-- ITEM SLOT -->
                                     @if($item)
