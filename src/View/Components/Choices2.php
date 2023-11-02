@@ -27,7 +27,6 @@ class Choices2 extends Component
 
         // slots
         public mixed $item = null
-
     ) {
         $this->uuid = md5(serialize($this));
     }
@@ -73,7 +72,7 @@ class Choices2 extends Component
                             }
 
                             return this.isSingle
-                                    ? this.selection && this.options.length  == 1
+                                    ? (this.selection && this.options.length  == 1) || (!this.selection && this.options.length == 0)
                                     : this.options.length <= this.selection.length
                         },
                         clear() {
@@ -123,7 +122,7 @@ class Choices2 extends Component
                         <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
                     @endif
 
-                    <!-- SELECTED OPTIONS + INPUT -->
+                    <!-- SELECTED OPTIONS + SEARCH INPUT -->
                     <div
                         @click="focus()"
 
@@ -140,7 +139,6 @@ class Choices2 extends Component
                             ])
                         }}
                     >
-
                         <!-- ICON  -->
                         @if($icon)
                             <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
@@ -150,7 +148,7 @@ class Choices2 extends Component
                         <x-icon @click="reset()"  name="o-x-mark" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
 
                         <!-- SELECTED OPTIONS -->
-                        <span wire:key="selected-options-{{ rand() }}">
+                        <span wire:key="selected-options-{{ $uuid }}">
                             <template x-for="(option, index) in selectedOptions" :key="option.{{ $optionValue }}">
                                 <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 px-2 mr-2 rounded cursor-pointer break-before-all">
                                     <span x-text="option.{{ $optionLabel }}"></span>
@@ -174,8 +172,12 @@ class Choices2 extends Component
                     </div>
 
                     <!-- OPTIONS LIST -->
-                    <div x-show="focused" class="relative" wire:key="options-list">
-                        <div class="max-h-64 w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto">
+                    <div x-show="focused" class="relative">
+                        <div wire:key="options-list-{{ $uuid }}" class="max-h-64 w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto">
+
+                            <!-- PROGRESS -->
+                            <progress wire:loading wire:target="{{ $searchFunction }}" class="progress absolute progress-primary top-0 h-0.5"></progress>
+
                             <!-- NO RESULTS -->
                             <div
                                 x-show="noResults"
