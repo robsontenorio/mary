@@ -22,6 +22,7 @@ class Choices2 extends Component
         public ?string $compactText = 'selected',
         public ?bool $allowAll = false,
         public ?string $allowAllText = 'Select all',
+        public ?string $removeAllText = 'Remove all',
         public ?string $searchFunction = 'search',
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
@@ -190,6 +191,8 @@ class Choices2 extends Component
                             @endif
                         </span>
 
+                        &nbsp;
+
                         <!-- INPUT SEARCH -->
                         <input
                             x-ref="searchInput"
@@ -215,12 +218,11 @@ class Choices2 extends Component
                            <!-- SELECT ALL -->
                            @if($allowAll)
                                <div
-                                    x-show="!isAllSelected"
-                                    @click="selectAll()"
                                     wire:key="allow-all-{{ rand() }}"
-                                    class="p-5 font-bold decoration-wavy decoration-info underline border border-l-4 border-b-base-200 hover:bg-base-200"
+                                    class="font-bold   border border-l-4 border-b-base-200 hover:bg-base-200"
                                >
-                                    {{ $allowAllText }}
+                                    <div x-show="!isAllSelected" @click="selectAll()" class="p-3 underline decoration-wavy decoration-info">{{ $allowAllText }}</div>
+                                    <div x-show="isAllSelected" @click="reset()" class="p-3 underline decoration-wavy decoration-error">{{ $removeAllText }}</div>
                                </div>
                            @endif
 
@@ -228,7 +230,7 @@ class Choices2 extends Component
                             <div
                                 x-show="noResults"
                                 wire:key="no-results-{{ rand() }}"
-                                class="p-5 decoration-wavy decoration-warning underline font-bold border border-l-4 border-b-base-200"
+                                class="p-3 decoration-wavy decoration-warning underline font-bold border border-l-4 border-l-warning border-b-base-200"
                             >
                                 {{ $noResultText }}
                             </div>
