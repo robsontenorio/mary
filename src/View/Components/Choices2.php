@@ -20,7 +20,7 @@ class Choices2 extends Component
         public ?string $searchFunction = 'search',
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
-        public ?string $optionSubLabel = 'description',
+        public ?string $optionSubLabel = '',
         public ?string $optionAvatar = 'avatar',
         public Collection|array $options = new Collection(),
         public ?string $noResultText = 'No results found.',
@@ -145,7 +145,9 @@ class Choices2 extends Component
                         @endif
 
                         <!-- CLEAR ICON  -->
-                        <x-icon @click="reset()"  name="o-x-mark" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                        @if(! $isReadonly())
+                            <x-icon @click="reset()"  name="o-x-mark" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                        @endif
 
                         <!-- SELECTED OPTIONS -->
                         <span wire:key="selected-options-{{ $uuid }}">
