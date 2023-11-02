@@ -70,6 +70,7 @@ class Choices2 extends Component
                         isSingle: {{ json_encode($single) }},
                         isSearchable: {{ json_encode($searchable) }},
                         isReadonly: {{ json_encode($isReadonly()) }},
+                        isRequired: {{ json_encode($isRequired()) }},
 
                         get selectedOptions() {
                             return this.isSingle
@@ -87,6 +88,11 @@ class Choices2 extends Component
                         },
                         get isAllSelected() {
                             return this.options.length == this.selection.length
+                        },
+                        get isSelectionEmpty() {
+                            return this.isSingle
+                                ? this.selection == null
+                                : this.selection.length == 0
                         },
                         selectAll() {
                             this.selection = this.options.map(i => i.{{ $optionValue }})
@@ -142,10 +148,6 @@ class Choices2 extends Component
                     <div
                         @click="focus()"
 
-                        @if($isRequired)
-                            required
-                        @endif
-
                         {{
                             $attributes->except('wire:model')->class([
                                 "select select-bordered select-primary w-full h-fit pb-2 pt-2.5 pr-16 inline-block cursor-pointer relative",
@@ -185,6 +187,7 @@ class Choices2 extends Component
                         <input
                             x-ref="searchInput"
                             @input="focus()"
+                            :required="isRequired && isSelectionEmpty"
                             :readonly="isReadonly || ! isSearchable"
                             :class="(isReadonly || !isSearchable) && 'hidden'"
                             class="outline-none bg-transparent"
