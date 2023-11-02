@@ -3,6 +3,7 @@
 namespace Mary\View\Components;
 
 use Closure;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
@@ -17,6 +18,10 @@ class Choices2 extends Component
         public ?string $hint = null,
         public ?bool $searchable = false,
         public ?bool $single = false,
+        public ?bool $compact = false,
+        public ?string $compactText = 'selected',
+        public ?bool $allowAll = false,
+        public ?string $allowAllText = 'Select all',
         public ?string $searchFunction = 'search',
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
@@ -29,6 +34,10 @@ class Choices2 extends Component
         public mixed $item = null
     ) {
         $this->uuid = md5(serialize($this));
+
+        if (($this->allowAll || $this->compact) && ($this->single || $this->searchable)) {
+            throw new Exception("`allow-all` and `compact` does not work combined with `single` or `searchable`.");
+        }
     }
 
     public function modelName(): string
@@ -74,6 +83,12 @@ class Choices2 extends Component
                             return this.isSingle
                                     ? (this.selection && this.options.length  == 1) || (!this.selection && this.options.length == 0)
                                     : this.options.length <= this.selection.length
+                        },
+                        get isAllSelected() {
+                            return this.options.length == this.selection.length
+                        },
+                        selectAll() {
+                            this.selection = this.options.map(i => i.{{ $optionValue }})
                         },
                         clear() {
                             this.focused = false;
@@ -132,7 +147,7 @@ class Choices2 extends Component
 
                         {{
                             $attributes->except('wire:model')->class([
-                                "select select-bordered select-primary w-full h-fit pb-2 pt-2.5 pr-16 inline-block cursor-auto relative",
+                                "select select-bordered select-primary w-full h-fit pb-2 pt-2.5 pr-16 inline-block cursor-pointer relative",
                                 'border border-dashed' => $isReadonly(),
                                 'select-error' => $errors->has($modelName()),
                                 'pl-10' => $icon,
@@ -151,12 +166,18 @@ class Choices2 extends Component
 
                         <!-- SELECTED OPTIONS -->
                         <span wire:key="selected-options-{{ $uuid }}">
-                            <template x-for="(option, index) in selectedOptions" :key="option.{{ $optionValue }}">
-                                <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 px-2 mr-2 rounded cursor-pointer break-before-all">
-                                    <span x-text="option.{{ $optionLabel }}"></span>
-                                    <x-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
+                            @if($compact)
+                                <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 px-2 mr-2 rounded cursor-pointer">
+                                    <span class="font-black" x-text="selectedOptions.length"></span> {{ $compactText }}
                                 </span>
-                            </template>
+                            @else
+                                <template x-for="(option, index) in selectedOptions" :key="option.{{ $optionValue }}">
+                                    <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 px-2 mr-2 rounded cursor-pointer break-before-all">
+                                        <span x-text="option.{{ $optionLabel }}"></span>
+                                        <x-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
+                                    </span>
+                                </template>
+                            @endif
                         </span>
 
                         <!-- INPUT SEARCH -->
@@ -180,11 +201,23 @@ class Choices2 extends Component
                             <!-- PROGRESS -->
                             <progress wire:loading wire:target="{{ $searchFunction }}" class="progress absolute progress-primary top-0 h-0.5"></progress>
 
+                           <!-- SELECT ALL -->
+                           @if($allowAll)
+                               <div
+                                    x-show="!isAllSelected"
+                                    @click="selectAll()"
+                                    wire:key="allow-all-{{ rand() }}"
+                                    class="p-5 font-bold decoration-wavy decoration-info underline border border-l-4 border-b-base-200 hover:bg-base-200"
+                               >
+                                    {{ $allowAllText }}
+                               </div>
+                           @endif
+
                             <!-- NO RESULTS -->
                             <div
                                 x-show="noResults"
-                                wire:key="{{ rand() }}"
-                                class="p-5 decoration-wavy decoration-warning font-bold underline border border-l-4 border-l-warning border-b-base-200"
+                                wire:key="no-results-{{ rand() }}"
+                                class="p-5 decoration-wavy decoration-warning underline font-bold border border-l-4 border-b-base-200"
                             >
                                 {{ $noResultText }}
                             </div>
