@@ -229,9 +229,9 @@ class Choices2 extends Component
                             @foreach($options as $option)
                                 <div
                                     wire:key="option-{{ data_get($option, $optionValue) }}"
-                                    @click="toggle({{ data_get($option, $optionValue) }})"
+                                    @click="toggle('{{ data_get($option, $optionValue) }}')"
                                     class="border-l-4"
-                                    :class="isActive({{ data_get($option, $optionValue) }}) && 'border-l-4 border-l-primary'"
+                                    :class="isActive('{{ data_get($option, $optionValue) }}') && 'border-l-4 border-l-primary'"
                                 >
                                     <!-- ITEM SLOT -->
                                     @if($item)
