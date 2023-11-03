@@ -21,6 +21,7 @@ class Choices2 extends Component
         public ?bool $compact = false,
         public ?string $compactText = 'selected',
         public ?bool $allowAll = false,
+        public ?string $debounce = '250ms',
         public ?string $allowAllText = 'Select all',
         public ?string $removeAllText = 'Remove all',
         public ?string $searchFunction = 'search',
@@ -203,7 +204,7 @@ class Choices2 extends Component
                                 class="outline-none bg-transparent"
 
                                 @if($searchable)
-                                    wire:keydown.debounce="{{ $searchFunction }}($el.value)"
+                                    wire:keydown.debounce.{{ $debounce }}="{{ $searchFunction }}($el.value)"
                                 @endif
                              />
                         </div>
