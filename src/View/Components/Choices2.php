@@ -22,6 +22,7 @@ class Choices2 extends Component
         public ?string $compactText = 'selected',
         public ?bool $allowAll = false,
         public ?string $debounce = '250ms',
+        public ?int $minChars = 0,
         public ?string $allowAllText = 'Select all',
         public ?string $removeAllText = 'Remove all',
         public ?string $searchFunction = 'search',
@@ -80,6 +81,7 @@ class Choices2 extends Component
                             isSearchable: {{ json_encode($searchable) }},
                             isReadonly: {{ json_encode($isReadonly()) }},
                             isRequired: {{ json_encode($isRequired()) }},
+                            minChars: {{ $minChars }},
 
                             get selectedOptions() {
                                 return this.isSingle
@@ -145,6 +147,13 @@ class Choices2 extends Component
 
                                 $refs.searchInput.value = ''
                                 $refs.searchInput.focus()
+                            },
+                            search(value) {
+                                if (value.length < this.minChars) {
+                                    return
+                                }
+
+                                @this.{{ $searchFunction }}(value)
                             }
                         }"
                     >
@@ -204,13 +213,13 @@ class Choices2 extends Component
                                 class="outline-none bg-transparent"
 
                                 @if($searchable)
-                                    wire:keydown.debounce.{{ $debounce }}="{{ $searchFunction }}($el.value)"
+                                    @keydown.debounce.{{ $debounce }}="search($el.value)"
                                 @endif
                              />
                         </div>
 
                         <!-- OPTIONS LIST -->
-                        <div x-show="focused" class="relative">
+                        <div x-show="focused && options.length" class="relative" wire:key="options-list-main-{{ $uuid }}" >
                             <div wire:key="options-list-{{ $uuid }}" class="{{ $height}} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto">
 
                                 <!-- PROGRESS -->
