@@ -13,6 +13,7 @@ class Modal extends Component
         public ?string $title = null,
         public ?string $subtitle = null,
         public ?bool $separator = false,
+        public ?bool $closeOutside = true,
 
         // Slots
         public ?string $actions = null
@@ -52,6 +53,12 @@ class Modal extends Component
                             {{ $actions }}
                         </div>
                     </div>
+
+                    @if($closeOutside)
+                    <form class="modal-backdrop" method="dialog">
+                        <span x-on:click="$wire.{{ $attributes->wire('model')->value() }} = false">close</span>
+                    </form>
+                    @endif
                 </dialog>
                 HTML;
     }
