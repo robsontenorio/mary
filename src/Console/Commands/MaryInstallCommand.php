@@ -70,6 +70,10 @@ It will set up:
             Process::run('composer require livewire/volt', function (string $type, string $output) {
                 echo $output;
             })->throw();
+
+            Process::run('php artisan volt:install', function (string $type, string $output) {
+                echo $output;
+            })->throw();
         }
 
         /**
