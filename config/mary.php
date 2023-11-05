@@ -11,6 +11,10 @@ return [
      *    prefix => 'mary-'
      *               <x-mary-button />
      *               <x-mary-card />
+     *
+     * Make sure to clear view cache after renaming
+     *    php artisan view:clear
+     *
      */
     'prefix' => ''
 ];
