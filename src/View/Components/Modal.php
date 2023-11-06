@@ -13,7 +13,7 @@ class Modal extends Component
         public ?string $title = null,
         public ?string $subtitle = null,
         public ?bool $separator = false,
-        public ?bool $closeOutside = true,
+        public ?bool $persistent = false,
 
         // Slots
         public ?string $actions = null
@@ -33,7 +33,9 @@ class Modal extends Component
                         x-data="{open: @entangle($attributes->wire('model')).live }"                         
                         :class="{'modal-open !animate-none': open}"
                         :open="open"
-                        @keydown.escape.window = "$wire.{{ $attributes->wire('model')->value() }} = false"
+                        @if(!$persistent)
+                            @keydown.escape.window = "$wire.{{ $attributes->wire('model')->value() }} = false"
+                        @endif
                     @endif
                 >
                     <div class="modal-box">
@@ -54,7 +56,7 @@ class Modal extends Component
                         </div>
                     </div>
 
-                    @if($closeOutside)
+                    @if(!$persistent)
                     <form class="modal-backdrop" method="dialog">
                         <span x-on:click="$wire.{{ $attributes->wire('model')->value() }} = false">close</span>
                     </form>
