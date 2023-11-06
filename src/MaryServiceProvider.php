@@ -65,7 +65,7 @@ class MaryServiceProvider extends ServiceProvider
         // Just rename <x-icon> provided by BladeUI Icons to <x-svg> to not collide with ours
         Blade::component('BladeUI\Icons\Components\Icon', 'svg');
 
-        // Also register as <x-icon> if there is a prefix for Mary components
+        // Also register as <x-icon> even if there is a prefix for Mary components
         Blade::component('icon', Icon::class);
 
         $prefix = config('mary.prefix');
