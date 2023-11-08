@@ -147,33 +147,6 @@ class MaryServiceProvider extends ServiceProvider
         });
     }
 
-    public function registerMaryJSDirective(): void
-    {
-        Blade::directive('maryJS', function ($expression) {
-            $parts = Str::of($expression)->explode(',');
-
-            $file = Str::of($parts->first())->replace("'", "")->replace('"', "");
-            $package = Str::of($file)->before('/')->toString();
-            $version = self::$third_party[$package] ?? 'x';
-
-            $extra = $parts->count() == 2 ? $parts->last() : '';
-            $extra = Str::of($extra)->replace("'", "")->replace('"', "");
-
-            return "<script src='/mary/asset?name=$file?$version' $extra></script>";
-        });
-    }
-
-    public function registerMaryCSSDirective(): void
-    {
-        Blade::directive('maryCSS', function ($expression) {
-            $file = Str::of($expression)->replace("'", "")->replace('"', "");
-            $package = Str::of($file)->before('/')->toString();
-            $version = self::$third_party[$package] ?? 'x';
-
-            return "<link rel='stylesheet' type='text/css' href='/mary/asset?name=$file?$version' />";
-        });
-    }
-
     /**
      * Register any package services.
      */
