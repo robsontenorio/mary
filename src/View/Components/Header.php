@@ -41,7 +41,7 @@ class Header extends Component
                 <div id="{{ $anchor }}" {{ $attributes->class(["mb-10", "mary-header-anchor" => $withAnchor]) }}">
                     <div class="flex flex-wrap gap-5 justify-between items-center">
                         <div>
-                            <div class="{{$size}} font-extrabold">
+                            <div {{ $title->attributes->class(["$size font-extrabold"]) }}>
                                 @if($withAnchor)
                                     <a href="#{{ $anchor }}">
                                 @endif
@@ -54,7 +54,7 @@ class Header extends Component
                             </div>
 
                             @if($subtitle)
-                                <div class="text-gray-500 text-sm mt-1">{{ $subtitle }}</div>
+                                <div {{ $subtitle->attributes->class(["text-gray-500 text-sm mt-1"]) }}>{{ $subtitle }}</div>
                             @endif
                         </div>
                         <div class="flex items-center justify-center gap-3 grow order-last sm:order-none">
@@ -62,7 +62,7 @@ class Header extends Component
                                 {{ $middle }}
                             </div>
                         </div>
-                        <div class="flex items-center gap-3">
+                        <div {{ $actions->attributes->class(["flex items-center gap-3"]) }}>
                             {{ $actions}}
                         </div>
                     </div>
