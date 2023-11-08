@@ -43,10 +43,14 @@ class Card extends Component
                             <div class="flex justify-between items-center">
                                 <div>
                                     @if($title)
-                                        <div {{ $title->attributes->class(["text-2xl font-bold"]) }}>{{ $title }}</div>
+                                        <div @class(["text-2xl font-bold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
+                                            {{ $title }}
+                                        </div>
                                     @endif
                                     @if($subtitle)
-                                        <div {{ $subtitle->attributes->class(["text-gray-500 text-sm mt-1"]) }}>{{ $subtitle }}</div>
+                                    <div @class(["text-gray-500 text-sm mt-1", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
+                                            {{ $subtitle }}
+                                        </div>
                                     @endif
                                 </div>
 
