@@ -34,9 +34,11 @@ class Card extends Component
                             ->class(['card bg-base-100 rounded-lg p-5', 'shadow-sm' => $shadow])
                     }}
                 >
-                    <figure>
-                        {{ $figure }}
-                    </figure>
+                    @if($figure)
+                        <figure {{ $figure->attributes->class(["mb-5 -m-5"]) }}>
+                            {{ $figure }}
+                        </figure>
+                    @endif
 
                     @if($title || $subtitle)
                         <div class="pb-5">
