@@ -31,7 +31,7 @@ class Card extends Component
                     {{
                         $attributes
                             ->merge(['wire:key' => $uuid ])
-                            ->class(['card bg-base-100 rounded-lg', 'shadow-sm' => $shadow])
+                            ->class(['card bg-base-100 rounded-lg p-5', 'shadow-sm' => $shadow])
                     }}
                 >
                     <figure>
@@ -39,7 +39,7 @@ class Card extends Component
                     </figure>
 
                     @if($title || $subtitle)
-                        <div class="px-5 pt-5">
+                        <div class="pb-5">
                             <div class="flex justify-between items-center">
                                 <div>
                                     @if($title)
@@ -65,7 +65,7 @@ class Card extends Component
                         </div>
                     @endif
 
-                    <div class="p-5">
+                    <div>
                         {{ $slot }}
                     </div>
 
