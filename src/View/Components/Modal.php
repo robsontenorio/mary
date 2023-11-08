@@ -24,13 +24,13 @@ class Modal extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <dialog 
+                <dialog
                     {{ $attributes->except('wire:model')->class(["modal"]) }}
-                    
+
                     @if($id)
                         id="{{ $id }}"
                     @else
-                        x-data="{open: @entangle($attributes->wire('model')).live }"                         
+                        x-data="{open: @entangle($attributes->wire('model')).live }"
                         :class="{'modal-open !animate-none': open}"
                         :open="open"
                         @if(!$persistent)
@@ -47,8 +47,8 @@ class Modal extends Component
                             {{ $slot }}
                         </p>
 
-                        @if($separator) 
-                            <hr class="mt-5" /> 
+                        @if($separator)
+                            <hr class="mt-5" />
                         @endif
 
                         <div class="modal-action">
@@ -57,9 +57,12 @@ class Modal extends Component
                     </div>
 
                     @if(!$persistent)
-                    <form class="modal-backdrop" method="dialog">
-                        <span x-on:click="$wire.{{ $attributes->wire('model')->value() }} = false">close</span>
-                    </form>
+                        <form class="modal-backdrop" method="dialog">
+                            <button>invisible, just to allow close on click outside</button>
+                            @if(!$id)
+                                <span @click="$wire.{{ $attributes->wire('model')->value() }} = false">close</span>
+                            @endif
+                        </form>
                     @endif
                 </dialog>
                 HTML;
