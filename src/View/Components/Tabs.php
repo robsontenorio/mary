@@ -18,37 +18,27 @@ class Tabs extends Component
         $this->tabContainer = $this->uuid;
     }
 
-    public function selectedTab(): ?string
-    {
-        if ($this->selected) {
-            return "'".$this->selected."'";
-        }
-
-        if ($value = $this->attributes->whereStartsWith('wire:model')->first()) {
-            return '';
-        }
-    }
-
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                    <div 
-                        class="flex overflow-x-auto" 
-                        x-data="{ 
+                    <div
+                        x-data="{
                             selected:
-                                @if($selected) 
+                                @if($selected)
                                     '{{ $selected }}'
-                                @else  
-                                    @entangle($attributes->wire('model')).live 
-                                @endif 
+                                @else
+                                    @entangle($attributes->wire('model')).live
+                                @endif
                         }"
+
+                        {{ $attributes->class(["flex overflow-x-auto"]) }}
                     >
-                        {{ $slot }}
+                        {{ $slot }} 
                     </div>
                     <hr/>
                     <div id="{{ $tabContainer }}">
-                            <!-- tab contents will be teleported in here -->                             
-                    </div>                    
+                            <!-- tab contents will be teleported in here -->
+                    </div>
                 HTML;
     }
 }
