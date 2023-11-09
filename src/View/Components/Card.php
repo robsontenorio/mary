@@ -27,47 +27,56 @@ class Card extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div 
-                    wire:key="{{ $uuid }}" 
-                    {{ $attributes->class(['card bg-base-100 rounded-lg', 'shadow-sm' => $shadow])}}
+                <div
+                    {{
+                        $attributes
+                            ->merge(['wire:key' => $uuid ])
+                            ->class(['card bg-base-100 rounded-lg p-5', 'shadow-sm' => $shadow])
+                    }}
                 >
-                    <figure>
-                        {{ $figure }}
-                    </figure>
-                    
+                    @if($figure)
+                        <figure {{ $figure->attributes->class(["mb-5 -m-5"]) }}>
+                            {{ $figure }}
+                        </figure>
+                    @endif
+
                     @if($title || $subtitle)
-                        <div class="px-5 pt-5">
+                        <div class="pb-5">
                             <div class="flex justify-between items-center">
                                 <div>
                                     @if($title)
-                                        <div class="text-2xl font-bold">{{ $title }}</div>
+                                        <div @class(["text-2xl font-bold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
+                                            {{ $title }}
+                                        </div>
                                     @endif
                                     @if($subtitle)
-                                        <div class="text-gray-500 text-sm mt-1">{{ $subtitle }}</div>
-                                    @endif                        
+                                    <div @class(["text-gray-500 text-sm mt-1", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
+                                            {{ $subtitle }}
+                                        </div>
+                                    @endif
                                 </div>
 
                                 @if($menu)
                                     <div {{ $menu->attributes->class(["flex items-center gap-2"]) }}> {{ $menu }} </div>
                                 @endif
-                            </div>     
+                            </div>
 
-                            @if($separator) 
-                                <hr class="mt-3" /> 
-                            @endif 
-                        </div>                                                
-                    @endif          
+                            @if($separator)
+                                <hr class="mt-3" />
+                            @endif
+                        </div>
+                    @endif
 
-                    <div class="p-5">                        
+                    <div>
                         {{ $slot }}
                     </div>
-                    
-                    @if($actions)                                            
-                        @if($separator) 
-                            <hr class="mt-5" /> 
+
+                    @if($actions)
+                        @if($separator)
+                            <hr class="mt-5" />
                         @endif
-                    
-                        <div class="flex justify-end gap-3 p-3">                            
+
+                        <div class="flex justify-end gap-3 p-3">
                             {{ $actions }}
                         </div>
                     @endif
