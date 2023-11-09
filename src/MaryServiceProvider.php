@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Mary\Console\Commands\MaryInstallCommand;
 use Mary\View\Components\Alert;
+use Mary\View\Components\Avatar;
 use Mary\View\Components\Badge;
 use Mary\View\Components\Button;
 use Mary\View\Components\Calendar;
@@ -73,6 +74,7 @@ class MaryServiceProvider extends ServiceProvider
 
         // Blade
         Blade::component($prefix . 'alert', Alert::class);
+        Blade::component($prefix . 'avatar', Avatar::class);
         Blade::component($prefix . 'badge', Badge::class);
         Blade::component($prefix . 'button', Button::class);
         Blade::component($prefix . 'calendar', Calendar::class);

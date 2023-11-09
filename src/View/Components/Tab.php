@@ -31,9 +31,10 @@ class Tab extends Component
                                 $wire.selectedTab = '{{ $name }}'
                             @endif
                             "
+                        class="tab tab-bordered flex-none font-semibold"
                         :class="{ 'tab-active': selected === '{{ $name }}' }"
                         {{ $attributes->whereDoesntStartWith('class') }}
-                        {{ $attributes->class(['tab tab-bordered flex-none font-semibold']) }}>
+                      >
 
                         @if($icon)
                             <x-icon :name="$icon" class="mr-2" />
@@ -44,7 +45,7 @@ class Tab extends Component
 
                     <div wire:key="{{ $name }}-{{ rand() }}">
                         <template x-teleport="#{{ $tabContainer }}">
-                            <div class="py-5" x-show="selected === '{{ $name }}'">
+                            <div x-show="selected === '{{ $name }}'" {{ $attributes->class(['py-5']) }}>
                                 {{ $slot }}
                             </div>
                         </template>

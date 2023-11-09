@@ -31,8 +31,6 @@ class Toast extends Component
                         class="toast rounded-md fixed cursor-pointer z-50"
                         :class="toast.position"
                         x-show="show"
-                        x-transition.opacity.scale
-                        x-transition:enter.duration.700ms
                         @click="show = false"
                         >
                         <div class="alert" :class="toast.css">
