@@ -36,8 +36,8 @@ class Icon extends Component
         return <<<'HTML'
                 @if($label)
                     <div class="inline-flex items-center gap-1">
-                        <div>
                 @endif
+
                         <x-svg
                             :name="$icon()"
                             {{
@@ -49,7 +49,6 @@ class Icon extends Component
                         />
 
                     @if($label)
-                            </div>
                             <div class="{{ $labelClasses() }}">
                                 {{ $label }}
                             </div>
