@@ -34,7 +34,7 @@ class Icon extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                @if($label)
+                @if(strlen($label) > 0)
                     <div class="inline-flex items-center gap-1">
                 @endif
                         <x-svg
@@ -47,7 +47,7 @@ class Icon extends Component
                              }}
                         />
 
-                    @if($label)
+                    @if(strlen($label) > 0)
                             <div class="{{ $labelClasses() }}">
                                 {{ $label }}
                             </div>
