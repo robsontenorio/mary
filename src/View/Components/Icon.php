@@ -12,7 +12,8 @@ class Icon extends Component
     public string $uuid;
 
     public function __construct(
-        public string $name
+        public string $name,
+        public ?string $label = null
     ) {
         $this->uuid = md5(serialize($this));
     }
@@ -24,18 +25,34 @@ class Icon extends Component
         return $name->contains('.') ? $name->replace('.', '-') : "heroicon-{$this->name}";
     }
 
+    public function labelClasses(): ?string
+    {
+        // Remove `w-*` and `h-*` classes, because it applies only for icon
+        return Str::replaceMatches('/(w-\w*)|(h-\w*)/', '', $this->attributes->get('class'));
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <x-svg
-                    :name="$icon()"
-                    {{
-                        $attributes->class([
-                            'inline',
-                            'w-5 h-5' => !Str::contains($attributes->get('class'), ['w-', 'h-'])
-                        ])
-                     }}
-                />
+                <div class="inline-flex items-center gap-1">
+                    <div>
+                        <x-svg
+                            :name="$icon()"
+                            {{
+                                $attributes->class([
+                                    'inline',
+                                    'w-5 h-5' => !Str::contains($attributes->get('class'), ['w-', 'h-'])
+                                ])
+                             }}
+                        />
+                    </div>
+
+                    @if($label)
+                        <div class="{{ $labelClasses() }}">
+                            {{ $label }}
+                        </div>
+                    @endif
+                </div>
             HTML;
     }
 }
