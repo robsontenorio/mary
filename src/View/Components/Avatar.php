@@ -26,7 +26,7 @@ class Avatar extends Component
         return <<<'HTML'
             <div class="flex items-center gap-2">
                 <div class="avatar">
-                    <div {{ $attributes->class(["w-8 rounded-full"]) }}>
+                    <div {{ $attributes->class(["w-7 rounded-full"]) }}>
                         <img src="{{ $image }}" />
                     </div>
                 </div>
