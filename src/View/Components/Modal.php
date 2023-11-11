@@ -58,9 +58,10 @@ class Modal extends Component
 
                     @if(!$persistent)
                         <form class="modal-backdrop" method="dialog">
-                            <button>invisible, just to allow close on click outside</button>
-                            @if(!$id)
-                                <span @click="$wire.{{ $attributes->wire('model')->value() }} = false">close</span>
+                            @if ($id)
+                                <button type="submit">close</button>
+                            @else
+                                <button @click="$wire.{{ $attributes->wire('model')->value() }} = false" type="button">close</button>
                             @endif
                         </form>
                     @endif
