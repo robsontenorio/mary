@@ -39,15 +39,15 @@ class Modal extends Component
                     @endif
                 >
                     <div class="modal-box">
-                        @if($title)
-                            <x-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" class="mb-5" />
+                        @if ($title)
+                            <x-header :separator="$separator" :subtitle="$subtitle" :title="$title" class="mb-5" size="text-2xl" />
                         @endif
 
                         <p class="">
                             {{ $slot }}
                         </p>
 
-                        @if($separator)
+                        @if ($separator)
                             <hr class="mt-5" />
                         @endif
 
@@ -56,15 +56,16 @@ class Modal extends Component
                         </div>
                     </div>
 
-                    @if(!$persistent)
+                    @if (!$persistent)
                         <form class="modal-backdrop" method="dialog">
-                            <button>invisible, just to allow close on click outside</button>
-                            @if(!$id)
-                                <span @click="$wire.{{ $attributes->wire('model')->value() }} = false">close</span>
+                            @if ($id)
+                                <button type="submit">close</button>
+                            @else
+                                <button @click="$wire.{{ $attributes->wire('model')->value() }} = false" type="button">close</button>
                             @endif
                         </form>
                     @endif
                 </dialog>
-                HTML;
+            HTML;
     }
 }
