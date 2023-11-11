@@ -27,13 +27,13 @@ class Tabs extends Component
                                 @if($selected)
                                     '{{ $selected }}'
                                 @else
-                                    @entangle($attributes->wire('model')).live
+                                    @entangle($attributes->wire('model'))
                                 @endif
                         }"
 
                         {{ $attributes->class(["flex overflow-x-auto"]) }}
                     >
-                        {{ $slot }} 
+                        {{ $slot }}
                     </div>
                     <hr/>
                     <div id="{{ $tabContainer }}">

@@ -22,15 +22,9 @@ class Tab extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                    @aware(['tabContainer' =>  '', 'selected' => ''])
+                    @aware(['tabContainer' =>  ''])
                     <a
-                        @click="
-                            @if($selected)
-                                selected = '{{ $name }}'
-                            @else
-                                $wire.selectedTab = '{{ $name }}'
-                            @endif
-                            "
+                        @click="selected = '{{ $name }}'"
                         class="tab tab-bordered flex-none font-semibold"
                         :class="{ 'tab-active': selected === '{{ $name }}' }"
                         {{ $attributes->whereDoesntStartWith('class') }}
