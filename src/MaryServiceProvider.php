@@ -38,6 +38,7 @@ use Mary\View\Components\Stat;
 use Mary\View\Components\Tab;
 use Mary\View\Components\Table;
 use Mary\View\Components\Tabs;
+use Mary\View\Components\Tags;
 use Mary\View\Components\Textarea;
 use Mary\View\Components\TimelineItem;
 use Mary\View\Components\Toast;
@@ -105,6 +106,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'table', Table::class);
         Blade::component($prefix . 'tab', Tab::class);
         Blade::component($prefix . 'tabs', Tabs::class);
+        Blade::component($prefix . 'tags', Tags::class);
         Blade::component($prefix . 'textarea', Textarea::class);
         Blade::component($prefix . 'timeline-item', TimelineItem::class);
         Blade::component($prefix . 'toast', Toast::class);
