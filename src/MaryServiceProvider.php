@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Mary\Console\Commands\MaryInstallCommand;
 use Mary\View\Components\Alert;
+use Mary\View\Components\Avatar;
 use Mary\View\Components\Badge;
 use Mary\View\Components\Button;
 use Mary\View\Components\Calendar;
@@ -65,10 +66,14 @@ class MaryServiceProvider extends ServiceProvider
         // Just rename <x-icon> provided by BladeUI Icons to <x-svg> to not collide with ours
         Blade::component('BladeUI\Icons\Components\Icon', 'svg');
 
+        // Also register as <x-icon> even if there is a prefix for Mary components
+        Blade::component('icon', Icon::class);
+
         $prefix = config('mary.prefix');
 
         // Blade
         Blade::component($prefix . 'alert', Alert::class);
+        Blade::component($prefix . 'avatar', Avatar::class);
         Blade::component($prefix . 'badge', Badge::class);
         Blade::component($prefix . 'button', Button::class);
         Blade::component($prefix . 'calendar', Calendar::class);
@@ -76,7 +81,6 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'chart', Chart::class);
         Blade::component($prefix . 'checkbox', Checkbox::class);
         Blade::component($prefix . 'choices', Choices::class);
-        Blade::component($prefix . 'choices2', Choices2::class);
         Blade::component($prefix . 'datepicker', DatePicker::class);
         Blade::component($prefix . 'datetime', DateTime::class);
         Blade::component($prefix . 'diff', Diff::class);
@@ -85,8 +89,8 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'file', File::class);
         Blade::component($prefix . 'form', Form::class);
         Blade::component($prefix . 'header', Header::class);
-        Blade::component($prefix . 'input', Input::class);
         Blade::component($prefix . 'icon', Icon::class);
+        Blade::component($prefix . 'input', Input::class);
         Blade::component($prefix . 'list-item', ListItem::class);
         Blade::component($prefix . 'modal', Modal::class);
         Blade::component($prefix . 'menu', Menu::class);
