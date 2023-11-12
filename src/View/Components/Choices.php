@@ -168,7 +168,7 @@ class Choices extends Component
 
                             {{
                                 $attributes->except('wire:model')->class([
-                                    "select select-bordered select-primary w-full h-fit pb-2 pt-2.5 pr-16 inline-block cursor-pointer relative",
+                                    "select select-bordered select-primary w-full h-fit pb-2 pt-2.5 pr-16 inline-block cursor-pointer relative flex gap-8",
                                     'border border-dashed' => $isReadonly(),
                                     'select-error' => $errors->has($modelName()),
                                     'pl-10' => $icon,
@@ -193,9 +193,9 @@ class Choices extends Component
                                     </span>
                                 @else
                                     <template x-for="(option, index) in selectedOptions" :key="index">
-                                        <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 px-2 mr-2 rounded cursor-pointer break-before-all">
+                                        <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 px-2 mr-2 my-1 rounded cursor-pointer break-before-all inline-block">
                                             <span x-text="option.{{ $optionLabel }}"></span>
-                                            <x-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
+                                            <x-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500 ml-2" />
                                         </span>
                                     </template>
                                 @endif
