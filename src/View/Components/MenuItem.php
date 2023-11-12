@@ -16,6 +16,7 @@ class MenuItem extends Component
         public ?string $title = null,
         public ?string $icon = null,
         public ?string $link = null,
+        public ?bool $external = false,
         public ?string $badge = null,
         public ?string $badgeClasses = null,
         public ?bool $active = false,
@@ -33,7 +34,7 @@ class MenuItem extends Component
         $link = url($this->link ?? '');
         $route = url(Route::current()->uri());
 
-        if ($link == $route){
+        if ($link == $route) {
             return true;
         }
 
@@ -55,7 +56,14 @@ class MenuItem extends Component
                         }}
 
                         @if($link)
-                            href="{{ $link }}" wire:navigate
+                            href="{{ $link }}"
+                            @if($external)
+                                target="_blank"
+                            @endif
+
+                            @if(!$external)
+                                wire:navigate
+                            @endif
                         @endif
                     >
                         @if($icon)
