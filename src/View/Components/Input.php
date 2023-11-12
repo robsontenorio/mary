@@ -59,7 +59,7 @@ class Input extends Component
 
                 <!-- PREFIX / PREPEND -->
                 @if($prefix || $prepend)
-                    <div class="rounded-l-lg flex items-center bg-base-200 @if($prefix) border border-primary border-r-0 px-4 @endif">
+                    <div class="!rounded-l-lg flex items-center bg-base-200 @if($prefix) border border-primary border-r-0 px-4 @endif">
                         {{ $prepend ?? $prefix }}
                     </div>
                 @endif
@@ -94,8 +94,8 @@ class Input extends Component
                                     'pl-10' => ($icon),
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
-                                    'rounded-l-none' => $prefix || $prepend,
-                                    'rounded-r-none' => $suffix || $append,
+                                    '!rounded-l-none' => $prefix || $prepend,
+                                    '!rounded-r-none' => $suffix || $append,
                                     'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                     'input-error' => $errors->has($modelName())
                             ])
@@ -128,7 +128,7 @@ class Input extends Component
 
                 <!-- SUFFIX/APPEND -->
                 @if($suffix || $append)
-                    <div class="rounded-r-lg flex items-center bg-base-200 @if($suffix) border border-primary border-l-0 px-4 @endif">
+                    <div class="!rounded-r-lg flex items-center bg-base-200 @if($suffix) border border-primary border-l-0 px-4 @endif">
                         {{ $append ?? $suffix }}
                     </div>
                 @endif
