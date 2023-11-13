@@ -1,0 +1,66 @@
+name: But Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:    
+  - type: input
+    id: mary-version
+    attributes:
+      label: MaryUI version
+      description: You can see number on your `composer.json` file.
+      placeholder: "example: 2.7.0"
+    validations:
+      required: true
+      
+  - type: input
+    id: daisy-version
+    attributes:
+      label: daisyUI version
+      description: You can see number on your `package.json` file.
+      placeholder: "example: 2.7.0"
+    validations:
+      required: true
+      
+  - type: input
+    id: livewire-version
+    attributes:
+      label: Livewire version
+      description: You can see number on your `composer.json` file.
+      placeholder: "example: 2.7.0"
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are affected?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge 
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      placeholder: Tell us what you see!
+      value: |
+        ✅ For sure you can paste screenshots.
+        
+        ❌ Please, don't paste code as screenshot. Past as formated text.        
+
+        PHP      
+        ```php
+        public bool $modal = false;
+        ```
+        
+        HTML/Blade
+        
+        ```blade
+        <x-buton label="Hi" />
+        ```
+      
+    validations:
+      required: true
