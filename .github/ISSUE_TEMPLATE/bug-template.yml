@@ -54,6 +54,7 @@ body:
         ❌ Please, don't paste code as screenshot. Paste as formatted markdown code.        
 
         PHP      
+        
         ```php
         public bool $modal = false;
         ```
@@ -61,7 +62,7 @@ body:
         HTML/Blade
         
         ```blade
-        <x-buton label="Hi" />
+        <x-button label="Hi" />
         ```
       
     validations:
