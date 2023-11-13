@@ -1,58 +1,64 @@
----
-name: Test template
-about: Describe this issue template's purpose here.
-title: ''
-labels: ''
-assignees: ''
-
----
-
-name: 🐞 Report a new Bug
-description: If you found a new bug, report it here.
-title: "[BUG]: "
+name: Test Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug", "triage"]
+projects: ["octo-org/1", "octo-org/44"]
+assignees:
+  - octocat
 body:
   - type: markdown
     attributes:
       value: |
-
-        Thank you for submitting a bug report 💚  
-
-        👉 Before you submit a new bug, please do the following steps:
-
-        1. Update to [latest version](https://mary-ui.com/docs/upgrading) 
-
+        Thanks for taking the time to fill out this bug report!
   - type: input
-    id: version
+    id: contact
     attributes:
-      label: What version of MaryUI?
-      description: You can see the MaryUI version number on your `composer.json` file.
-      placeholder: "example: 1.3.1"
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see!
+      value: "A bug happened!"
     validations:
       required: true
-
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: What version of our software are you running?
+      options:
+        - 1.0.2 (Default)
+        - 1.0.3 (Edge)
+      default: 0
+    validations:
+      required: true
   - type: dropdown
     id: browsers
     attributes:
-      label: Which browsers are you seeing the problem on?
+      label: What browsers are you seeing the problem on?
       multiple: true
       options:
+        - Firefox
         - Chrome
         - Safari
-        - Firefox
-        - Edge
-        - Other
-
+        - Microsoft Edge
   - type: textarea
-    id: description
+    id: logs
     attributes:
-      label: Describe your issue
-      description: |
-
-        ℹ️ Describe the problem and say how and when it happens.
-
-        ℹ️ To write a code block, use ``` before and after your code.
-
-        ℹ️ Please don't paste code screenshots, past code as text!
-
-    validations:
-      required: true
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
