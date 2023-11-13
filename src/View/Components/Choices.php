@@ -168,7 +168,7 @@ class Choices extends Component
 
                             {{
                                 $attributes->except('wire:model')->class([
-                                    "select select-bordered select-primary w-full h-fit pb-2 pt-2.5 pr-16 inline-block cursor-pointer relative flex gap-8",
+                                    "select select-bordered select-primary w-full h-fit pr-16 pb-1 pt-1.5 inline-block cursor-pointer relative",
                                     'border border-dashed' => $isReadonly(),
                                     'select-error' => $errors->has($modelName()),
                                     'pl-10' => $icon,
@@ -188,15 +188,15 @@ class Choices extends Component
                             <!-- SELECTED OPTIONS -->
                             <span wire:key="selected-options-{{ $uuid }}">
                                 @if($compact)
-                                    <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 px-2 mr-2 rounded cursor-pointer">
+                                    <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 rounded inline-block cursor-pointer">
                                         <span class="font-black" x-text="selectedOptions.length"></span> {{ $compactText }}
-                                    </span>
+                                    </div>
                                 @else
                                     <template x-for="(option, index) in selectedOptions" :key="index">
-                                        <span class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit p-1 px-2 mr-2 my-1 rounded cursor-pointer break-before-all inline-block">
+                                        <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
                                             <span x-text="option.{{ $optionLabel }}"></span>
-                                            <x-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500 ml-2" />
-                                        </span>
+                                            <x-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
+                                        </div>
                                     </template>
                                 @endif
                             </span>
@@ -210,7 +210,7 @@ class Choices extends Component
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || ! isSearchable"
                                 :class="(isReadonly || !isSearchable) && 'hidden'"
-                                class="outline-none bg-transparent"
+                                class="outline-none mt-1 bg-transparent"
 
                                 @if($searchable)
                                     @keydown.debounce.{{ $debounce }}="search($el.value)"
