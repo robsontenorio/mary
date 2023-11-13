@@ -1,0 +1,33 @@
+name: But Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:  
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      placeholder: Tell us what you see!
+      value: "Please, dont paste code screenshot, paste code as text!"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: MaryUI version
+      description: You can see number on your `composer.json` file.
+      placeholder: "example: 2.7.0"
+    validations:
+      required: false
+      
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge 
