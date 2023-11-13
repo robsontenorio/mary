@@ -49,7 +49,7 @@ body:
       value: |
         ✅ For sure you can paste screenshots.
         
-        ❌ Please, don't paste code as screenshot. Past as formated text.        
+        ❌ Please, don't paste code as screenshot. Paste as formatted markdown code.        
 
         PHP      
         ```php
