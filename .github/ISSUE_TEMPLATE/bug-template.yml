@@ -13,7 +13,7 @@ body:
       required: true
 
   - type: input
-    id: version
+    id: mary-version
     attributes:
       label: MaryUI version
       description: You can see number on your `composer.json` file.
@@ -22,7 +22,7 @@ body:
       required: true
       
   - type: input
-    id: version
+    id: daisy-version
     attributes:
       label: daisyUI version
       description: You can see number on your `package.json` file.
@@ -31,7 +31,7 @@ body:
       required: true
       
   - type: input
-    id: version
+    id: livewire-version
     attributes:
       label: Livewire version
       description: You can see number on your `composer.json` file.
@@ -49,3 +49,12 @@ body:
         - Chrome
         - Safari
         - Microsoft Edge 
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: I have not pasted code screenshot
+      description: Paste code as text 
+      options:
+        - label: I have not pasted code screenshot
+          required: true
