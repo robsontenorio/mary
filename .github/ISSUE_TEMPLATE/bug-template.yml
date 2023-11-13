@@ -2,16 +2,7 @@ name: But Report
 description: File a bug report
 title: "[Bug]: "
 labels: ["bug", "triage"]
-body:  
-  - type: textarea
-    id: what-happened
-    attributes:
-      label: What happened?
-      placeholder: Tell us what you see!
-      value: "Please, dont paste code screenshot, paste code as text!"
-    validations:
-      required: true
-
+body:    
   - type: input
     id: mary-version
     attributes:
@@ -53,8 +44,16 @@ body:
   - type: checkboxes
     id: terms
     attributes:
-      label: I have not pasted code screenshot
-      description: Paste code as text 
+      label: I have pasted code as text
       options:
-        - label: I have not pasted code screenshot
+        - label: I have not pasted code as screenshot
           required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      placeholder: Tell us what you see!
+      value: "Please, dont paste code screenshot, paste code as text!"
+    validations:
+      required: true
