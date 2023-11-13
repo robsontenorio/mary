@@ -57,11 +57,10 @@ class MenuItem extends Component
 
                         @if($link)
                             href="{{ $link }}"
+
                             @if($external)
                                 target="_blank"
-                            @endif
-
-                            @if(!$external)
+                            @else
                                 wire:navigate
                             @endif
                         @endif
