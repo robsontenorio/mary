@@ -25,7 +25,7 @@ class Main extends Component
     {
         return <<<'HTML'
                  <main @class(["w-full mx-auto", "max-w-screen-2xl" => !$fullWidth])>
-                    <div class="drawer lg:drawer-open">
+                    <div class="drawer inline lg:grid lg:drawer-open">
                         <input id="{{ $sidebar?->attributes['drawer'] }}" type="checkbox" class="drawer-toggle" />
                         <div {{ $content->attributes->class(["drawer-content w-full mx-auto p-5 lg:p-10"]) }}>
                             <!-- MAIN CONTENT -->
@@ -57,7 +57,7 @@ class Main extends Component
 
                                     {{
                                         $sidebar->attributes->class([
-                                            "pb-40 !transition-all !duration-100 ease-out overflow-x-hidden overflow-y-auto h-screen",
+                                            "bg-base-100 pb-40 !transition-all !duration-100 ease-out overflow-x-hidden overflow-y-auto h-screen",
                                             "w-[70px] [&>*_summary::after]:hidden [&_.mary-hideable]:hidden [&_.display-when-collapsed]:block [&_.hidden-when-collapsed]:hidden" => session('mary-sidebar-collapsed') == 'true',
                                             "w-[270px] [&>*_summary::after]:block [&_.mary-hideable]:block [&_.hidden-when-collapsed]:block [&_.display-when-collapsed]:hidden" => session('mary-sidebar-collapsed') != 'true'
                                         ])
