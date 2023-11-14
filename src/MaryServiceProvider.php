@@ -71,7 +71,7 @@ class MaryServiceProvider extends ServiceProvider
         // because they are used inside some Mary's components itself.
         Blade::component('mary-icon', Icon::class);
         Blade::component('mary-list-item', ListItem::class);
-        Blade::component('mary-menu', MenuItem::class);
+        Blade::component('mary-menu', Menu::class);
         Blade::component('mary-menu-item', MenuItem::class);
         Blade::component('mary-header', Header::class);
 
