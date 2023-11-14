@@ -25,13 +25,13 @@ class Alert extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div 
-                    wire:key="{{ $uuid }}" 
-                    {{ $attributes->whereDoesntStartWith('class') }} 
+                <div
+                    wire:key="{{ $uuid }}"
+                    {{ $attributes->whereDoesntStartWith('class') }}
                     {{ $attributes->class(['alert rounded-md', 'shadow-md' => $shadow])}}
                 >
-                    @if($icon) 
-                        <x-icon :name="$icon" /> 
+                    @if($icon)
+                        <x-mary-icon :name="$icon" />
                     @endif
 
                     @if($title)

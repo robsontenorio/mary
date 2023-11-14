@@ -31,7 +31,7 @@ class Tab extends Component
                       >
 
                         @if($icon)
-                            <x-icon :name="$icon" class="mr-2" />
+                            <x-mary-icon :name="$icon" class="mr-2" />
                         @endif
 
                         {{ $label }}

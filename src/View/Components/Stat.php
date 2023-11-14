@@ -42,7 +42,7 @@ class Stat extends Component
                     <div class="flex items-center gap-3">
                         @if($icon)
                             <div class="  {{ $color }}">
-                                <x-icon :name="$icon" class="w-9 h-9" />
+                                <x-mary-icon :name="$icon" class="w-9 h-9" />
                             </div>
                         @endif
 

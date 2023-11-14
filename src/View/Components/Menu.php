@@ -29,7 +29,7 @@ class Menu extends Component
                             <div class="flex items-center gap-2">
 
                                 @if($icon)
-                                    <x-icon :name="$icon" class="w-4 h-4 inline-flex"  />
+                                    <x-mary-icon :name="$icon" class="w-4 h-4 inline-flex"  />
                                 @endif
 
                                 {{ $title }}

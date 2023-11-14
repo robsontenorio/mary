@@ -71,12 +71,12 @@ class DatePicker extends Component
 
                     <!-- ICON  -->
                     @if($icon)
-                        <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
+                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
                     @endif
 
                     <!-- RIGHT ICON  -->
                     @if($iconRight)
-                        <x-icon :name="$iconRight" class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                        <x-mary-icon :name="$iconRight" class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 pointer-events-none" />
                     @endif
 
                     <!-- INLINE LABEL -->
