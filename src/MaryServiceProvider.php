@@ -67,7 +67,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('BladeUI\Icons\Components\Icon', 'svg');
 
         // No matter if components has custom prefix or not,
-        // we also register as these alias to avoid naming collision,
+        // we also register bellow alias to avoid naming collision,
         // because they are used inside some Mary's components itself.
         Blade::component('mary-icon', Icon::class);
         Blade::component('mary-list-item', ListItem::class);
