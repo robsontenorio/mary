@@ -210,7 +210,7 @@ class Choices extends Component
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || ! isSearchable"
                                 :class="(isReadonly || !isSearchable) && 'hidden'"
-                                class="outline-none mt-1 bg-transparent"
+                                class="outline-none mt-0.5 bg-transparent"
 
                                 @if($searchable)
                                     @keydown.debounce.{{ $debounce }}="search($el.value)"
