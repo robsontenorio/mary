@@ -177,12 +177,12 @@ class Choices extends Component
                         >
                             <!-- ICON  -->
                             @if($icon)
-                                <x-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
+                                <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
                             @endif
 
                             <!-- CLEAR ICON  -->
                             @if(! $isReadonly())
-                                <x-icon @click="reset()"  name="o-x-mark" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                                <x-mary-icon @click="reset()"  name="o-x-mark" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
                             @endif
 
                             <!-- SELECTED OPTIONS -->
@@ -195,7 +195,7 @@ class Choices extends Component
                                     <template x-for="(option, index) in selectedOptions" :key="index">
                                         <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
                                             <span x-text="option.{{ $optionLabel }}"></span>
-                                            <x-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
+                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
                                         </div>
                                     </template>
                                 @endif
@@ -256,7 +256,7 @@ class Choices extends Component
                                         @if($item)
                                             {{ $item($option) }}
                                         @else
-                                            <x-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar"  />
+                                            <x-mary-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar"  />
                                         @endif
                                     </div>
                                 @endforeach

@@ -40,7 +40,7 @@ class Modal extends Component
                 >
                     <div class="modal-box">
                         @if($title)
-                            <x-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" class="mb-5" />
+                            <x-mary-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" class="mb-5" />
                         @endif
 
                         <p class="">

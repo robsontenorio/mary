@@ -67,12 +67,12 @@ class Main extends Component
 
                                      <!-- SIDEBAR COLLAPSE -->
                                     @if($sidebar->attributes['collapsible'])
-                                        <x-menu class="fixed bottom-0 hidden bg-inherit lg:block">
-                                            <x-menu-item
+                                        <x-mary-menu class="fixed bottom-0 hidden bg-inherit lg:block">
+                                            <x-mary-menu-item
                                                 @click="toggle"
                                                 icon="o-bars-3-bottom-right"
                                                 title="{{ $sidebar->attributes['collapse-text'] ?? $collapseText }}" />
-                                        </x-menu>
+                                        </x-mary-menu>
                                     @endif
                                 </div>
                             </div>

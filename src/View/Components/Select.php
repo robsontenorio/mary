@@ -65,12 +65,12 @@ class Select extends Component
 
                     <!-- ICON -->
                     @if($icon)
-                        <x-icon :name="$icon" class="absolute pointer-events-none top-1/2 -translate-y-1/2 left-3 text-gray-400" />
+                        <x-mary-icon :name="$icon" class="absolute pointer-events-none top-1/2 -translate-y-1/2 left-3 text-gray-400" />
                     @endif
 
                     <!-- RIGHT ICON  -->
                     @if($iconRight)
-                        <x-icon :name="$iconRight" class="absolute pointer-events-none top-1/2 right-8 -translate-y-1/2 text-gray-400 " />
+                        <x-mary-icon :name="$iconRight" class="absolute pointer-events-none top-1/2 right-8 -translate-y-1/2 text-gray-400 " />
                     @endif
 
                     <!-- INLINE LABEL -->

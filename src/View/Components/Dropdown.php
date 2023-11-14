@@ -36,7 +36,7 @@ class Dropdown extends Component
                     <!-- DEFAULT TRIGGER -->
                     <summary @click.prevent="open = !open" {{ $attributes->class(["btn normal-case"]) }}>
                         {{ $label }}
-                        <x-icon :name="$icon" />
+                        <x-mary-icon :name="$icon" />
                     </summary>
                 @endif
                 <ul @click="open = false" class="dropdown-content p-2 shadow menu z-[1] bg-base-100 dark:bg-base-200 rounded-box whitespace-nowrap">

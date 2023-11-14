@@ -158,7 +158,7 @@ class Table extends Component
                                     <!-- EXPAND ICON -->
                                     @if($expandable)
                                         <td class="w-1 pr-0">
-                                            <x-icon
+                                            <x-mary-icon
                                                 name="o-chevron-down"
                                                 ::class="isExpanded({{ data_get($row, $expandableKey) }}) || '-rotate-90 !text-current !bg-base-200'"
                                                 class="cursor-pointer p-2 w-8 h-8 bg-base-300 rounded-lg"
@@ -220,11 +220,6 @@ class Table extends Component
                             @endforeach
                         </tbody>
                     </table>
-                    @php
-                        # TODO: workaround for bug when using slot with @scope on tables.
-                        # It seems it loses start/end context with @scope/@endscope. So I am just placing any hidden component here.
-                    @endphp
-                    <x-alert style="display:none" />
                 </div>
             HTML;
     }
