@@ -57,7 +57,7 @@ class Main extends Component
 
                                     {{
                                         $sidebar->attributes->class([
-                                            "bg-base-100 pb-40 !transition-all !duration-100 ease-out overflow-x-hidden overflow-y-auto h-screen",
+                                            "pb-40 !transition-all !duration-100 ease-out overflow-x-hidden overflow-y-auto h-screen",
                                             "w-[70px] [&>*_summary::after]:hidden [&_.mary-hideable]:hidden [&_.display-when-collapsed]:block [&_.hidden-when-collapsed]:hidden" => session('mary-sidebar-collapsed') == 'true',
                                             "w-[270px] [&>*_summary::after]:block [&_.mary-hideable]:block [&_.hidden-when-collapsed]:block [&_.display-when-collapsed]:hidden" => session('mary-sidebar-collapsed') != 'true'
                                         ])
