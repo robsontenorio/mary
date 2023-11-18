@@ -22,24 +22,28 @@ class Dropdown extends Component
     {
         return <<<'HTML'
             <details
-                class="dropdown @if($right) dropdown-end @endif"
                 x-data="{open: false}"
                 @click.outside="open = false"
                 :open="open"
+                class="dropdown"
             >
                 <!-- CUSTOM TRIGGER -->
                 @if($trigger)
-                    <summary @click.prevent="open = !open" class="list-none">
+                    <summary x-ref="button" @click.prevent="open = !open" class="list-none">
                         {{ $trigger }}
                     </summary>
                 @else
                     <!-- DEFAULT TRIGGER -->
-                    <summary @click.prevent="open = !open" {{ $attributes->class(["btn normal-case"]) }}>
+                    <summary x-ref="button" @click.prevent="open = !open" {{ $attributes->class(["btn normal-case"]) }}>
                         {{ $label }}
                         <x-mary-icon :name="$icon" />
                     </summary>
                 @endif
-                <ul @click="open = false" class="dropdown-content p-2 shadow menu z-[1] bg-base-100 dark:bg-base-200 rounded-box whitespace-nowrap">
+                <ul
+                    class="dropdown-content p-2 shadow menu z-[1] border border-base-200 bg-base-100 dark:bg-base-200 rounded-box whitespace-nowrap"
+                    @click="open = false"
+                    x-anchor.{{ $right ? 'bottom-end' : 'bottom-start' }}="$refs.button"
+                >
                     {{ $slot }}
                 </ul>
             </details>
