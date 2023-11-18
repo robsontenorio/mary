@@ -8,6 +8,8 @@ use Illuminate\View\Component;
 
 class Dropdown extends Component
 {
+    public string $uuid;
+
     public function __construct(
         public ?string $label = null,
         public ?string $icon = 'o-chevron-down',
@@ -16,6 +18,7 @@ class Dropdown extends Component
         //Slots
         public mixed $trigger = null
     ) {
+        $this->uuid = md5(serialize($this));
     }
 
     public function render(): View|Closure|string
@@ -39,12 +42,15 @@ class Dropdown extends Component
                         <x-mary-icon :name="$icon" />
                     </summary>
                 @endif
+
                 <ul
-                    class="dropdown-content p-2 shadow menu z-[1] border border-base-200 bg-base-100 dark:bg-base-200 rounded-box whitespace-nowrap"
+                    class="p-2 shadow menu z-[1] border border-base-200 bg-base-100 dark:bg-base-200 rounded-box whitespace-nowrap"
                     @click="open = false"
                     x-anchor.{{ $right ? 'bottom-end' : 'bottom-start' }}="$refs.button"
                 >
+                    <div wire:key="dropdown-slot-{{ $uuid }}">
                     {{ $slot }}
+                    </div>
                 </ul>
             </details>
         HTML;
