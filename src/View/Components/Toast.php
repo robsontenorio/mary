@@ -32,11 +32,12 @@ class Toast extends Component
                         :class="toast.position"
                         x-show="show"
                         @click="show = false"
-                        >
-                        <div class="alert" :class="toast.css">
+                    >
+                        <div class="alert gap-2" :class="toast.css">
+                            <div x-html="toast.icon"></div>
                             <div class="grid">
-                                <div x-text="toast.title" class="font-bold"></div>
-                                <div x-text="toast.description" class="text-xs"></div>
+                                <div x-html="toast.title" class="font-bold"></div>
+                                <div x-html="toast.description" class="text-xs"></div>
                             </div>
                         </div>
                     </div>
