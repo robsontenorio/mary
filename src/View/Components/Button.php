@@ -45,7 +45,7 @@ class Button extends Component
     {
         return <<<'HTML'
                 @if($link)
-                    <a href="{{ $link }}"
+                    <a href="{!! $link !!}"
                 @else
                     <button
                 @endif
