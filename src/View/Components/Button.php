@@ -19,6 +19,9 @@ class Button extends Component
         public ?string $spinner = null,
         public ?string $link = null,
         public ?bool $external = false,
+        public ?bool $responsive = false,
+        public ?string $badge = null,
+        public ?string $badgeClasses = null,
         public ?string $tooltip = null,
         public ?string $tooltipLeft = null,
         public ?string $tooltipRight = null,
@@ -82,7 +85,17 @@ class Button extends Component
                         </span>
                     @endif
 
-                    {{ $label ?? $slot }}
+                    <!-- LABEL / SLOT -->
+                    @if($label)
+                        <span @class(["hidden lg:block" => $responsive ])>
+                            {{ $label }}
+                        </span>
+                        @if(strlen($badge))
+                            <span class="badge badge-primary {{ $badgeClasses }}">{{ $badge }}</span>
+                        @endif
+                    @else
+                        {{ $slot }}
+                    @endif
 
                     <!-- ICON RIGHT -->
                     @if($iconRight)
