@@ -80,7 +80,7 @@ class Button extends Component
 
                     <!-- ICON -->
                     @if($icon)
-                        <span @if($spinner) wire:loading.remove wire:target="{{ $spinnerTarget() }}" @endif>
+                        <span class="inline-flex" @if($spinner) wire:loading.remove.class="inline-flex" wire:target="{{ $spinnerTarget() }}" @endif>
                             <x-mary-icon :name="$icon" />
                         </span>
                     @endif
@@ -99,7 +99,7 @@ class Button extends Component
 
                     <!-- ICON RIGHT -->
                     @if($iconRight)
-                        <span @if($spinner) wire:loading.remove wire:target="{{ $spinnerTarget() }}" @endif>
+                        <span class="inline-flex" @if($spinner) wire:loading.remove.class="inline-flex" wire:target="{{ $spinnerTarget() }}" @endif>
                             <x-mary-icon :name="$iconRight" />
                         </span>
                     @endif
