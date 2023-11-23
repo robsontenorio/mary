@@ -17,6 +17,7 @@ class MenuItem extends Component
         public ?string $icon = null,
         public ?string $link = null,
         public ?bool $external = false,
+        public ?bool $noWireNavigate = false,
         public ?string $badge = null,
         public ?string $badgeClasses = null,
         public ?bool $active = false,
@@ -60,7 +61,9 @@ class MenuItem extends Component
 
                             @if($external)
                                 target="_blank"
-                            @else
+                            @endif
+
+                            @if(!$external && !$noWireNavigate)
                                 wire:navigate
                             @endif
                         @endif
