@@ -73,14 +73,14 @@ class Button extends Component
                     @endif
                 >
 
-                    <!-- SPINNER -->
-                    @if($spinner)
+                    <!-- SPINNER LEFT -->
+                    @if($spinner && !$iconRight)
                         <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
                     @endif
 
                     <!-- ICON -->
                     @if($icon)
-                        <span @if($spinner) wire:loading.remove wire:target="{{ $spinnerTarget() }}" @endif>
+                        <span class="block" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
                             <x-mary-icon :name="$icon" />
                         </span>
                     @endif
@@ -99,9 +99,14 @@ class Button extends Component
 
                     <!-- ICON RIGHT -->
                     @if($iconRight)
-                        <span @if($spinner) wire:loading.remove wire:target="{{ $spinnerTarget() }}" @endif>
+                        <span class="block" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
                             <x-mary-icon :name="$iconRight" />
                         </span>
+                    @endif
+
+                    <!-- SPINNER RIGHT -->
+                    @if($spinner && $iconRight)
+                        <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
                     @endif
 
                 @if(!$link)
