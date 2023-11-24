@@ -31,7 +31,7 @@ class Tabs extends Component
                                 @endif
                         }"
 
-                        {{ $attributes->class(["flex overflow-x-auto"]) }}
+                        {{ $attributes->class(["tabs tabs-bordered flex overflow-x-auto"]) }}
                     >
                         {{ $slot }}
                     </div>
