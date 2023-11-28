@@ -41,6 +41,7 @@ class Tags extends Component
 
                 hasTag(tag) {
                     var tag = this.tags.find(e => {
+                        e = e.toString();
                         return e.toLowerCase() === tag.toLowerCase()
                     })
                     return tag != undefined
@@ -83,7 +84,9 @@ class Tags extends Component
                         <input class="input input-bordered input-ghost input-sm my-1 rounded transition-all focus:input-primary" id="{{ $uuid }}" placeholder="{{ $attributes->whereStartsWith('placeholder')->first() }}" type="text" x-model="tag" x-on:click.outside="clear()" x-on:keydown.enter.prevent="push()" x-on:keyup.prevent="if (event.key === ',') { push() }" />
                     </div>
 
-                    <x-mary-icon class="inline-block h-6 w-6 min-w-fit cursor-pointer stroke-current transition-all hover:text-red-500" name="o-x-mark" x-on:click="clearAll()" x-show="tags.length" />
+                    <div>
+                        <x-mary-icon class="inline-block h-6 w-6 min-w-fit cursor-pointer stroke-current transition-all hover:text-red-500" name="o-x-mark" x-on:click="clearAll()" x-show="tags.length" />
+                    </div>
                 </div>
 
                 @error($modelName())
