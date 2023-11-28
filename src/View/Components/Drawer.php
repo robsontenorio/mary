@@ -12,34 +12,66 @@ class Drawer extends Component
 
     public function __construct(
         public ?string $id = null,
-        public ?bool $right = false
+        public ?bool $right = false,
+        public ?string $title = null,
+        public ?string $subtitle = null,
+        public ?bool $separator = false,
+        public ?bool $withCloseButton = false,
+
+        //Slots
+        public ?string $actions = null
     ) {
         $this->uuid = md5(serialize($this));
+    }
+
+    public function id(): string
+    {
+        return $this->id ?? $this->attributes?->wire('model')->value();
+    }
+
+    public function closeAction(): string
+    {
+        return $this->attributes->has('wire:model') ? '$wire.' . $this->attributes->wire('model')->value() . ' = false' : '$refs.checkbox.checked  = false';
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                @php 
-                    $id = $id ?? $attributes?->whereStartsWith('wire:model')->first() 
-                @endphp
-
-                <div class="drawer absolute z-50 @if($right) drawer-end @endif">
+                <div x-data @class(["drawer absolute z-50", "drawer-end" => $right])>
                     <!-- Toggle visibility  -->
-                    <input 
-                        id="{{ $id }}" 
-                        type="checkbox" 
-                        class="drawer-toggle" 
-                        {{ $attributes->whereStartsWith('wire:model') }} />
+                    <input
+                        id="{{ $id() }}"
+                        x-ref="checkbox"
+                        type="checkbox"
+                        class="drawer-toggle"
+                        {{ $attributes->wire('model') }} />
 
                     <div class="drawer-side">
-                        <!-- Overlay effect , click outside -->                        
-                        <label for="{{ $id }}" class="drawer-overlay"></label>
+                        <!-- Overlay effect , click outside -->
+                        <label for="{{ $id() }}" class="drawer-overlay"></label>
 
                         <!-- Content -->
-                        <div {{ $attributes->class(['bg-base-100 min-h-screen']) }}>
+                        <x-mary-card
+                            :title="$title"
+                            :subtitle="$subtitle"
+                            :separator="$separator"
+                            wire:key="drawer-card"
+                            {{ $attributes->except('wire:model')->class(['min-h-screen rounded-none px-8']) }}
+                        >
+                            @if($withCloseButton)
+                                <x-slot:menu>
+                                    <x-mary-button icon="o-x-mark" class="btn-ghost btn-sm" @click="{{ $closeAction() }}" />
+                                </x-slot:menu>
+                            @endif
+
                             {{ $slot }}
-                        </div>
+
+                            @if($actions)
+                                <x-slot:actions>
+                                    {{ $actions }}
+                                </x-slot:actions>
+                            @endif
+                        </x-mary-card>
                     </div>
                 </div>
             HTML;
