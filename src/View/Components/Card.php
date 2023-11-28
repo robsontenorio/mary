@@ -15,6 +15,7 @@ class Card extends Component
         public ?string $subtitle = null,
         public ?bool $separator = false,
         public ?bool $shadow = false,
+        public ?string $progressIndicator = null,
 
         // Slots
         public mixed $menu = null,
@@ -22,6 +23,15 @@ class Card extends Component
         public mixed $figure = null,
     ) {
         $this->uuid = md5(serialize($this));
+    }
+
+    public function progressTarget(): ?string
+    {
+        if ($this->progressIndicator == 1) {
+            return $this->attributes->whereStartsWith('progress-indicator')->first();
+        }
+
+        return $this->progressIndicator;
     }
 
     public function render(): View|Closure|string
@@ -63,6 +73,18 @@ class Card extends Component
 
                             @if($separator)
                                 <hr class="mt-3" />
+
+                                @if($progressIndicator)
+                                    <div class="h-0.5 -mt-4 mb-4">
+                                        <progress
+                                            class="progress progress-primary w-full h-0.5 dark:h-1"
+                                            wire:loading
+
+                                            @if($progressTarget())
+                                                wire:target="{{ $progressTarget() }}"
+                                             @endif></progress>
+                                    </div>
+                                @endif
                             @endif
                         </div>
                     @endif
