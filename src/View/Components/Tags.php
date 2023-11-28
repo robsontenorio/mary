@@ -9,9 +9,11 @@ use Illuminate\View\Component;
 class Tags extends Component
 {
     public string $uuid;
+
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
+        public ?string $icon = null,
     ) {
         $this->uuid = md5(serialize($this));
     }
@@ -21,72 +23,127 @@ class Tags extends Component
         return $this->attributes->whereStartsWith('wire:model')->first();
     }
 
+    public function isReadonly(): bool
+    {
+        return $this->attributes->has('readonly') && $this->attributes->get('readonly') == true;
+    }
+
+    public function isRequired(): bool
+    {
+        return $this->attributes->has('required') && $this->attributes->get('required') == true;
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'HTML'
             <div x-data="{
-                tags: @entangle($attributes->wire('model')),
-                tag: null,
+                    tags: @entangle($attributes->wire('model')),
+                    tag: null,
+                    isReadonly: {{ json_encode($isReadonly()) }},
+                    isRequired: {{ json_encode($isRequired()) }},
 
-                push() {
-                    if (this.tag != '' && this.tag != null && this.tag != undefined) {
-                        let tag = this.tag.trim()
-                        tag = this.tag.replace(/,/g, '');
-                        if (tag != '' && !this.hasTag(tag)) {
-                            this.tags.push(tag)
+                    push() {
+                        if (this.tag != '' && this.tag != null && this.tag != undefined) {
+                            let tag = this.tag.trim()
+                            tag = this.tag.replace(/,/g, '');
+                            if (tag != '' && !this.hasTag(tag)) {
+                                this.tags.push(tag)
+                            }
                         }
-                    }
-                    this.clear()
-                },
+                        this.clear()
+                    },
 
-                hasTag(tag) {
-                    var tag = this.tags.find(e => {
-                        e = e.toString();
-                        return e.toLowerCase() === tag.toLowerCase()
-                    })
-                    return tag != undefined
-                },
+                    hasTag(tag) {
+                        var tag = this.tags.find(e => {
+                            e = e.toString();
+                            return e.toLowerCase() === tag.toLowerCase()
+                        })
+                        return tag != undefined
+                    },
 
-                remove(index) {
-                    this.tags.splice(index, 1)
-                },
+                    remove(index) {
+                        this.tags.splice(index, 1)
+                    },
 
-                clear() {
-                    this.tag = null;
-                },
+                    clear() {
+                        this.tag = null;
+                    },
 
-                clearAll() {
-                    this.tags = [];
-                },
-
-                init() {
-                    if (this.tags == null || !Array.isArray(this.tags)) {
+                    clearAll() {
                         this.tags = [];
-                    }
-                },
-            }" x-on:keydown.escape="clear()">
+                    },
+
+                    focus() {
+                        if (this.isReadonly) {
+                            return
+                        }
+
+                        $refs.searchInput.focus()
+                    },
+
+                    init() {
+                        if (this.tags == null || !Array.isArray(this.tags)) {
+                            this.tags = [];
+                        }
+                    },
+                }"
+                @keydown.escape="clear()"
+            >
+                <!-- STANDARD LABEL -->
                 @if ($label)
-                    <!-- LABEL -->
                     <label class="label label-text pt-0 font-semibold" for="{{ $uuid }}">{{ $label }}</label>
                 @endif
 
-                <!-- DIV AS INPUT -->
-                <div class="input input-primary relative flex h-fit w-full max-w-full place-items-center justify-between [outline:none!important]">
-                    <div class="py-1">
+                <!-- TAGS + SEARCH INPUT -->
+                <div
+                    @click="focus()"
+
+                    {{
+                        $attributes->except('wire:model')->class([
+                            "input input-bordered input-primary w-full h-fit pr-16 pt-1.5 pb-1 min-h-[47px] inline-block cursor-pointer relative",
+                            'border border-dashed' => $isReadonly(),
+                            'input-error' => $errors->has($modelName()),
+                            'pl-10' => $icon,
+                        ])
+                    }}
+                >
+                    <!-- ICON  -->
+                    @if($icon)
+                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
+                    @endif
+
+                    <!-- CLEAR ICON  -->
+                    @if(! $isReadonly())
+                        <x-mary-icon @click="clearAll()" x-show="tags.length"  name="o-x-mark" class="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                    @endif
+
+                    <!--  TAGS  -->
+                    <span wire:key="tags-{{ $uuid }}">
                         <template :key="index" x-for="(tag, index) in tags">
-                            <div class="my-1 mr-2 inline-block cursor-pointer space-x-2 rounded bg-primary/20 px-2 py-1 transition-all hover:bg-primary/40">
+                            <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
                                 <span x-text="tag"></span>
-                                <x-mary-icon class="inline-block h-4 w-4 stroke-current transition-all hover:text-red-500" name="o-x-mark" x-on:click="remove(index)" />
+                                <x-mary-icon @click="remove(index)" x-show="!isReadonly" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
                             </div>
                         </template>
+                    </span>
 
-                        <!-- INPUT -->
-                        <input class="input input-bordered input-ghost input-sm my-1 rounded transition-all focus:input-primary" id="{{ $uuid }}" placeholder="{{ $attributes->whereStartsWith('placeholder')->first() }}" type="text" x-model="tag" x-on:click.outside="clear()" x-on:keydown.enter.prevent="push()" x-on:keyup.prevent="if (event.key === ',') { push() }" />
-                    </div>
+                    &nbsp;
 
-                    <div>
-                        <x-mary-icon class="inline-block h-6 w-6 min-w-fit cursor-pointer stroke-current transition-all hover:text-red-500" name="o-x-mark" x-on:click="clearAll()" x-show="tags.length" />
-                    </div>
+                    <!-- INPUT -->
+                    <input
+                        id="{{ $uuid }}"
+                        class="outline-none mt-1 bg-transparent"
+                        placeholder="{{ $attributes->whereStartsWith('placeholder')->first() }}"
+                        type="text"
+                        x-ref="searchInput"
+                        :class="isReadonly && 'hidden'"
+                        :required="isRequired"
+                        :readonly="isReadonly"
+                        x-model="tag"
+                        @click.outside="clear()"
+                        @keydown.enter.prevent="push()"
+                        @keyup.prevent="if (event.key === ',') { push() }"
+                    />
                 </div>
 
                 @error($modelName())
