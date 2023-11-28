@@ -73,6 +73,8 @@ class MaryServiceProvider extends ServiceProvider
         // No matter if components has custom prefix or not,
         // we also register bellow alias to avoid naming collision,
         // because they are used inside some Mary's components itself.
+        Blade::component('mary-button', Button::class);
+        Blade::component('mary-card', Card::class);
         Blade::component('mary-icon', Icon::class);
         Blade::component('mary-list-item', ListItem::class);
         Blade::component('mary-menu', Menu::class);
