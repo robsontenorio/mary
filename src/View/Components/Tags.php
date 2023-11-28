@@ -44,8 +44,7 @@ class Tags extends Component
 
                     push() {
                         if (this.tag != '' && this.tag != null && this.tag != undefined) {
-                            let tag = this.tag.trim()
-                            tag = this.tag.replace(/,/g, '');
+                            let tag = this.tag.toString().replace(/,/g, '').trim()
                             if (tag != '' && !this.hasTag(tag)) {
                                 this.tags.push(tag)
                             }
