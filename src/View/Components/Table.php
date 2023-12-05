@@ -40,6 +40,11 @@ class Table extends Component
     // Get all ids for selectable and expandable features
     public function getAllIds(): array
     {
+        // Pagination
+        if ($this->rows instanceof ArrayAccess) {
+            return $this->rows->pluck($this->selectableKey)->all();
+        }
+
         return collect($this->rows)->pluck($this->selectableKey)->all();
     }
 
