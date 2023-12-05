@@ -98,7 +98,7 @@ class Input extends Component
                                     'rounded-l-none' => $prefix || $prepend,
                                     'rounded-r-none' => $suffix || $append,
                                     'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                    'input-error' => $errors->has($modelName()) && !$omitError
+                                    'input-error' => $modelName() && $errors->has($modelName()) && !$omitError
                             ])
                         }}
                     />
@@ -140,7 +140,7 @@ class Input extends Component
                 @endif
 
                 <!-- ERROR -->
-                @if(!$omitError)
+                @if(!$omitError && $modelName())
                     @error($modelName())
                         <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                     @enderror
