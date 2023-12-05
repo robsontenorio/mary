@@ -78,9 +78,9 @@ class Input extends Component
                     <input
                         id="{{ $uuid }}"
                         placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
-                        x-ref="myInput"
 
                         @if($money)
+                            x-ref="myInput"
                             :value="amount"
                             @input="$nextTick(() => $wire.{{ $modelName() }} = Currency.getUnmasked())"
                             inputmode="numeric"
