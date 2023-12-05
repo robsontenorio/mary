@@ -63,7 +63,7 @@ class Choices extends Component
     {
         $value = data_get($option, $this->optionValue);
 
-        return is_numeric($value) ? $value : "'$value'";
+        return is_numeric($value) && ! str($option)->start('0') ? $value : "'$value'";
     }
 
     public function render(): View|Closure|string
