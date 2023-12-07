@@ -167,7 +167,7 @@ class Choices extends Component
                             @click="focus()"
 
                             {{
-                                $attributes->except('wire:model')->class([
+                                $attributes->except(['wire:model', 'wire:model.live'])->class([
                                     "select select-bordered select-primary w-full h-fit pr-16 pb-1 pt-1.5 inline-block cursor-pointer relative",
                                     'border border-dashed' => $isReadonly(),
                                     'select-error' => $errors->has($modelName()),
