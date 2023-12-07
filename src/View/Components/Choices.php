@@ -35,7 +35,8 @@ class Choices extends Component
         public ?string $noResultText = 'No results found.',
 
         // slots
-        public mixed $item = null
+        public mixed $item = null,
+        public mixed $selection = null
     ) {
         $this->uuid = md5(serialize($this));
 
@@ -63,19 +64,18 @@ class Choices extends Component
     {
         $value = data_get($option, $this->optionValue);
 
-        return is_numeric($value) && ! str($option)->start('0') ? $value : "'$value'";
+        return is_numeric($value) && ! str($value)->startsWith('0') ? $value : "'$value'";
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div x-data="{focused: false}">
+                <div x-data="{ focused: false, selection: @entangle($attributes->wire('model')) }">
                     <div
                         @click.outside = "clear()"
                         @keyup.esc = "clear()"
 
                         x-data="{
-                            selection: @entangle($attributes->wire('model')),
                             options: {{ json_encode($options) }},
                             isSingle: {{ json_encode($single) }},
                             isSearchable: {{ json_encode($searchable) }},
@@ -194,7 +194,13 @@ class Choices extends Component
                                 @else
                                     <template x-for="(option, index) in selectedOptions" :key="index">
                                         <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
-                                            <span x-text="option.{{ $optionLabel }}"></span>
+                                            <!-- SELECTION SLOT -->
+                                             @if($selection)
+                                                <span x-html="document.getElementById('selection-{{ $uuid . '-\' + option.'. $optionValue }}).innerHTML"></span>
+                                             @else
+                                                <span x-text="option.{{ $optionLabel }}"></span>
+                                             @endif
+
                                             <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
                                         </div>
                                     </template>
@@ -220,7 +226,7 @@ class Choices extends Component
 
                         <!-- OPTIONS LIST -->
                         <div x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}" >
-                            <div wire:key="options-list-{{ $uuid }}" class="{{ $height}} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto">
+                            <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto">
 
                                 <!-- PROGRESS -->
                                 <progress wire:loading wire:target="{{ $searchFunction }}" class="progress absolute progress-primary top-0 h-0.5"></progress>
@@ -256,7 +262,14 @@ class Choices extends Component
                                         @if($item)
                                             {{ $item($option) }}
                                         @else
-                                            <x-mary-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar"  />
+                                            <x-mary-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar" />
+                                        @endif
+
+                                        <!-- SELECTION SLOT -->
+                                        @if($selection)
+                                            <span id="selection-{{ $uuid }}-{{ data_get($option, $optionValue) }}" class="hidden">
+                                                {{ $selection($option) }}
+                                            </span>
                                         @endif
                                     </div>
                                 @endforeach
