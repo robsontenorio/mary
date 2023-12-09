@@ -22,6 +22,10 @@ class Select extends Component
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
+
+        // Slots
+        public mixed $prepend = null,
+        public mixed $append = null
     ) {
         $this->uuid = md5(serialize($this));
     }
@@ -34,13 +38,25 @@ class Select extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <div wire:key="{{ $uuid }}">
+            <div>
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
                     <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">{{ $label }}</label>
                 @endif
 
-                <div class="relative">
+                <!-- PREPEND/APPEND CONTAINER -->
+                @if($prepend || $append)
+                    <div class="flex">
+                @endif
+
+                <!-- PREPEND -->
+                @if($prepend)
+                    <div class="rounded-l-lg flex items-center bg-base-200">
+                        {{ $prepend }}
+                    </div>
+                @endif
+
+                <div class="relative flex-1">
                     <select
                         id="{{ $uuid }}"
                         {{ $attributes->whereDoesntStartWith('class') }}
@@ -49,6 +65,8 @@ class Select extends Component
                                     'pl-10' => ($icon),
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
+                                    'rounded-l-none' => $prepend,
+                                    'rounded-r-none' => $append,
                                     'select-error' => $errors->has($modelName())
                                 ])
                         }}
@@ -80,6 +98,18 @@ class Select extends Component
                         </label>
                     @endif
                 </div>
+
+                <!-- APPEND -->
+                @if($append)
+                    <div class="rounded-r-lg flex items-center bg-base-200">
+                        {{ $append }}
+                    </div>
+                @endif
+
+                <!-- END: APPEND/PREPEND CONTAINER  -->
+                @if($prepend || $append)
+                    </div>
+                @endif
 
                  <!-- ERROR -->
                  @error($modelName())
