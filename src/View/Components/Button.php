@@ -19,6 +19,7 @@ class Button extends Component
         public ?string $spinner = null,
         public ?string $link = null,
         public ?bool $external = false,
+        public ?bool $noWireNavigate = false,
         public ?bool $responsive = false,
         public ?string $badge = null,
         public ?string $badgeClasses = null,
@@ -59,7 +60,7 @@ class Button extends Component
                         target="_blank"
                     @endif
 
-                    @if($link && ! $external)
+                    @if($link && !$external && !$noWireNavigate)
                         wire:navigate
                     @endif
 

@@ -18,6 +18,7 @@ class Input extends Component
         public ?string $prefix = null,
         public ?string $suffix = null,
         public ?bool $inline = false,
+        public ?bool $omitError = false,
         public ?bool $money = false,
         public ?string $locale = 'en-US',
 
@@ -77,9 +78,9 @@ class Input extends Component
                     <input
                         id="{{ $uuid }}"
                         placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
-                        x-ref="myInput"
 
                         @if($money)
+                            x-ref="myInput"
                             :value="amount"
                             @input="$nextTick(() => $wire.{{ $modelName() }} = Currency.getUnmasked())"
                             inputmode="numeric"
@@ -97,7 +98,7 @@ class Input extends Component
                                     'rounded-l-none' => $prefix || $prepend,
                                     'rounded-r-none' => $suffix || $append,
                                     'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                    'input-error' => $errors->has($modelName())
+                                    'input-error' => $modelName() && $errors->has($modelName()) && !$omitError
                             ])
                         }}
                     />
@@ -139,9 +140,11 @@ class Input extends Component
                 @endif
 
                 <!-- ERROR -->
-                @error($modelName())
-                    <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
-                @enderror
+                @if(!$omitError && $modelName())
+                    @error($modelName())
+                        <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
+                    @enderror
+                @endif
 
                 <!-- HINT -->
                 @if($hint)
