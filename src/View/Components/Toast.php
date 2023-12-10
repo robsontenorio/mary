@@ -31,6 +31,7 @@ class Toast extends Component
                         class="toast rounded-md fixed cursor-pointer z-50"
                         :class="toast.position"
                         x-show="show"
+                        x-classes="top-10 right-10 toast toast-bottom toast-center toast-middle toast-start"
                         @click="show = false"
                     >
                         <div class="alert gap-2" :class="toast.css">
@@ -42,9 +43,6 @@ class Toast extends Component
                         </div>
                     </div>
                 </div>
-
-                <!-- Force Tailwind compile alert types -->
-                <span class="hidden alert alert-success alert-warning alert-error alert-info top-10 right-10 toast toast-top toast-bottom toast-center toast-end toast-middle toast-start"></span>
 
                 <script>
                     window.toast = function(payload){
