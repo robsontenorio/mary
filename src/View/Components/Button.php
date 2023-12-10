@@ -10,7 +10,7 @@ class Button extends Component
 {
     public string $uuid;
 
-    public string $tooltipPosition = 'tooltip-top';
+    public string $tooltipPosition = 'lg:tooltip-top';
 
     public function __construct(
         public ?string $label = null,
@@ -30,7 +30,7 @@ class Button extends Component
     ) {
         $this->uuid = md5(serialize($this));
         $this->tooltip = $this->tooltip ?? $this->tooltipLeft ?? $this->tooltipRight ?? $this->tooltipBottom;
-        $this->tooltipPosition = $this->tooltipLeft ? 'tooltip-left' : ($this->tooltipRight ? 'tooltip-right' : ($this->tooltipBottom ? 'tooltip-bottom' : 'tooltip-top'));
+        $this->tooltipPosition = $this->tooltipLeft ? 'lg:tooltip-left' : ($this->tooltipRight ? 'lg:tooltip-right' : ($this->tooltipBottom ? 'lg:tooltip-bottom' : 'lg:tooltip-top'));
     }
 
     public function spinnerTarget(): ?string
@@ -53,7 +53,7 @@ class Button extends Component
 
                     wire:key="{{ $uuid }}"
                     {{ $attributes->whereDoesntStartWith('class') }}
-                    {{ $attributes->class(['btn normal-case', "!inline-flex lg:tooltip lg:$tooltipPosition" => $tooltip]) }}
+                    {{ $attributes->class(['btn normal-case', "!inline-flex lg:tooltip $tooltipPosition" => $tooltip]) }}
                     {{ $attributes->merge(['type' => 'button']) }}
 
                     @if($link && $external)
@@ -115,11 +115,6 @@ class Button extends Component
                 @else
                     </a>
                 @endif
-
-                <!--  Force tailwind compile tooltip classes   -->
-                <span class="hidden">
-                    <span class="lg:tooltip lg:tooltip-left lg:tooltip-right lg:tooltip-bottom lg:tooltip-top"></span>
-                </span>
             HTML;
     }
 }
