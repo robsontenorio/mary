@@ -52,9 +52,8 @@ class Button extends Component
                 @endif
 
                     wire:key="{{ $uuid }}"
-                    {{ $attributes->whereDoesntStartWith('class') }}
+                    {{ $attributes->whereDoesntStartWith('class')->merge(['type' => 'button']) }}
                     {{ $attributes->class(['btn normal-case', "!inline-flex lg:tooltip $tooltipPosition" => $tooltip]) }}
-                    {{ $attributes->merge(['type' => 'button']) }}
 
                     @if($link && $external)
                         target="_blank"
