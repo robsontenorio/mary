@@ -85,7 +85,7 @@ class ChoicesOffline extends Component
                                 return this.options.filter(i => i.{{ $optionLabel }}.match(new RegExp(this.search, 'i')))
                             },
                             get noResults() {
-                                if (!this.isSearchable || this.search.value == '') {
+                                if (!this.isSearchable || this.search == '') {
                                     return false
                                 }
 
@@ -104,7 +104,7 @@ class ChoicesOffline extends Component
                             },
                             clear() {
                                 this.focused = false;
-                                $refs.searchInput.value = ''
+                                this.search = ''
                             },
                             reset() {
                                 this.clear();
@@ -133,13 +133,13 @@ class ChoicesOffline extends Component
                                 if (this.isSingle) {
                                     this.selection = id
                                     this.focused = false
+                                    this.search = ''
                                 } else {
                                     this.selection.includes(id)
                                         ? this.selection = this.selection.filter(i => i != id)
                                         : this.selection.push(id)
                                 }
 
-                                $refs.searchInput.value = ''
                                 $refs.searchInput.focus()
                             }
                         }"
@@ -245,12 +245,19 @@ class ChoicesOffline extends Component
                                         @else
                                             <div class="p-3 hover:bg-base-200 border border-t-0 border-b-base-200">
                                                 <div class="flex gap-3 items-center">
-                                                    <div>
-                                                        <img :src="option.{{ $optionAvatar }}" class="rounded-full w-11 h-11" />
-                                                    </div>
+                                                    <!-- AVATAR -->
+
+                                                    <template x-if="option.{{ $optionAvatar }}">
+                                                        <div>
+                                                            <img :src="option.{{ $optionAvatar }}" class="rounded-full w-11 h-11" />
+                                                        </div>
+                                                    </template>
                                                     <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0 mary-hideable">
+                                                        <!-- LABEL -->
                                                         <div x-text="option.{{ $optionLabel }}" class="font-semibold truncate"></div>
-                                                        @if(isset($optionSubLabel))
+
+                                                        <!-- SUB LABEL -->
+                                                        @if(!empty($optionSubLabel))
                                                             <div x-text="option.{{ $optionSubLabel }}" class="text-gray-400 text-sm truncate"></div>
                                                         @endif
                                                     </div>
