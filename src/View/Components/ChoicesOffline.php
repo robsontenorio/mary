@@ -35,7 +35,9 @@ class ChoicesOffline extends Component
 
         // slots
         public mixed $item = null,
-        public mixed $selection = null
+        public mixed $selection = null,
+        public mixed $prepend = null,
+        public mixed $append = null
     ) {
         $this->uuid = md5(serialize($this));
 
@@ -149,6 +151,18 @@ class ChoicesOffline extends Component
                             <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
                         @endif
 
+                        <!-- PREPEND/APPEND CONTAINER -->
+                        @if($prepend || $append)
+                            <div class="flex">
+                        @endif
+
+                        <!-- PREPEND -->
+                        @if($prepend)
+                            <div class="rounded-l-lg flex items-center bg-base-200">
+                                {{ $prepend }}
+                            </div>
+                        @endif
+
                         <!-- SELECTED OPTIONS + SEARCH INPUT -->
                         <div
                             @click="focus()"
@@ -158,6 +172,8 @@ class ChoicesOffline extends Component
                                     "select select-bordered select-primary w-full h-fit pr-16 pb-1 pt-1.5 inline-block cursor-pointer relative",
                                     'border border-dashed' => $isReadonly(),
                                     'select-error' => $errors->has($modelName()),
+                                    'rounded-l-none' => $prepend,
+                                    'rounded-r-none' => $append,
                                     'pl-10' => $icon,
                                 ])
                             }}
@@ -207,6 +223,19 @@ class ChoicesOffline extends Component
                                 class="outline-none mt-0.5 bg-transparent"
                              />
                         </div>
+
+
+                        <!-- APPEND -->
+                        @if($append)
+                            <div class="rounded-r-lg flex items-center bg-base-200">
+                                {{ $append }}
+                            </div>
+                        @endif
+
+                        <!-- END: APPEND/PREPEND CONTAINER  -->
+                        @if($prepend || $append)
+                            </div>
+                        @endif
 
                         <!-- OPTIONS LIST -->
                         <div x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}" >
