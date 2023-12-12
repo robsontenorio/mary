@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
-class Choices extends Component
+class ChoicesOffline extends Component
 {
     public string $uuid;
 
@@ -25,7 +25,6 @@ class Choices extends Component
         public ?int $minChars = 0,
         public ?string $allowAllText = 'Select all',
         public ?string $removeAllText = 'Remove all',
-        public ?string $searchFunction = 'search',
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public ?string $optionSubLabel = '',
@@ -62,13 +61,6 @@ class Choices extends Component
         return $this->attributes->has('required') && $this->attributes->get('required') == true;
     }
 
-    public function getOptionValue($option): mixed
-    {
-        $value = data_get($option, $this->optionValue);
-
-        return is_numeric($value) && ! str($value)->startsWith('0') ? $value : "'$value'";
-    }
-
     public function render(): View|Closure|string
     {
         return <<<'HTML'
@@ -84,20 +76,22 @@ class Choices extends Component
                             isReadonly: {{ json_encode($isReadonly()) }},
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
+                            search: '',
 
                             get selectedOptions() {
                                 return this.isSingle
                                     ? this.options.filter(i => i.{{ $optionValue }} == this.selection)
                                     : this.selection.map(i => this.options.filter(o => o.{{ $optionValue }} == i)[0])
                             },
+                            get searchOptions() {
+                                return this.options.filter(i => i.{{ $optionLabel }}.match(new RegExp(this.search, 'i')))
+                            },
                             get noResults() {
-                                if (!this.isSearchable || $refs.searchInput.value == '') {
+                                if (!this.isSearchable || this.search == '') {
                                     return false
                                 }
 
-                                return this.isSingle
-                                        ? (this.selection && this.options.length  == 1) || (!this.selection && this.options.length == 0)
-                                        : this.options.length <= this.selection.length
+                                return this.searchOptions.length == 0
                             },
                             get isAllSelected() {
                                 return this.options.length == this.selection.length
@@ -112,7 +106,7 @@ class Choices extends Component
                             },
                             clear() {
                                 this.focused = false;
-                                $refs.searchInput.value = ''
+                                this.search = ''
                             },
                             reset() {
                                 this.clear();
@@ -141,21 +135,14 @@ class Choices extends Component
                                 if (this.isSingle) {
                                     this.selection = id
                                     this.focused = false
+                                    this.search = ''
                                 } else {
                                     this.selection.includes(id)
                                         ? this.selection = this.selection.filter(i => i != id)
                                         : this.selection.push(id)
                                 }
 
-                                $refs.searchInput.value = ''
                                 $refs.searchInput.focus()
-                            },
-                            search(value) {
-                                if (value.length < this.minChars) {
-                                    return
-                                }
-
-                                @this.{{ $searchFunction }}(value)
                             }
                         }"
                     >
@@ -182,7 +169,7 @@ class Choices extends Component
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
-                                    "select select-bordered select-primary w-full h-fit pr-16 pb-1 pt-1.5 inline-block cursor-pointer relative flex-1",
+                                    "select select-bordered select-primary w-full h-fit pr-16 pb-1 pt-1.5 inline-block cursor-pointer relative",
                                     'border border-dashed' => $isReadonly(),
                                     'select-error' => $errors->has($modelName()),
                                     'rounded-l-none' => $prepend,
@@ -199,6 +186,15 @@ class Choices extends Component
                             <!-- CLEAR ICON  -->
                             @if(! $isReadonly())
                                 <x-mary-icon @click="reset()"  name="o-x-mark" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                            @endif
+
+                            <!-- SELECTION SLOT (render ahead of time to make it available for custom selection slot)-->
+                            @if($selection)
+                                <template x-for="(option, index) in searchOptions" :key="index">
+                                    <span x-bind:id="`selection-{{ $uuid}}-${option.{{ $optionValue }}}`" class="hidden">
+                                        {{ $selection }}
+                                    </span>
+                                </template>
                             @endif
 
                             <!-- SELECTED OPTIONS -->
@@ -228,17 +224,15 @@ class Choices extends Component
                             <!-- INPUT SEARCH -->
                             <input
                                 x-ref="searchInput"
+                                x-model="search"
                                 @input="focus()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || ! isSearchable"
                                 :class="(isReadonly || !isSearchable) && 'hidden'"
                                 class="outline-none mt-0.5 bg-transparent"
-
-                                @if($searchable)
-                                    @keydown.debounce.{{ $debounce }}="search($el.value)"
-                                @endif
                              />
                         </div>
+
 
                         <!-- APPEND -->
                         @if($append)
@@ -255,9 +249,6 @@ class Choices extends Component
                         <!-- OPTIONS LIST -->
                         <div x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}" >
                             <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto">
-
-                                <!-- PROGRESS -->
-                                <progress wire:loading wire:target="{{ $searchFunction }}" class="progress absolute progress-primary top-0 h-0.5"></progress>
 
                                <!-- SELECT ALL -->
                                @if($allowAll)
@@ -279,28 +270,40 @@ class Choices extends Component
                                     {{ $noResultText }}
                                 </div>
 
-                                @foreach($options as $option)
+
+                                <template x-for="(option, index) in searchOptions" :key="index">
                                     <div
-                                        wire:key="option-{{ data_get($option, $optionValue) }}"
-                                        @click="toggle({{ $getOptionValue($option) }})"
-                                        :class="isActive({{ $getOptionValue($option) }}) && 'border-l-4 border-l-primary'"
+                                        @click="toggle(option.{{ $optionValue }})"
+                                        :class="isActive(option.{{ $optionValue }}) && 'border-l-4 border-l-primary'"
                                         class="border-l-4"
                                     >
                                         <!-- ITEM SLOT -->
                                         @if($item)
-                                            {{ $item($option) }}
+                                            {{ $item }}
                                         @else
-                                            <x-mary-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar" />
-                                        @endif
+                                            <div class="p-3 hover:bg-base-200 border border-t-0 border-b-base-200">
+                                                <div class="flex gap-3 items-center">
+                                                    <!-- AVATAR -->
 
-                                        <!-- SELECTION SLOT -->
-                                        @if($selection)
-                                            <span id="selection-{{ $uuid }}-{{ data_get($option, $optionValue) }}" class="hidden">
-                                                {{ $selection($option) }}
-                                            </span>
+                                                    <template x-if="option.{{ $optionAvatar }}">
+                                                        <div>
+                                                            <img :src="option.{{ $optionAvatar }}" class="rounded-full w-11 h-11" />
+                                                        </div>
+                                                    </template>
+                                                    <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0 mary-hideable">
+                                                        <!-- LABEL -->
+                                                        <div x-text="option.{{ $optionLabel }}" class="font-semibold truncate"></div>
+
+                                                        <!-- SUB LABEL -->
+                                                        @if(!empty($optionSubLabel))
+                                                            <div x-text="option.{{ $optionSubLabel }}" class="text-gray-400 text-sm truncate"></div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
                                         @endif
                                     </div>
-                                @endforeach
+                                </template>
                             </div>
                         </div>
 
