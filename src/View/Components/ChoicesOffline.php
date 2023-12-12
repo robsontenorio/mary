@@ -188,6 +188,15 @@ class ChoicesOffline extends Component
                                 <x-mary-icon @click="reset()"  name="o-x-mark" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
                             @endif
 
+                            <!-- SELECTION SLOT (render ahead of time to make it available for custom selection slot)-->
+                            @if($selection)
+                                <template x-for="(option, index) in searchOptions" :key="index">
+                                    <span x-bind:id="`selection-{{ $uuid}}-${option.{{ $optionValue }}}`" class="hidden">
+                                        {{ $selection }}
+                                    </span>
+                                </template>
+                            @endif
+
                             <!-- SELECTED OPTIONS -->
                             <span wire:key="selected-options-{{ $uuid }}">
                                 @if($compact)
@@ -292,13 +301,6 @@ class ChoicesOffline extends Component
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
-
-                                        <!-- SELECTION SLOT -->
-                                        @if($selection)
-                                            <span x-bind:id="`selection-{{ $uuid}}-${option.{{ $optionValue }}}`" class="hidden">
-                                                {{ $selection }}
-                                            </span>
                                         @endif
                                     </div>
                                 </template>
