@@ -23,12 +23,13 @@ class Table extends Component
         public ?bool $expandable = false,
         public ?string $expandableKey = 'id',
         public ?string $link = null,
+        public ?bool $withPagination = false,
 
         // Slots
         public mixed $actions = null,
         public mixed $tr = null,
         public mixed $cell = null,
-        public mixed $expansion = null,
+        public mixed $expansion = null
     ) {
         $this->uuid = md5(serialize($this));
 
@@ -99,7 +100,7 @@ class Table extends Component
                         }}
                     >
                         <!-- HEADERS -->
-                        <thead @class(["text-black dark:text-gray-500", "hidden" => $noHeaders])>
+                        <thead @class(["text-black dark:text-gray-200", "hidden" => $noHeaders])>
                             <tr x-ref="headers">
                                 <!-- CHECKBOX -->
                                 @if($selectable)
@@ -225,6 +226,15 @@ class Table extends Component
                             @endforeach
                         </tbody>
                     </table>
+
+                    <!-- Pagination -->
+                    @if($withPagination)
+                        <div class="mary-table-pagination">
+                            <div class="border border-x-0 border-t-0 border-b-1 border-b-base-300 mb-3"></div>
+
+                            {{ $rows->onEachSide(1)->links(data: ['scrollTo' => false])  }}
+                        </div>
+                    @endif
                 </div>
             HTML;
     }
