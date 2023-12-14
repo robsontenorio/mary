@@ -24,6 +24,7 @@ class Table extends Component
         public ?string $expandableKey = 'id',
         public ?string $link = null,
         public ?bool $withPagination = false,
+        public ?array $sortBy = [],
 
         // Slots
         public mixed $actions = null,
@@ -47,6 +48,40 @@ class Table extends Component
         }
 
         return collect($this->rows)->pluck($this->selectableKey)->all();
+    }
+
+    // Check if header is sortable
+    public function isSortable(mixed $header): bool
+    {
+        return count($this->sortBy) && ($header['sortable'] ?? true);
+    }
+
+    // Check if is currently sorted by this header
+    public function isSortedBy(mixed $header): bool
+    {
+        if (count($this->sortBy) == 0) {
+            return false;
+        }
+
+        return $this->sortBy['column'] == $header['key'];
+    }
+
+    // Handle header sort
+    public function getSort(mixed $header): mixed
+    {
+        if (! $this->isSortable($header)) {
+            return false;
+        }
+
+        if (count($this->sortBy) == 0) {
+            return ['column' => '', 'direction' => ''];
+        }
+
+        $direction = $this->isSortedBy($header)
+            ? $this->sortBy['direction'] == 'asc' ? 'desc' : 'asc'
+            : 'asc';
+
+        return ['column' => $header['key'], 'direction' => $direction];
     }
 
     // Build row link
@@ -125,16 +160,19 @@ class Table extends Component
                                         $temp_key = str_replace('.', '___', $header['key'])
                                     @endphp
 
-                                    <!--  HAS CUSTOM SLOT ? -->
-                                    @if(isset(${"header_".$temp_key}))
-                                        <th class="{{ $header['class'] ?? ' ' }}">
-                                            {{ ${"header_".$temp_key}($header)  }}
-                                        </th>
-                                    @else
-                                        <th class="{{ $header['class'] ?? ' ' }}">
-                                            {{ $header['label'] }}
-                                        </th>
-                                    @endif
+                                    <th
+                                        class="@if($isSortable($header)) cursor-pointer hover:bg-base-200 @endif {{ $header['class'] ?? ' ' }}"
+
+                                        @if($sortBy && $isSortable($header))
+                                            @click="$wire.set('sortBy', {column: '{{ $getSort($header)['column'] }}', direction: '{{ $getSort($header)['direction'] }}' })"
+                                        @endif
+                                    >
+                                        {{ isset(${"header_".$temp_key}) ? ${"header_".$temp_key}($header) : $header['label'] }}
+
+                                        @if($isSortable($header) && $isSortedBy($header))
+                                            <x-mary-icon :name="$getSort($header)['direction'] == 'asc' ? 'o-arrow-small-down' : 'o-arrow-small-up'"  class="w-4 h-4 mb-1" />
+                                        @endif
+                                    </th>
                                 @endforeach
 
                                 <!-- ACTIONS (Just a empty column) -->
