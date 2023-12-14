@@ -67,9 +67,3 @@ body:
       
     validations:
       required: true
-
-- type: textarea
-    id: browser-console
-    attributes:
-      label: Browser console erros/warnings
-      placeholder: Is there any error/warning on browser console output?
