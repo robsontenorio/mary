@@ -2,6 +2,7 @@
 
 namespace Mary;
 
+use Arr;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Mary\Console\Commands\MaryInstallCommand;
@@ -142,7 +143,7 @@ class MaryServiceProvider extends ServiceProvider
     {
         /**
          * All credits from this blade directive goes to Konrad Kalemba.
-         * Just copied and modified for my very specifc use case.
+         * Just copied and modified for my very specific use case.
          *
          * https://github.com/konradkalemba/blade-components-scoped-slots
          */
@@ -153,15 +154,21 @@ class MaryServiceProvider extends ServiceProvider
 
             [$name, $functionArguments] = $directiveArguments;
 
+            // Build function "uses" to inject extra external variables
+            $uses = Arr::except(array_flip($directiveArguments), [$name, $functionArguments]);
+            $uses = array_flip($uses);
+            array_push($uses, '$__env');
+            $uses = implode(',', $uses);
+
             /**
              *  Slot names can`t contains dot , eg: `user.city`.
              *  So we convert `user.city` to `user___city`
              *
-             *  Later, on component you must replace it back.
+             *  Later, on component it will be replaced back.
              */
             $name = str_replace('.', '___', $name);
 
-            return "<?php \$__env->slot({$name}, function({$functionArguments}) use (\$__env) { ?>";
+            return "<?php \$__env->slot({$name}, function({$functionArguments}) use ({$uses}) { ?>";
         });
 
         Blade::directive('endscope', function () {
