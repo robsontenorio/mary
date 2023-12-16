@@ -44,7 +44,7 @@ class DatePicker extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <div wire:key="datepicker-{{ rand() }}" >
+            <div wire:key="datepicker-{{ rand() }}">
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
                     <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
