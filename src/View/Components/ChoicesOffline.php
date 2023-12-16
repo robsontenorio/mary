@@ -79,7 +79,7 @@ class ChoicesOffline extends Component
                             search: '',
 
                             init() {
-                                // TODO: fix weird issue when navigating back
+                                // Fix weird issue when navigating back
                                 document.addEventListener('livewire:navigating', () => {
                                     let elements = document.querySelectorAll('.mary-choices-element');
                                     elements.forEach(el =>  el.remove());

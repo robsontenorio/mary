@@ -47,7 +47,7 @@ class Tags extends Component
                             this.tags = [];
                         }
 
-                        // TODO: fix weird issue when navigating back
+                        // Fix weird issue when navigating back
                         document.addEventListener('livewire:navigating', () => {
                             let elements = document.querySelectorAll('.mary-tags-element');
                             elements.forEach(el =>  el.remove());
