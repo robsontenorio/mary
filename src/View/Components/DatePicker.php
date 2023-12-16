@@ -51,7 +51,11 @@ class DatePicker extends Component
                 @endif
 
                 <div class="flex-1 relative">
-                        <div x-data x-init="flatpickr($refs.input, {{ $setup() }});">
+                        <div
+                            x-data="{instance: undefined}"
+                            x-init="instance = flatpickr($refs.input, {{ $setup() }});"
+                            x-on:livewire:navigating.window="instance.destroy();"
+                        >
                             <input
                                 x-ref="input"
                                 {{
