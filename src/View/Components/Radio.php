@@ -31,7 +31,15 @@ class Radio extends Component
         return <<<'HTML'
                 <div>
                     @if($label)
-                        <label class="label label-text font-semibold">{{ $label }}</label>
+                        <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                            <span>
+                                {{ $label }}
+
+                                @if($attributes->has('required'))
+                                    <span class="text-error">*</span>
+                                @endif
+                            </span>
+                        </label>
                     @endif
 
                     <div class="join">

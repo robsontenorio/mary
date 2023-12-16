@@ -41,7 +41,15 @@ class Select extends Component
             <div>
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">{{ $label }}</label>
+                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                        <span>
+                            {{ $label }}
+
+                            @if($attributes->has('required'))
+                                <span class="text-error">*</span>
+                            @endif
+                        </span>
+                    </label>
                 @endif
 
                 <!-- PREPEND/APPEND CONTAINER -->

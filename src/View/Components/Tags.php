@@ -95,7 +95,15 @@ class Tags extends Component
             >
                 <!-- STANDARD LABEL -->
                 @if ($label)
-                    <label class="label label-text pt-0 font-semibold" for="{{ $uuid }}">{{ $label }}</label>
+                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                        <span>
+                            {{ $label }}
+
+                            @if($attributes->has('required'))
+                                <span class="text-error">*</span>
+                            @endif
+                        </span>
+                    </label>
                 @endif
 
                 <!-- TAGS + SEARCH INPUT -->
