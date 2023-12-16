@@ -126,8 +126,8 @@ class ChoicesOffline extends Component
                                     return
                                 }
 
-                                $refs.searchInput.focus()
                                 this.focused = true
+                                $nextTick(() => $refs.searchInput.focus())
                             },
                             isActive(id) {
                                 return this.isSingle
@@ -173,6 +173,7 @@ class ChoicesOffline extends Component
                         <!-- SELECTED OPTIONS + SEARCH INPUT -->
                         <div
                             @click="focus()"
+                            x-ref="container"
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
@@ -235,7 +236,7 @@ class ChoicesOffline extends Component
                                 @input="focus()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || ! isSearchable"
-                                :class="(isReadonly || !isSearchable) && 'hidden'"
+                                :class="(isReadonly || !isSearchable || !focused) && 'hidden'"
                                 class="outline-none mt-0.5 bg-transparent"
                              />
                         </div>
@@ -255,7 +256,7 @@ class ChoicesOffline extends Component
 
                         <!-- OPTIONS LIST -->
                         <div x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}" >
-                            <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto">
+                            <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto" x-anchor.bottom-start="$refs.container">
 
                                <!-- SELECT ALL -->
                                @if($allowAll)
