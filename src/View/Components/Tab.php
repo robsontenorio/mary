@@ -22,7 +22,7 @@ class Tab extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                    @aware(['tabContainer' =>  ''])
+                    @aware(['htmlId' =>  ''])
                     <a
                         @click="selected = '{{ $name }}'"
                         class="tab tab-bordered flex-none font-semibold"
@@ -38,7 +38,7 @@ class Tab extends Component
                     </a>
 
                     <div wire:key="{{ $name }}-{{ rand() }}">
-                        <template x-teleport="#{{ $tabContainer }}">
+                        <template x-teleport="#{{ $htmlId }}">
                             <div x-show="selected === '{{ $name }}'" {{ $attributes->class(['py-5']) }}>
                                 {{ $slot }}
                             </div>

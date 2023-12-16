@@ -5,17 +5,20 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Mary\Traits\WithHtmlId;
+use Mary\Traits\WithUuid;
 
 class Tabs extends Component
 {
-    public string $uuid;
+    use WithUuid;
+    use WithHtmlId;
 
     public function __construct(
         public ?string $selected = null,
         public string $tabContainer = ''
     ) {
-        $this->uuid = md5(serialize($this));
-        $this->tabContainer = sprintf('tabs-%s', $this->uuid);
+        $this->setUuid(md5(serialize($this)));
+        $this->setHtmlId('tabs');
     }
 
     public function render(): View|Closure|string
@@ -36,7 +39,7 @@ class Tabs extends Component
                         {{ $slot }}
                     </div>
                     <hr/>
-                    <div id="{{ $tabContainer }}">
+                    <div id="{{ $htmlId }}">
                             <!-- tab contents will be teleported in here -->
                     </div>
                 HTML;
