@@ -15,7 +15,7 @@ class Tabs extends Component
         public string $tabContainer = ''
     ) {
         $this->uuid = md5(serialize($this));
-        $this->tabContainer = $this->uuid;
+        $this->tabContainer = sprintf('tabs-%s', $this->uuid);
     }
 
     public function render(): View|Closure|string
