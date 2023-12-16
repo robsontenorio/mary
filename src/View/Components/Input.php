@@ -18,6 +18,7 @@ class Input extends Component
         public ?string $prefix = null,
         public ?string $suffix = null,
         public ?bool $inline = false,
+        public ?bool $clearable = false,
         public ?bool $omitError = false,
         public ?bool $money = false,
         public ?string $locale = 'en-US',
@@ -116,9 +117,14 @@ class Input extends Component
                         <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
                     @endif
 
+                    <!-- CLEAR ICON  -->
+                    @if($clearable)
+                        <x-mary-icon @click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->has('wire:model.live')) }})"  name="o-x-mark" class="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                    @endif
+
                     <!-- RIGHT ICON  -->
                     @if($iconRight)
-                        <x-mary-icon :name="$iconRight" class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                        <x-mary-icon :name="$iconRight" @class(["absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 pointer-events-none", "!right-10" => $clearable]) />
                     @endif
 
                     <!-- INLINE LABEL -->
