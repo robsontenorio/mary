@@ -42,6 +42,17 @@ class Tags extends Component
                     isReadonly: {{ json_encode($isReadonly()) }},
                     isRequired: {{ json_encode($isRequired()) }},
 
+                    init() {
+                        if (this.tags == null || !Array.isArray(this.tags)) {
+                            this.tags = [];
+                        }
+
+                        // Fix weird issue when navigating back
+                        document.addEventListener('livewire:navigating', () => {
+                            let elements = document.querySelectorAll('.mary-tags-element');
+                            elements.forEach(el =>  el.remove());
+                        });
+                    },
                     push() {
                         if (this.tag != '' && this.tag != null && this.tag != undefined) {
                             let tag = this.tag.toString().replace(/,/g, '').trim()
@@ -78,13 +89,7 @@ class Tags extends Component
                         }
 
                         $refs.searchInput.focus()
-                    },
-
-                    init() {
-                        if (this.tags == null || !Array.isArray(this.tags)) {
-                            this.tags = [];
-                        }
-                    },
+                    }
                 }"
                 @keydown.escape="clear()"
             >
@@ -119,7 +124,7 @@ class Tags extends Component
                     <!--  TAGS  -->
                     <span wire:key="tags-{{ $uuid }}">
                         <template :key="index" x-for="(tag, index) in tags">
-                            <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
+                            <div class="mary-tags-element bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
                                 <span x-text="tag"></span>
                                 <x-mary-icon @click="remove(index)" x-show="!isReadonly" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
                             </div>
