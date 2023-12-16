@@ -85,6 +85,13 @@ class Choices extends Component
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
 
+                            init() {
+                                // TODO: fix weird issue when navigating back 
+                                document.addEventListener('livewire:navigating', () => {
+                                    let elements = document.querySelectorAll('.mary-choices-element');
+                                    elements.forEach(el =>  el.remove());
+                                });
+                            },
                             get selectedOptions() {
                                 return this.isSingle
                                     ? this.options.filter(i => i.{{ $optionValue }} == this.selection)
@@ -209,7 +216,7 @@ class Choices extends Component
                                     </div>
                                 @else
                                     <template x-for="(option, index) in selectedOptions" :key="index">
-                                        <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
+                                        <div class="mary-choices-element bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
                                             <!-- SELECTION SLOT -->
                                              @if($selection)
                                                 <span x-html="document.getElementById('selection-{{ $uuid . '-\' + option.'. $optionValue }}).innerHTML"></span>
