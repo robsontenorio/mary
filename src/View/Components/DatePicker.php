@@ -44,14 +44,18 @@ class DatePicker extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <div wire:key="datepicker-{{ rand() }}">
+            <div wire:key="datepicker-{{ rand() }}" >
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
                     <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
                 @endif
 
                 <div class="flex-1 relative">
-                        <div x-data x-init="flatpickr($refs.input, {{ $setup() }});">
+                        <div
+                            x-data="{instance: undefined}"
+                            x-init="instance = flatpickr($refs.input, {{ $setup() }});"
+                            x-on:livewire:navigating.window="instance.destroy();"
+                        >
                             <input
                                 x-ref="input"
                                 {{
