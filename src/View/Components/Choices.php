@@ -85,6 +85,13 @@ class Choices extends Component
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
 
+                            init() {
+                                // Fix weird issue when navigating back
+                                document.addEventListener('livewire:navigating', () => {
+                                    let elements = document.querySelectorAll('.mary-choices-element');
+                                    elements.forEach(el =>  el.remove());
+                                });
+                            },
                             get selectedOptions() {
                                 return this.isSingle
                                     ? this.options.filter(i => i.{{ $optionValue }} == this.selection)
@@ -125,8 +132,8 @@ class Choices extends Component
                                     return
                                 }
 
-                                $refs.searchInput.focus()
                                 this.focused = true
+                                $nextTick(() => $refs.searchInput.focus())
                             },
                             isActive(id) {
                                 return this.isSingle
@@ -187,6 +194,7 @@ class Choices extends Component
                         <!-- SELECTED OPTIONS + SEARCH INPUT -->
                         <div
                             @click="focus()"
+                            x-ref="container"
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
@@ -217,7 +225,7 @@ class Choices extends Component
                                     </div>
                                 @else
                                     <template x-for="(option, index) in selectedOptions" :key="index">
-                                        <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
+                                        <div class="mary-choices-element bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
                                             <!-- SELECTION SLOT -->
                                              @if($selection)
                                                 <span x-html="document.getElementById('selection-{{ $uuid . '-\' + option.'. $optionValue }}).innerHTML"></span>
@@ -239,7 +247,7 @@ class Choices extends Component
                                 @input="focus()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || ! isSearchable"
-                                :class="(isReadonly || !isSearchable) && 'hidden'"
+                                :class="(isReadonly || !isSearchable || !focused) && 'hidden'"
                                 class="outline-none mt-0.5 bg-transparent"
 
                                 @if($searchable)
@@ -261,8 +269,8 @@ class Choices extends Component
                         @endif
 
                         <!-- OPTIONS LIST -->
-                        <div x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}" >
-                            <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto">
+                        <div x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}">
+                            <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto" x-anchor.bottom-start="$refs.container">
 
                                 <!-- PROGRESS -->
                                 <progress wire:loading wire:target="{{ $searchFunction }}" class="progress absolute progress-primary top-0 h-0.5"></progress>
