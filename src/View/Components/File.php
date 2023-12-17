@@ -5,10 +5,13 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Mary\Traits\WithHtmlId;
+use Mary\Traits\WithUuid;
 
 class File extends Component
 {
-    public string $uuid;
+    use WithHtmlId;
+    use WithUuid;
 
     public function __construct(
         public ?string $label = null,
@@ -16,7 +19,8 @@ class File extends Component
         public ?bool $hideErrors = false,
         public ?bool $hideProgress = false,
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->setUuid(md5(serialize($this)));
+        $this->setHtmlId('file');
     }
 
     public function modelName(): ?string
@@ -52,7 +56,7 @@ class File extends Component
 
                     <!-- FILE INPUT -->
                     <input
-                        id="{{ $uuid }}"
+                        id="{{ $htmlId }}"
                         type="file"
                         {{
                             $attributes->class([
@@ -63,7 +67,7 @@ class File extends Component
                     />
 
                     @if ($slot->isNotEmpty())
-                        <label for="{{ $uuid }}">{{ $slot }}</label>
+                        <label for="{{ $htmlId }}">{{ $slot }}</label>
                     @endif
 
                     <!-- ERROR -->

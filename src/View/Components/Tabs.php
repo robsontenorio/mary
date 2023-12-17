@@ -10,8 +10,8 @@ use Mary\Traits\WithUuid;
 
 class Tabs extends Component
 {
-    use WithUuid;
     use WithHtmlId;
+    use WithUuid;
 
     public function __construct(
         public ?string $selected = null,

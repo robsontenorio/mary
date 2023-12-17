@@ -5,17 +5,21 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Mary\Traits\WithHtmlId;
+use Mary\Traits\WithUuid;
 
 class Tags extends Component
 {
-    public string $uuid;
+    use WithHtmlId;
+    use WithUuid;
 
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $icon = null,
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->setUuid(md5(serialize($this)));
+        $this->setHtmlId('tags');
     }
 
     public function modelName(): ?string
@@ -95,7 +99,7 @@ class Tags extends Component
             >
                 <!-- STANDARD LABEL -->
                 @if ($label)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                    <label for="{{ $htmlId }}" class="pt-0 label label-text font-semibold">
                         <span>
                             {{ $label }}
 
@@ -143,7 +147,7 @@ class Tags extends Component
 
                     <!-- INPUT -->
                     <input
-                        id="{{ $uuid }}"
+                        id="{{ $htmlId }}"
                         class="outline-none mt-1 bg-transparent"
                         placeholder="{{ $attributes->whereStartsWith('placeholder')->first() }}"
                         type="text"

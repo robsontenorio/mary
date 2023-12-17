@@ -6,10 +6,13 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
+use Mary\Traits\WithHtmlId;
+use Mary\Traits\WithUuid;
 
 class Select extends Component
 {
-    public string $uuid;
+    use WithHtmlId;
+    use WithUuid;
 
     public function __construct(
         public ?string $label = null,
@@ -27,7 +30,8 @@ class Select extends Component
         public mixed $prepend = null,
         public mixed $append = null
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->setUuid(md5(serialize($this)));
+        $this->setHtmlId('select');
     }
 
     public function modelName(): ?string
@@ -41,7 +45,7 @@ class Select extends Component
             <div>
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                    <label for="{{ $htmlId }}" class="pt-0 label label-text font-semibold">
                         <span>
                             {{ $label }}
 
@@ -66,7 +70,7 @@ class Select extends Component
 
                 <div class="relative flex-1">
                     <select
-                        id="{{ $uuid }}"
+                        id="{{ $htmlId }}"
                         {{ $attributes->whereDoesntStartWith('class') }}
                         {{ $attributes->class([
                                     'select select-primary w-full font-normal',
@@ -101,7 +105,7 @@ class Select extends Component
 
                     <!-- INLINE LABEL -->
                     @if($label && $inline)
-                        <label for="{{ $uuid }}" class="absolute pointer-events-none text-gray-500 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded bg-base-100 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
+                        <label for="{{ $htmlId }}" class="absolute pointer-events-none text-gray-500 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded bg-base-100 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
                             {{ $label }}
                         </label>
                     @endif

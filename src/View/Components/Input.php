@@ -5,10 +5,13 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Mary\Traits\WithHtmlId;
+use Mary\Traits\WithUuid;
 
 class Input extends Component
 {
-    public string $uuid;
+    use WithHtmlId;
+    use WithUuid;
 
     public function __construct(
         public ?string $label = null,
@@ -27,7 +30,8 @@ class Input extends Component
         public mixed $prepend = null,
         public mixed $append = null
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->setUuid(md5(serialize($this)));
+        $this->setHtmlId('input');
     }
 
     public function modelName(): ?string
@@ -51,7 +55,7 @@ class Input extends Component
             <div>
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                    <label for="{{ $htmlId }}" class="pt-0 label label-text font-semibold">
                         <span>
                             {{ $label }}
 
@@ -85,7 +89,7 @@ class Input extends Component
 
                     <!-- INPUT -->
                     <input
-                        id="{{ $uuid }}"
+                        id="{{ $htmlId }}"
                         placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
 
                         @if($money)
@@ -129,7 +133,7 @@ class Input extends Component
 
                     <!-- INLINE LABEL -->
                     @if($label && $inline)
-                        <label for="{{ $uuid }}" class="absolute text-gray-400 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded bg-base-100 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
+                        <label for="{{ $htmlId }}" class="absolute text-gray-400 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded bg-base-100 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
                             {{ $label }}
                         </label>
                     @endif

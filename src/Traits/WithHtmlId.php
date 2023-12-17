@@ -6,9 +6,9 @@ use Illuminate\Support\Str;
 
 trait WithHtmlId
 {
-    public string $htmlId;
+    public string $htmlId = 'element';
 
-    public function setHtmlId(string $prefix, ?string $value = null)
+    public function setHtmlId(string $prefix, ?string $value = null): void
     {
         $this->htmlId = sprintf(
             '%s-%s',
