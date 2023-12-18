@@ -14,5 +14,5 @@ Route::middleware('web')->get('/mary/spotlight', function (Request $request) {
         return [];
     }
 
-    return app()->make(config('mary.components.spotlight.class'))->search($request->q);
+    return app()->make(config('mary.components.spotlight.class'))->search(...array_values($request->all()));
 });
