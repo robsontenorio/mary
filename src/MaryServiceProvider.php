@@ -41,6 +41,7 @@ use Mary\View\Components\Progress;
 use Mary\View\Components\ProgressRadial;
 use Mary\View\Components\Radio;
 use Mary\View\Components\Select;
+use Mary\View\Components\Spotlight;
 use Mary\View\Components\Stat;
 use Mary\View\Components\Tab;
 use Mary\View\Components\Table;
@@ -80,6 +81,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('mary-button', Button::class);
         Blade::component('mary-card', Card::class);
         Blade::component('mary-icon', Icon::class);
+        Blade::component('mary-input', Input::class);
         Blade::component('mary-list-item', ListItem::class);
         Blade::component('mary-menu', Menu::class);
         Blade::component('mary-menu-item', MenuItem::class);
@@ -123,6 +125,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'progress-radial', ProgressRadial::class);
         Blade::component($prefix . 'radio', Radio::class);
         Blade::component($prefix . 'select', Select::class);
+        Blade::component($prefix . 'spotlight', Spotlight::class);
         Blade::component($prefix . 'stat', Stat::class);
         Blade::component($prefix . 'table', Table::class);
         Blade::component($prefix . 'tab', Tab::class);
