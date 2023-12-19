@@ -98,7 +98,7 @@ class Choices extends Component
                                     : this.selection.map(i => this.options.filter(o => o.{{ $optionValue }} == i)[0])
                             },
                             get noResults() {
-                                if (!this.isSearchable || $refs.searchInput.value == '') {
+                                if (!this.isSearchable || this.$refs.searchInput.value == '') {
                                     return false
                                 }
 
@@ -119,7 +119,7 @@ class Choices extends Component
                             },
                             clear() {
                                 this.focused = false;
-                                $refs.searchInput.value = ''
+                                this.$refs.searchInput.value = ''
                             },
                             reset() {
                                 this.clear();
@@ -133,7 +133,7 @@ class Choices extends Component
                                 }
 
                                 this.focused = true
-                                $nextTick(() => $refs.searchInput.focus())
+                                this.$refs.searchInput.focus()
                             },
                             isActive(id) {
                                 return this.isSingle
@@ -154,8 +154,8 @@ class Choices extends Component
                                         : this.selection.push(id)
                                 }
 
-                                $refs.searchInput.value = ''
-                                $refs.searchInput.focus()
+                                this.$refs.searchInput.value = ''
+                                this.$refs.searchInput.focus()
                             },
                             search(value) {
                                 if (value.length < this.minChars) {
@@ -247,8 +247,8 @@ class Choices extends Component
                                 @input="focus()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || ! isSearchable"
-                                :class="(isReadonly || !isSearchable || !focused) && 'hidden'"
-                                class="outline-none mt-0.5 bg-transparent"
+                                :class="(isReadonly || !isSearchable || !focused) && '!w-1'"
+                                class="outline-none mt-0.5 bg-transparent w-20"
 
                                 @if($searchable)
                                     @keydown.debounce.{{ $debounce }}="search($el.value)"
