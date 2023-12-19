@@ -30,13 +30,21 @@ class Spotlight extends Component
                             value: '',
                             results: [],
                             open: $persist(false).as('mary-spotlight-modal'),
-                            searching: false,
+                            elapsed: 0,
+                            elapsedStep: 200,
+                            elapsedMax: 500,
+                            maxDebounce: 250,
+                            searchTimer: null,
+                            debounceTimer: null,
+                            controller: new AbortController(),
                             query: '',
                             searchedWithNoResults: false,
                             init(){
                                 if(this.open) {
                                     this.show()
                                 }
+
+                                this.$watch('value', value => this.debounce(() => this.search(), this.maxDebounce))
 
                                 $refs.marySpotlightRef.querySelector('.modal-box').classList.add('absolute', 'top-0', 'lg:top-10', 'w-full', 'lg:max-w-3xl')
 
@@ -61,24 +69,44 @@ class Spotlight extends Component
                                 this.query = query
                                 this.search()
                             },
+                            startTimer() {
+                                this.searchTimer = setInterval(() => this.elapsed += this.elapsedStep, this.elapsedStep)
+                            },
+                            resetTimer() {
+                                clearInterval(this.searchTimer)
+                                this.elapsed = 0
+                            },
+                            debounce(fn, waitTime) {
+                                clearTimeout(this.debounceTimer)
+                                this.debounceTimer = setTimeout(() => fn(), waitTime)
+                            },
                             async search() {
                                 $refs.spotSearch.focus()
 
-                                if (!this.value) {
+                                if (this.value == '') {
                                     this.results = []
                                     return
                                 }
 
-                                this.searching = true
-                                let response = await fetch(`/mary/spotlight?q=${this.value}&${this.query}`)
-                                this.results = await response.json()
-                                this.searching = false
+                                this.resetTimer()
+                                this.startTimer()
 
-                                if(Object.keys(this.results).length){
-                                    this.searchedWithNoResults = false
-                                }else{
-                                    this.searchedWithNoResults = true
+                                try {
+                                    this.controller?.abort()
+                                    this.controller = new AbortController();
+
+                                    let response = await fetch(`/mary/spotlight?search=${this.value}&${this.query}`, { signal: this.controller.signal })
+                                    this.results = await response.json()
+                                } catch(e) {
+                                    console.log(e)
+                                    return
                                 }
+
+                                this.resetTimer()
+
+                                Object.keys(this.results).length
+                                    ? this.searchedWithNoResults = false
+                                    : this.searchedWithNoResults = true
                             }
                         }"
 
@@ -87,9 +115,10 @@ class Spotlight extends Component
                     @keydown.up="$focus.previous()"
                     @keydown.down="$focus.next()"
                     @mary-search.window="updateQuery(event.detail)"
+                    @mary-search-open.window="show(); focus();"
                 >
                     <x-modal id="marySpotlight" x-ref="marySpotlightRef" class="backdrop-blur-sm">
-                        <div class="-mx-5 -my-10" @click.outside="close()">
+                        <div class="-mx-5 -my-10" @click.outside="close()" @keydown.enter="close()">
                             <!-- INPUT -->
                             <div class="flex">
                                 <div class="flex-1">
@@ -101,7 +130,6 @@ class Spotlight extends Component
                                         class="border-none focus:outline-0"
                                         tabindex="0"
                                         @focus="$el.focus()"
-                                        @keyup.debounce="search()"
                                     />
                                 </div>
 
@@ -112,7 +140,7 @@ class Spotlight extends Component
 
                             <!-- PROGRESS  -->
                             <div class="h-[2px] border-t-[1px] border-t-base-200 dark:border-t-base-300">
-                                <progress class="progress hidden h-[1px]" :class="searching && '!h-[2px] !block'"></progress>
+                                <progress class="progress hidden h-[1px]" :class="elapsed > elapsedMax && '!h-[2px] !block'"></progress>
                             </div>
 
                             <!-- SLOT -->

@@ -10,9 +10,5 @@ Route::middleware('web')->get('/mary/toogle-sidebar', function (Request $request
 });
 
 Route::middleware('web')->get('/mary/spotlight', function (Request $request) {
-    if (! $request->q) {
-        return [];
-    }
-
-    return app()->make(config('mary.components.spotlight.class'))->search(...array_values($request->all()));
+    return app()->make(config('mary.components.spotlight.class'))->search($request);
 });
