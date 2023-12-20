@@ -118,7 +118,7 @@ class Spotlight extends Component
                     @mary-search-open.window="show(); focus();"
                 >
                     <x-modal id="marySpotlight" x-ref="marySpotlightRef" class="backdrop-blur-sm">
-                        <div class="-mx-5 -my-10" @click.outside="close()" @keydown.enter="close()">
+                        <div class="-mx-5 -mt-5 -mb-10" @click.outside="close()" @keydown.enter="close()">
                             <!-- INPUT -->
                             <div class="flex">
                                 <div class="flex-1">
