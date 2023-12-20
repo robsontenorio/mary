@@ -127,7 +127,7 @@ class ChoicesOffline extends Component
                                 }
 
                                 this.focused = true
-                                $nextTick(() => $refs.searchInput.focus())
+                                this.$refs.searchInput.focus()
                             },
                             isActive(id) {
                                 return this.isSingle
@@ -149,7 +149,7 @@ class ChoicesOffline extends Component
                                         : this.selection.push(id)
                                 }
 
-                                $refs.searchInput.focus()
+                                this.$refs.searchInput.focus()
                             }
                         }"
                     >
@@ -180,7 +180,7 @@ class ChoicesOffline extends Component
 
                         <!-- SELECTED OPTIONS + SEARCH INPUT -->
                         <div
-                            @click="focus()"
+                            @click="focus();"
                             x-ref="container"
 
                             {{
@@ -244,8 +244,8 @@ class ChoicesOffline extends Component
                                 @input="focus()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || ! isSearchable"
-                                :class="(isReadonly || !isSearchable || !focused) && 'hidden'"
-                                class="outline-none mt-0.5 bg-transparent"
+                                :class="(isReadonly || !isSearchable || !focused) && '!w-1'"
+                                class="outline-none mt-0.5 bg-transparent w-20"
                              />
                         </div>
 
