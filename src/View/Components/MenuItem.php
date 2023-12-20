@@ -33,7 +33,7 @@ class MenuItem extends Component
         }
 
         $link = url($this->link ?? '');
-        $route = url(Route::current()->uri());
+        $route = url(request()->url());
 
         if ($link == $route) {
             return true;

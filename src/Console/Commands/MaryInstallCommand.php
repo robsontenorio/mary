@@ -142,35 +142,47 @@ It will set up:
     {
         $this->info("Copying stubs...\n");
 
-        Process::run('mkdir -p app/Livewire && mkdir -p resources/views/components/layouts', function (string $type, string $output) {
-            echo $output;
-        })->throw();
+        $ds = DIRECTORY_SEPARATOR;
 
-        Process::run('cp ' . __DIR__ . '/../../../stubs/app.blade.php resources/views/components/layouts/', function (string $type, string $output) {
-            echo $output;
-        })->throw();
+        $livewirePath = "app{$ds}Livewire";
+        $layoutsPath = "resources{$ds}views{$ds}components{$ds}layouts";
+        $cssPath = "resources{$ds}css";
+        $routesPath = "routes";
 
-        Process::run('cp ' . __DIR__ . '/../../../stubs/app.css resources/css/', function (string $type, string $output) {
-            echo $output;
-        })->throw();
+        $this->createDirectoryIfNotExists($livewirePath);
+        $this->createDirectoryIfNotExists($layoutsPath);
 
-        Process::run('cp ' . __DIR__ . '/../../../stubs/tailwind.config.js .', function (string $type, string $output) {
-            echo $output;
-        })->throw();
+        $this->copyFile(__DIR__ . "/../../../stubs/app.blade.php", "{$layoutsPath}{$ds}app.blade.php");
+        $this->copyFile(__DIR__ . "/../../../stubs/app.css", "{$cssPath}{$ds}app.css");
+        $this->copyFile(__DIR__ . "/../../../stubs/tailwind.config.js", "tailwind.config.js");
+        $this->copyFile(__DIR__ . "/../../../stubs/Welcome.php", "{$livewirePath}{$ds}Welcome.php");
+        $this->copyFile(__DIR__ . "/../../../stubs/web.php", "{$routesPath}{$ds}web.php");
+    }
 
-        Process::run('cp ' . __DIR__ . '/../../../stubs/Welcome.php app/Livewire/', function (string $type, string $output) {
-            echo $output;
-        })->throw();
+    private function createDirectoryIfNotExists(string $path): void
+    {
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+    }
 
-        Process::run('cp ' . __DIR__ . '/../../../stubs/web.php routes/', function (string $type, string $output) {
-            echo $output;
-        })->throw();
+    private function copyFile(string $source, string $destination): void
+    {
+        $source = str_replace('/', DIRECTORY_SEPARATOR, $source);
+        $destination = str_replace('/', DIRECTORY_SEPARATOR, $destination);
+
+        if (!copy($source, $destination)) {
+            throw new \RuntimeException("Failed to copy {$source} to {$destination}");
+        }
     }
 
     public function askForPackageInstaller(): string
     {
-        $yarn = Process::run('which yarn')->output();
-        $npm = Process::run('which npm')->output();
+        $os = PHP_OS;
+        $findCommand = stripos($os, 'WIN') === 0 ? 'where' : 'which';
+
+        $yarn = Process::run($findCommand . ' yarn')->output();
+        $npm = Process::run($findCommand . ' npm')->output();
 
         $options = [];
 
@@ -179,7 +191,7 @@ It will set up:
         }
 
         if (Str::of($npm)->isNotEmpty()) {
-            $options = array_merge($options, ['npm install --dev' => 'npm',]);
+            $options = array_merge($options, ['npm install --save-dev' => 'npm']);
         }
 
         if (count($options) == 0) {
@@ -193,6 +205,7 @@ It will set up:
             options: $options
         );
     }
+
 
     /**
      * Also install Volt?
