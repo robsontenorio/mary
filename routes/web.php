@@ -8,3 +8,7 @@ Route::middleware('web')->get('/mary/toogle-sidebar', function (Request $request
         session(['mary-sidebar-collapsed' => $request->collapsed]);
     }
 });
+
+Route::middleware('web')->get('/mary/spotlight', function (Request $request) {
+    return app()->make(config('mary.components.spotlight.class'))->search($request);
+});

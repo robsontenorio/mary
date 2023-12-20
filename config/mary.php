@@ -16,6 +16,15 @@ return [
      *    php artisan view:clear
      *
      */
-    'prefix' => ''
+    'prefix' => '',
+
+    /**
+     * Components settings
+     */
+    'components' => [
+        'spotlight' => [
+            'class' => 'App\Support\Spotlight',
+        ]
+    ]
 ];
 
