@@ -50,12 +50,13 @@ class Spotlight extends Component
 
                                 // Fix weird issue when navigating back
                                 document.addEventListener('livewire:navigating', () => {
-                                    $refs.marySpotlightRef?.close()
+                                    this.close()
                                     document.querySelectorAll('.mary-spotlight-element')?.forEach(el =>  el.remove());
                                 });
                             },
                             close() {
                                 this.open = false
+                                $refs.marySpotlightRef?.close()
                             },
                             show() {
                                 this.open = true;
