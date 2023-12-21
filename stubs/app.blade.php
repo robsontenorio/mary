@@ -8,42 +8,55 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen font-sans antialiased">
-<x-main full-width>
-    <x-slot:sidebar drawer="main-drawer" collapsible class="pt-3 bg-sky-800 text-white">
+<body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
 
-        {{-- Hidden when collapsed --}}
-        <div class="hidden-when-collapsed ml-5 font-black text-4xl text-yellow-500">mary</div>
+    {{-- NAVBAR mobile only --}}
+    <x-nav sticky class="lg:hidden">
+        <x-slot:brand>
+            <x-app-brand />
+        </x-slot:brand>
+        <x-slot:actions>
+            <label for="main-drawer" class="lg:hidden mr-3">
+                <x-icon name="o-bars-3" class="cursor-pointer" />
+            </label>
+        </x-slot:actions>
+    </x-nav>
 
-        {{-- Display when collapsed --}}
-        <div class="display-when-collapsed ml-5 font-black text-4xl text-orange-500">m</div>
+    {{-- MAIN --}}
+    <x-main full-width>
+        {{-- SIDEBAR --}}
+        <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit">
 
-        {{-- Custom `active menu item background color` --}}
-        <x-menu activate-by-route active-bg-color="bg-base-300/10">
+            {{-- BRAND --}}
+            <x-app-brand class="p-5 pt-3" />
 
-            {{-- User --}}
-            @if($user = auth()->user())
-                <x-list-item :item="$user" sub-value="username" no-separator no-hover class="!-mx-2 mt-2 mb-5 border-y border-y-sky-900">
-                    <x-slot:actions>
-                        <x-button icon="o-power" class="btn-circle btn-ghost btn-xs" tooltip-left="logoff" />
-                    </x-slot:actions>
-                </x-list-item>
-            @endif
+            {{-- MENU --}}
+            <x-menu activate-by-route>
 
-            <x-menu-item title="Home" icon="o-home" link="/" />
-            <x-menu-item title="Yeah" icon="o-sparkles" link="####" />
+                {{-- User --}}
+                @if($user = auth()->user())
+                    <x-list-item :item="$user" sub-value="username" no-separator no-hover class="!-mx-2 mt-2 mb-5 border-y border-y-sky-900">
+                        <x-slot:actions>
+                            <x-button icon="o-power" class="btn-circle btn-ghost btn-xs" tooltip-left="logoff" />
+                        </x-slot:actions>
+                    </x-list-item>
+                @endif
 
-            <x-menu-sub title="Settings" icon="o-cog-6-tooth">
-                <x-menu-item title="Wifi" icon="o-wifi" link="####" />
-                <x-menu-item title="Archives" icon="o-archive-box" link="####" />
-            </x-menu-sub>
-        </x-menu>
-    </x-slot:sidebar>
+                <x-menu-item title="Hello" icon="o-sparkles" link="/" />
+                <x-menu-sub title="Settings" icon="o-cog-6-tooth">
+                    <x-menu-item title="Wifi" icon="o-wifi" link="####" />
+                    <x-menu-item title="Archives" icon="o-archive-box" link="####" />
+                </x-menu-sub>
+            </x-menu>
+        </x-slot:sidebar>
 
-    {{-- The `$slot` goes here --}}
-    <x-slot:content>
-        {{ $slot }}
-    </x-slot:content>
-</x-main>
+        {{-- The `$slot` goes here --}}
+        <x-slot:content>
+            {{ $slot }}
+        </x-slot:content>
+    </x-main>
+
+    {{--  TOAST area --}}
+    <x-toast />
 </body>
 </html>

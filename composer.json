@@ -1,6 +1,6 @@
 {
     "name": "robsontenorio/mary",
-    "description": "Laravel blade components for Livewire 3",
+    "description": "Laravel Blade UI Components for Livewire 3",
     "license": "MIT",
     "authors": [
         {
@@ -11,12 +11,15 @@
     ],
     "homepage": "https://mary-ui.com",
     "keywords": [
-        "Laravel",
-        "Livewire",
-        "Blade",
-        "Components",
-        "Mary",
-        "UI"
+        "laravel",
+        "livewire",
+        "tallstack",
+        "blade",
+        "ui",
+        "components",
+        "livewire-packages",
+        "livewire-components",
+        "alpinejs"
     ],
     "require": {
         "illuminate/support": "~10",

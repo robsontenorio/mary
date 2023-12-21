@@ -27,7 +27,7 @@ class Main extends Component
                  <main @class(["w-full mx-auto", "max-w-screen-2xl" => !$fullWidth])>
                     <div class="drawer inline lg:grid lg:drawer-open">
                         <input id="{{ $sidebar?->attributes['drawer'] }}" type="checkbox" class="drawer-toggle" />
-                        <div {{ $content->attributes->class(["drawer-content w-full mx-auto p-5 lg:p-10"]) }}>
+                        <div {{ $content->attributes->class(["drawer-content w-full mx-auto p-5 lg:px-10 lg:py-5"]) }}>
                             <!-- MAIN CONTENT -->
                             {{ $content }}
                         </div>

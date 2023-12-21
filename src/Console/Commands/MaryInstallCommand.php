@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
+use RuntimeException;
 use function Laravel\Prompts\select;
 
 class MaryInstallCommand extends Command
@@ -144,36 +145,25 @@ It will set up:
 
         $ds = DIRECTORY_SEPARATOR;
 
+        $appViewComponents = "app{$ds}View{$ds}Components";
         $livewirePath = "app{$ds}Livewire";
         $layoutsPath = "resources{$ds}views{$ds}components{$ds}layouts";
+        $livewireBladePath = "resources{$ds}views{$ds}livewire";
         $cssPath = "resources{$ds}css";
         $routesPath = "routes";
 
+        $this->createDirectoryIfNotExists($appViewComponents);
         $this->createDirectoryIfNotExists($livewirePath);
+        $this->createDirectoryIfNotExists($livewireBladePath);
         $this->createDirectoryIfNotExists($layoutsPath);
 
+        $this->copyFile(__DIR__ . "/../../../stubs/AppBrand.php", "{$appViewComponents}{$ds}AppBrand.php");
         $this->copyFile(__DIR__ . "/../../../stubs/app.blade.php", "{$layoutsPath}{$ds}app.blade.php");
         $this->copyFile(__DIR__ . "/../../../stubs/app.css", "{$cssPath}{$ds}app.css");
         $this->copyFile(__DIR__ . "/../../../stubs/tailwind.config.js", "tailwind.config.js");
         $this->copyFile(__DIR__ . "/../../../stubs/Welcome.php", "{$livewirePath}{$ds}Welcome.php");
+        $this->copyFile(__DIR__ . "/../../../stubs/welcome.blade.php", "{$livewireBladePath}{$ds}welcome.blade.php");
         $this->copyFile(__DIR__ . "/../../../stubs/web.php", "{$routesPath}{$ds}web.php");
-    }
-
-    private function createDirectoryIfNotExists(string $path): void
-    {
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
-    }
-
-    private function copyFile(string $source, string $destination): void
-    {
-        $source = str_replace('/', DIRECTORY_SEPARATOR, $source);
-        $destination = str_replace('/', DIRECTORY_SEPARATOR, $destination);
-
-        if (!copy($source, $destination)) {
-            throw new \RuntimeException("Failed to copy {$source} to {$destination}");
-        }
     }
 
     public function askForPackageInstaller(): string
@@ -206,7 +196,6 @@ It will set up:
         );
     }
 
-
     /**
      * Also install Volt?
      */
@@ -217,5 +206,22 @@ It will set up:
             ['Yes', 'No'],
             hint: 'No matter what is your choice, it always installs `livewire/livewire`'
         );
+    }
+
+    private function createDirectoryIfNotExists(string $path): void
+    {
+        if (! file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+    }
+
+    private function copyFile(string $source, string $destination): void
+    {
+        $source = str_replace('/', DIRECTORY_SEPARATOR, $source);
+        $destination = str_replace('/', DIRECTORY_SEPARATOR, $destination);
+
+        if (! copy($source, $destination)) {
+            throw new RuntimeException("Failed to copy {$source} to {$destination}");
+        }
     }
 }
