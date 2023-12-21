@@ -51,7 +51,7 @@ class DatePicker extends Component
                         <span>
                             {{ $label }}
 
-                            @if($attributes->has('required'))
+                            @if($attributes->get('required'))
                                 <span class="text-error">*</span>
                             @endif
                         </span>
