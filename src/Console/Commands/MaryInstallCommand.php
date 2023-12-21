@@ -148,7 +148,7 @@ It will set up:
         $appViewComponents = "app{$ds}View{$ds}Components";
         $livewirePath = "app{$ds}Livewire";
         $layoutsPath = "resources{$ds}views{$ds}components{$ds}layouts";
-        $livewireBladePath = "resources{$ds}views{$ds}components{$ds}livewire";
+        $livewireBladePath = "resources{$ds}views{$ds}livewire";
         $cssPath = "resources{$ds}css";
         $routesPath = "routes";
 
