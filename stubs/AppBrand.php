@@ -18,7 +18,7 @@ class AppBrand extends Component
      */
     public function render(): View|Closure|string
     {
-        return <<<'blade'
+        return <<<'HTML'
                 <a href="/" wire:navigate>
                     <!-- Hidden when collapsed -->
                     <div {{ $attributes->class(["hidden-when-collapsed"]) }}>
@@ -35,6 +35,6 @@ class AppBrand extends Component
                         <x-icon name="s-square-3-stack-3d" class="w-6 -mb-1 text-purple-500" />
                     </div>
                 </a>
-            blade;
+            HTML;
     }
 }
