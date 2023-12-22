@@ -38,7 +38,7 @@ class ListItem extends Component
                     }}
                 >
 
-                    @if($link && data_get($item, $avatar) || !is_string($avatar))
+                    @if($link && (data_get($item, $avatar) || !is_string($avatar)))
                         <div>
                             <a href="{{ $link }}" wire:navigate>
                     @endif
@@ -61,7 +61,7 @@ class ListItem extends Component
                     @endif
 
 
-                    @if($link && data_get($item, $avatar) || !is_string($avatar))
+                    @if($link && (data_get($item, $avatar) || !is_string($avatar)))
                             </a>
                         </div>
                     @endif
