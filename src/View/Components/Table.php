@@ -63,7 +63,7 @@ class Table extends Component
             return false;
         }
 
-        return $this->sortBy['column'] == $header['key'];
+        return $this->sortBy['column'] == ($header['sortBy'] ?? $header['key']);
     }
 
     // Handle header sort
@@ -81,7 +81,7 @@ class Table extends Component
             ? $this->sortBy['direction'] == 'asc' ? 'desc' : 'asc'
             : 'asc';
 
-        return ['column' => $header['key'], 'direction' => $direction];
+        return ['column' => $header['sortBy'] ?? $header['key'], 'direction' => $direction];
     }
 
     // Build row link
