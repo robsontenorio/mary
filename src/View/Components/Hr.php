@@ -13,7 +13,7 @@ class Hr extends Component
     public function __construct(
         public ?string $target = null,
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function progressTarget(): ?string

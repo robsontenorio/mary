@@ -18,7 +18,7 @@ class DatePicker extends Component
         public ?bool $inline = false,
         public ?array $config = []
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function setup(): string
@@ -26,7 +26,7 @@ class DatePicker extends Component
         $config = json_encode(array_merge([
             'dateFormat' => 'Y-m-d H:i',
             'altInput' => true,
-            'clickOpens' => ! $this->attributes->has('readonly') || $this->attributes->get('readonly') == false,
+            'clickOpens' => !$this->attributes->has('readonly') || $this->attributes->get('readonly') == false,
             'defaultDate' => 'x',
         ], $this->config));
 

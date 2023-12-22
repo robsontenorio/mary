@@ -21,7 +21,7 @@ class Drawer extends Component
         //Slots
         public ?string $actions = null
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function id(): string

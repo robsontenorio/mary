@@ -15,7 +15,7 @@ class Tags extends Component
         public ?string $hint = null,
         public ?string $icon = null,
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function modelName(): ?string
