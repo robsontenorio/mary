@@ -23,7 +23,7 @@ class MenuItem extends Component
         public ?bool $active = false,
         public ?bool $separator = false
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function routeMatches(): bool

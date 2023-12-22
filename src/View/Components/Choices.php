@@ -40,7 +40,7 @@ class Choices extends Component
         public mixed $prepend = null,
         public mixed $append = null
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this));
 
         if (($this->allowAll || $this->compact) && ($this->single || $this->searchable)) {
             throw new Exception("`allow-all` and `compact` does not work combined with `single` or `searchable`.");
@@ -66,7 +66,7 @@ class Choices extends Component
     {
         $value = data_get($option, $this->optionValue);
 
-        return is_numeric($value) && ! str($value)->startsWith('0') ? $value : "'$value'";
+        return is_numeric($value) && !str($value)->startsWith('0') ? $value : "'$value'";
     }
 
     public function render(): View|Closure|string

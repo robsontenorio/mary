@@ -17,7 +17,7 @@ class Diff extends Component
         public string $fileName = 'payload.json',
         public ?array $config = []
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function setup(): string

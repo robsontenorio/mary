@@ -32,7 +32,7 @@ class Table extends Component
         public mixed $cell = null,
         public mixed $expansion = null
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this));
 
         if ($this->selectable && $this->expandable) {
             throw new Exception("You can not combine `expandable` with `selectable`.");
@@ -69,7 +69,7 @@ class Table extends Component
     // Handle header sort
     public function getSort(mixed $header): mixed
     {
-        if (! $this->isSortable($header)) {
+        if (!$this->isSortable($header)) {
             return false;
         }
 

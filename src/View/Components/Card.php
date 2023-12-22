@@ -22,7 +22,7 @@ class Card extends Component
         public mixed $actions = null,
         public mixed $figure = null,
     ) {
-        $this->uuid = md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function progressTarget(): ?string
