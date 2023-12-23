@@ -268,7 +268,7 @@ class Table extends Component
                     <!-- Pagination -->
                     @if($withPagination)
                         <div class="mary-table-pagination">
-                            <div class="border border-x-0 border-t-0 border-b-1 border-b-base-300 mb-3"></div>
+                            <div class="border border-x-0 border-t-0 border-b-1 border-b-base-300 mb-5"></div>
 
                             {{ $rows->onEachSide(1)->links(data: ['scrollTo' => false])  }}
                         </div>
