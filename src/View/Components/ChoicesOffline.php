@@ -61,6 +61,13 @@ class ChoicesOffline extends Component
         return $this->attributes->has('required') && $this->attributes->get('required') == true;
     }
 
+    public function getOptionValue($option): mixed
+    {
+        $value = data_get($option, $this->optionValue);
+
+        return is_numeric($value) && ! str($value)->startsWith('0') ? $value : "'$value'";
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'HTML'
@@ -76,6 +83,7 @@ class ChoicesOffline extends Component
                             isReadonly: {{ json_encode($isReadonly()) }},
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
+                            noResults: false,
                             search: '',
 
                             init() {
@@ -89,16 +97,6 @@ class ChoicesOffline extends Component
                                 return this.isSingle
                                     ? this.options.filter(i => i.{{ $optionValue }} == this.selection)
                                     : this.selection.map(i => this.options.filter(o => o.{{ $optionValue }} == i)[0])
-                            },
-                            get searchOptions() {
-                                return this.options.filter(i => i.{{ $optionLabel }}.match(new RegExp(this.search, 'i')))
-                            },
-                            get noResults() {
-                                if (!this.isSearchable || this.search == '') {
-                                    return false
-                                }
-
-                                return this.searchOptions.length == 0
                             },
                             get isAllSelected() {
                                 return this.options.length == this.selection.length
@@ -150,6 +148,18 @@ class ChoicesOffline extends Component
                                 }
 
                                 this.$refs.searchInput.focus()
+                            },
+                            lookup() {
+                                Array.from(this.$refs.choicesOptions.children).forEach(child => {
+                                    if (!child.getAttribute('search-value').match(new RegExp(this.search, 'i'))){
+                                        child.classList.add('hidden')
+                                    } else {
+                                        child.classList.remove('hidden')
+                                    }
+                                })
+
+                                this.noResults = Array.from(this.$refs.choicesOptions.querySelectorAll('div > .hidden')).length ==
+                                                 Array.from(this.$refs.choicesOptions.querySelectorAll('[search-value]')).length
                             }
                         }"
                     >
@@ -204,15 +214,6 @@ class ChoicesOffline extends Component
                                 <x-mary-icon @click="reset()"  name="o-x-mark" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
                             @endif
 
-                            <!-- SELECTION SLOT (render ahead of time to make it available for custom selection slot)-->
-                            @if($selection)
-                                <template x-for="(option, index) in searchOptions" :key="index">
-                                    <span x-bind:id="`selection-{{ $uuid}}-${option.{{ $optionValue }}}`" class="hidden mary-choices-element">
-                                        {{ $selection }}
-                                    </span>
-                                </template>
-                            @endif
-
                             <!-- SELECTED OPTIONS -->
                             <span wire:key="selected-options-{{ $uuid }}">
                                 @if($compact)
@@ -241,6 +242,7 @@ class ChoicesOffline extends Component
                             <input
                                 x-ref="searchInput"
                                 x-model="search"
+                                @keyup="lookup()"
                                 @input="focus()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || ! isSearchable"
@@ -286,40 +288,32 @@ class ChoicesOffline extends Component
                                     {{ $noResultText }}
                                 </div>
 
+                                <div x-ref="choicesOptions">
+                                    @foreach($options as $option)
+                                        <div
+                                            id="option-{{ $uuid }}-{{ data_get($option, $optionValue) }}"
+                                            wire:key="option-{{ data_get($option, $optionValue) }}"
+                                            @click="toggle({{ $getOptionValue($option) }})"
+                                            :class="isActive({{ $getOptionValue($option) }}) && 'border-l-4 border-l-primary'"
+                                            search-value="{{ data_get($option, $optionLabel) }}"
+                                            class="border-l-4"
+                                        >
+                                            <!-- ITEM SLOT -->
+                                            @if($item)
+                                                {{ $item($option) }}
+                                            @else
+                                                <x-mary-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar" />
+                                            @endif
 
-                                <template x-for="(option, index) in searchOptions" :key="index">
-                                    <div
-                                        @click="toggle(option.{{ $optionValue }})"
-                                        :class="isActive(option.{{ $optionValue }}) && 'border-l-4 border-l-primary'"
-                                        class="mary-choices-element border-l-4"
-                                    >
-                                        <!-- ITEM SLOT -->
-                                        @if($item)
-                                            {{ $item }}
-                                        @else
-                                            <div class="p-3 hover:bg-base-200 border border-t-0 border-b-base-200">
-                                                <div class="flex gap-3 items-center">
-                                                    <!-- AVATAR -->
-
-                                                    <template x-if="option.{{ $optionAvatar }}">
-                                                        <div>
-                                                            <img :src="option.{{ $optionAvatar }}" class="rounded-full w-11 h-11" />
-                                                        </div>
-                                                    </template>
-                                                    <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0 mary-hideable">
-                                                        <!-- LABEL -->
-                                                        <div x-text="option.{{ $optionLabel }}" class="font-semibold truncate"></div>
-
-                                                        <!-- SUB LABEL -->
-                                                        @if(!empty($optionSubLabel))
-                                                            <div x-text="option.{{ $optionSubLabel }}" class="text-gray-400 text-sm truncate"></div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </template>
+                                            <!-- SELECTION SLOT -->
+                                            @if($selection)
+                                                <span id="selection-{{ $uuid }}-{{ data_get($option, $optionValue) }}" class="hidden">
+                                                    {{ $selection($option) }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
 
