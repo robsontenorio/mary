@@ -111,7 +111,7 @@ class Tags extends Component
                     @click="focus()"
 
                     {{
-                        $attributes->except('wire:model')->class([
+                        $attributes->except(['wire:model', 'wire:model.live'])->class([
                             "input input-bordered input-primary w-full h-fit pr-16 pt-1.5 pb-1 min-h-[47px] inline-block cursor-pointer relative",
                             'border border-dashed' => $isReadonly(),
                             'input-error' => $errors->has($modelName()),
