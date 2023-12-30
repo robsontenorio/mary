@@ -83,6 +83,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('mary-icon', Icon::class);
         Blade::component('mary-input', Input::class);
         Blade::component('mary-list-item', ListItem::class);
+        Blade::component('mary-modal', Modal::class);
         Blade::component('mary-menu', Menu::class);
         Blade::component('mary-menu-item', MenuItem::class);
         Blade::component('mary-header', Header::class);

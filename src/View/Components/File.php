@@ -25,6 +25,7 @@ class File extends Component
         public ?string $cropTitleText = "Edit image",
         public ?string $cropCancelText = "Cancel",
         public ?string $cropSaveText = "Save",
+        public ?array $cropConfig = []
 
     ) {
         $this->uuid = "mary" . md5(serialize($this));
@@ -37,6 +38,15 @@ class File extends Component
         return $this->attributes->has('multiple') ? "$name.*" : $name;
     }
 
+    public function cropSetup(): string
+    {
+        return json_encode(array_merge([
+            'autoCropArea' => 1,
+            'viewMode' => 1,
+            'dragMode' => 'move'
+        ], $this->cropConfig));
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'HTML'
@@ -44,13 +54,23 @@ class File extends Component
                     x-data="{
                         progress: 0,
                         cropper: null,
+                        justCropped: false,
                         fileChanged: false,
-                        imageJustCropped: false,
-                        uploadFinished: false,
+                        imagePreview: null,
+                        imageCrop: null,
+                        originalImageUrl: null,
                         cropAfterChange: {{ json_encode($cropAfterChange) }},
                         file: @entangle($attributes->wire('model')),
                         init () {
+                            this.imagePreview = this.$refs.preview?.querySelector('img')
+                            this.imageCrop = this.$refs.crop?.querySelector('img')
+                            this.originalImageUrl = this.imagePreview?.src
 
+                            this.$watch('progress', value => {
+                                if (value == 100 && this.cropAfterChange && !this.justCropped) {
+                                    this.crop()
+                                }
+                            })
                         },
                         get processing () {
                             return this.progress > 0 && this.progress < 100
@@ -64,40 +84,40 @@ class File extends Component
                                 return
                             }
 
-                            $refs.crop.querySelector('img').addEventListener('load', (event) => {
-                                if (event.target.complete) {
-                                    this.$dispatch('image-reloaded')
-                                }
-                            })
-
                             this.$refs.file.click()
                         },
-                        cropAfterReload () {
-                            if (this.fileChanged && this.uploadFinished && !this.imageJustCropped){
-                                this.crop()
+                        refreshImage() {
+                            this.progress = 1
+                            this.justCropped = false
+
+                            if (this.imagePreview?.src) {
+                                this.imagePreview.src = URL.createObjectURL(this.$refs.file.files[0])
+                                this.imageCrop.src = this.imagePreview.src
                             }
                         },
                         crop() {
                             $refs.maryCrop.showModal()
                             this.cropper?.destroy()
-                            let image = $refs.crop.querySelector('img')
 
-                            this.cropper = new Cropper(image, {
-                                autoCropArea: 1,
-                                viewMode: 1
-                            });
+                            this.cropper = new Cropper(this.imageCrop, {{ $cropSetup() }});
                         },
                         revert() {
-                             $wire.$removeUpload('{{ $attributes->wire('model')->value }}', this.file.split('livewire-file:').pop())
+                             $wire.$removeUpload('{{ $attributes->wire('model')->value }}', this.file.split('livewire-file:').pop(), () => {
+                                this.imagePreview.src = this.originalImageUrl
+                             })
                         },
                         async save() {
                             $refs.maryCrop.close();
-                            this.imageJustCropped = true
-                            this.fileChanged = false
+
+                            this.progress = 1
+                            this.justCropped = true
+
+                            this.imagePreview.src = this.cropper.getCroppedCanvas().toDataURL()
+                            this.imageCrop.src = this.imagePreview.src
 
                             this.cropper.getCroppedCanvas().toBlob((blob) => {
                                 @this.upload('{{ $attributes->wire('model')->value }}', blob,
-                                    (uploadedFilename) => {   },
+                                    (uploadedFilename) => {  },
                                     (error) => {  },
                                     (event) => { this.progress = event.detail.progress }
                                 )
@@ -105,9 +125,9 @@ class File extends Component
                         }
                      }"
 
-                    x-on:livewire-upload-progress="progress = $event.detail.progress; console.log($event.detail.progress)"
-                    x-on:livewire-upload-finish="uploadFinished = true; imageJustCropped = false; console.log('finished')"
-                    x-on:image-reloaded="cropAfterReload()"
+                    x-on:livewire-upload-progress="progress = $event.detail.progress;"
+
+                    {{ $attributes->whereStartsWith('class') }}
                 >
                     <!-- STANDARD LABEL -->
                     @if($label)
@@ -115,9 +135,10 @@ class File extends Component
                     @endif
 
                     <!-- PROGRESS BAR  -->
-                    @if(! $hideProgress)
+                    @if(! $hideProgress && $slot->isEmpty())
                         <div class="h-1 -mt-5 mb-5">
                             <progress
+                                x-cloak
                                 :class="!processing && 'hidden'"
                                 :value="progress"
                                 max="100"
@@ -130,10 +151,10 @@ class File extends Component
                         id="{{ $uuid }}"
                         type="file"
                         x-ref="file"
-                        @change="fileChanged = true"
+                        @change="refreshImage()"
 
                         {{
-                            $attributes->class([
+                            $attributes->whereDoesntStartWith('class')->class([
                                 "file-input file-input-bordered file-input-primary",
                                 "hidden" => $slot->isNotEmpty()
                             ])
@@ -142,11 +163,24 @@ class File extends Component
 
                     @if ($slot->isNotEmpty())
                         <!-- PREVIEW AREA -->
-                        <div class="relative flex" :class="processing && 'opacity-50'">
-                            <div class="cursor-pointer hover:scale-105 transition-all tooltip" data-tip="{{ $changeText }}" @click="change()">
+                        <div x-ref="preview" class="relative flex">
+                            <div
+                                wire:ignore
+                                @click="change()"
+                                :class="processing && 'opacity-50 pointer-events-none'"
+                                class="cursor-pointer hover:scale-105 transition-all tooltip"
+                                data-tip="{{ $changeText }}"
+                            >
                                 {{ $slot }}
                             </div>
-                            <div :class="processing && 'loading loading-spinner absolute top-5 left-5'"></div>
+                            <!-- PROGRESS -->
+                            <div
+                                x-cloak
+                                :style="`--value:${progress}; --size:1.5rem; --thickness: 4px;`"
+                                :class="!processing && 'hidden'"
+                                class="radial-progress text-success absolute top-5 left-5 bg-neutral"
+                                role="progressbar"
+                            ></div>
                         </div>
 
                         <!-- BUTTONS -->
@@ -159,15 +193,14 @@ class File extends Component
                         @endif
 
                         <!-- CROP MODAL -->
-                        <div @click.prevent="" x-ref="crop">
-                            <!-- TODO: add x-mary-modal -->
-                            <x-modal id="maryCrop{{ $uuid }}" x-ref="maryCrop" :title="$cropTitleText" separator class="backdrop-blur-sm" persistent @keydown.window.esc.prevent="">
-                                {{ $slot }}
+                        <div @click.prevent="" x-ref="crop" wire:ignore>
+                            <x-mary-modal id="maryCrop{{ $uuid }}" x-ref="maryCrop" :title="$cropTitleText" separator class="backdrop-blur-sm" persistent @keydown.window.esc.prevent="">
+                                <img src="#" />
                                 <x-slot:actions>
                                     <x-button :label="$cropCancelText" @click="close()" />
                                     <x-button :label="$cropSaveText" class="btn-primary" @click="save()" ::disabled="processing" />
                                 </x-slot:actions>
-                            </x-modal>
+                            </x-mary-modal>
                         </div>
                     @endif
 
