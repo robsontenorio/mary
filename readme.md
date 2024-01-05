@@ -65,3 +65,9 @@ Start dev
 ```bash
 yarn dev
 ```
+
+
+## License
+<a name="license"></a>
+
+Livewire is open-sourced software licensed under the [MIT license](LICENSE.md).
