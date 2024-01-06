@@ -97,13 +97,14 @@ class ImageLibrary extends Component
                             this.cropper = new Cropper(this.imageCrop, {{ $cropSetup() }});
                         },
                         removeMedia(uuid, path){
-                            $wire.removeMedia(uuid, '{{ $modelName() }}', '{{ $mediaName() }}', path)
+                            this.progress = 99
+                            $wire.removeMedia(uuid, '{{ $modelName() }}', '{{ $mediaName() }}', path).then(() => this.progress = 100)
                         },
                         refreshMediaOrder(order){
                             $wire.refreshMediaOrder(order, '{{ $mediaName() }}')
                         },
                         refreshMediaSources(){
-                            this.processing = 99
+                            this.progress = 99
                             $wire.refreshMediaSources('{{ $modelName() }}', '{{ $mediaName() }}').then(x => this.progress = 100)
                         },
                         async save() {
@@ -114,13 +115,13 @@ class ImageLibrary extends Component
                                 @this.upload(this.croppingId, blob,
                                     (uploadedFilename) => { this.refreshMediaSources() },
                                     (error) => {  },
-                                    (event) => { this.progress = event.detail.progress }
+                                    (event) => { this.progress = event.detail.progress - 1 }
                                 )
                             })
                         }
                      }"
 
-                    x-on:livewire-upload-progress="progress = $event.detail.progress;"
+                    x-on:livewire-upload-progress="progress = $event.detail.progress - 1;"
                     x-on:livewire-upload-finish="refreshMediaSources()"
 
 
@@ -169,8 +170,8 @@ class ImageLibrary extends Component
 
                                     <!-- ACTIONS -->
                                     <div class="absolute flex flex-col gap-2 top-3 left-3 cursor-pointer  p-2 rounded-lg">
-                                        <x-mary-button @click="removeMedia('{{ $image['uuid'] }}', '{{ $image['path'] }}')"  icon="o-x-circle" :tooltip="$removeText" ::disabled="processing" @class(["btn-sm btn-ghost btn-circle  "]) />
-                                        <x-mary-button @click="crop('image-{{ $modelName().'.'.$key  }}-{{ $uuid }}')" icon="o-scissors"  :tooltip="$cropText" ::disabled="!files || processing"  @class(["btn-sm btn-ghost btn-circle "]) />
+                                        <x-mary-button @click="removeMedia('{{ $image['uuid'] }}', '{{ $image['path'] }}')"  icon="o-x-circle" :tooltip="$removeText"  class="btn-sm btn-ghost btn-circle" />
+                                        <x-mary-button @click="crop('image-{{ $modelName().'.'.$key  }}-{{ $uuid }}')" icon="o-scissors" :tooltip="$cropText"  class="btn-sm btn-ghost btn-circle" />
                                     </div>
                                 </div>
                             @endforeach
@@ -198,18 +199,18 @@ class ImageLibrary extends Component
 
                     <!-- PROGRESS BAR  -->
                     @if(! $hideProgress && $slot->isEmpty())
-                        <div class="h-1 -mt-5 mb-5">
+                        <div class="h-1 mb-1">
                             <progress
                                 x-cloak
                                 :class="!processing && 'hidden'"
                                 :value="progress"
                                 max="100"
-                                class="progress progress-success h-1 w-56"></progress>
+                                class="progress progress-success h-1 w-full"></progress>
                         </div>
                     @endif
 
                     <!-- ADD FILES -->
-                    <div @click="$refs.files.click()" class="btn btn-block mt-3 ">
+                    <div @click="$refs.files.click()" class="btn btn-block mt-3" :class="processing && 'opacity-50 pointer-events-none'">
                         <x-mary-icon name="o-plus-circle" label="{{ $addFilesText }}" />
                     </div>
 
