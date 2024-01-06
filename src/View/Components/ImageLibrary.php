@@ -37,9 +37,9 @@ class ImageLibrary extends Component
         return $this->attributes->wire('model');
     }
 
-    public function mediaName(): ?string
+    public function libraryName(): ?string
     {
-        return $this->attributes->wire('media');
+        return $this->attributes->wire('library');
     }
 
     public function validationMessage(string $message): string
@@ -102,14 +102,14 @@ class ImageLibrary extends Component
                         },
                         removeMedia(uuid, path){
                             this.indeterminate = true
-                            $wire.removeMedia(uuid, '{{ $modelName() }}', '{{ $mediaName() }}', path).then(() => this.indeterminate = false)
+                            $wire.removeMedia(uuid, '{{ $modelName() }}', '{{ $libraryName() }}', path).then(() => this.indeterminate = false)
                         },
                         refreshMediaOrder(order){
-                            $wire.refreshMediaOrder(order, '{{ $mediaName() }}')
+                            $wire.refreshMediaOrder(order, '{{ $libraryName() }}')
                         },
                         refreshMediaSources(){
                             this.indeterminate = true
-                            $wire.refreshMediaSources('{{ $modelName() }}', '{{ $mediaName() }}').then(() => this.indeterminate = false)
+                            $wire.refreshMediaSources('{{ $modelName() }}', '{{ $libraryName() }}').then(() => this.indeterminate = false)
                         },
                         async save() {
                             $refs.maryCropModal.close();
@@ -148,14 +148,13 @@ class ImageLibrary extends Component
                         >
                             @foreach($preview as $key => $image)
                                 <div class="relative border-b-primary border-b border-dotted last:border-none cursor-move hover:bg-base-200/50" data-id="{{ $image['uuid'] }}">
-                                    <div wire:key="preview-{{ $image['uuid'] }}" class="py-2 pl-16 pr-10">
+                                    <div wire:key="preview-{{ $image['uuid'] }}" class="py-2 pl-16 pr-10 tooltip" data-tip="{{ $changeText }}">
                                         <!-- IMAGE -->
                                         <img
                                             src="{{ $image['path'] }}"
                                             class="h-24 cursor-pointer border-2 rounded-lg hover:scale-105 transition-all ease-in-out"
                                             @click="document.getElementById('file-{{ $uuid}}-{{ $key }}').click()"
-                                            id="image-{{ $modelName().'.'.$key  }}-{{ $uuid }}"
-                                            />
+                                            id="image-{{ $modelName().'.'.$key  }}-{{ $uuid }}" />
 
                                         <!-- VALIDATION -->
                                          @error($modelName().'.'.$key)
@@ -229,7 +228,7 @@ class ImageLibrary extends Component
 
                     <!-- ERROR -->
                     @if (! $hideErrors)
-                        @error($mediaName())
+                        @error($libraryName())
                             <div class="text-red-500 label-text-alt p-1 pt-2">{{ $message }}</div>
                         @enderror
                     @endif

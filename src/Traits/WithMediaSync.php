@@ -9,10 +9,10 @@ use Str;
 trait WithMediaSync
 {
     // Remove media
-    public function removeMedia(string $uuid, string $filesModelName, string $preview, string $path): void
+    public function removeMedia(string $uuid, string $filesModelName, string $library, string $path): void
     {
-        // Updates preview
-        $this->{$preview} = $this->{$preview}->filter(fn($image) => $image['uuid'] != $uuid);
+        // Updates library
+        $this->{$library} = $this->{$library}->filter(fn($image) => $image['uuid'] != $uuid);
 
         // Remove file
         $name = str($path)->after('preview-file/')->before('?expires')->toString();
@@ -20,21 +20,21 @@ trait WithMediaSync
     }
 
     // Set order
-    public function refreshMediaOrder(array $order, string $preview): void
+    public function refreshMediaOrder(array $order, string $library): void
     {
-        $this->{$preview} = $this->{$preview}->sortBy(function ($item) use ($order) {
+        $this->{$library} = $this->{$library}->sortBy(function ($item) use ($order) {
             return array_search($item['uuid'], $order);
         });
     }
 
     // Bind temporary files with respective previews and replace existing ones, if necessary
-    public function refreshMediaSources(string $filesModelName, string $previewsName)
+    public function refreshMediaSources(string $filesModelName, string $library)
     {
         // New files area
         foreach ($this->{$filesModelName}['*'] ?? [] as $key => $file) {
-            $this->{$previewsName} = $this->{$previewsName}->add(['uuid' => Str::uuid()->toString(), 'path' => $file->temporaryUrl()]);
+            $this->{$library} = $this->{$library}->add(['uuid' => Str::uuid()->toString(), 'path' => $file->temporaryUrl()]);
 
-            $key = $this->{$previewsName}->keys()->last();
+            $key = $this->{$library}->keys()->last();
             $this->{$filesModelName}[$key] = $file;
         }
 
@@ -43,14 +43,16 @@ trait WithMediaSync
 
         //Replace existing files
         foreach ($this->{$filesModelName} as $key => $file) {
-            $this->{$previewsName} = $this->{$previewsName}->replace([
+            $this->{$library} = $this->{$library}->replace([
                 $key => ['uuid' => Str::uuid()->toString(), 'path' => $file->temporaryUrl()]
             ]);
         }
+
+        $this->validateOnly($filesModelName . '.*');
     }
 
     // Storage files into permanent area and updates the model with fresh sources
-    public function syncMedia(Model $model, mixed $files, Collection $previews, string $storage_subpath = '', $model_field = 'library', string $visibility = 'public'): void
+    public function syncMedia(Model $model, mixed $files, Collection $library, string $storage_subpath = '', $model_field = 'library', string $visibility = 'public'): void
     {
         $uploads = collect();
 
@@ -60,7 +62,7 @@ trait WithMediaSync
         }
 
         // Replace temporary sources for permanent sources
-        $images = $previews
+        $images = $library
             ->map(function ($item) use ($uploads) {
                 $upload = $uploads->filter(function ($upload) use ($item) {
                     return str($item['path'])->contains($upload['filename']);
