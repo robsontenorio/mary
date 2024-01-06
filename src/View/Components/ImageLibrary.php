@@ -63,21 +63,18 @@ class ImageLibrary extends Component
                     x-data="{
                         progress: 0,
                         cropper: null,
-                        justCropped: false,
-                        fileChanged: false,
-                        imagePreview: null,
                         imageCrop: null,
+                        croppingId: null,
                         files: @entangle($modelName()),
 
                         init () {
-                            this.imagePreview = this.$refs.preview?.querySelector('img')
                             this.imageCrop = this.$refs.crop?.querySelector('img')
                         },
                         get processing () {
                             return this.progress > 0 && this.progress < 100
                         },
                         close() {
-                            $refs.maryCrop.close()
+                            $refs.maryCropModal.close()
                             this.cropper?.destroy()
                         },
                         change() {
@@ -90,9 +87,12 @@ class ImageLibrary extends Component
                         refreshImage() {
 
                         },
-                        crop() {
-                            $refs.maryCrop.showModal()
+                        crop(id) {
+                            $refs.maryCropModal.showModal()
+
                             this.cropper?.destroy()
+                            this.croppingId = id.split('-')[1]
+                            this.imageCrop.src = document.getElementById(id).src
 
                             this.cropper = new Cropper(this.imageCrop, {{ $cropSetup() }});
                         },
@@ -107,20 +107,12 @@ class ImageLibrary extends Component
                             $wire.refreshMediaSources('{{ $modelName() }}', '{{ $mediaName() }}').then(x => this.progress = 100)
                         },
                         async save() {
-                            $refs.maryCrop.close();
-
+                            $refs.maryCropModal.close();
                             this.progress = 1
-                            this.justCropped = true
-
-                            this.imagePreview.src = this.cropper.getCroppedCanvas().toDataURL()
-                            this.imageCrop.src = this.imagePreview.src
-                            this.file.files[0] = this.cropper.getCroppedCanvas().toDataURL()
-
-                            return
 
                             this.cropper.getCroppedCanvas().toBlob((blob) => {
-                                @this.upload('{{ $modelName() }}', blob,
-                                    (uploadedFilename) => {  },
+                                @this.upload(this.croppingId, blob,
+                                    (uploadedFilename) => { this.refreshMediaSources() },
                                     (error) => {  },
                                     (event) => { this.progress = event.detail.progress }
                                 )
@@ -153,7 +145,12 @@ class ImageLibrary extends Component
                                 <div class="relative border-b-primary border-b border-dotted last:border-none cursor-move hover:bg-base-200/50" data-id="{{ $image['uuid'] }}">
                                     <div wire:key="preview-{{ $image['uuid'] }}" class="py-2 pl-16 pr-10">
                                         <!-- IMAGE -->
-                                        <img src="{{ $image['path'] }}" class="h-24 cursor-pointer border-2 rounded-lg hover:scale-105 transition-all" @click="document.getElementById('file-{{ $uuid}}-{{ $key }}').click()" />
+                                        <img
+                                            src="{{ $image['path'] }}"
+                                            class="h-24 cursor-pointer border-2 rounded-lg hover:scale-105 transition-all ease-in-out"
+                                            @click="document.getElementById('file-{{ $uuid}}-{{ $key }}').click()"
+                                            id="image-{{ $modelName().'.'.$key  }}-{{ $uuid }}"
+                                            />
 
                                         <!-- VALIDATION -->
                                          @error($modelName().'.'.$key)
@@ -173,7 +170,7 @@ class ImageLibrary extends Component
                                     <!-- ACTIONS -->
                                     <div class="absolute flex flex-col gap-2 top-3 left-3 cursor-pointer  p-2 rounded-lg">
                                         <x-mary-button @click="removeMedia('{{ $image['uuid'] }}', '{{ $image['path'] }}')"  icon="o-x-circle" :tooltip="$removeText" ::disabled="processing" @class(["btn-sm btn-ghost btn-circle  "]) />
-                                        <x-mary-button @click="crop()" icon="o-scissors"  :tooltip="$cropText" ::disabled="!files || processing"  @class(["btn-sm btn-ghost btn-circle "]) />
+                                        <x-mary-button @click="crop('image-{{ $modelName().'.'.$key  }}-{{ $uuid }}')" icon="o-scissors"  :tooltip="$cropText" ::disabled="!files || processing"  @class(["btn-sm btn-ghost btn-circle "]) />
                                     </div>
                                 </div>
                             @endforeach
@@ -190,7 +187,7 @@ class ImageLibrary extends Component
 
                     <!-- CROP MODAL -->
                     <div @click.prevent="" x-ref="crop" wire:ignore>
-                            <x-mary-modal id="maryCrop{{ $uuid }}" x-ref="maryCrop" :title="$cropTitleText" separator class="backdrop-blur-sm" persistent @keydown.window.esc.prevent="">
+                            <x-mary-modal id="maryCropModal{{ $uuid }}" x-ref="maryCropModal" :title="$cropTitleText" separator class="backdrop-blur-sm" persistent @keydown.window.esc.prevent="">
                                 <img src="#" />
                                 <x-slot:actions>
                                     <x-button :label="$cropCancelText" @click="close()" />
