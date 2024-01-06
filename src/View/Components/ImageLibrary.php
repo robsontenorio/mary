@@ -62,13 +62,17 @@ class ImageLibrary extends Component
                  <div
                     x-data="{
                         progress: 0,
+                        indeterminate: false,
                         cropper: null,
                         imageCrop: null,
                         croppingId: null,
-                        files: @entangle($modelName()),
 
                         init () {
                             this.imageCrop = this.$refs.crop?.querySelector('img')
+
+                            this.$watch('progress', value => {
+                                this.indeterminate = value > 99
+                            })
                         },
                         get processing () {
                             return this.progress > 0 && this.progress < 100
@@ -97,15 +101,15 @@ class ImageLibrary extends Component
                             this.cropper = new Cropper(this.imageCrop, {{ $cropSetup() }});
                         },
                         removeMedia(uuid, path){
-                            this.progress = 99
-                            $wire.removeMedia(uuid, '{{ $modelName() }}', '{{ $mediaName() }}', path).then(() => this.progress = 100)
+                            this.indeterminate = true
+                            $wire.removeMedia(uuid, '{{ $modelName() }}', '{{ $mediaName() }}', path).then(() => this.indeterminate = false)
                         },
                         refreshMediaOrder(order){
                             $wire.refreshMediaOrder(order, '{{ $mediaName() }}')
                         },
                         refreshMediaSources(){
-                            this.progress = 99
-                            $wire.refreshMediaSources('{{ $modelName() }}', '{{ $mediaName() }}').then(x => this.progress = 100)
+                            this.indeterminate = true
+                            $wire.refreshMediaSources('{{ $modelName() }}', '{{ $mediaName() }}').then(() => this.indeterminate = false)
                         },
                         async save() {
                             $refs.maryCropModal.close();
@@ -115,13 +119,13 @@ class ImageLibrary extends Component
                                 @this.upload(this.croppingId, blob,
                                     (uploadedFilename) => { this.refreshMediaSources() },
                                     (error) => {  },
-                                    (event) => { this.progress = event.detail.progress - 1 }
+                                    (event) => { this.progress = event.detail.progress;  }
                                 )
                             })
                         }
                      }"
 
-                    x-on:livewire-upload-progress="progress = $event.detail.progress - 1;"
+                    x-on:livewire-upload-progress="progress = $event.detail.progress;"
                     x-on:livewire-upload-finish="refreshMediaSources()"
 
 
@@ -134,8 +138,8 @@ class ImageLibrary extends Component
 
                     <!-- PREVIEW AREA -->
                     <div
-                        :class="processing && 'opacity-50 pointer-events-none'"
-                        @class(["relative", "hidden" => count($preview) == 0])
+                        :class="(processing || indeterminate) && 'opacity-50 pointer-events-none'"
+                        @class(["relative", "hidden" => $preview->count() == 0])
                     >
                         <div
                             x-data="{ sortable: null }"
@@ -165,6 +169,7 @@ class ImageLibrary extends Component
                                             wire:model="{{ $modelName().'.'.$key  }}"
                                             accept="{{ $attributes->get('accept') ?? $mimes }}"
                                             class="hidden"
+                                            @change="progress = 1"
                                             />
                                     </div>
 
@@ -176,14 +181,6 @@ class ImageLibrary extends Component
                                 </div>
                             @endforeach
                         </div>
-
-                        <!-- PROGRESS -->
-                        <div
-                            x-cloak
-                            :style="`--value:${progress}; --size:1.5rem; --thickness: 4px;`"
-                            :class="!processing && 'hidden'"
-                            class="radial-progress text-success absolute top-5 left-5 bg-neutral"
-                            role="progressbar"></div>
                     </div>
 
                     <!-- CROP MODAL -->
@@ -192,25 +189,30 @@ class ImageLibrary extends Component
                                 <img src="#" />
                                 <x-slot:actions>
                                     <x-button :label="$cropCancelText" @click="close()" />
-                                    <x-button :label="$cropSaveText" class="btn-primary" @click="save()" ::disabled="processing" />
+                                    <x-button :label="$cropSaveText" class="btn-primary" @click="save()" />
                                 </x-slot:actions>
                             </x-mary-modal>
                         </div>
 
                     <!-- PROGRESS BAR  -->
                     @if(! $hideProgress && $slot->isEmpty())
-                        <div class="h-1 mb-1">
+                        <div class="h-1 -mt-2 mb-2">
                             <progress
                                 x-cloak
                                 :class="!processing && 'hidden'"
                                 :value="progress"
                                 max="100"
                                 class="progress progress-success h-1 w-full"></progress>
+
+                            <progress
+                                x-cloak
+                                :class="!indeterminate && 'hidden'"
+                                class="progress progress-success h-1 w-full"></progress>
                         </div>
                     @endif
 
                     <!-- ADD FILES -->
-                    <div @click="$refs.files.click()" class="btn btn-block mt-3" :class="processing && 'opacity-50 pointer-events-none'">
+                    <div @click="$refs.files.click()" class="btn btn-block mt-2" :class="(processing || indeterminate) && 'opacity-50 pointer-events-none'">
                         <x-mary-icon name="o-plus-circle" label="{{ $addFilesText }}" />
                     </div>
 
@@ -222,6 +224,7 @@ class ImageLibrary extends Component
                         class="file-input file-input-bordered file-input-primary hidden"
                         wire:model="{{ $modelName() }}.*"
                         accept="{{ $attributes->get('accept') ?? $mimes }}"
+                        @change="progress = 1"
                         multiple />
 
                     <!-- ERROR -->
