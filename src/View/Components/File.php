@@ -15,16 +15,11 @@ class File extends Component
         public ?string $hint = null,
         public ?bool $hideErrors = false,
         public ?bool $hideProgress = false,
-        public ?bool $changeButton = false,
-        public ?bool $cropButton = false,
-        public ?bool $revertButton = false,
         public ?bool $cropAfterChange = false,
         public ?string $changeText = "Change",
-        public ?string $cropText = "Crop",
-        public ?string $revertText = "Revert",
-        public ?string $cropTitleText = "Edit image",
+        public ?string $cropTitleText = "Crop image",
         public ?string $cropCancelText = "Cancel",
-        public ?string $cropSaveText = "Save",
+        public ?string $cropSaveText = "Crop",
         public ?array $cropConfig = []
 
     ) {
@@ -33,9 +28,7 @@ class File extends Component
 
     public function modelName(): ?string
     {
-        $name = $this->attributes->whereStartsWith('wire:model')->first();
-
-        return $this->attributes->has('multiple') ? "$name.*" : $name;
+        return $this->attributes->wire('model');
     }
 
     public function cropSetup(): string
@@ -183,15 +176,6 @@ class File extends Component
                             ></div>
                         </div>
 
-                        <!-- BUTTONS -->
-                        @if($changeButton || $cropButton || $revertButton)
-                            <div class="flex gap-3 my-3">
-                                <x-mary-button @click="change()"  icon="o-pencil" :tooltip="$changeText" ::disabled="processing" @class(["btn-sm ", "!hidden" => !$changeButton]) />
-                                <x-mary-button @click="crop()" icon="o-scissors"  :tooltip="$cropText" ::disabled="!file || processing"  @class(["btn-sm ", "!hidden" => !$cropButton]) />
-                                <x-mary-button @click="revert()" icon="o-arrow-uturn-left" :tooltip="$revertText"  ::disabled="!file || processing" @class(["btn-sm ", "!hidden" => !$revertButton]) />
-                            </div>
-                        @endif
-
                         <!-- CROP MODAL -->
                         <div @click.prevent="" x-ref="crop" wire:ignore>
                             <x-mary-modal id="maryCrop{{ $uuid }}" x-ref="maryCrop" :title="$cropTitleText" separator class="backdrop-blur-sm" persistent @keydown.window.esc.prevent="">
@@ -206,8 +190,14 @@ class File extends Component
 
                     <!-- ERROR -->
                     @if (! $hideErrors)
+                        <!-- SINGLE -->
                         @error($modelName())
-                            <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
+                            <div class="text-red-500 label-text-alt p-1 pt-2">{{ $message }}</div>
+                        @enderror
+
+                        <!-- MULTIPLE -->
+                        @error($modelName().'.*')
+                            <div class="text-red-500 label-text-alt p-1 pt-2">{{ $message }}</div>
                         @enderror
                     @endif
 
