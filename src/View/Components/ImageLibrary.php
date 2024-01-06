@@ -11,6 +11,8 @@ class ImageLibrary extends Component
 {
     public string $uuid;
 
+    public string $mimes = 'image/png, image/jpeg';
+
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
@@ -22,7 +24,7 @@ class ImageLibrary extends Component
         public ?string $cropTitleText = "Crop image",
         public ?string $cropCancelText = "Cancel",
         public ?string $cropSaveText = "Crop",
-        public ?string $addFilesText = "Add files",
+        public ?string $addFilesText = "Add images",
         public ?array $cropConfig = [],
         public Collection $preview = new Collection(),
 
@@ -38,6 +40,11 @@ class ImageLibrary extends Component
     public function mediaName(): ?string
     {
         return $this->attributes->wire('media');
+    }
+
+    public function validationMessage(string $message): string
+    {
+        return str($message)->after('field');
     }
 
     public function cropSetup(): string
@@ -132,18 +139,6 @@ class ImageLibrary extends Component
                         <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
                     @endif
 
-                    <!-- PROGRESS BAR  -->
-                    @if(! $hideProgress && $slot->isEmpty())
-                        <div class="h-1 -mt-5 mb-5">
-                            <progress
-                                x-cloak
-                                :class="!processing && 'hidden'"
-                                :value="progress"
-                                max="100"
-                                class="progress progress-success h-1 w-56"></progress>
-                        </div>
-                    @endif
-
                     <!-- PREVIEW AREA -->
                     <div
                         :class="processing && 'opacity-50 pointer-events-none'"
@@ -155,14 +150,14 @@ class ImageLibrary extends Component
                             class="border border-dotted border-primary rounded-lg"
                         >
                             @foreach($preview as $key => $image)
-                                <div class="relative border-b-primary border-b border-dotted cursor-move hover:bg-base-200/50" data-id="{{ $image['uuid'] }}">
-                                    <div wire:key="preview-{{ $image['uuid'] }}" class="py-5 pl-16 pr-10">
+                                <div class="relative border-b-primary border-b border-dotted last:border-none cursor-move hover:bg-base-200/50" data-id="{{ $image['uuid'] }}">
+                                    <div wire:key="preview-{{ $image['uuid'] }}" class="py-2 pl-16 pr-10">
                                         <!-- IMAGE -->
                                         <img src="{{ $image['path'] }}" class="h-24 cursor-pointer border-2 rounded-lg hover:scale-105 transition-all" @click="document.getElementById('file-{{ $uuid}}-{{ $key }}').click()" />
 
                                         <!-- VALIDATION -->
                                          @error($modelName().'.'.$key)
-                                            <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
+                                            <div class="text-red-500 label-text-alt p-1">{{ $validationMessage($message) }}</div>
                                          @enderror
 
                                         <!-- HIDDEN FILE INPUT -->
@@ -170,7 +165,7 @@ class ImageLibrary extends Component
                                             type="file"
                                             id="file-{{ $uuid}}-{{ $key }}"
                                             wire:model="{{ $modelName().'.'.$key  }}"
-                                            accept="{{ $attributes->get('accept') }}"
+                                            accept="{{ $attributes->get('accept') ?? $mimes }}"
                                             class="hidden"
                                             />
                                     </div>
@@ -204,6 +199,17 @@ class ImageLibrary extends Component
                             </x-mary-modal>
                         </div>
 
+                    <!-- PROGRESS BAR  -->
+                    @if(! $hideProgress && $slot->isEmpty())
+                        <div class="h-1 -mt-5 mb-5">
+                            <progress
+                                x-cloak
+                                :class="!processing && 'hidden'"
+                                :value="progress"
+                                max="100"
+                                class="progress progress-success h-1 w-56"></progress>
+                        </div>
+                    @endif
 
                     <!-- ADD FILES -->
                     <div @click="$refs.files.click()" class="btn btn-block mt-3 ">
@@ -217,7 +223,7 @@ class ImageLibrary extends Component
                         x-ref="files"
                         class="file-input file-input-bordered file-input-primary hidden"
                         wire:model="{{ $modelName() }}.*"
-                        accept="{{ $attributes->get('accept') }}"
+                        accept="{{ $attributes->get('accept') ?? $mimes }}"
                         multiple />
 
                     <!-- ERROR -->
