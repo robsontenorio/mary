@@ -16,17 +16,13 @@ class ImageLibrary extends Component
         public ?string $hint = null,
         public ?bool $hideErrors = false,
         public ?bool $hideProgress = false,
-        public ?bool $changeButton = false,
-        public ?bool $cropButton = false,
-        public ?bool $revertButton = false,
-        public ?bool $cropAfterChange = false,
         public ?string $changeText = "Change",
         public ?string $cropText = "Crop",
-        public ?string $revertText = "Revert",
         public ?string $removeText = "Remove",
-        public ?string $cropTitleText = "Edit image",
+        public ?string $cropTitleText = "Crop image",
         public ?string $cropCancelText = "Cancel",
-        public ?string $cropSaveText = "Save",
+        public ?string $cropSaveText = "Crop",
+        public ?string $addFilesText = "Add files",
         public ?array $cropConfig = [],
         public Collection $preview = new Collection(),
 
@@ -64,21 +60,11 @@ class ImageLibrary extends Component
                         fileChanged: false,
                         imagePreview: null,
                         imageCrop: null,
-                        originalImageUrl: null,
-                        cropAfterChange: {{ json_encode($cropAfterChange) }},
                         files: @entangle($modelName()),
 
                         init () {
                             this.imagePreview = this.$refs.preview?.querySelector('img')
                             this.imageCrop = this.$refs.crop?.querySelector('img')
-                            this.originalImageUrl = this.imagePreview?.src
-
-                            this.$watch('progress', value => {
-                                if (value == 100 && this.cropAfterChange && !this.justCropped) {
-                                    this.crop()
-                                }
-                            })
-
                         },
                         get processing () {
                             return this.progress > 0 && this.progress < 100
@@ -221,7 +207,7 @@ class ImageLibrary extends Component
 
                     <!-- ADD FILES -->
                     <div @click="$refs.files.click()" class="btn btn-block mt-3 ">
-                        <x-mary-icon name="o-plus-circle" label="Add files" />
+                        <x-mary-icon name="o-plus-circle" label="{{ $addFilesText }}" />
                     </div>
 
                     <!-- MAIN FILE INPUT -->
@@ -232,11 +218,7 @@ class ImageLibrary extends Component
                         class="file-input file-input-bordered file-input-primary hidden"
                         wire:model="{{ $modelName() }}.*"
                         accept="{{ $attributes->get('accept') }}"
-
-                        @if($attributes->has('multiple'))
-                            multiple
-                        @endif
-                    />
+                        multiple />
 
                     <!-- ERROR -->
                     @if (! $hideErrors)
