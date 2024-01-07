@@ -11,11 +11,9 @@ class Tabs extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $selected = null,
-        public string $tabContainer = ''
+        public ?string $selected = null
     ) {
         $this->uuid = "mary" . md5(serialize($this));
-        $this->tabContainer = $this->uuid;
     }
 
     public function render(): View|Closure|string
@@ -23,21 +21,32 @@ class Tabs extends Component
         return <<<'HTML'
                     <div
                         x-data="{
-                            selected:
-                                @if($selected)
-                                    '{{ $selected }}'
-                                @else
-                                    @entangle($attributes->wire('model'))
-                                @endif
+                                tabs: [],
+                                selected:
+                                    @if($selected)
+                                        '{{ $selected }}'
+                                    @else
+                                        @entangle($attributes->wire('model'))
+                                    @endif
                         }"
-
-                        {{ $attributes->class(["tabs tabs-bordered flex overflow-x-auto"]) }}
+                        class="relative"
                     >
-                        {{ $slot }}
-                    </div>
-                    <hr/>
-                    <div id="{{ $tabContainer }}">
-                            <!-- tab contents will be teleported in here -->
+                        <!-- TAB LABELS -->
+                        <div class="border-b-2 border-b-base-200 flex overflow-x-auto">
+                            <template x-for="tab in tabs">
+                                <a
+                                    role="tab"
+                                    x-html="tab.label"
+                                    @click="selected = tab.name"
+                                    :class="(selected === tab.name) && 'border-b-2 border-b-gray-600 dark:border-b-gray-400'"
+                                    class="tab font-semibold border-b-2 border-b-base-300"></a>
+                            </template>
+                        </div>
+
+                        <!-- TAB CONTENT -->
+                        <div role="tablist" {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["tabs tabs-bordered block"]) }}>
+                            {{ $slot }}
+                        </div>
                     </div>
                 HTML;
     }
