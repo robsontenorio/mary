@@ -21,7 +21,9 @@ class Tab extends Component
 
     public function tabLabel(): string
     {
-        return Blade::render("<x-mary-icon name='" . $this->icon . "' class='mr-2' label='" . $this->label . "' />");
+        return $this->icon
+            ? Blade::render("<x-mary-icon name='" . $this->icon . "' class='mr-2' label='" . $this->label . "' />")
+            : $this->label;
     }
 
     public function render(): View|Closure|string
