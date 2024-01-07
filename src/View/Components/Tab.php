@@ -4,7 +4,7 @@ namespace Mary\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Component;
 
 class Tab extends Component
@@ -16,33 +16,25 @@ class Tab extends Component
         public ?string $label = null,
         public ?string $icon = null
     ) {
-        $this->uuid = Str::uuid();
+        $this->uuid = "mary" . md5(serialize($this));
+    }
+
+    public function tabLabel(): string
+    {
+        return Blade::render("<x-mary-icon name='" . $this->icon . "' class='mr-2' label='" . $this->label . "' />");
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                    @aware(['tabContainer' =>  ''])
                     <a
-                        @click="selected = '{{ $name }}'"
-                        class="tab tab-bordered flex-none font-semibold"
+                        class="hidden"
                         :class="{ 'tab-active': selected === '{{ $name }}' }"
-                        {{ $attributes->whereDoesntStartWith('class') }}
-                      >
+                        x-init="tabs.push({ name: '{{ $name }}', label: {{ json_encode($tabLabel()) }} })"
+                    ></a>
 
-                        @if($icon)
-                            <x-mary-icon :name="$icon" class="mr-2" />
-                        @endif
-
-                        {{ $label }}
-                    </a>
-
-                    <div wire:key="{{ $name }}-{{ rand() }}">
-                        <template x-teleport="#{{ $tabContainer }}">
-                            <div x-show="selected === '{{ $name }}'" {{ $attributes->class(['py-5']) }}>
-                                {{ $slot }}
-                            </div>
-                        </template>
+                    <div x-show="selected === '{{ $name }}'" role="tabpanel" {{ $attributes->class("tab-content py-5 px-1") }}>
+                        {{ $slot }}
                     </div>
                 HTML;
     }
