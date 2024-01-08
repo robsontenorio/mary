@@ -44,6 +44,8 @@ use Mary\View\Components\Radio;
 use Mary\View\Components\Select;
 use Mary\View\Components\Spotlight;
 use Mary\View\Components\Stat;
+use Mary\View\Components\Step;
+use Mary\View\Components\Steps;
 use Mary\View\Components\Tab;
 use Mary\View\Components\Table;
 use Mary\View\Components\Tabs;
@@ -131,6 +133,8 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'select', Select::class);
         Blade::component($prefix . 'spotlight', Spotlight::class);
         Blade::component($prefix . 'stat', Stat::class);
+        Blade::component($prefix . 'steps', Steps::class);
+        Blade::component($prefix . 'step', Step::class);
         Blade::component($prefix . 'table', Table::class);
         Blade::component($prefix . 'tab', Tab::class);
         Blade::component($prefix . 'tabs', Tabs::class);
