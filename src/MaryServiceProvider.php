@@ -49,6 +49,7 @@ use Mary\View\Components\Table;
 use Mary\View\Components\Tabs;
 use Mary\View\Components\Tags;
 use Mary\View\Components\Textarea;
+use Mary\View\Components\ThemeToggle;
 use Mary\View\Components\TimelineItem;
 use Mary\View\Components\Toast;
 use Mary\View\Components\Toggle;
@@ -136,6 +137,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'tags', Tags::class);
         Blade::component($prefix . 'textarea', Textarea::class);
         Blade::component($prefix . 'timeline-item', TimelineItem::class);
+        Blade::component($prefix . 'theme-toggle', ThemeToggle::class);
         Blade::component($prefix . 'toast', Toast::class);
         Blade::component($prefix . 'toggle', Toggle::class);
     }
