@@ -44,7 +44,7 @@ class ThemeToggle extends Component
                         @mary-toggle-theme.window="toggle()"
                         {{ $attributes->class("swap swap-rotate") }}
                     >
-                        <input type="checkbox" class="theme-controller" @click="toggle()" :value="theme" />
+                        <input type="checkbox" class="theme-controller opacity-0" @click="toggle()" :value="theme" />
                         <x-mary-icon x-ref="sun" name="o-sun" class="swap-on" />
                         <x-mary-icon x-ref="moon" name="o-moon" class="swap-off"  />
                     </label>
