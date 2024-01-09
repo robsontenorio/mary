@@ -27,6 +27,7 @@ use Mary\View\Components\Form;
 use Mary\View\Components\Header;
 use Mary\View\Components\Hr;
 use Mary\View\Components\Icon;
+use Mary\View\Components\ImageGallery;
 use Mary\View\Components\ImageLibrary;
 use Mary\View\Components\Input;
 use Mary\View\Components\ListItem;
@@ -116,6 +117,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'header', Header::class);
         Blade::component($prefix . 'hr', Hr::class);
         Blade::component($prefix . 'icon', Icon::class);
+        Blade::component($prefix . 'image-gallery', ImageGallery::class);
         Blade::component($prefix . 'image-library', ImageLibrary::class);
         Blade::component($prefix . 'input', Input::class);
         Blade::component($prefix . 'list-item', ListItem::class);
