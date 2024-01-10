@@ -4,6 +4,7 @@ namespace Mary\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Str;
 
 trait WithMediaSync
@@ -52,13 +53,23 @@ trait WithMediaSync
     }
 
     // Storage files into permanent area and updates the model with fresh sources
-    public function syncMedia(Model $model, mixed $files, Collection $library, string $storage_subpath = '', $model_field = 'library', string $visibility = 'public'): void
-    {
+    public function syncMedia(
+        Model $model,
+        mixed $files,
+        Collection $library,
+        string $storage_subpath = '',
+        $model_field = 'library',
+        string $visibility = 'public',
+        string $disk = 'public'
+    ): void {
         $uploads = collect();
 
         // Storage files
         foreach ($files as $file) {
-            $uploads->add(['url' => "/storage/" . $file->store($storage_subpath, $visibility), 'filename' => $file->getFilename()]);
+            $tmp = Storage::disk($disk)->putFile($storage_subpath, $file, $visibility);
+            $url = Storage::disk($disk)->url($tmp);
+
+            $uploads->add(['url' => $url, 'filename' => $file->getFilename()]);
         }
 
         // Replace temporary sources for permanent sources

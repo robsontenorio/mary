@@ -52,7 +52,8 @@ class ImageLibrary extends Component
         return json_encode(array_merge([
             'autoCropArea' => 1,
             'viewMode' => 1,
-            'dragMode' => 'move'
+            'dragMode' => 'move',
+            'checkCrossOrigin' => false,
         ], $this->cropConfig));
     }
 
@@ -185,7 +186,7 @@ class ImageLibrary extends Component
                     <!-- CROP MODAL -->
                     <div @click.prevent="" x-ref="crop" wire:ignore>
                             <x-mary-modal id="maryCropModal{{ $uuid }}" x-ref="maryCropModal" :title="$cropTitleText" separator class="backdrop-blur-sm" persistent @keydown.window.esc.prevent="">
-                                <img src="#" />
+                                <img src="#" crossOrigin="Anonymous" />
                                 <x-slot:actions>
                                     <x-button :label="$cropCancelText" @click="close()" />
                                     <x-button :label="$cropSaveText" class="btn-primary" @click="save()" />
