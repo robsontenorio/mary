@@ -16,6 +16,7 @@ class MenuItem extends Component
         public ?string $title = null,
         public ?string $icon = null,
         public ?string $link = null,
+        public ?string $route = null,
         public ?bool $external = false,
         public ?bool $noWireNavigate = false,
         public ?string $badge = null,
@@ -28,10 +29,31 @@ class MenuItem extends Component
 
     public function routeMatches(): bool
     {
-        if ($this->link == null) {
+        if ($this->link != null)
+        {
+            return $this->_linkMatches();
+        } elseif ($this->route != null)
+        {
+            return $this->_routeMatches();
+        } else {
             return false;
         }
+    }
 
+    private function _routeMatches(): bool
+    {
+        $routeName = $this->route;
+        $currentRouteName = Route::currentRouteName();
+
+        if ($routeName == $currentRouteName) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function _linkMatches(): bool
+    {
         $link = url($this->link ?? '');
         $route = url(request()->url());
 
@@ -39,8 +61,7 @@ class MenuItem extends Component
             return true;
         }
 
-        //return $this->link != '/' && Str::startsWith($route, $link);
-        return false;
+        return $this->link != '/' && Str::startsWith($route, $link);        
     }
 
     public function render(): View|Closure|string
@@ -57,8 +78,12 @@ class MenuItem extends Component
                             ])
                         }}
 
-                        @if($link)
+                        @if($link || $route)
+                            @if ($link)
                             href="{{ $link }}"
+                            @elseif ($route)
+                            href="{{ route($route) }}"
+                            @endif
 
                             @if($external)
                                 target="_blank"
