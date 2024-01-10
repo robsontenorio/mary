@@ -101,9 +101,9 @@ class ImageLibrary extends Component
 
                             this.cropper = new Cropper(this.imageCrop, {{ $cropSetup() }});
                         },
-                        removeMedia(uuid, path){
+                        removeMedia(uuid, url){
                             this.indeterminate = true
-                            $wire.removeMedia(uuid, '{{ $modelName() }}', '{{ $libraryName() }}', path).then(() => this.indeterminate = false)
+                            $wire.removeMedia(uuid, '{{ $modelName() }}', '{{ $libraryName() }}', url).then(() => this.indeterminate = false)
                         },
                         refreshMediaOrder(order){
                             $wire.refreshMediaOrder(order, '{{ $libraryName() }}')
@@ -152,7 +152,7 @@ class ImageLibrary extends Component
                                     <div wire:key="preview-{{ $image['uuid'] }}" class="py-2 pl-16 pr-10 tooltip" data-tip="{{ $changeText }}">
                                         <!-- IMAGE -->
                                         <img
-                                            src="{{ $image['path'] }}"
+                                            src="{{ $image['url'] }}"
                                             class="h-24 cursor-pointer border-2 rounded-lg hover:scale-105 transition-all ease-in-out"
                                             @click="document.getElementById('file-{{ $uuid}}-{{ $key }}').click()"
                                             id="image-{{ $modelName().'.'.$key  }}-{{ $uuid }}" />
@@ -175,7 +175,7 @@ class ImageLibrary extends Component
 
                                     <!-- ACTIONS -->
                                     <div class="absolute flex flex-col gap-2 top-3 left-3 cursor-pointer  p-2 rounded-lg">
-                                        <x-mary-button @click="removeMedia('{{ $image['uuid'] }}', '{{ $image['path'] }}')"  icon="o-x-circle" :tooltip="$removeText"  class="btn-sm btn-ghost btn-circle" />
+                                        <x-mary-button @click="removeMedia('{{ $image['uuid'] }}', '{{ $image['url'] }}')"  icon="o-x-circle" :tooltip="$removeText"  class="btn-sm btn-ghost btn-circle" />
                                         <x-mary-button @click="crop('image-{{ $modelName().'.'.$key  }}-{{ $uuid }}')" icon="o-scissors" :tooltip="$cropText"  class="btn-sm btn-ghost btn-circle" />
                                     </div>
                                 </div>
