@@ -49,7 +49,7 @@ class ImageGallery extends Component
                                         $el.setAttribute('data-pswp-height', document.getElementById('image-{{ $uuid }}-{{ $loop->index }}').naturalHeight);
                                     "
                             >
-                                <img src="{{ $image }}" class="object-cover" id="image-{{ $uuid }}-{{ $loop->index }}" />
+                                <img src="{{ $image }}" class="object-cover hover:opacity-70" id="image-{{ $uuid }}-{{ $loop->index }}" />
                             </a>
                         @endforeach
                     </div>
