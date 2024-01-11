@@ -38,6 +38,7 @@ class ThemeToggle extends Component
                             toggle() {
                                 this.theme = this.theme == 'light' ? 'dark' : 'light'
                                 document.documentElement.setAttribute('data-theme', this.theme)
+                                document.documentElement.setAttribute('class', this.theme)
                                 this.$dispatch('theme-changed', this.theme)
                             }
                         }"
@@ -51,6 +52,7 @@ class ThemeToggle extends Component
                 </div>
                 <script>
                     document.documentElement.setAttribute("data-theme", localStorage.getItem("mary-theme")?.replaceAll("\"", ""))
+                    document.documentElement.setAttribute("class", localStorage.getItem("mary-theme")?.replaceAll("\"", ""))
                 </script>
             HTML;
     }
