@@ -22,7 +22,7 @@ class Tab extends Component
     public function tabLabel(): string
     {
         return $this->icon
-            ? Blade::render("<x-mary-icon name='" . $this->icon . "' class='mr-2' label='" . $this->label . "' />")
+            ? Blade::render("<x-mary-icon name='" . $this->icon . "' class='mr-2 whitespace-nowrap' label='" . $this->label . "' />")
             : $this->label;
     }
 
