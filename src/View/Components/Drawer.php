@@ -29,24 +29,41 @@ class Drawer extends Component
         return $this->id ?? $this->attributes?->wire('model')->value();
     }
 
-    public function closeAction(): string
+    public function modelName(): ?string
     {
-        return $this->attributes->has('wire:model') ? '$wire.' . $this->attributes->wire('model')->value() . ' = false' : '$refs.checkbox.checked  = false';
+        return $this->attributes->wire('model');
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div x-data @class(["drawer absolute z-50", "drawer-end" => $right])>
+                <div
+                    x-data="{
+                        open:
+                            @if($modelName())
+                                @entangle($modelName())
+                            @else
+                                false
+                            @endif
+                        ,
+                        close() {
+                            this.open = false
+                            $refs.checkbox.checked = false
+                        }
+                    }"
+
+                    x-trap="open" x-bind:inert="!open"
+                    @class(["drawer absolute z-50", "drawer-end" => $right])
+                >
                     <!-- Toggle visibility  -->
                     <input
                         id="{{ $id() }}"
+                        x-model="open"
                         x-ref="checkbox"
                         type="checkbox"
-                        class="drawer-toggle"
-                        {{ $attributes->wire('model') }} />
+                        class="drawer-toggle" />
 
-                    <div class="drawer-side">
+                    <div class="drawer-side" >
                         <!-- Overlay effect , click outside -->
                         <label for="{{ $id() }}" class="drawer-overlay"></label>
 
@@ -60,7 +77,7 @@ class Drawer extends Component
                         >
                             @if($withCloseButton)
                                 <x-slot:menu>
-                                    <x-mary-button icon="o-x-mark" class="btn-ghost btn-sm" @click="{{ $closeAction() }}" />
+                                    <x-mary-button icon="o-x-mark" class="btn-ghost btn-sm" @click="close()" />
                                 </x-slot:menu>
                             @endif
 
