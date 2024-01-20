@@ -18,7 +18,7 @@ Route::middleware(['web', 'auth'])->post('/mary/upload', function (Request $requ
     $disk = $request->disk ?? 'public';
     $folder = $request->folder ?? 'editor';
 
-    $file = Storage::disk($disk)->put($folder, $request->file('file'));
+    $file = Storage::disk($disk)->put($folder, $request->file('file'), 'public');
     $url = Storage::disk($disk)->url($file);
 
     return ['location' => $url];
