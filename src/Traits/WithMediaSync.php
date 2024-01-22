@@ -93,7 +93,7 @@ trait WithMediaSync
     private function getFileName(?array $media): ?string
     {
         $name = $media['uuid'] ?? null;
-        $extension = str($media['url'] ?? null)->after('.')->before('?expires')->toString();
+        $extension = str($media['url'] ?? null)->afterLast('.')->before('?expires')->toString();
 
         return "$name.$extension";
     }
