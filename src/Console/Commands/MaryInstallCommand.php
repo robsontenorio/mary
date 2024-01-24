@@ -92,6 +92,7 @@ class MaryInstallCommand extends Command
 
         if (! File::exists($tailwindJsPath)) {
             $this->copyFile(__DIR__ . "/../../../stubs/tailwind.config.js", "tailwind.config.js");
+            $this->copyFile(__DIR__ . "/../../../stubs/postcss.config.js", "postcss.config.js");
 
             return;
         }
