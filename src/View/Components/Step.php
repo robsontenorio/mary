@@ -14,6 +14,8 @@ class Step extends Component
         public int $step,
         public string $text,
         public ?string $label = null,
+        public ?string $stepClasses = null,
+        public ?string $dataContent = null,
 
     ) {
         $this->uuid = "mary" . md5(serialize($this));
@@ -24,7 +26,7 @@ class Step extends Component
         return <<<'HTML'
                     <div
                         class="hidden"
-                        x-init="steps.push({ step: '{{ $step }}', text: '{{ $text }}' })"
+                        x-init="steps.push({ step: '{{ $step }}', text: '{{ $text }}', classes: '{{ $stepClasses }}' @if($dataContent), dataContent: '{{ $dataContent }}' @endif })"
                     ></div>
 
                     <div x-show="current == '{{ $step }}'" {{ $attributes->class("px-1") }} >
