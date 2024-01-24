@@ -11,7 +11,8 @@ class Steps extends Component
     public string $uuid;
 
     public function __construct(
-        public bool $vertical = false
+        public bool $vertical = false,
+        public ?string $stepsColor = 'step-primary'
 
     ) {
         $this->uuid = "mary" . md5(serialize($this));
@@ -35,7 +36,7 @@ class Steps extends Component
                         <!-- STEP LABELS -->
                         <ul class="steps">
                             <template x-for="(step, index) in steps" :key="index">
-                                <li x-html="step.text" class="step" :class="(index + 1 <= current) && 'step-primary'"></li>
+                                <li x-html="step.text" :data-content="step.dataContent || (index + 1)" class="step" :class="(index + 1 <= current) && '{{ $stepsColor }} ' + step.classes"></li>
                             </template>
                         </ul>
 
@@ -43,6 +44,9 @@ class Steps extends Component
                         <div {{ $attributes->whereDoesntStartWith('wire') }}>
                             {{ $slot }}
                         </div>
+
+                        <!-- Force Tailwind compile steps color -->
+                        <span class="hidden step-primary step-error step-neutral step-info step-accent"></span>
                     </div>
             HTML;
     }
