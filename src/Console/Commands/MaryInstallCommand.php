@@ -20,7 +20,7 @@ class MaryInstallCommand extends Command
 
     public function handle()
     {
-        $this->info("❤️ maryUI installer");
+        $this->info("❤️  maryUI installer");
 
         // Install Volt ?
         $shouldInstallVolt = $this->askForVolt();
@@ -40,9 +40,12 @@ class MaryInstallCommand extends Command
         // Rename components if Jetstream or Breeze are detected
         $this->renameComponents();
 
-        $this->info("\n✅ Done! Run `yarn dev or npm run dev`");
-        $this->info("🌟 Give it a star: https://github.com/robsontenorio/mary");
-        $this->info("❤️ Sponsor this project: https://github.com/sponsors/robsontenorio\n");
+        // Clear view cache
+        Artisan::call('view:clear');
+
+        $this->info("\n✅  Done! Run `yarn dev or npm run dev`");
+        $this->info("🌟  Give it a star: https://github.com/robsontenorio/mary");
+        $this->info("❤️  Sponsor this project: https://github.com/sponsors/robsontenorio\n");
     }
 
     public function installLivewire(string $shouldInstallVolt)
@@ -65,7 +68,7 @@ class MaryInstallCommand extends Command
          */
         $this->info("\nInstalling daisyUI + Tailwind...\n");
 
-        Process::run("$packageManagerCommand tailwindcss daisyui@latest postcss autoprefixer && npx tailwindcss init -p", function (string $type, string $output) {
+        Process::run("$packageManagerCommand tailwindcss daisyui@latest postcss autoprefixer", function (string $type, string $output) {
             echo $output;
         })->throw();
 
