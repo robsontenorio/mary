@@ -43,7 +43,7 @@ class MaryInstallCommand extends Command
         // Clear view cache
         Artisan::call('view:clear');
 
-        $this->info("\n✅  Done! Run `yarn dev or npm run dev`");
+        $this->info("\n✅   Done! Run `yarn dev or npm run dev`");
         $this->info("🌟  Give it a star: https://github.com/robsontenorio/mary");
         $this->info("❤️  Sponsor this project: https://github.com/sponsors/robsontenorio\n");
     }
@@ -102,19 +102,15 @@ class MaryInstallCommand extends Command
          */
 
         $tailwindJs = File::get($tailwindJsPath);
-        $originalPlugins = str($tailwindJs)->after('plugins')->after('[')->before(']');
+        $pluginsBlock = str($tailwindJs)->match('/plugins:[\S\s]*\[[\S\s]*\]/');
 
-        if ($originalPlugins->contains('daisyui')) {
+        if ($pluginsBlock->contains('daisyui')) {
             return;
         }
 
-        $plugins = str($tailwindJs)->replace('plugins: []', 'plugins: [require("daisyui")]');
-
-        if (! $originalPlugins->isEmpty()) {
-            $plugins = $originalPlugins->squish()->trim()->remove(' ')->explode(',')->add('require("daisyui")')->filter()->implode(',');
-            $plugins = str($plugins)->prepend("\n\t\t")->replace(',', ",\n\t\t")->append("\r\n\t");
-            $plugins = str($tailwindJs)->replace($originalPlugins, $plugins);
-        }
+        $plugins = $pluginsBlock->after('plugins')->after('[')->before(']')->squish()->trim()->remove(' ')->explode(',')->add('require("daisyui")')->filter()->implode(',');
+        $plugins = str($plugins)->prepend("\n\t\t")->replace(',', ",\n\t\t")->append("\r\n\t");
+        $plugins = str($tailwindJs)->replace($pluginsBlock, "plugins: [$plugins]");
 
         File::put($tailwindJsPath, $plugins);
 
@@ -145,17 +141,20 @@ class MaryInstallCommand extends Command
 
         collect(['jetstream', 'breeze'])->each(function (string $target) use ($composerJson) {
             if (str($composerJson)->contains($target)) {
-                Artisan::call('vendor:publish --tag mary.config');
+                Artisan::call('vendor:publish --force --tag mary.config');
 
                 $path = base_path() . "{$this->ds}config{$this->ds}mary.php";
                 $config = File::get($path);
                 $contents = str($config)->replace("'prefix' => ''", "'prefix' => 'mary-'");
                 File::put($path, $contents);
 
-                $this->warn("\n\n🚨`$target` was detected.🚨");
+                $this->warn('---------------------------------------------');
+                $this->warn("🚨`$target` was detected.🚨");
+                $this->warn('---------------------------------------------');
                 $this->warn("A global prefix on maryUI components was added to avoid name collision.");
                 $this->warn("\n * Example: x-mary-button, x-mary-card ...");
-                $this->warn(" * See config/mary.php\n");
+                $this->warn(" * See config/mary.php");
+                $this->warn('---------------------------------------------');
             }
         });
     }
