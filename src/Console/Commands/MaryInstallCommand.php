@@ -3,6 +3,7 @@
 namespace Mary\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
@@ -15,155 +16,180 @@ class MaryInstallCommand extends Command
 
     protected $description = 'Command description';
 
+    protected $ds = DIRECTORY_SEPARATOR;
+
     public function handle()
     {
-        $this->info("🔨 Mary installer");
+        $this->info("❤️  maryUI installer");
 
-        $this->warn('
-It will set up:
-- Livewire
-- Tailwind + daisyUI
-- Default layout
-- Welcome component
-- Route to Welcome');
-
-        /**
-         * Install Volt ?
-         */
+        // Install Volt ?
         $shouldInstallVolt = $this->askForVolt();
 
-        /**
-         * Yarn or Npm ?
-         */
+        //Yarn or Npm ?
         $packageManagerCommand = $this->askForPackageInstaller();
 
-        /**
-         * Check for existing STARTER KIT packages
-         */
-        $composerJson = File::get(base_path() . "/composer.json");
-        $targets = ['breeze', 'jetstream', 'genesis'];
-        $this->checkForExistingPackages($composerJson, $targets);
+        // Install Livewire/Volt
+        $this->installLivewire($shouldInstallVolt);
 
-        /**
-         * Check for existing JS packages
-         */
-        $packageJson = File::get(base_path() . "/package.json");
-        $targets = ['tailwindcss', 'daisyui'];
-        $this->checkForExistingPackages($packageJson, $targets);
+        // Setup Tailwind and Daisy
+        $this->setupTailwindDaisy($packageManagerCommand);
 
-        /**
-         * Check for stubs
-         */
-        $this->checkForStubs();
+        // Copy stubs if is brand-new project
+        $this->copyStubs();
 
-        /**
-         * Install Livewire
-         */
+        // Rename components if Jetstream or Breeze are detected
+        $this->renameComponents();
+
+        // Clear view cache
+        Artisan::call('view:clear');
+
+        $this->info("\n✅   Done! Run `yarn dev or npm run dev`");
+        $this->info("🌟  Give it a star: https://github.com/robsontenorio/mary");
+        $this->info("❤️  Sponsor this project: https://github.com/sponsors/robsontenorio\n");
+    }
+
+    public function installLivewire(string $shouldInstallVolt)
+    {
         $this->info("\nInstalling Livewire...\n");
 
-        Process::run('composer require livewire/livewire', function (string $type, string $output) {
+        $extra = $shouldInstallVolt == 'Yes'
+            ? ' livewire/volt && php artisan volt:install'
+            : '';
+
+        Process::run("composer require livewire/livewire $extra", function (string $type, string $output) {
             echo $output;
         })->throw();
+    }
 
-        if ($shouldInstallVolt == 'Yes') {
-            $this->info("\nInstalling Livewire Volt...\n");
-
-            Process::run('composer require livewire/volt', function (string $type, string $output) {
-                echo $output;
-            })->throw();
-
-            Process::run('php artisan volt:install', function (string $type, string $output) {
-                echo $output;
-            })->throw();
-        }
-
+    public function setupTailwindDaisy(string $packageManagerCommand)
+    {
         /**
          * Install daisyUI + Tailwind
          */
         $this->info("\nInstalling daisyUI + Tailwind...\n");
 
-        Process::run("$packageManagerCommand tailwindcss daisyui@latest postcss autoprefixer && npx tailwindcss init -p", function (string $type, string $output) {
+        Process::run("$packageManagerCommand tailwindcss daisyui@latest postcss autoprefixer", function (string $type, string $output) {
             echo $output;
         })->throw();
 
         /**
-         * Copy all stubs
+         * Setup app.css
          */
-        $this->copyStubs();
 
-        $this->info("\n🌟 Done! Run `yarn dev or npm run dev`\n");
+        $cssPath = base_path() . "{$this->ds}resources{$this->ds}css{$this->ds}app.css";
+        $css = File::get($cssPath);
+
+        if (! str($css)->contains('@tailwind')) {
+            $stub = File::get(__DIR__ . "/../../../stubs/app.css");
+            File::put($cssPath, str($css)->prepend($stub));
+        }
+
+        /**
+         * Setup tailwind.config.js
+         */
+
+        $tailwindJsPath = base_path() . "{$this->ds}tailwind.config.js";
+
+        if (! File::exists($tailwindJsPath)) {
+            $this->copyFile(__DIR__ . "/../../../stubs/tailwind.config.js", "tailwind.config.js");
+            $this->copyFile(__DIR__ . "/../../../stubs/postcss.config.js", "postcss.config.js");
+
+            return;
+        }
+
+        /**
+         * Setup Tailwind plugins
+         */
+
+        $tailwindJs = File::get($tailwindJsPath);
+        $pluginsBlock = str($tailwindJs)->match('/plugins:[\S\s]*\[[\S\s]*\]/');
+
+        if ($pluginsBlock->contains('daisyui')) {
+            return;
+        }
+
+        $plugins = $pluginsBlock->after('plugins')->after('[')->before(']')->squish()->trim()->remove(' ')->explode(',')->add('require("daisyui")')->filter()->implode(',');
+        $plugins = str($plugins)->prepend("\n\t\t")->replace(',', ",\n\t\t")->append("\r\n\t");
+        $plugins = str($tailwindJs)->replace($pluginsBlock, "plugins: [$plugins]");
+
+        File::put($tailwindJsPath, $plugins);
+
+        /**
+         * Setup Tailwind contents
+         */
+        $tailwindJs = File::get($tailwindJsPath);
+        $originalContents = str($tailwindJs)->after('contents')->after('[')->before(']');
+
+        if ($originalContents->contains('robsontenorio/mary')) {
+            return;
+        }
+
+        $contents = $originalContents->squish()->trim()->remove(' ')->explode(',')->add('"./vendor/robsontenorio/mary/src/View/Components/**/*.php"')->filter()->implode(', ');
+        $contents = str($contents)->prepend("\n\t\t")->replace(',', ",\n\t\t")->append("\r\n\t");
+        $contents = str($tailwindJs)->replace($originalContents, $contents);
+
+        File::put($tailwindJsPath, $contents);
     }
 
     /**
-     * Check for existing packages
+     * If Jetstream or Breeze are detected we publish config file and add a global prefix to maryUI components,
+     * in order to avoid name collision with existing components.
      */
-    public function checkForExistingPackages(string $content, array $targets): void
+    public function renameComponents()
     {
-        collect($targets)->each(function (string $target) use ($content) {
-            if (Str::of($content)->contains($target)) {
-                $this->error("Automatic install works only for brand-new Laravel projects.");
-                $this->warn("Detected: " . $target);
+        $composerJson = File::get(base_path() . "/composer.json");
 
-                exit;
+        collect(['jetstream', 'breeze'])->each(function (string $target) use ($composerJson) {
+            if (str($composerJson)->contains($target)) {
+                Artisan::call('vendor:publish --force --tag mary.config');
+
+                $path = base_path() . "{$this->ds}config{$this->ds}mary.php";
+                $config = File::get($path);
+                $contents = str($config)->replace("'prefix' => ''", "'prefix' => 'mary-'");
+                File::put($path, $contents);
+
+                $this->warn('---------------------------------------------');
+                $this->warn("🚨`$target` was detected.🚨");
+                $this->warn('---------------------------------------------');
+                $this->warn("A global prefix on maryUI components was added to avoid name collision.");
+                $this->warn("\n * Example: x-mary-button, x-mary-card ...");
+                $this->warn(" * See config/mary.php");
+                $this->warn('---------------------------------------------');
             }
         });
     }
 
     /**
-     * Check for existing stubs
+     * Copy example demo stub if it is a brand-new project.
      */
-    public function checkForStubs(): void
-    {
-        collect([
-            [
-                'path' => 'resources/views/components/layouts',
-                'name' => 'app.blade.php'
-            ],
-            [
-                'path' => 'app/Livewire/',
-                'name' => 'Welcome.php',
-            ],
-            [
-                'path' => '',
-                'name' => 'tailwind.config.js',
-            ]
-        ])->each(function (array $item) {
-            $file = base_path() . '/' . $item['path'] . $item['name'];
-
-            if (File::exists($file)) {
-                $this->error("Automatic install works only for brand-new Laravel projects.");
-                $this->warn('Detected:' . $file);
-
-                exit;
-            }
-        });
-    }
-
     public function copyStubs(): void
     {
+        // If there is something, skip stubs
+        $web = base_path() . "{$this->ds}routes{$this->ds}web.php";
+
+        if (count(file($web)) > 20) {
+            return;
+        }
+
         $this->info("Copying stubs...\n");
 
-        $ds = DIRECTORY_SEPARATOR;
-
-        $appViewComponents = "app{$ds}View{$ds}Components";
-        $livewirePath = "app{$ds}Livewire";
-        $layoutsPath = "resources{$ds}views{$ds}components{$ds}layouts";
-        $livewireBladePath = "resources{$ds}views{$ds}livewire";
-        $cssPath = "resources{$ds}css";
-        $routesPath = "routes";
+        $appViewComponents = "app{$this->ds}View{$this->ds}Components";
+        $livewirePath = "app{$this->ds}Livewire";
+        $layoutsPath = "resources{$this->ds}views{$this->ds}components{$this->ds}layouts";
+        $livewireBladePath = "resources{$this->ds}views{$this->ds}livewire";
 
         $this->createDirectoryIfNotExists($appViewComponents);
         $this->createDirectoryIfNotExists($livewirePath);
         $this->createDirectoryIfNotExists($livewireBladePath);
         $this->createDirectoryIfNotExists($layoutsPath);
 
-        $this->copyFile(__DIR__ . "/../../../stubs/AppBrand.php", "{$appViewComponents}{$ds}AppBrand.php");
-        $this->copyFile(__DIR__ . "/../../../stubs/app.blade.php", "{$layoutsPath}{$ds}app.blade.php");
-        $this->copyFile(__DIR__ . "/../../../stubs/app.css", "{$cssPath}{$ds}app.css");
-        $this->copyFile(__DIR__ . "/../../../stubs/tailwind.config.js", "tailwind.config.js");
-        $this->copyFile(__DIR__ . "/../../../stubs/Welcome.php", "{$livewirePath}{$ds}Welcome.php");
-        $this->copyFile(__DIR__ . "/../../../stubs/welcome.blade.php", "{$livewireBladePath}{$ds}welcome.blade.php");
-        $this->copyFile(__DIR__ . "/../../../stubs/web.php", "{$routesPath}{$ds}web.php");
+        $this->copyFile(__DIR__ . "/../../../stubs/AppBrand.php", "{$appViewComponents}{$this->ds}AppBrand.php");
+        $this->copyFile(__DIR__ . "/../../../stubs/app.blade.php", "{$layoutsPath}{$this->ds}app.blade.php");
+
+        $this->copyFile(__DIR__ . "/../../../stubs/Welcome.php", "{$livewirePath}{$this->ds}Welcome.php");
+        $this->copyFile(__DIR__ . "/../../../stubs/welcome.blade.php", "{$livewireBladePath}{$this->ds}welcome.blade.php");
+
+        $this->copyFile(__DIR__ . "/../../../stubs/web.php", $web);
     }
 
     public function askForPackageInstaller(): string
