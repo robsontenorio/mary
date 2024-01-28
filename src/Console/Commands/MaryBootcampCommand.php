@@ -4,6 +4,7 @@ namespace Mary\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use RuntimeException;
 
@@ -36,6 +37,8 @@ class MaryBootcampCommand extends Command
         })->throw();
 
         // Copy stubs
+        $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/2024_01_27_023021_create_countries_table.php",
+            "database{$this->ds}migrations{$this->ds}2024_01_27_023021_create_countries_table.php");
 
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/2014_10_12_000000_create_users_table.php",
             "database{$this->ds}migrations{$this->ds}2014_10_12_000000_create_users_table.php");
@@ -46,17 +49,23 @@ class MaryBootcampCommand extends Command
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/CountrySeeder.php", "database{$this->ds}seeders{$this->ds}CountrySeeder.php");
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/DatabaseSeeder.php", "database{$this->ds}seeders{$this->ds}DatabaseSeeder.php");
 
+        // Setup SQLITE
+        $env = File::get(base_path() . ".env");
+        $content = str($env)->replace('DB_CONNECTION=mysql', 'DB_CONNECTION=sqlite');
+        File::put($env, $content);
+
+        // Create database file
+        Process::run("touch database/database.sqlite", function (string $type, string $output) {
+            echo $output;
+        })->throw();
+
+        // Migrate fresh seed
+        Artisan::call('migrate:fresh --seed');
+
         // Clear view cache
         Artisan::call('view:clear');
 
         $this->info("\n✅   Done! Go back to Bootcamp page\n");
-    }
-
-    private function createDirectoryIfNotExists(string $path): void
-    {
-        if (! file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
     }
 
     private function copyFile(string $source, string $destination): void
