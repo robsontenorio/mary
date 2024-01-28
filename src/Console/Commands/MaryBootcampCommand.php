@@ -50,7 +50,7 @@ class MaryBootcampCommand extends Command
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/DatabaseSeeder.php", "database{$this->ds}seeders{$this->ds}DatabaseSeeder.php");
 
         // Setup SQLITE
-        $env = File::get(base_path() . ".env");
+        $env = File::get(base_path() . "{$this->ds}.env");
         $content = str($env)->replace('DB_CONNECTION=mysql', 'DB_CONNECTION=sqlite');
         File::put($env, $content);
 
