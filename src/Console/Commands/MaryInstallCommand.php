@@ -191,7 +191,7 @@ class MaryInstallCommand extends Command
 
         // Demo component and its route
         if ($shouldInstallVolt == 'Yes') {
-            $this->copyFile(__DIR__ . "/../../../stubs/index.blade.php", "$livewireBladePath{$this->ds}users/{$this->ds}index.blade.php");
+            $this->copyFile(__DIR__ . "/../../../stubs/index.blade.php", "$livewireBladePath{$this->ds}users{$this->ds}index.blade.php");
             $this->copyFile(__DIR__ . "/../../../stubs/web-volt.php", "$routes{$this->ds}web.php");
         } else {
             $this->createDirectoryIfNotExists($livewirePath);
