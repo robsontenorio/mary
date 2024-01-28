@@ -164,10 +164,10 @@ class MaryInstallCommand extends Command
      */
     public function copyStubs(string $shouldInstallVolt): void
     {
-        $web = base_path() . "{$this->ds}routes{$this->ds}web.php";
+        $routes = base_path() . "{$this->ds}routes";
 
         // If there is something in there, skip stubs
-        if (count(file($web)) > 20) {
+        if (count(file("$routes{$this->ds}web.php")) > 20) {
             return;
         }
 
@@ -192,12 +192,12 @@ class MaryInstallCommand extends Command
         // Demo component and its route
         if ($shouldInstallVolt == 'Yes') {
             $this->copyFile(__DIR__ . "/../../../stubs/index.blade.php", "$livewireBladePath{$this->ds}index.blade.php");
-            $this->copyFile(__DIR__ . "/../../../stubs/web-volt.php", "$web{$this->ds}web.php");
+            $this->copyFile(__DIR__ . "/../../../stubs/web-volt.php", "$routes{$this->ds}web.php");
         } else {
             $this->createDirectoryIfNotExists($livewirePath);
             $this->copyFile(__DIR__ . "/../../../stubs/Welcome.php", "{$livewirePath}{$this->ds}Welcome.php");
             $this->copyFile(__DIR__ . "/../../../stubs/welcome.blade.php", "{$livewireBladePath}{$this->ds}welcome.blade.php");
-            $this->copyFile(__DIR__ . "/../../../stubs/web.php", $web);
+            $this->copyFile(__DIR__ . "/../../../stubs/web.php", "$routes{$this->ds}web.php");
         }
     }
 
