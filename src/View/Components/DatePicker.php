@@ -31,14 +31,18 @@ class DatePicker extends Component
         ], $this->config));
 
         // Sets default date as current binded model
-        $config = str_replace('"x"', '$wire.' . $this->modelName(), $config);
+        $config = str_replace('"x"', $this->modelName() ?? "null", $config);
 
         return $config;
     }
 
     public function modelName(): ?string
     {
-        return $this->attributes->whereStartsWith('wire:model')->first();
+        if($this->attributes->has('wire:model')){
+            return '$wire.' . $this->attributes->whereStartsWith('wire:model')->first();
+        } else {
+            return null;
+        }
     }
 
     public function render(): View|Closure|string
