@@ -15,6 +15,18 @@ return new class extends Migration {
             $table->string('name');
             $table->timestamps();
         });
+
+        Schema::create('languages', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('country_id')->constrained('countries');
+            $table->string('avatar')->nullable();
+            $table->text('bio');
+        });
     }
 
     /**
@@ -22,6 +34,10 @@ return new class extends Migration {
      */
     public function down(): void
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('country_id');
+        });
+
         Schema::dropIfExists('countries');
     }
 };

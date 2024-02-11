@@ -43,7 +43,7 @@ class MaryInstallCommand extends Command
         // Clear view cache
         Artisan::call('view:clear');
 
-        $this->info("\n✅   Done! Run `yarn dev or npm run dev`");
+        $this->info("\n✅   Done! Run `yarn dev` or `npm run dev`");
         $this->info("🌟  Give it a star: https://github.com/robsontenorio/mary");
         $this->info("❤️  Sponsor this project: https://github.com/sponsors/robsontenorio\n");
     }
