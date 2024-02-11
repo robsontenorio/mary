@@ -27,6 +27,12 @@ return new class extends Migration {
             $table->string('avatar')->nullable();
             $table->text('bio');
         });
+
+        Schema::create('language_user', function (Blueprint $table) {
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('language_id')->constrained('languages');
+            $table->timestamps();
+        });
     }
 
     /**
