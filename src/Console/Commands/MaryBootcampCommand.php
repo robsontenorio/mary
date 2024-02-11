@@ -43,6 +43,7 @@ class MaryBootcampCommand extends Command
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/Country.php", "app{$this->ds}Models{$this->ds}Country.php");
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/UserFactory.php", "database{$this->ds}factories{$this->ds}UserFactory.php");
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/CountrySeeder.php", "database{$this->ds}seeders{$this->ds}CountrySeeder.php");
+        $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/LanguageSeeder.php", "database{$this->ds}seeders{$this->ds}LanguageSeeder.php");
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/DatabaseSeeder.php", "database{$this->ds}seeders{$this->ds}DatabaseSeeder.php");
 
         // Migrate fresh seed
