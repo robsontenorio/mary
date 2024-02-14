@@ -13,6 +13,8 @@ class Table extends Component
 {
     public string $uuid;
 
+    public mixed $loop = null;
+
     public function __construct(
         public array $headers,
         public ArrayAccess|array $rows,
@@ -69,7 +71,7 @@ class Table extends Component
     // Handle header sort
     public function getSort(mixed $header): mixed
     {
-        if (!$this->isSortable($header)) {
+        if (! $this->isSortable($header)) {
             return false;
         }
 
@@ -185,6 +187,11 @@ class Table extends Component
                         <!-- ROWS -->
                         <tbody>
                             @foreach($rows as $k => $row)
+                                @php
+                                    # helper variable to provide the loop context
+                                    $this->loop = $loop;
+                                @endphp
+
                                 <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50" @click="$dispatch('row-click', {{ json_encode($row) }});">
 
                                     <!-- CHECKBOX -->
