@@ -47,6 +47,11 @@ class Choices extends Component
         }
     }
 
+    public function onChangeFunc(): string | null
+    {
+        return $this->attributes->whereStartsWith('@change')->first();
+    }
+
     public function modelName(): string
     {
         return $this->attributes->wire('model')->value();
@@ -84,6 +89,10 @@ class Choices extends Component
                             isReadonly: {{ json_encode($isReadonly()) }},
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
+                            onChange: (id) => {
+                                $value = id;
+                                {{ $onChangeFunc() }}
+                            },
 
                             init() {
                                 // Fix weird issue when navigating back
@@ -153,6 +162,8 @@ class Choices extends Component
                                         ? this.selection = this.selection.filter(i => i != id)
                                         : this.selection.push(id)
                                 }
+
+                                this.onChange(this.selection)
 
                                 this.$refs.searchInput.value = ''
                                 this.$refs.searchInput.focus()
