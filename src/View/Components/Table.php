@@ -37,12 +37,24 @@ class Table extends Component
         public mixed $cell = null,
         public mixed $expansion = null
     ) {
-        //$this->uuid = "mary" . md5(serialize($this));
-        $this->uuid = rand();
-
         if ($this->selectable && $this->expandable) {
             throw new Exception("You can not combine `expandable` with `selectable`.");
         }
+
+        // Temp decoration
+        $rowDecoration = $this->rowDecoration;
+        $cellDecoration = $this->cellDecoration;
+
+        // Remove decoration from serialization, because they are closures.
+        unset($this->rowDecoration);
+        unset($this->cellDecoration);
+
+        // Serialize
+        $this->uuid = "mary" . md5(serialize($this));
+
+        // Put them back
+        $this->rowDecoration = $rowDecoration;
+        $this->cellDecoration = $cellDecoration;
     }
 
     // Get all ids for selectable and expandable features
