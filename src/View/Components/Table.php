@@ -6,6 +6,7 @@ use ArrayAccess;
 use Closure;
 use Exception;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
@@ -27,6 +28,8 @@ class Table extends Component
         public ?string $link = null,
         public ?bool $withPagination = false,
         public ?array $sortBy = [],
+        public ?array $rowDecoration = [],
+        public ?array $cellDecoration = [],
 
         // Slots
         public mixed $actions = null,
@@ -34,7 +37,8 @@ class Table extends Component
         public mixed $cell = null,
         public mixed $expansion = null
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        //$this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = rand();
 
         if ($this->selectable && $this->expandable) {
             throw new Exception("You can not combine `expandable` with `selectable`.");
@@ -100,6 +104,32 @@ class Table extends Component
         });
 
         return $link;
+    }
+
+    public function rowClasses(mixed $row): ?string
+    {
+        $classes = [];
+
+        foreach ($this->rowDecoration as $class => $condition) {
+            if ($condition($row)) {
+                $classes[] = $class;
+            }
+        }
+
+        return Arr::join($classes, ' ');
+    }
+
+    public function cellClasses(mixed $row, ?string $key): ?string
+    {
+        $classes = [];
+
+        foreach ($this->cellDecoration[$key] ?? [] as $class => $condition) {
+            if ($condition($row)) {
+                $classes[] = $class;
+            }
+        }
+
+        return Arr::join($classes, ' ');
     }
 
     public function render(): View|Closure|string
@@ -192,8 +222,7 @@ class Table extends Component
                                     $this->loop = $loop;
                                 @endphp
 
-                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50" @click="$dispatch('row-click', {{ json_encode($row) }});">
-
+                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50 opacity-100 {{ $rowClasses($row) }}" @click="$dispatch('row-click', {{ json_encode($row) }});">
                                     <!-- CHECKBOX -->
                                     @if($selectable)
                                         <td class="w-1">
@@ -239,7 +268,7 @@ class Table extends Component
                                                  @endif
                                             </td>
                                         @else
-                                            <td @class(["p-0" => $link, "hidden" => Str::contains($header['class'] ?? '', 'hidden') ])>
+                                            <td @class([$cellClasses($row, $header['key']), "p-0" => $link, "hidden" => Str::contains($header['class'] ?? '', 'hidden') ])>
 
                                                 @if($link)
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block p-4">
