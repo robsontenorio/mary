@@ -39,6 +39,7 @@ class Tags extends Component
             <div x-data="{
                     tags: @entangle($attributes->wire('model')),
                     tag: null,
+                    focused: false,
                     isReadonly: {{ json_encode($isReadonly()) }},
                     isRequired: {{ json_encode($isRequired()) }},
 
@@ -56,10 +57,12 @@ class Tags extends Component
                     push() {
                         if (this.tag != '' && this.tag != null && this.tag != undefined) {
                             let tag = this.tag.toString().replace(/,/g, '').trim()
+
                             if (tag != '' && !this.hasTag(tag)) {
                                 this.tags.push(tag)
                             }
                         }
+
                         this.clear()
                     },
 
@@ -77,6 +80,7 @@ class Tags extends Component
 
                     clear() {
                         this.tag = null;
+                        this.focused = false;
                     },
 
                     clearAll() {
@@ -88,6 +92,7 @@ class Tags extends Component
                             return
                         }
 
+                        this.focused = true
                         $refs.searchInput.focus()
                     }
                 }"
@@ -114,7 +119,7 @@ class Tags extends Component
                         $attributes->except(['wire:model', 'wire:model.live'])->class([
                             "input input-bordered input-primary w-full h-fit pr-16 pt-1.5 pb-1 min-h-[47px] inline-block cursor-pointer relative",
                             'border border-dashed' => $isReadonly(),
-                            'input-error' => $errors->has($modelName()),
+                            'input-error' => $errors->has($modelName()) || $errors->has($modelName().'*'),
                             'pl-10' => $icon,
                         ])
                     }}
@@ -148,18 +153,25 @@ class Tags extends Component
                         placeholder="{{ $attributes->whereStartsWith('placeholder')->first() }}"
                         type="text"
                         x-ref="searchInput"
-                        :class="isReadonly && 'hidden'"
+                        :class="(isReadonly || !focused) && 'w-1'"
                         :required="isRequired"
                         :readonly="isReadonly"
                         x-model="tag"
+                        @input="focus()"
                         @click.outside="clear()"
                         @keydown.enter.prevent="push()"
+                        @keydown.tab.prevent="push()"
                         @keyup.prevent="if (event.key === ',') { push() }"
                     />
                 </div>
 
+                <!-- SINGLE ERROR -->
                 @error($modelName())
-                    <!-- ERROR -->
+                    <div class="label-text-alt p-1 text-red-500">{{ $message }}</div>
+                @enderror
+
+                 <!-- MULTIPLE ERROR -->
+                @error($modelName().'.*')
                     <div class="label-text-alt p-1 text-red-500">{{ $message }}</div>
                 @enderror
 
