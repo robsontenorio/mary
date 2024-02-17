@@ -131,11 +131,11 @@ class Table extends Component
         return Arr::join($classes, ' ');
     }
 
-    public function cellClasses(mixed $row, ?string $key): ?string
+    public function cellClasses(mixed $row, array $header): ?string
     {
-        $classes = [];
+        $classes = Str::of($header['class'] ?? '')->explode(' ')->all();
 
-        foreach ($this->cellDecoration[$key] ?? [] as $class => $condition) {
+        foreach ($this->cellDecoration[$header['key']] ?? [] as $class => $condition) {
             if ($condition($row)) {
                 $classes[] = $class;
             }
@@ -268,7 +268,7 @@ class Table extends Component
 
                                         <!--  HAS CUSTOM SLOT ? -->
                                         @if(isset(${"cell_".$temp_key}))
-                                            <td @class(["p-0" => $link])>
+                                            <td @class([$cellClasses($row, $header), "p-0" => $link])>
                                                 @if($link)
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block p-4">
                                                 @endif
@@ -280,8 +280,7 @@ class Table extends Component
                                                  @endif
                                             </td>
                                         @else
-                                            <td @class([$cellClasses($row, $header['key']), "p-0" => $link, "hidden" => Str::contains($header['class'] ?? '', 'hidden') ])>
-
+                                            <td @class([$cellClasses($row, $header), "p-0" => $link])>
                                                 @if($link)
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block p-4">
                                                 @endif
