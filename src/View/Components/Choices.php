@@ -126,6 +126,8 @@ class Choices extends Component
                                 this.isSingle
                                     ? this.selection = null
                                     : this.selection = []
+                                
+                                this.dispatchChangeEvent({ value: null })
                             },
                             focus() {
                                 if (this.isReadonly) {
@@ -154,15 +156,10 @@ class Choices extends Component
                                         : this.selection.push(id)
                                 }
 
+                                this.dispatchChangeEvent({ value: this.selection }, this.isSingle ? id : this.selection.join(','))    
+
                                 this.$refs.searchInput.value = ''
                                 this.$refs.searchInput.focus()
-                                this.$refs.searchInput.dispatchEvent(new CustomEvent('change', {
-                                    bubbles: true, 
-                                    detail: {
-                                        target: this.$refs.searchInput,
-                                        value: this.selection
-                                    }
-                                }))
                             },
                             search(value) {
                                 if (value.length < this.minChars) {
@@ -170,6 +167,13 @@ class Choices extends Component
                                 }
 
                                 @this.{{ $searchFunction }}(value)
+                            },
+                            dispatchChangeEvent(detail, inputOverride) {
+                                if (inputOverride) {
+                                    this.$refs.searchInput.value = inputOverride
+                                }
+
+                                this.$refs.searchInput.dispatchEvent(new CustomEvent('change', { bubbles: true, detail }))
                             }
                         }"
                     >
