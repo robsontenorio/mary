@@ -234,7 +234,7 @@ class Table extends Component
                                     $this->loop = $loop;
                                 @endphp
 
-                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50 opacity-100 {{ $rowClasses($row) }}" @click="$dispatch('row-click', {{ json_encode($row) }});">
+                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50 {{ $rowClasses($row) }}" @click="$dispatch('row-click', {{ json_encode($row) }});">
                                     <!-- CHECKBOX -->
                                     @if($selectable)
                                         <td class="w-1">
