@@ -156,7 +156,7 @@ class Choices extends Component
                                         : this.selection.push(id)
                                 }
 
-                                this.dispatchChangeEvent({ value: this.selection }, this.isSingle ? id : this.selection.join(','))    
+                                this.dispatchChangeEvent({ value: this.selection })    
 
                                 this.$refs.searchInput.value = ''
                                 this.$refs.searchInput.focus()
@@ -168,12 +168,8 @@ class Choices extends Component
 
                                 @this.{{ $searchFunction }}(value)
                             },
-                            dispatchChangeEvent(detail, inputOverride) {
-                                if (inputOverride) {
-                                    this.$refs.searchInput.value = inputOverride
-                                }
-
-                                this.$refs.searchInput.dispatchEvent(new CustomEvent('change', { bubbles: true, detail }))
+                            dispatchChangeEvent(detail) {
+                                this.$refs.searchInput.dispatchEvent(new CustomEvent('change-select', { bubbles: true, detail }))
                             }
                         }"
                     >
