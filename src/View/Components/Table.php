@@ -6,12 +6,15 @@ use ArrayAccess;
 use Closure;
 use Exception;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
 class Table extends Component
 {
     public string $uuid;
+
+    public mixed $loop = null;
 
     public function __construct(
         public array $headers,
@@ -25,6 +28,8 @@ class Table extends Component
         public ?string $link = null,
         public ?bool $withPagination = false,
         public ?array $sortBy = [],
+        public ?array $rowDecoration = [],
+        public ?array $cellDecoration = [],
 
         // Slots
         public mixed $actions = null,
@@ -32,11 +37,24 @@ class Table extends Component
         public mixed $cell = null,
         public mixed $expansion = null
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
-
         if ($this->selectable && $this->expandable) {
             throw new Exception("You can not combine `expandable` with `selectable`.");
         }
+
+        // Temp decoration
+        $rowDecoration = $this->rowDecoration;
+        $cellDecoration = $this->cellDecoration;
+
+        // Remove decoration from serialization, because they are closures.
+        unset($this->rowDecoration);
+        unset($this->cellDecoration);
+
+        // Serialize
+        $this->uuid = "mary" . md5(serialize($this));
+
+        // Put them back
+        $this->rowDecoration = $rowDecoration;
+        $this->cellDecoration = $cellDecoration;
     }
 
     // Get all ids for selectable and expandable features
@@ -69,7 +87,7 @@ class Table extends Component
     // Handle header sort
     public function getSort(mixed $header): mixed
     {
-        if (!$this->isSortable($header)) {
+        if (! $this->isSortable($header)) {
             return false;
         }
 
@@ -98,6 +116,32 @@ class Table extends Component
         });
 
         return $link;
+    }
+
+    public function rowClasses(mixed $row): ?string
+    {
+        $classes = [];
+
+        foreach ($this->rowDecoration as $class => $condition) {
+            if ($condition($row)) {
+                $classes[] = $class;
+            }
+        }
+
+        return Arr::join($classes, ' ');
+    }
+
+    public function cellClasses(mixed $row, array $header): ?string
+    {
+        $classes = Str::of($header['class'] ?? '')->explode(' ')->all();
+
+        foreach ($this->cellDecoration[$header['key']] ?? [] as $class => $condition) {
+            if ($condition($row)) {
+                $classes[] = $class;
+            }
+        }
+
+        return Arr::join($classes, ' ');
     }
 
     public function render(): View|Closure|string
@@ -185,8 +229,12 @@ class Table extends Component
                         <!-- ROWS -->
                         <tbody>
                             @foreach($rows as $k => $row)
-                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50" @click="$dispatch('row-click', {{ json_encode($row) }});">
+                                @php
+                                    # helper variable to provide the loop context
+                                    $this->loop = $loop;
+                                @endphp
 
+                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50 {{ $rowClasses($row) }}" @click="$dispatch('row-click', {{ json_encode($row) }});">
                                     <!-- CHECKBOX -->
                                     @if($selectable)
                                         <td class="w-1">
@@ -220,7 +268,7 @@ class Table extends Component
 
                                         <!--  HAS CUSTOM SLOT ? -->
                                         @if(isset(${"cell_".$temp_key}))
-                                            <td @class(["p-0" => $link])>
+                                            <td @class([$cellClasses($row, $header), "p-0" => $link])>
                                                 @if($link)
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block p-4">
                                                 @endif
@@ -232,8 +280,7 @@ class Table extends Component
                                                  @endif
                                             </td>
                                         @else
-                                            <td @class(["p-0" => $link, "hidden" => Str::contains($header['class'] ?? '', 'hidden') ])>
-
+                                            <td @class([$cellClasses($row, $header), "p-0" => $link])>
                                                 @if($link)
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block p-4">
                                                 @endif
