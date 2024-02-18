@@ -127,7 +127,7 @@ class Choices extends Component
                                     ? this.selection = null
                                     : this.selection = []
                                 
-                                this.dispatchChangeEvent({ value: null })
+                                this.dispatchChangeEvent({ value: this.isSingle ? null : []})
                             },
                             focus() {
                                 if (this.isReadonly) {
