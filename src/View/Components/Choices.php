@@ -169,7 +169,7 @@ class Choices extends Component
                                 @this.{{ $searchFunction }}(value)
                             },
                             dispatchChangeEvent(detail) {
-                                this.$refs.searchInput.dispatchEvent(new CustomEvent('change-select', { bubbles: true, detail }))
+                                this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
                             }
                         }"
                     >
