@@ -118,6 +118,8 @@ class ChoicesOffline extends Component
                                 this.isSingle
                                     ? this.selection = null
                                     : this.selection = []
+
+                                this.dispatchChangeEvent({ value: this.selection })  
                             },
                             focus() {
                                 if (this.isReadonly) {
@@ -147,6 +149,7 @@ class ChoicesOffline extends Component
                                         : this.selection.push(id)
                                 }
 
+                                this.dispatchChangeEvent({ value: this.selection })  
                                 this.$refs.searchInput.focus()
                             },
                             lookup() {
@@ -160,6 +163,9 @@ class ChoicesOffline extends Component
 
                                 this.noResults = Array.from(this.$refs.choicesOptions.querySelectorAll('div > .hidden')).length ==
                                                  Array.from(this.$refs.choicesOptions.querySelectorAll('[search-value]')).length
+                            },
+                            dispatchChangeEvent(detail) {
+                                this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
                             }
                         }"
                     >
