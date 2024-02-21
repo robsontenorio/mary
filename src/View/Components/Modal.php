@@ -51,9 +51,11 @@ class Modal extends Component
                             <hr class="mt-5" />
                         @endif
 
-                        <div class="modal-action">
-                            {{ $actions }}
-                        </div>
+                        @if($actions)
+                            <div class="modal-action">
+                                {{ $actions }}
+                            </div>
+                        @endif
                     </div>
 
                     @if(!$persistent)
