@@ -126,6 +126,8 @@ class Choices extends Component
                                 this.isSingle
                                     ? this.selection = null
                                     : this.selection = []
+                                
+                                this.dispatchChangeEvent({ value: this.selection})
                             },
                             focus() {
                                 if (this.isReadonly) {
@@ -154,6 +156,8 @@ class Choices extends Component
                                         : this.selection.push(id)
                                 }
 
+                                this.dispatchChangeEvent({ value: this.selection })    
+
                                 this.$refs.searchInput.value = ''
                                 this.$refs.searchInput.focus()
                             },
@@ -163,6 +167,9 @@ class Choices extends Component
                                 }
 
                                 @this.{{ $searchFunction }}(value)
+                            },
+                            dispatchChangeEvent(detail) {
+                                this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
                             }
                         }"
                     >

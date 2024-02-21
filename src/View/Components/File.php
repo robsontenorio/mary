@@ -181,8 +181,8 @@ class File extends Component
                             <x-mary-modal id="maryCrop{{ $uuid }}" x-ref="maryCrop" :title="$cropTitleText" separator class="backdrop-blur-sm" persistent @keydown.window.esc.prevent="">
                                 <img src="#" />
                                 <x-slot:actions>
-                                    <x-button :label="$cropCancelText" @click="close()" />
-                                    <x-button :label="$cropSaveText" class="btn-primary" @click="save()" ::disabled="processing" />
+                                    <x-mary-button :label="$cropCancelText" @click="close()" />
+                                    <x-mary-button :label="$cropSaveText" class="btn-primary" @click="save()" ::disabled="processing" />
                                 </x-slot:actions>
                             </x-mary-modal>
                         </div>

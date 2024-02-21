@@ -28,13 +28,13 @@ class Icon extends Component
     public function labelClasses(): ?string
     {
         // Remove `w-*` and `h-*` classes, because it applies only for icon
-        return Str::replaceMatches('/(w-\w*)|(h-\w*)/', '', $this->attributes->get('class'));
+        return Str::replaceMatches('/(w-\w*)|(h-\w*)/', '', $this->attributes->get('class') ?? '');
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                @if(strlen($label) > 0)
+                @if(strlen($label ?? '') > 0)
                     <div class="inline-flex items-center gap-1">
                 @endif
                         <x-svg
@@ -42,12 +42,12 @@ class Icon extends Component
                             {{
                                 $attributes->class([
                                     'inline',
-                                    'w-5 h-5' => !Str::contains($attributes->get('class'), ['w-', 'h-'])
+                                    'w-5 h-5' => !Str::contains($attributes->get('class') ?? '', ['w-', 'h-'])
                                 ])
                              }}
                         />
 
-                    @if(strlen($label) > 0)
+                    @if(strlen($label ?? '') > 0)
                             <div class="{{ $labelClasses() }}">
                                 {{ $label }}
                             </div>

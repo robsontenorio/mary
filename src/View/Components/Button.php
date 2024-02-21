@@ -90,7 +90,7 @@ class Button extends Component
                         <span @class(["hidden lg:block" => $responsive ])>
                             {{ $label }}
                         </span>
-                        @if(strlen($badge))
+                        @if(strlen($badge ?? '') > 0)
                             <span class="badge badge-primary {{ $badgeClasses }}">{{ $badge }}</span>
                         @endif
                     @else
