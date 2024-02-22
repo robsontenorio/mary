@@ -46,6 +46,7 @@ class MaryBootcampCommand extends Command
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/CountrySeeder.php", "database{$this->ds}seeders{$this->ds}CountrySeeder.php");
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/LanguageSeeder.php", "database{$this->ds}seeders{$this->ds}LanguageSeeder.php");
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/DatabaseSeeder.php", "database{$this->ds}seeders{$this->ds}DatabaseSeeder.php");
+        $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/empty-user.jpg", "public{$this->ds}empty-user.jpg");
 
         // Migrate fresh seed
         Artisan::call('migrate:fresh --seed');

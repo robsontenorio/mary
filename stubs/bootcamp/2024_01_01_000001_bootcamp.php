@@ -23,9 +23,9 @@ return new class extends Migration {
         });
 
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('country_id')->constrained('countries');
+            $table->foreignId('country_id')->nullable()->constrained('countries');
             $table->string('avatar')->nullable();
-            $table->text('bio');
+            $table->text('bio')->nullable();
         });
 
         Schema::create('language_user', function (Blueprint $table) {
