@@ -80,7 +80,7 @@ class Input extends Component
                                 "border border-primary border-r-0 px-4" => $prefix,
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                "border-error" => $modelName() && $errors->has($modelName()) && !$omitError
+                                "!border-error" => $modelName() && $errors->has($modelName()) && !$omitError
                             ])
                     >
                         {{ $prepend ?? $prefix }}
@@ -162,7 +162,7 @@ class Input extends Component
                                 "border border-primary border-l-0 px-4" => $suffix,
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                "border-error" => $modelName() && $errors->has($modelName()) && !$omitError
+                                "!border-error" => $modelName() && $errors->has($modelName()) && !$omitError
                             ])
                     >
                         {{ $append ?? $suffix }}
