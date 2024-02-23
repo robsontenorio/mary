@@ -17,6 +17,7 @@ class Main extends Component
         public ?bool $fullWidth = false,
         public ?bool $withNav = false,
         public ?string $collapseText = 'Collapse',
+        public ?string $collapseIcon = 'o-bars-3-bottom-right',
         public ?bool $collapsible = false,
     ) {
     }
@@ -70,7 +71,7 @@ class Main extends Component
                                         <x-mary-menu class="fixed bottom-0 hidden bg-inherit lg:block">
                                             <x-mary-menu-item
                                                 @click="toggle"
-                                                icon="o-bars-3-bottom-right"
+                                                icon="{{ $sidebar->attributes['collapse-icon'] ?? $collapseIcon }}"
                                                 title="{{ $sidebar->attributes['collapse-text'] ?? $collapseText }}" />
                                         </x-mary-menu>
                                     @endif
