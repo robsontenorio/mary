@@ -43,7 +43,7 @@ class Select extends Component
                      // Wee need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
                      $uuid = $uuid . $modelName()
                  @endphp
-            
+
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
                     <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
@@ -80,6 +80,7 @@ class Select extends Component
                                     'pt-3' => ($inline && $label),
                                     'rounded-l-none' => $prepend,
                                     'rounded-r-none' => $append,
+                                    'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                     'select-error' => $errors->has($modelName())
                                 ])
                         }}
@@ -106,7 +107,7 @@ class Select extends Component
 
                     <!-- INLINE LABEL -->
                     @if($label && $inline)
-                        <label for="{{ $uuid }}" class="absolute pointer-events-none text-gray-500 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded bg-base-100 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
+                        <label for="{{ $uuid }}" class="absolute pointer-events-none text-gray-500 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
                             {{ $label }}
                         </label>
                     @endif
