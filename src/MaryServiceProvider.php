@@ -5,6 +5,7 @@ namespace Mary;
 use Arr;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Mary\Console\Commands\MaryBootcampCommand;
 use Mary\Console\Commands\MaryInstallCommand;
 use Mary\View\Components\Alert;
 use Mary\View\Components\Avatar;
@@ -225,6 +226,6 @@ class MaryServiceProvider extends ServiceProvider
             __DIR__ . '/../config/mary.php' => config_path('mary.php'),
         ], 'mary.config');
 
-        $this->commands([MaryInstallCommand::class]);
+        $this->commands([MaryInstallCommand::class, MaryBootcampCommand::class]);
     }
 }

@@ -35,7 +35,7 @@ class MaryInstallCommand extends Command
         $this->setupTailwindDaisy($packageManagerCommand);
 
         // Copy stubs if is brand-new project
-        $this->copyStubs();
+        $this->copyStubs($shouldInstallVolt);
 
         // Rename components if Jetstream or Breeze are detected
         $this->renameComponents();
@@ -43,7 +43,7 @@ class MaryInstallCommand extends Command
         // Clear view cache
         Artisan::call('view:clear');
 
-        $this->info("\n✅   Done! Run `yarn dev or npm run dev`");
+        $this->info("\n✅   Done! Run `yarn dev` or `npm run dev`");
         $this->info("🌟  Give it a star: https://github.com/robsontenorio/mary");
         $this->info("❤️  Sponsor this project: https://github.com/sponsors/robsontenorio\n");
     }
@@ -162,12 +162,12 @@ class MaryInstallCommand extends Command
     /**
      * Copy example demo stub if it is a brand-new project.
      */
-    public function copyStubs(): void
+    public function copyStubs(string $shouldInstallVolt): void
     {
-        // If there is something, skip stubs
-        $web = base_path() . "{$this->ds}routes{$this->ds}web.php";
+        $routes = base_path() . "{$this->ds}routes";
 
-        if (count(file($web)) > 20) {
+        // If there is something in there, skip stubs
+        if (count(file("$routes{$this->ds}web.php")) > 20) {
             return;
         }
 
@@ -178,18 +178,28 @@ class MaryInstallCommand extends Command
         $layoutsPath = "resources{$this->ds}views{$this->ds}components{$this->ds}layouts";
         $livewireBladePath = "resources{$this->ds}views{$this->ds}livewire";
 
+        // Blade Brand component
         $this->createDirectoryIfNotExists($appViewComponents);
-        $this->createDirectoryIfNotExists($livewirePath);
-        $this->createDirectoryIfNotExists($livewireBladePath);
-        $this->createDirectoryIfNotExists($layoutsPath);
-
         $this->copyFile(__DIR__ . "/../../../stubs/AppBrand.php", "{$appViewComponents}{$this->ds}AppBrand.php");
+
+        // Default app layout
+        $this->createDirectoryIfNotExists($layoutsPath);
         $this->copyFile(__DIR__ . "/../../../stubs/app.blade.php", "{$layoutsPath}{$this->ds}app.blade.php");
 
-        $this->copyFile(__DIR__ . "/../../../stubs/Welcome.php", "{$livewirePath}{$this->ds}Welcome.php");
-        $this->copyFile(__DIR__ . "/../../../stubs/welcome.blade.php", "{$livewireBladePath}{$this->ds}welcome.blade.php");
+        // Livewire blade views
+        $this->createDirectoryIfNotExists($livewireBladePath);
 
-        $this->copyFile(__DIR__ . "/../../../stubs/web.php", $web);
+        // Demo component and its route
+        if ($shouldInstallVolt == 'Yes') {
+            $this->createDirectoryIfNotExists("$livewireBladePath{$this->ds}users");
+            $this->copyFile(__DIR__ . "/../../../stubs/index.blade.php", "$livewireBladePath{$this->ds}users{$this->ds}index.blade.php");
+            $this->copyFile(__DIR__ . "/../../../stubs/web-volt.php", "$routes{$this->ds}web.php");
+        } else {
+            $this->createDirectoryIfNotExists($livewirePath);
+            $this->copyFile(__DIR__ . "/../../../stubs/Welcome.php", "{$livewirePath}{$this->ds}Welcome.php");
+            $this->copyFile(__DIR__ . "/../../../stubs/welcome.blade.php", "{$livewireBladePath}{$this->ds}welcome.blade.php");
+            $this->copyFile(__DIR__ . "/../../../stubs/web.php", "$routes{$this->ds}web.php");
+        }
     }
 
     public function askForPackageInstaller(): string

@@ -22,14 +22,14 @@
         "alpinejs"
     ],
     "require": {
-        "illuminate/support": "~10",
-        "blade-ui-kit/blade-heroicons": "^2.1",
+        "illuminate/support": "^10.0|^11.0",
         "jfcherng/php-diff": "^6.15",
-        "laravel/prompts": "^0.1.11"
+        "laravel/prompts": "^0.1.15",
+        "blade-ui-kit/blade-heroicons": "^2.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.2",
-        "orchestra/testbench": "^8.5"
+        "phpunit/phpunit": "^10.5",
+        "orchestra/testbench": "^8.21"
     },
     "autoload": {
         "psr-4": {
