@@ -12,6 +12,7 @@ class Collapse extends Component
 
     public function __construct(
         public ?string $name = null,
+        public ?bool $accordionItem = false,
         public ?bool $checked = false,
         public ?bool $collapseArrow = false,
         public ?bool $collapsePlusMinus = false,
@@ -31,7 +32,13 @@ class Collapse extends Component
                     {{ $attributes->merge(['class' => 'collapse bg-base-200']) }}
                     :class="{'join-item': join, 'collapse-arrow': '{{ $collapseArrow }}', 'collapse-plus': '{{ $collapsePlusMinus }}'}"
                     wire:key="{{ $uuid }}">
-                        <input type="radio" name="{{ $name }}" {{ $checked ? 'checked="checked"' : '' }}/>
+
+                        @if($accordionItem)
+                            <input type="radio" name="{{ $name }}" {{ $checked ? 'checked="checked"' : '' }}/>
+                        @else
+                            <input type="checkbox" />
+                        @endif
+
                         <div {{ $heading->attributes->merge(["class" => "collapse-title text-xl font-medium"])  }}>
                             {{ $heading }}
                         </div>
