@@ -59,11 +59,15 @@ class Header extends Component
                                 </div>
                             @endif
                         </div>
-                        <div @class(["flex items-center justify-center gap-3 grow order-last sm:order-none", is_string($middle) ? '' : $middle?->attributes->get('class')])>
-                            <div class="w-full lg:w-auto">
-                                {{ $middle }}
+
+                        @if($middle)
+                            <div @class(["flex items-center justify-center gap-3 grow order-last sm:order-none", is_string($middle) ? '' : $middle?->attributes->get('class')])>
+                                <div class="w-full lg:w-auto">
+                                    {{ $middle }}
+                                </div>
                             </div>
-                        </div>
+                        @endif
+                        
                         <div @class(["flex items-center gap-3", is_string($actions) ? '' : $actions?->attributes->get('class') ]) >
                             {{ $actions}}
                         </div>
