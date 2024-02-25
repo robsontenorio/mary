@@ -44,6 +44,7 @@ use Mary\View\Components\Nav;
 use Mary\View\Components\Progress;
 use Mary\View\Components\ProgressRadial;
 use Mary\View\Components\Radio;
+use Mary\View\Components\Range;
 use Mary\View\Components\Select;
 use Mary\View\Components\Spotlight;
 use Mary\View\Components\Stat;
@@ -135,6 +136,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'progress', Progress::class);
         Blade::component($prefix . 'progress-radial', ProgressRadial::class);
         Blade::component($prefix . 'radio', Radio::class);
+        Blade::component($prefix . 'range', Range::class);
         Blade::component($prefix . 'select', Select::class);
         Blade::component($prefix . 'spotlight', Spotlight::class);
         Blade::component($prefix . 'stat', Stat::class);
