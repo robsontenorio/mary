@@ -270,7 +270,7 @@ class Table extends Component
                                         @if(isset(${"cell_".$temp_key}))
                                             <td @class([$cellClasses($row, $header), "p-0" => $link])>
                                                 @if($link)
-                                                    <a href="{{ $redirectLink($row) }}" wire:navigate class="block p-4">
+                                                    <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
                                                 @endif
 
                                                 {{ ${"cell_".$temp_key}($row)  }}
@@ -282,7 +282,7 @@ class Table extends Component
                                         @else
                                             <td @class([$cellClasses($row, $header), "p-0" => $link])>
                                                 @if($link)
-                                                    <a href="{{ $redirectLink($row) }}" wire:navigate class="block p-4">
+                                                    <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
                                                 @endif
 
                                                 {{ data_get($row, $header['key']) }}
@@ -296,7 +296,7 @@ class Table extends Component
 
                                     <!-- ACTIONS -->
                                     @if($actions)
-                                        <td class="text-right" @click="event.stopPropagation()">{{ $actions($row) }}</td>
+                                        <td class="text-right py-0" @click="event.stopPropagation()">{{ $actions($row) }}</td>
                                     @endif
                                 </tr>
 
