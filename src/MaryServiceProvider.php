@@ -32,6 +32,7 @@ use Mary\View\Components\Icon;
 use Mary\View\Components\ImageGallery;
 use Mary\View\Components\ImageLibrary;
 use Mary\View\Components\Input;
+use Mary\View\Components\Kbd;
 use Mary\View\Components\ListItem;
 use Mary\View\Components\Loading;
 use Mary\View\Components\Main;
@@ -123,6 +124,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'image-gallery', ImageGallery::class);
         Blade::component($prefix . 'image-library', ImageLibrary::class);
         Blade::component($prefix . 'input', Input::class);
+        Blade::component($prefix . 'kbd', Kbd::class);
         Blade::component($prefix . 'list-item', ListItem::class);
         Blade::component($prefix . 'loading', Loading::class);
         Blade::component($prefix . 'modal', Modal::class);
