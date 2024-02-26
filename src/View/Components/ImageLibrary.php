@@ -188,8 +188,8 @@ class ImageLibrary extends Component
                             <x-mary-modal id="maryCropModal{{ $uuid }}" x-ref="maryCropModal" :title="$cropTitleText" separator class="backdrop-blur-sm" persistent @keydown.window.esc.prevent="">
                                 <img src="#" crossOrigin="Anonymous" />
                                 <x-slot:actions>
-                                    <x-button :label="$cropCancelText" @click="close()" />
-                                    <x-button :label="$cropSaveText" class="btn-primary" @click="save()" />
+                                    <x-mary-button :label="$cropCancelText" @click="close()" />
+                                    <x-mary-button :label="$cropSaveText" class="btn-primary" @click="save()" />
                                 </x-slot:actions>
                             </x-mary-modal>
                         </div>
