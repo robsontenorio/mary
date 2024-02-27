@@ -34,7 +34,7 @@ class Collapse extends Component
                     wire:key="{{ $uuid }}"
                 >
                         <!-- Detects if it is inside an accordion.  -->
-                        @if($noJoin)
+                        @if(isset($noJoin))
                             <input type="radio" value="{{ $name }}" x-model="model" />
                         @else
                             <input {{ $attributes->wire('model') }} type="checkbox" />
