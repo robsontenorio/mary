@@ -1,17 +1,17 @@
 name: Bug Report
 description: File a bug report
-title: "[Bug]: "
-labels: ["bug", "triage"]
-body:    
+title: ""
+labels: [ "bug", "triage" ]
+body:
   - type: input
     id: mary-version
     attributes:
-      label: MaryUI version
+      label: maryUI version
       description: You can see number on your `composer.json` file.
       placeholder: "example: 2.7.0"
     validations:
       required: true
-      
+
   - type: input
     id: daisy-version
     attributes:
@@ -20,7 +20,7 @@ body:
       placeholder: "example: 2.7.0"
     validations:
       required: true
-      
+
   - type: input
     id: livewire-version
     attributes:
@@ -29,7 +29,7 @@ body:
       placeholder: "example: 2.7.0"
     validations:
       required: true
-      
+
   - type: dropdown
     id: browsers
     attributes:
@@ -39,10 +39,10 @@ body:
         - Firefox
         - Chrome
         - Safari
-        - Microsoft Edge 
+        - Microsoft Edge
     validations:
       required: true
-      
+
   - type: textarea
     id: what-happened
     attributes:
@@ -50,20 +50,20 @@ body:
       placeholder: Tell us what you see!
       value: |
         ✅ For sure you can paste screenshots.
-        
-        ❌ Please, don't paste code as screenshot. Paste as formatted markdown code.        
 
-        PHP      
-        
+        ❌ Please, don't paste code as screenshot. Paste as formatted markdown code.
+
+        PHP
+
         ```php
         public bool $modal = false;
         ```
-        
+
         HTML/Blade
-        
+
         ```blade
         <x-button label="Hi" />
         ```
-      
+
     validations:
       required: true

@@ -1,4 +1,4 @@
-<p align="center"><img width="200" src="https://github.com/robsontenorio/mary-ui.com/blob/main/public/mary.png?raw=true""></p>
+<p align="center"><img width="200" src="https://github.com/robsontenorio/mary-ui.com/blob/main/public/mary.png?raw=true"></p>
 
 <p align="center">
     <a href="https://packagist.org/packages/robsontenorio/mary">
@@ -14,11 +14,11 @@
 
 ## Introduction
 
-Mary is a set of gorgeous Laravel blade components made for Livewire 3 and styled with DaisyUI and Tailwind.
+MaryUI is a set of gorgeous Laravel blade components made for Livewire 3 and styled with DaisyUI and Tailwind.
 
 ## Official Documentation
 
-You can read the official documentation on the [Mary website](https://mary-ui.com).
+You can read the official documentation on the [maryUI website](https://mary-ui.com).
 
 ## Sponsor
 
@@ -27,7 +27,6 @@ Let's keep pushing it, [sponsor me](https://github.com/sponsors/robsontenorio) â
 ## Follow me
 
 [@robsontenorio](https://twitter.com/robsontenorio)
-
 
 ## Contributing
 
@@ -39,20 +38,23 @@ git clone git@github.com:robsontenorio/mary.git
 
 Change `composer.json` from **your app**
 
+<!-- @formatter:off -->
 ```json
-"minimum-stability": "dev",      // <- change to "dev"
+"minimum-stability": "dev", // <- change to "dev"
 
 // Add this
 "repositories": {
     "robsontenorio/mary": {
         "type": "path",
-        "url": "/path/to/mary",  // <- change the path
+        "url": "/path/to/mary", // <- change the path
         "options": {
-            "symlink": true
+          "symlink": true
         }
     }
 }
 ```
+<!-- @formatter:on -->
+
 
 Require the package again for local symlink.
 
@@ -66,8 +68,8 @@ Start dev
 yarn dev
 ```
 
-
 ## License
+
 <a name="license"></a>
 
 Livewire is open-sourced software licensed under the [MIT license](LICENSE.md).

@@ -44,7 +44,7 @@ class Welcome extends Component
      * For demo purpose, this is a static collection.
      *
      * On real projects you do it with Eloquent collections.
-     * Please, refer to Mary docs to see the eloquent examples.
+     * Please, refer to maryUI docs to see the eloquent examples.
      */
     public function users(): Collection
     {
