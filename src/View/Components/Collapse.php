@@ -12,15 +12,13 @@ class Collapse extends Component
 
     public function __construct(
         public ?string $name = null,
-        public ?bool $accordionItem = false,
-        public ?bool $checked = false,
-        public ?bool $collapseArrow = false,
+        public ?bool $collapseArrow = true,
         public ?bool $collapsePlusMinus = false,
+        public ?bool $separator = false,
 
         // Slots
         public mixed $heading = null,
         public mixed $content = null,
-    public mixed $actions = null
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -28,21 +26,28 @@ class Collapse extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div
-                    {{ $attributes->merge(['class' => 'collapse bg-base-200']) }}
-                    :class="{'join-item': join, 'collapse-arrow': '{{ $collapseArrow }}', 'collapse-plus': '{{ $collapsePlusMinus }}'}"
-                    wire:key="{{ $uuid }}">
+                @aware(['noJoin' => null])
 
-                        @if($accordionItem)
-                            <input type="radio" name="{{ $name }}" {{ $checked ? 'checked="checked"' : '' }}/>
+                <div
+                    {{ $attributes->merge(['class' => 'collapse border border-base-300']) }}
+                    :class="{'join-item': '{{ ! $noJoin }}', 'collapse-arrow': '{{ $collapseArrow && ! $collapsePlusMinus }}', 'collapse-plus': '{{ $collapsePlusMinus }}'}"
+                    wire:key="{{ $uuid }}"
+                >
+                        <!-- Detects if it is inside an accordion.  -->
+                        @if($noJoin)
+                            <input type="radio" value="{{ $name }}" x-model="model" />
                         @else
-                            <input type="checkbox" />
+                            <input {{ $attributes->wire('model') }} type="checkbox" />
                         @endif
 
                         <div {{ $heading->attributes->merge(["class" => "collapse-title text-xl font-medium"])  }}>
                             {{ $heading }}
                         </div>
-                        <div {{ $content->attributes->merge(["class" => "collapse-content"])  }}>
+                        <div {{ $content->attributes->merge(["class" => "collapse-content"]) }}>
+                            @if($separator)
+                                <hr class="mb-3" />
+                            @endif
+
                             {{ $content }}
                         </div>
                 </div>

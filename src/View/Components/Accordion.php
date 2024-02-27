@@ -11,9 +11,7 @@ class Accordion extends Component
     public string $uuid;
 
     public function __construct(
-        public ?bool $join = false,
-
-    public mixed $actions = null
+        public ?bool $noJoin = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -22,9 +20,10 @@ class Accordion extends Component
     {
         return <<<'HTML'
                 <div
-                    x-data="{ join: {{ $join ? 'true' : 'false' }} }"
-                    {{ $attributes->merge(['class' => ($join ? 'join join-vertical w-full' : '')]) }}
-                    wire:key="{{ $uuid }}">
+                    x-data="{ model: @entangle($attributes->wire('model')) }"
+                    {{ $attributes->merge(['class' => ($noJoin ? '' : 'join join-vertical w-full')]) }}
+                    wire:key="{{ $uuid }}"
+                >
                         {{ $slot }}
                 </div>
             HTML;
