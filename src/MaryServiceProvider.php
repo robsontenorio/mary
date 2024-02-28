@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Mary\Console\Commands\MaryBootcampCommand;
 use Mary\Console\Commands\MaryInstallCommand;
+use Mary\View\Components\Accordion;
 use Mary\View\Components\Alert;
 use Mary\View\Components\Avatar;
 use Mary\View\Components\Badge;
@@ -17,6 +18,7 @@ use Mary\View\Components\Chart;
 use Mary\View\Components\Checkbox;
 use Mary\View\Components\Choices;
 use Mary\View\Components\ChoicesOffline;
+use Mary\View\Components\Collapse;
 use Mary\View\Components\DatePicker;
 use Mary\View\Components\DateTime;
 use Mary\View\Components\Diff;
@@ -100,6 +102,7 @@ class MaryServiceProvider extends ServiceProvider
         $prefix = config('mary.prefix');
 
         // Blade
+        Blade::component($prefix . 'accordion', Accordion::class);
         Blade::component($prefix . 'alert', Alert::class);
         Blade::component($prefix . 'avatar', Avatar::class);
         Blade::component($prefix . 'badge', Badge::class);
@@ -110,6 +113,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'checkbox', Checkbox::class);
         Blade::component($prefix . 'choices', Choices::class);
         Blade::component($prefix . 'choices-offline', ChoicesOffline::class);
+        Blade::component($prefix . 'collapse', Collapse::class);
         Blade::component($prefix . 'datepicker', DatePicker::class);
         Blade::component($prefix . 'datetime', DateTime::class);
         Blade::component($prefix . 'diff', Diff::class);
