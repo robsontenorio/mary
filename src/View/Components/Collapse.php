@@ -31,7 +31,7 @@ class Collapse extends Component
                 <div
                     {{ $attributes->merge(['class' => 'collapse border border-base-300']) }}
                     :class="{'join-item': '{{ ! $noJoin }}', 'collapse-arrow': '{{ $collapseArrow && ! $collapsePlusMinus }}', 'collapse-plus': '{{ $collapsePlusMinus }}'}"
-                    wire:key="{{ $uuid }}"
+                    wire:key="collapse-{{ $uuid }}"
                 >
                         <!-- Detects if it is inside an accordion.  -->
                         @if(isset($noJoin))
@@ -43,7 +43,7 @@ class Collapse extends Component
                         <div {{ $heading->attributes->merge(["class" => "collapse-title text-xl font-medium"])  }}>
                             {{ $heading }}
                         </div>
-                        <div {{ $content->attributes->merge(["class" => "collapse-content"]) }}>
+                        <div {{ $content->attributes->merge(["class" => "collapse-content"]) }} wire:key="content-{{ $uuid }}">
                             @if($separator)
                                 <hr class="mb-3" />
                             @endif

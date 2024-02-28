@@ -21,8 +21,8 @@ class Accordion extends Component
         return <<<'HTML'
                 <div
                     x-data="{ model: @entangle($attributes->wire('model')) }"
-                    {{ $attributes->merge(['class' => ($noJoin ? '' : 'join join-vertical w-full')]) }}
-                    wire:key="{{ $uuid }}"
+                    {{ $attributes->whereDoesntStartWith('wire:model')->merge(['class' => ($noJoin ? '' : 'join join-vertical w-full')]) }}
+                    wire:key="accordion-{{ $uuid }}"
                 >
                         {{ $slot }}
                 </div>
