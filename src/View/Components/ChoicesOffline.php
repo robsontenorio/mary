@@ -56,6 +56,11 @@ class ChoicesOffline extends Component
         return $this->attributes->has('readonly') && $this->attributes->get('readonly') == true;
     }
 
+    public function isDisabled(): bool
+    {
+        return $this->attributes->has('disabled') && $this->attributes->get('disabled') == true;
+    }
+
     public function isRequired(): bool
     {
         return $this->attributes->has('required') && $this->attributes->get('required') == true;
@@ -81,6 +86,7 @@ class ChoicesOffline extends Component
                             isSingle: {{ json_encode($single) }},
                             isSearchable: {{ json_encode($searchable) }},
                             isReadonly: {{ json_encode($isReadonly()) }},
+                            isDisabled: {{ json_encode($isDisabled()) }},
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
                             noResults: false,
@@ -119,10 +125,10 @@ class ChoicesOffline extends Component
                                     ? this.selection = null
                                     : this.selection = []
 
-                                this.dispatchChangeEvent({ value: this.selection })  
+                                this.dispatchChangeEvent({ value: this.selection })
                             },
                             focus() {
-                                if (this.isReadonly) {
+                                if (this.isReadonly || this.isDisabled) {
                                     return
                                 }
 
@@ -135,7 +141,7 @@ class ChoicesOffline extends Component
                                     : this.selection.includes(id)
                             },
                             toggle(id) {
-                                if (this.isReadonly) {
+                                if (this.isReadonly || this.isDisabled) {
                                     return
                                 }
 
@@ -149,7 +155,7 @@ class ChoicesOffline extends Component
                                         : this.selection.push(id)
                                 }
 
-                                this.dispatchChangeEvent({ value: this.selection })  
+                                this.dispatchChangeEvent({ value: this.selection })
                                 this.$refs.searchInput.focus()
                             },
                             lookup() {
@@ -216,7 +222,7 @@ class ChoicesOffline extends Component
                             @endif
 
                             <!-- CLEAR ICON  -->
-                            @if(! $isReadonly())
+                            @if(! $isReadonly() && ! $isDisabled())
                                 <x-mary-icon @click="reset()"  name="o-x-mark" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
                             @endif
 
@@ -236,7 +242,7 @@ class ChoicesOffline extends Component
                                                 <span x-text="option.{{ $optionLabel }}"></span>
                                              @endif
 
-                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
+                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
                                         </div>
                                     </template>
                                 @endif
@@ -251,8 +257,8 @@ class ChoicesOffline extends Component
                                 @keyup="lookup()"
                                 @input="focus()"
                                 :required="isRequired && isSelectionEmpty"
-                                :readonly="isReadonly || ! isSearchable"
-                                :class="(isReadonly || !isSearchable || !focused) && '!w-1'"
+                                :readonly="isReadonly || isDisabled || ! isSearchable"
+                                :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-1'"
                                 class="outline-none mt-0.5 bg-transparent w-20"
                              />
                         </div>
@@ -271,7 +277,7 @@ class ChoicesOffline extends Component
                         @endif
 
                         <!-- OPTIONS LIST -->
-                        <div x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}" >
+                        <div x-show="focused" x-cloak class="relative" wire:key="options-list-main-{{ $uuid }}" >
                             <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto" x-anchor.bottom-start="$refs.container">
 
                                <!-- SELECT ALL -->
