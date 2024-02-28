@@ -44,12 +44,12 @@ class ImageGallery extends Component
                                 target="_blank"
                                 data-pswp-width="200"
                                 data-pswp-height="200"
-                                x-init="
-                                        $el.setAttribute('data-pswp-width', document.getElementById('image-{{ $uuid }}-{{ $loop->index }}').naturalWidth);
-                                        $el.setAttribute('data-pswp-height', document.getElementById('image-{{ $uuid }}-{{ $loop->index }}').naturalHeight);
-                                    "
                             >
-                                <img src="{{ $image }}" class="object-cover hover:opacity-70" id="image-{{ $uuid }}-{{ $loop->index }}" />
+                                <img
+                                    src="{{ $image }}"
+                                    class="object-cover hover:opacity-70"
+                                    onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)"
+                                />
                             </a>
                         @endforeach
                     </div>
