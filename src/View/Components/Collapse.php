@@ -12,7 +12,6 @@ class Collapse extends Component
 
     public function __construct(
         public ?string $name = null,
-        public ?bool $collapseArrow = true,
         public ?bool $collapsePlusMinus = false,
         public ?bool $separator = false,
 
@@ -30,7 +29,7 @@ class Collapse extends Component
 
                 <div
                     {{ $attributes->merge(['class' => 'collapse border border-base-300']) }}
-                    :class="{'join-item': '{{ ! $noJoin }}', 'collapse-arrow': '{{ $collapseArrow && ! $collapsePlusMinus }}', 'collapse-plus': '{{ $collapsePlusMinus }}'}"
+                    :class="{'join-item': '{{ ! $noJoin }}', 'collapse-arrow': '{{ ! $collapsePlusMinus }}', 'collapse-plus': '{{ $collapsePlusMinus }}'}"
                     wire:key="collapse-{{ $uuid }}"
                 >
                         <!-- Detects if it is inside an accordion.  -->
