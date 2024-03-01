@@ -24,7 +24,7 @@ class Main extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                 <main @class(["w-full mx-auto", "max-w-screen-2xl" => !$fullWidth])>
+                 <main @class(["w-full mx-auto flex grow", "max-w-screen-2xl" => !$fullWidth])>
                     <div class="drawer inline lg:grid lg:drawer-open">
                         <input id="{{ $sidebar?->attributes['drawer'] }}" type="checkbox" class="drawer-toggle" />
                         <div {{ $content->attributes->class(["drawer-content w-full mx-auto p-5 lg:px-10 lg:py-5"]) }}>
@@ -43,9 +43,9 @@ class Main extends Component
                                         fetch('/mary/toogle-sidebar?collapsed=' + this.collapsed);
                                     }
                                 }"
-
+                                style="height: inherit; display: flex;"
                                 @menu-sub-clicked="if(collapsed) { toggle() }"
-                                @class(["drawer-side z-20 lg:z-auto", "top-0 lg:top-16" => $withNav])
+                                @class(["drawer-side z-20 lg:z-auto flex flex-col", "top-0 lg:top-16" => $withNav])
                             >
                                 <label for="{{ $sidebar?->attributes['drawer'] }}" aria-label="close sidebar" class="drawer-overlay"></label>
 
@@ -57,7 +57,7 @@ class Main extends Component
 
                                     {{
                                         $sidebar->attributes->class([
-                                            "pb-40 !transition-all !duration-100 ease-out overflow-x-hidden overflow-y-auto h-full max-h-full",
+                                            "!transition-all !duration-100 ease-out overflow-x-hidden overflow-y-auto flex flex-col justify-between grow max-h-dvh",
                                             "w-[70px] [&>*_summary::after]:hidden [&_.mary-hideable]:hidden [&_.display-when-collapsed]:block [&_.hidden-when-collapsed]:hidden" => session('mary-sidebar-collapsed') == 'true',
                                             "w-[270px] [&>*_summary::after]:block [&_.mary-hideable]:block [&_.hidden-when-collapsed]:block [&_.display-when-collapsed]:hidden" => session('mary-sidebar-collapsed') != 'true'
                                         ])
@@ -67,7 +67,7 @@ class Main extends Component
 
                                      <!-- SIDEBAR COLLAPSE -->
                                     @if($sidebar->attributes['collapsible'])
-                                        <x-mary-menu class="fixed bottom-0 hidden bg-inherit lg:block">
+                                        <x-mary-menu class="hidden bg-inherit lg:block">
                                             <x-mary-menu-item
                                                 @click="toggle"
                                                 icon="o-bars-3-bottom-right"
