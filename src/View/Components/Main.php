@@ -15,7 +15,6 @@ class Main extends Component
         public mixed $content = null,
         public mixed $footer = null,
         public ?bool $fullWidth = false,
-        public ?bool $withNav = false,
         public ?string $collapseText = 'Collapse',
         public ?bool $collapsible = false,
     ) {
@@ -45,7 +44,7 @@ class Main extends Component
                                 }"
                                 style="height: inherit; display: flex;"
                                 @menu-sub-clicked="if(collapsed) { toggle() }"
-                                @class(["drawer-side z-20 lg:z-auto flex flex-col", "top-0 lg:top-16" => $withNav])
+                                @class(["drawer-side z-20 lg:z-auto flex flex-col"])
                             >
                                 <label for="{{ $sidebar?->attributes['drawer'] }}" aria-label="close sidebar" class="drawer-overlay"></label>
 
