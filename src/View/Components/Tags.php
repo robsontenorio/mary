@@ -152,6 +152,7 @@ class Tags extends Component
                         class="outline-none mt-1 bg-transparent"
                         placeholder="{{ $attributes->whereStartsWith('placeholder')->first() }}"
                         type="text"
+                        enterkeyhint="done"
                         x-ref="searchInput"
                         :class="(isReadonly || !focused) && 'w-1'"
                         :required="isRequired"
@@ -160,7 +161,6 @@ class Tags extends Component
                         @input="focus()"
                         @click.outside="clear()"
                         @keydown.enter.prevent="push()"
-                        @keydown.tab.prevent="push()"
                         @keyup.prevent="if (event.key === ',') { push() }"
                     />
                 </div>
