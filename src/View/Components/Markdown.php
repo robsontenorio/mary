@@ -30,7 +30,7 @@ class Markdown extends Component
         $setup = array_merge([
             'spellChecker' => false,
             'autoSave' => false,
-            'toolbarTips' => true,
+            'uploadImage' => true,
             'imageAccept' => 'image/png, image/jpeg, image/gif, image/avif',
             'toolbar' => [
                 'heading', 'bold', 'italic', 'strikethrough', '|',
@@ -72,10 +72,12 @@ class Markdown extends Component
                 <div
                     x-data="
                         {
+                            editor: null,
                             value: @entangle($attributes->wire('model')),
                             uploadUrl: '/mary/upload?disk={{ $disk }}&folder={{ $folder }}&_token={{ csrf_token() }}',
+                            uploading: false,
                             init() {
-                                const easyMDE = new EasyMDE({
+                                this.editor = new EasyMDE({
                                         {{ $setup() }},
                                         element: $refs.markdown{{ $uuid }},
                                         initialValue: this.value ?? '',
@@ -87,19 +89,31 @@ class Markdown extends Component
                                             var data = new FormData()
                                             data.append('file', file)
 
+                                            this.uploading = true
+
                                             fetch(this.uploadUrl, { method: 'POST', body: data })
                                                .then(response => response.json())
                                                .then(data => onSuccess(data.location))
                                                .catch((err) => onError('Error uploading image!'))
+                                               .finally(() => this.uploading = false)
                                         }
                                     })
 
-                                easyMDE.codemirror.on('change', () => this.value = easyMDE.value())
+                                this.editor.codemirror.on('change', () => this.value = this.editor.value())
                             }
                         }"
                     wire:ignore
+                    x-on:livewire:navigating.window="editor.toTextArea(); editor = null"
                 >
-                    <textarea x-ref="markdown{{ $uuid }}"></textarea>
+                    <div class="relative disabled" :class="uploading && 'pointer-events-none opacity-50'">
+                        <textarea x-ref="markdown{{ $uuid }}"></textarea>
+
+                        <div class="absolute top-1/2 left-1/2 !opacity-100 text-center hidden" :class="uploading && '!block'">
+                            <div>Uploading</div>
+                            <div class="loading loading-dots"></div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- ERROR -->
