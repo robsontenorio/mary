@@ -14,6 +14,7 @@ class Spotlight extends Component
         public ?string $shortcut = "meta.g",
         public ?string $searchText = "Search ...",
         public ?string $noResultsText = "Nothing found.",
+        public ?string $url = '/mary/spotlight',
 
         // Slots
         public mixed $append = null
@@ -96,7 +97,7 @@ class Spotlight extends Component
                                     this.controller?.abort()
                                     this.controller = new AbortController();
 
-                                    let response = await fetch(`/mary/spotlight?search=${this.value}&${this.query}`, { signal: this.controller.signal })
+                                    let response = await fetch(`{{$url}}?search=${this.value}&${this.query}`, { signal: this.controller.signal })
                                     this.results = await response.json()
                                 } catch(e) {
                                     console.log(e)
