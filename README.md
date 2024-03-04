@@ -14,7 +14,7 @@
 
 ## Introduction
 
-MaryUI is a set of gorgeous Laravel blade components made for Livewire 3 and styled with DaisyUI and Tailwind.
+MaryUI is a set of gorgeous Laravel Blade UI Components made for Livewire 3 and styled around daisyUI + Tailwind.
 
 ## Official Documentation
 
