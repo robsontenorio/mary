@@ -24,7 +24,9 @@ return [
     'components' => [
         'spotlight' => [
             'class' => 'App\Support\Spotlight',
-        ]
+        ],
+        'toogle-sidebar' => true,
+        'upload' => true
     ]
 ];
 
