@@ -42,9 +42,9 @@
                             <x-button icon="o-power" class="btn-circle btn-ghost btn-xs" tooltip-left="logoff" no-wire-navigate link="/logout" />
                         </x-slot:actions>
                     </x-list-item>
-                @endif
 
-                <x-menu-separator />
+                    <x-menu-separator />
+                @endif
 
                 <x-menu-item title="Hello" icon="o-sparkles" link="/" />
                 <x-menu-sub title="Settings" icon="o-cog-6-tooth">
