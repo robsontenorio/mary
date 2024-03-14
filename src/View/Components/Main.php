@@ -42,6 +42,7 @@ class Main extends Component
                                     toggle() {
                                         this.collapsed = !this.collapsed;
                                         fetch('/mary/toogle-sidebar?collapsed=' + this.collapsed);
+                                        this.$dispatch('sidebar-toggled', this.collapsed);
                                     }
                                 }"
 
