@@ -30,6 +30,7 @@ class Avatar extends Component
                         <img src="{{ $image }}" />
                     </div>
                 </div>
+                @if($title || $subtitle)
                 <div>
                     @if($title)
                         <div @class(["font-semibold font-lg", is_string($title) ? '' : $title?->attributes->get('class') ]) >
@@ -42,6 +43,7 @@ class Avatar extends Component
                         </div>
                     @endif
                 </div>
+                @endif
             </div>
             HTML;
     }
