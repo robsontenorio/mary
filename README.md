@@ -72,4 +72,4 @@ yarn dev
 
 <a name="license"></a>
 
-Livewire is open-sourced software licensed under the [MIT license](LICENSE.md).
+MaryUI is open-sourced software licensed under the [MIT license](/license.md).
