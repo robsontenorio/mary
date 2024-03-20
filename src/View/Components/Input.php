@@ -22,6 +22,7 @@ class Input extends Component
         public ?bool $omitError = false,
         public ?bool $money = false,
         public ?string $locale = 'en-US',
+        public ?string $errorBag = null,
 
         // Slots
         public mixed $prepend = null,
@@ -33,6 +34,11 @@ class Input extends Component
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function moneySettings(): string
@@ -80,7 +86,7 @@ class Input extends Component
                                 "border border-primary border-r-0 px-4" => $prefix,
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                "!border-error" => $modelName() && $errors->has($modelName()) && !$omitError
+                                "!border-error" => $errorBagName() && $errors->has($errorBagName()) && !$omitError
                             ])
                     >
                         {{ $prepend ?? $prefix }}
@@ -120,7 +126,7 @@ class Input extends Component
                                     'rounded-l-none' => $prefix || $prepend,
                                     'rounded-r-none' => $suffix || $append,
                                     'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                    'input-error' => $modelName() && $errors->has($modelName()) && !$omitError
+                                    'input-error' => $errorBagName() && $errors->has($errorBagName()) && !$omitError
                             ])
                         }}
                     />
@@ -162,7 +168,7 @@ class Input extends Component
                                 "border border-primary border-l-0 px-4" => $suffix,
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                "!border-error" => $modelName() && $errors->has($modelName()) && !$omitError
+                                "!border-error" => $errorBagName() && $errors->has($errorBagName()) && !$omitError
                             ])
                     >
                         {{ $append ?? $suffix }}
@@ -175,8 +181,8 @@ class Input extends Component
                 @endif
 
                 <!-- ERROR -->
-                @if(!$omitError && $modelName())
-                    @error($modelName())
+                @if(!$omitError && $errorBagName())
+                    @error($errorBagName())
                         <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                     @enderror
                 @endif
