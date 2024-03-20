@@ -51,14 +51,18 @@ class Toast extends Component
                     document.addEventListener('livewire:init', () => {
                         Livewire.hook('request', ({fail}) => {
                             fail(({status, content, preventDefault}) => {
-                                let result = JSON.parse(content);
+                                try {
+                                    let result = JSON.parse(content);
                 
-                                if (result?.toast && typeof window.toast === "function") {
-                                    window.toast(result);
-                                }
-                
-                                if ((result?.prevent_default ?? false) === true) {
-                                    preventDefault();
+                                    if (result?.toast && typeof window.toast === "function") {
+                                        window.toast(result);
+                                    }
+                    
+                                    if ((result?.prevent_default ?? false) === true) {
+                                        preventDefault();
+                                    }
+                                } catch (e) {
+                                    console.log(e)
                                 }
                             })
                         })
