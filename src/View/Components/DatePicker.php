@@ -5,9 +5,12 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Mary\Traits\HasErrors;
 
 class DatePicker extends Component
 {
+    use HasErrors;
+
     public string $uuid;
 
     public function __construct(
@@ -17,7 +20,6 @@ class DatePicker extends Component
         public ?string $hint = null,
         public ?bool $inline = false,
         public ?array $config = [],
-        public ?string $errorBag = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -35,16 +37,6 @@ class DatePicker extends Component
         $config = str_replace('"x"', '$wire.' . $this->modelName(), $config);
 
         return $config;
-    }
-
-    public function modelName(): ?string
-    {
-        return $this->attributes->whereStartsWith('wire:model')->first();
-    }
-
-    public function errorBagName(): ?string
-    {
-        return $this->errorBag ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -107,9 +99,7 @@ class DatePicker extends Component
                 </div>
 
                 <!-- ERROR -->
-                @error($errorBagName())
-                    <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
-                @enderror
+                {!! $errorTemplate($errors) !!}
 
                 <!-- HINT -->
                 @if($hint)

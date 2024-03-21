@@ -12,9 +12,10 @@ class Icon extends Component
     public string $uuid;
 
     public function __construct(
-        public string $name,
+        public string  $name,
         public ?string $label = null
-    ) {
+    )
+    {
         $this->uuid = "mary" . md5(serialize($this));
     }
 
@@ -22,7 +23,7 @@ class Icon extends Component
     {
         $name = Str::of($this->name);
 
-        return $name->contains('.') ? $name->replace('.', '-') : "{config('mary.components.icon.set', 'heroicon')}-{$this->name}";
+        return $name->contains('.') ? $name->replace('.', '-') : config('mary.components.icon.set', 'heroicon') . "-{$this->name}";
     }
 
     public function labelClasses(): ?string

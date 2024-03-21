@@ -5,9 +5,13 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
+use Mary\Traits\HasErrors;
 
 class Range extends Component
 {
+
+    use HasErrors;
+
     public string $uuid;
 
     public function __construct(
@@ -16,20 +20,8 @@ class Range extends Component
         public ?bool $omitError = false,
         public ?int $min = 0,
         public ?int $max = 100,
-        public ?string $errorBag = null,
-
     ) {
         $this->uuid = "mary" . md5(serialize($this));
-    }
-
-    public function modelName(): string
-    {
-        return $this->attributes->whereStartsWith('wire:model')->first();
-    }
-
-    public function errorBagName(): ?string
-    {
-        return $this->errorBag ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -58,11 +50,7 @@ class Range extends Component
                     />
 
                     <!-- ERROR -->
-                    @if(!$omitError && $errorBagName())
-                        @error($errorBagName())
-                            <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
-                        @enderror
-                    @endif
+                    {!! $errorTemplate($errors) !!}
 
                     <!-- HINT -->
                     @if($hint)

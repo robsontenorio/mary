@@ -5,9 +5,13 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Mary\Traits\HasErrors;
 
 class Markdown extends Component
 {
+
+    use HasErrors;
+
     public string $uuid;
 
     public function __construct(
@@ -15,20 +19,8 @@ class Markdown extends Component
         public ?string $disk = 'public',
         public ?string $folder = 'markdown',
         public ?array $config = [],
-        public ?string $errorBag = null,
-
     ) {
         $this->uuid = "mary" . md5(serialize($this));
-    }
-
-    public function modelName(): ?string
-    {
-        return $this->attributes->wire('model');
-    }
-
-    public function errorBagName(): ?string
-    {
-        return $this->errorBag ?? $this->modelName();
     }
 
     public function setup(): string
@@ -123,9 +115,7 @@ class Markdown extends Component
                 </div>
 
                 <!-- ERROR -->
-                @error($errorBagName())
-                    <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
-                @enderror
+                {!! $errorTemplate($errors) !!}
             </div>
             HTML;
     }

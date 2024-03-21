@@ -5,9 +5,13 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Mary\Traits\HasErrors;
 
 class Input extends Component
 {
+
+    use HasErrors;
+
     public string $uuid;
 
     public function __construct(
@@ -22,23 +26,12 @@ class Input extends Component
         public ?bool $omitError = false,
         public ?bool $money = false,
         public ?string $locale = 'en-US',
-        public ?string $errorBag = null,
 
         // Slots
         public mixed $prepend = null,
         public mixed $append = null
     ) {
         $this->uuid = "mary" . md5(serialize($this));
-    }
-
-    public function modelName(): ?string
-    {
-        return $this->attributes->whereStartsWith('wire:model')->first();
-    }
-
-    public function errorBagName(): ?string
-    {
-        return $this->errorBag ?? $this->modelName();
     }
 
     public function moneySettings(): string
@@ -181,11 +174,7 @@ class Input extends Component
                 @endif
 
                 <!-- ERROR -->
-                @if(!$omitError && $errorBagName())
-                    @error($errorBagName())
-                        <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
-                    @enderror
-                @endif
+                {!! $errorTemplate($errors) !!}
 
                 <!-- HINT -->
                 @if($hint)

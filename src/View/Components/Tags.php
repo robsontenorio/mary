@@ -5,29 +5,23 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Mary\Traits\HasErrors;
 
 class Tags extends Component
 {
+    use HasErrors;
+
     public string $uuid;
 
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $icon = null,
-        public ?string $errorBag = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
 
-    public function modelName(): ?string
-    {
-        return $this->attributes->whereStartsWith('wire:model')->first();
-    }
 
-    public function errorBagName(): ?string
-    {
-        return $this->errorBag ?? $this->modelName();
-    }
 
     public function isReadonly(): bool
     {
@@ -172,14 +166,7 @@ class Tags extends Component
                 </div>
 
                 <!-- SINGLE ERROR -->
-                @error($errorBagName())
-                    <div class="label-text-alt p-1 text-red-500">{{ $message }}</div>
-                @enderror
-
-                 <!-- MULTIPLE ERROR -->
-                @error($errorBagName().'.*')
-                    <div class="label-text-alt p-1 text-red-500">{{ $message }}</div>
-                @enderror
+                {!! $errorTemplate($errors) !!}
 
                 @if ($hint)
                     <!-- HINT -->

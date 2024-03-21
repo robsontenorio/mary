@@ -6,9 +6,12 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
+use Mary\Traits\HasErrors;
 
 class Radio extends Component
 {
+    use HasErrors;
+
     public string $uuid;
 
     public function __construct(
@@ -17,18 +20,8 @@ class Radio extends Component
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
-        public ?string $errorBag = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
-    }
-    public function modelName(): ?string
-    {
-        return $this->attributes->whereStartsWith('wire:model')->first();
-    }
-
-    public function errorBagName(): ?string
-    {
-        return $this->errorBag ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -60,9 +53,7 @@ class Radio extends Component
                         @endforeach
                     </div>
 
-                    @error($errorBagName())
-                        <div class="text-red-500 label-text-alt pl-1">{{ $message }}</div>
-                    @enderror
+                    {!! $errorTemplate($errors) !!}
 
                     @if($hint)
                         <div class="label-text-alt text-gray-400 pl-1 mt-2">{{ $hint }}</div>

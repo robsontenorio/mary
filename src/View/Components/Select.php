@@ -6,9 +6,12 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
+use Mary\Traits\HasErrors;
 
 class Select extends Component
 {
+    use HasErrors;
+
     public string $uuid;
 
     public function __construct(
@@ -22,23 +25,12 @@ class Select extends Component
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
-        public ?string $errorBag = null,
 
         // Slots
         public mixed $prepend = null,
         public mixed $append = null
     ) {
         $this->uuid = "mary" . md5(serialize($this));
-    }
-
-    public function modelName(): ?string
-    {
-        return $this->attributes->whereStartsWith('wire:model')->first();
-    }
-
-    public function errorBagName(): ?string
-    {
-        return $this->errorBag ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -132,9 +124,7 @@ class Select extends Component
                 @endif
 
                  <!-- ERROR -->
-                 @error($errorBagName())
-                    <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
-                @enderror
+                 {!! $errorTemplate($errors) !!}
 
                 <!-- HINT -->
                 @if($hint)

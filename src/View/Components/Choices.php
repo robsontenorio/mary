@@ -7,9 +7,12 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
+use Mary\Traits\HasErrors;
 
 class Choices extends Component
 {
+    use HasErrors;
+
     public string $uuid;
 
     public function __construct(
@@ -33,7 +36,6 @@ class Choices extends Component
         public ?string $height = 'max-h-64',
         public Collection|array $options = new Collection(),
         public ?string $noResultText = 'No results found.',
-        public ?string $errorBag = null,
 
         // slots
         public mixed $item = null,
@@ -46,16 +48,6 @@ class Choices extends Component
         if (($this->allowAll || $this->compact) && ($this->single || $this->searchable)) {
             throw new Exception("`allow-all` and `compact` does not work combined with `single` or `searchable`.");
         }
-    }
-
-    public function modelName(): string
-    {
-        return $this->attributes->wire('model')->value();
-    }
-
-    public function errorBagName(): ?string
-    {
-        return $this->errorBag ?? $this->modelName();
     }
 
     public function isReadonly(): bool
@@ -340,9 +332,7 @@ class Choices extends Component
                         </div>
 
                         <!-- ERROR -->
-                        @error($errorBagName())
-                            <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
-                        @enderror
+                        {!! $errorTemplate($errors) !!}
 
                         <!-- HINT -->
                         @if($hint)
