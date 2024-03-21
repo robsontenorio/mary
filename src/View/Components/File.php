@@ -20,7 +20,8 @@ class File extends Component
         public ?string $cropTitleText = "Crop image",
         public ?string $cropCancelText = "Cancel",
         public ?string $cropSaveText = "Crop",
-        public ?array $cropConfig = []
+        public ?array $cropConfig = [],
+        public ?string $errorBag = null,
 
     ) {
         $this->uuid = "mary" . md5(serialize($this));
@@ -29,6 +30,11 @@ class File extends Component
     public function modelName(): ?string
     {
         return $this->attributes->wire('model');
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function cropSetup(): string
@@ -199,12 +205,12 @@ class File extends Component
                     <!-- ERROR -->
                     @if (! $hideErrors)
                         <!-- SINGLE -->
-                        @error($modelName())
+                        @error($errorBagName())
                             <div class="text-red-500 label-text-alt p-1 pt-2">{{ $message }}</div>
                         @enderror
 
                         <!-- MULTIPLE -->
-                        @error($modelName().'.*')
+                        @error($errorBagName().'.*')
                             <div class="text-red-500 label-text-alt p-1 pt-2">{{ $message }}</div>
                         @enderror
                     @endif

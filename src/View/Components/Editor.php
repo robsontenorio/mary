@@ -15,7 +15,8 @@ class Editor extends Component
         public ?string $hint = null,
         public ?string $disk = 'public',
         public ?string $folder = 'editor',
-        public ?array $config = []
+        public ?array $config = [],
+        public ?string $errorBag = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -23,6 +24,11 @@ class Editor extends Component
     public function modelName(): ?string
     {
         return $this->attributes->wire('model');
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function setup(): string
@@ -114,7 +120,7 @@ class Editor extends Component
                     </div>
 
                     <!-- ERROR -->
-                    @error($modelName())
+                    @error($errorBagName())
                         <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                     @enderror
 

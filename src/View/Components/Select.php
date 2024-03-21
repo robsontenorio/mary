@@ -22,6 +22,7 @@ class Select extends Component
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
+        public ?string $errorBag = null,
 
         // Slots
         public mixed $prepend = null,
@@ -33,6 +34,11 @@ class Select extends Component
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -81,7 +87,7 @@ class Select extends Component
                                     'rounded-l-none' => $prepend,
                                     'rounded-r-none' => $append,
                                     'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                    'select-error' => $errors->has($modelName())
+                                    'select-error' => $errors->has($errorBagName())
                                 ])
                         }}
 
@@ -126,7 +132,7 @@ class Select extends Component
                 @endif
 
                  <!-- ERROR -->
-                 @error($modelName())
+                 @error($errorBagName())
                     <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                 @enderror
 

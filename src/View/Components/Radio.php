@@ -17,13 +17,18 @@ class Radio extends Component
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
+        public ?string $errorBag = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
-
-    public function name(): string
+    public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -46,7 +51,7 @@ class Radio extends Component
                         @foreach ($options as $option)
                             <input
                                 type="radio"
-                                name="{{ $name() }}"
+                                name="{{ $modelName() }}"
                                 value="{{ data_get($option, $optionValue) }}"
                                 aria-label="{{ data_get($option, $optionLabel) }}"
                                 {{ $attributes->whereStartsWith('wire:model') }}
@@ -55,7 +60,7 @@ class Radio extends Component
                         @endforeach
                     </div>
 
-                    @error($name())
+                    @error($errorBagName())
                         <div class="text-red-500 label-text-alt pl-1">{{ $message }}</div>
                     @enderror
 

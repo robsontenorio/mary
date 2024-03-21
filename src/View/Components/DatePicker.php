@@ -16,7 +16,8 @@ class DatePicker extends Component
         public ?string $iconRight = null,
         public ?string $hint = null,
         public ?bool $inline = false,
-        public ?array $config = []
+        public ?array $config = [],
+        public ?string $errorBag = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -39,6 +40,11 @@ class DatePicker extends Component
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -75,7 +81,7 @@ class DatePicker extends Component
                                             'h-14' => ($inline),
                                             'pt-3' => ($inline && $label),
                                             'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                            'input-error' => $errors->has($modelName())
+                                            'input-error' => $errors->has($errorBagName())
                                         ])
                                 }}
                             />
@@ -101,7 +107,7 @@ class DatePicker extends Component
                 </div>
 
                 <!-- ERROR -->
-                @error($modelName())
+                @error($errorBagName())
                     <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                 @enderror
 

@@ -33,6 +33,7 @@ class Choices extends Component
         public ?string $height = 'max-h-64',
         public Collection|array $options = new Collection(),
         public ?string $noResultText = 'No results found.',
+        public ?string $errorBag = null,
 
         // slots
         public mixed $item = null,
@@ -50,6 +51,11 @@ class Choices extends Component
     public function modelName(): string
     {
         return $this->attributes->wire('model')->value();
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function isReadonly(): bool
@@ -213,7 +219,7 @@ class Choices extends Component
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
                                     "select select-bordered select-primary w-full h-fit pr-16 pb-1 pt-1.5 inline-block cursor-pointer relative flex-1",
                                     'border border-dashed' => $isReadonly(),
-                                    'select-error' => $errors->has($modelName()),
+                                    'select-error' => $errors->has($errorBagName()),
                                     'rounded-l-none' => $prepend,
                                     'rounded-r-none' => $append,
                                     'pl-10' => $icon,
@@ -334,7 +340,7 @@ class Choices extends Component
                         </div>
 
                         <!-- ERROR -->
-                        @error($modelName())
+                        @error($errorBagName())
                             <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                         @enderror
 

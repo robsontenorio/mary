@@ -14,6 +14,7 @@ class Tags extends Component
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $icon = null,
+        public ?string $errorBag = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -21,6 +22,11 @@ class Tags extends Component
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function isReadonly(): bool
@@ -119,7 +125,7 @@ class Tags extends Component
                         $attributes->except(['wire:model', 'wire:model.live'])->class([
                             "input input-bordered input-primary w-full h-fit pr-16 pt-1.5 pb-1 min-h-[47px] inline-block cursor-pointer relative",
                             'border border-dashed' => $isReadonly(),
-                            'input-error' => $errors->has($modelName()) || $errors->has($modelName().'*'),
+                            'input-error' => $errors->has($errorBagName()) || $errors->has($errorBagName().'*'),
                             'pl-10' => $icon,
                         ])
                     }}
@@ -166,12 +172,12 @@ class Tags extends Component
                 </div>
 
                 <!-- SINGLE ERROR -->
-                @error($modelName())
+                @error($errorBagName())
                     <div class="label-text-alt p-1 text-red-500">{{ $message }}</div>
                 @enderror
 
                  <!-- MULTIPLE ERROR -->
-                @error($modelName().'.*')
+                @error($errorBagName().'.*')
                     <div class="label-text-alt p-1 text-red-500">{{ $message }}</div>
                 @enderror
 

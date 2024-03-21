@@ -12,13 +12,19 @@ class Checkbox extends Component
         public ?string $label = null,
         public ?string $hint = null,
         public ?bool $right = false,
-        public ?bool $tight = false
+        public ?bool $tight = false,
+        public ?string $errorBag = null,
     ) {
     }
 
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -40,7 +46,7 @@ class Checkbox extends Component
                     </label>
 
                     <!-- ERROR -->
-                    @error($modelName())
+                    @error($errorBagName())
                         <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                     @enderror
 

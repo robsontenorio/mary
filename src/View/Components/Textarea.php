@@ -14,6 +14,7 @@ class Textarea extends Component
         public ?string $label = null,
         public ?string $hint = null,
         public ?bool $inline = false,
+        public ?string $errorBag = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -21,6 +22,11 @@ class Textarea extends Component
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -51,7 +57,7 @@ class Textarea extends Component
                                 'textarea textarea-primary w-full peer',
                                 'pt-5' => ($inline && $label),
                                 'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                'textarea-error' => $errors->has($modelName())
+                                'textarea-error' => $errors->has($errorBagName())
                             ])
                         }}
                     >{{ $slot }}</textarea>
@@ -65,7 +71,7 @@ class Textarea extends Component
                 </div>
 
                 <!-- ERROR -->
-                @error($modelName())
+                @error($errorBagName())
                     <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                 @enderror
 

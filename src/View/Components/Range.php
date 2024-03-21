@@ -16,6 +16,7 @@ class Range extends Component
         public ?bool $omitError = false,
         public ?int $min = 0,
         public ?int $max = 100,
+        public ?string $errorBag = null,
 
     ) {
         $this->uuid = "mary" . md5(serialize($this));
@@ -24,6 +25,11 @@ class Range extends Component
     public function modelName(): string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -52,8 +58,8 @@ class Range extends Component
                     />
 
                     <!-- ERROR -->
-                    @if(!$omitError && $modelName())
-                        @error($modelName())
+                    @if(!$omitError && $errorBagName())
+                        @error($errorBagName())
                             <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
                         @enderror
                     @endif
