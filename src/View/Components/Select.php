@@ -6,11 +6,9 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
-use Mary\Traits\HasErrors;
 
 class Select extends Component
 {
-    use HasErrors;
 
     public string $uuid;
 
@@ -28,9 +26,25 @@ class Select extends Component
 
         // Slots
         public mixed $prepend = null,
-        public mixed $append = null
-    ) {
+        public mixed $append = null,
+        // Validations
+        public ?string $errorBag = null,
+        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?bool $omitError = false,
+        public ?bool $firstErrorOnly = false,
+    )
+    {
         $this->uuid = "mary" . md5(serialize($this));
+    }
+
+    public function modelName(): ?string
+    {
+        return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorBagName(): ?string
+    {
+        return $this->errorBag ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -123,8 +137,16 @@ class Select extends Component
                     </div>
                 @endif
 
-                 <!-- ERROR -->
-                 {!! $errorTemplate($errors) !!}
+                <!-- ERROR -->
+                @if(!$omitError && $errors->has($errorBagName()))
+                    @foreach($errors->get($errorBagName()) as $message)
+                        @foreach(Arr::wrap($message) as $line)
+                            <div class="{{ $errorClass }}">{{ $line }}</div>
+                            @break($firstErrorOnly)
+                        @endforeach
+                        @break($firstErrorOnly)
+                    @endforeach
+                @endif
 
                 <!-- HINT -->
                 @if($hint)
