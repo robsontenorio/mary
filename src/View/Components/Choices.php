@@ -172,7 +172,7 @@ class Choices extends Component
                                     return
                                 }
 
-                                @this.{{ $searchFunction }}(value)
+                                @this.{{ str_replace(')(', ', ', $searchFunction . '(value)') }}
                             },
                             dispatchChangeEvent(detail) {
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
@@ -286,7 +286,7 @@ class Choices extends Component
                             <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto" x-anchor.bottom-start="$refs.container">
 
                                 <!-- PROGRESS -->
-                                <progress wire:loading wire:target="{{ $searchFunction }}" class="progress absolute progress-primary top-0 h-0.5"></progress>
+                                <progress wire:loading wire:target="{{ preg_replace('/\((.*?)\)/', '', $searchFunction) }}" class="progress absolute progress-primary top-0 h-0.5"></progress>
 
                                <!-- SELECT ALL -->
                                @if($allowAll)
