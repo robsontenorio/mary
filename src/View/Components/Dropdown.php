@@ -32,7 +32,7 @@ class Dropdown extends Component
             >
                 <!-- CUSTOM TRIGGER -->
                 @if($trigger)
-                    <summary x-ref="button" @click.prevent="open = !open" {{ $attributes->class(['list-none']) }}>
+                    <summary x-ref="button" @click.prevent="open = !open" {{ $trigger->attributes->class(['list-none']) }}>
                         {{ $trigger }}
                     </summary>
                 @else
