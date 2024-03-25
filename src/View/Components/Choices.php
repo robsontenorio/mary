@@ -172,7 +172,12 @@ class Choices extends Component
                                     return
                                 }
 
-                                @this.{{ str_replace(')(', ', ', $searchFunction . '(value)') }}
+                                // Call search function from parent component
+                                // `search(value)` or `search(value, extra1, extra2 ...)`
+                                @this.{{ str_contains($searchFunction, '(')
+                                          ? preg_replace('/\((.*?)\)/', '(value, $1)', $searchFunction)
+                                          : $searchFunction . '(value)'
+                                        }}
                             },
                             dispatchChangeEvent(detail) {
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
