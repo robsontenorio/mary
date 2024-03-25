@@ -27,32 +27,54 @@ class ThemeToggle extends Component
                     <label
                         x-data="{
                             theme: $persist('light').as('mary-theme'),
-                            init() {
-                                if (this.theme == 'dark') {
-                                    this.$refs.sun.classList.add('swap-off');
-                                    this.$refs.sun.classList.remove('swap-on');
-                                    this.$refs.moon.classList.add('swap-on');
-                                    this.$refs.moon.classList.remove('swap-off');
-                                }
-                            },
                             toggle() {
-                                this.theme = this.theme == 'light' ? 'dark' : 'light'
+                                this.theme = $refs.input.checked ? 'dark' : 'light'
+
+                                if (this.theme === 'dark') {
+                                    document.documentElement.classList.add('dark')
+                                    document.documentElement.classList.remove('light')
+                                } else {
+                                    document.documentElement.classList.add('light')
+                                    document.documentElement.classList.remove('dark')
+                                }
+
                                 document.documentElement.setAttribute('data-theme', this.theme)
-                                document.documentElement.setAttribute('class', this.theme)
                                 this.$dispatch('theme-changed', this.theme)
                             }
                         }"
                         @mary-toggle-theme.window="toggle()"
-                        {{ $attributes->class("swap swap-rotate") }}
+                        {{ $attributes->class(["swap swap-rotate", "focus-within:outline focus-within:outline-2 focus-within:outline-offset-2" => Str::contains($attributes->get('class'), "btn")]) }}
                     >
-                        <input type="checkbox" class="theme-controller opacity-0" @click="toggle()" :value="theme" />
+                        <input x-ref="input" type="checkbox" class="theme-controller opacity-0" @click="toggle()" value="dark" />
                         <x-mary-icon x-ref="sun" name="o-sun" class="swap-on" />
                         <x-mary-icon x-ref="moon" name="o-moon" class="swap-off"  />
                     </label>
                 </div>
                 <script>
-                    document.documentElement.setAttribute("data-theme", localStorage.getItem("mary-theme")?.replaceAll("\"", ""))
-                    document.documentElement.setAttribute("class", localStorage.getItem("mary-theme")?.replaceAll("\"", ""))
+                    if (window.maryUiThemeInitialized === undefined) {
+                        // Set initial theme from three possible sources
+                        savedTheme = localStorage.getItem("mary-theme")?.replaceAll("\"", "");
+                        // 1. saved theme from localStorage
+                        definedTheme = document.documentElement.getAttribute("data-theme") || document.documentElement.classList.contains("dark") || null;
+                        // 2. defined theme from the <html>-tag
+                        browserTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+                        // 3. browser theme/color-scheme
+                        // If none of the above would trigger and the browser doesn't support color-scheme it defaults to 'light'
+                        endTheme = savedTheme ?? definedTheme ?? browserTheme;
+                        document.querySelector(".theme-controller").checked = endTheme === "dark"
+                        window.localStorage.setItem("mary-theme", JSON.stringify(endTheme))
+                        document.documentElement.setAttribute("data-theme", endTheme)
+                        
+                        if (endTheme === "dark") {
+                            document.documentElement.classList.add("dark")
+                            document.documentElement.classList.remove("light")
+                        } else {
+                            document.documentElement.classList.add("light")
+                            document.documentElement.classList.remove("dark")
+                        }
+                        
+                        window.maryUiThemeInitialized = true;
+                    }
                 </script>
             HTML;
     }
