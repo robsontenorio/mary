@@ -189,7 +189,7 @@ class Input extends Component
                 @if(!$omitError && $errors->has($errorBagName()))
                     @foreach($errors->get($errorBagName()) as $message)
                         @foreach(Arr::wrap($message) as $line)
-                            <div class="{{ $errorClass }}">{{ $line }}</div>
+                            <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
                             @break($firstErrorOnly)
                         @endforeach
                         @break($firstErrorOnly)
