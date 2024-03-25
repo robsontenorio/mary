@@ -22,7 +22,7 @@ class Icon extends Component
     {
         $name = Str::of($this->name);
 
-        return $name->contains('.') ? $name->replace('.', '-') : "{config('mary.components.icon.set', 'heroicon')}-{$this->name}";
+        return $name->contains('.') ? $name->replace('.', '-') : "heroicon-{$this->name}";
     }
 
     public function labelClasses(): ?string
