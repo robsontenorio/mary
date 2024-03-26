@@ -17,7 +17,7 @@ class Editor extends Component
         public ?string $folder = 'editor',
         public ?array $config = [],
         // Validations
-        public ?string $errorBag = null,
+        public ?string $errorField = null,
         public ?string $errorClass = 'text-red-500 label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
@@ -30,9 +30,9 @@ class Editor extends Component
         return $this->attributes->whereStartsWith('wire:model')->first();
     }
 
-    public function errorBagName(): ?string
+    public function errorFieldName(): ?string
     {
-        return $this->errorBag ?? $this->modelName();
+        return $this->errorField ?? $this->modelName();
     }
 
     public function setup(): string
@@ -124,8 +124,8 @@ class Editor extends Component
                     </div>
 
                     <!-- ERROR -->
-                    @if(!$omitError && $errors->has($errorBagName()))
-                        @foreach($errors->get($errorBagName()) as $message)
+                    @if(!$omitError && $errors->has($errorFieldName()))
+                        @foreach($errors->get($errorFieldName()) as $message)
                             @foreach(Arr::wrap($message) as $line)
                                 <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
                                 @break($firstErrorOnly)

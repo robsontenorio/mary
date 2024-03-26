@@ -27,7 +27,7 @@ class Input extends Component
         public mixed $prepend = null,
         public mixed $append = null,
         // Validations
-        public ?string $errorBag = null,
+        public ?string $errorField = null,
         public ?string $errorClass = 'text-red-500 label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
@@ -41,9 +41,9 @@ class Input extends Component
         return $this->attributes->whereStartsWith('wire:model')->first();
     }
 
-    public function errorBagName(): ?string
+    public function errorFieldName(): ?string
     {
-        return $this->errorBag ?? $this->modelName();
+        return $this->errorField ?? $this->modelName();
     }
 
     public function moneySettings(): string
@@ -91,7 +91,7 @@ class Input extends Component
                                 "border border-primary border-r-0 px-4" => $prefix,
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                "!border-error" => $errorBagName() && $errors->has($errorBagName()) && !$omitError
+                                "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                             ])
                     >
                         {{ $prepend ?? $prefix }}
@@ -131,7 +131,7 @@ class Input extends Component
                                     'rounded-l-none' => $prefix || $prepend,
                                     'rounded-r-none' => $suffix || $append,
                                     'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                    'input-error' => $errorBagName() && $errors->has($errorBagName()) && !$omitError
+                                    'input-error' => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                             ])
                         }}
                     />
@@ -173,7 +173,7 @@ class Input extends Component
                                 "border border-primary border-l-0 px-4" => $suffix,
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                "!border-error" => $errorBagName() && $errors->has($errorBagName()) && !$omitError
+                                "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                             ])
                     >
                         {{ $append ?? $suffix }}
@@ -186,8 +186,8 @@ class Input extends Component
                 @endif
 
                 <!-- ERROR -->
-                @if(!$omitError && $errors->has($errorBagName()))
-                    @foreach($errors->get($errorBagName()) as $message)
+                @if(!$omitError && $errors->has($errorFieldName()))
+                    @foreach($errors->get($errorFieldName()) as $message)
                         @foreach(Arr::wrap($message) as $line)
                             <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
                             @break($firstErrorOnly)

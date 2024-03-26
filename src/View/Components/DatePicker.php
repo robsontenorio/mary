@@ -19,7 +19,7 @@ class DatePicker extends Component
         public ?bool $inline = false,
         public ?array $config = [],
         // Validations
-        public ?string $errorBag = null,
+        public ?string $errorField = null,
         public ?string $errorClass = 'text-red-500 label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
@@ -33,9 +33,9 @@ class DatePicker extends Component
         return $this->attributes->whereStartsWith('wire:model')->first();
     }
 
-    public function errorBagName(): ?string
+    public function errorFieldName(): ?string
     {
-        return $this->errorBag ?? $this->modelName();
+        return $this->errorField ?? $this->modelName();
     }
 
     public function setup(): string
@@ -87,7 +87,7 @@ class DatePicker extends Component
                                             'h-14' => ($inline),
                                             'pt-3' => ($inline && $label),
                                             'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                            'input-error' => $errors->has($errorBagName())
+                                            'input-error' => $errors->has($errorFieldName())
                                         ])
                                 }}
                             />
@@ -113,8 +113,8 @@ class DatePicker extends Component
                 </div>
 
                 <!-- ERROR -->
-                @if(!$omitError && $errors->has($errorBagName()))
-                    @foreach($errors->get($errorBagName()) as $message)
+                @if(!$omitError && $errors->has($errorFieldName()))
+                    @foreach($errors->get($errorFieldName()) as $message)
                         @foreach(Arr::wrap($message) as $line)
                             <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
                             @break($firstErrorOnly)

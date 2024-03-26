@@ -34,7 +34,7 @@ class ChoicesOffline extends Component
         public Collection|array $options = new Collection(),
         public ?string $noResultText = 'No results found.',
         // Validations
-        public ?string $errorBag = null,
+        public ?string $errorField = null,
         public ?string $errorClass = 'text-red-500 label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
@@ -56,9 +56,9 @@ class ChoicesOffline extends Component
         return $this->attributes->whereStartsWith('wire:model')->first();
     }
 
-    public function errorBagName(): ?string
+    public function errorFieldName(): ?string
     {
-        return $this->errorBag ?? $this->modelName();
+        return $this->errorField ?? $this->modelName();
     }
 
     public function isReadonly(): bool
@@ -219,7 +219,7 @@ class ChoicesOffline extends Component
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
                                     "select select-bordered select-primary w-full h-fit pr-16 pb-1 pt-1.5 inline-block cursor-pointer relative",
                                     'border border-dashed' => $isReadonly(),
-                                    'select-error' => $errors->has($errorBagName()),
+                                    'select-error' => $errors->has($errorFieldName()),
                                     'rounded-l-none' => $prepend,
                                     'rounded-r-none' => $append,
                                     'pl-10' => $icon,
@@ -340,8 +340,8 @@ class ChoicesOffline extends Component
                         </div>
 
                         <!-- ERROR -->
-                        @if(!$omitError && $errors->has($errorBagName()))
-                            @foreach($errors->get($errorBagName()) as $message)
+                        @if(!$omitError && $errors->has($errorFieldName()))
+                            @foreach($errors->get($errorFieldName()) as $message)
                                 @foreach(Arr::wrap($message) as $line)
                                     <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
                                     @break($firstErrorOnly)
