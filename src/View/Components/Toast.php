@@ -48,7 +48,7 @@ class Toast extends Component
                     window.toast = function(payload){
                         window.dispatchEvent(new CustomEvent('mary-toast', {detail: payload}))
                     }
-                    
+
                     document.addEventListener('livewire:init', () => {
                         Livewire.hook('request', ({fail}) => {
                             fail(({status, content, preventDefault}) => {
