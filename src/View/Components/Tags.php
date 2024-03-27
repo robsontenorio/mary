@@ -14,6 +14,11 @@ class Tags extends Component
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $icon = null,
+        // Validations
+        public ?string $errorField = null,
+        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?bool $omitError = false,
+        public ?bool $firstErrorOnly = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -21,6 +26,11 @@ class Tags extends Component
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorFieldName(): ?string
+    {
+        return $this->errorField ?? $this->modelName();
     }
 
     public function isReadonly(): bool
@@ -119,7 +129,7 @@ class Tags extends Component
                         $attributes->except(['wire:model', 'wire:model.live'])->class([
                             "input input-bordered input-primary w-full h-fit pr-16 pt-1.5 pb-1 min-h-[47px] inline-block cursor-pointer relative",
                             'border border-dashed' => $isReadonly(),
-                            'input-error' => $errors->has($modelName()) || $errors->has($modelName().'*'),
+                            'input-error' => $errors->has($errorFieldName()) || $errors->has($errorFieldName().'*'),
                             'pl-10' => $icon,
                         ])
                     }}
@@ -165,12 +175,18 @@ class Tags extends Component
                     />
                 </div>
 
-                <!-- SINGLE ERROR -->
-                @error($modelName())
-                    <div class="label-text-alt p-1 text-red-500">{{ $message }}</div>
-                @enderror
+                <!-- ERROR -->
+                @if(!$omitError && $errors->has($errorFieldName()))
+                    @foreach($errors->get($errorFieldName()) as $message)
+                        @foreach(Arr::wrap($message) as $line)
+                            <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                            @break($firstErrorOnly)
+                        @endforeach
+                        @break($firstErrorOnly)
+                    @endforeach
+                @endif
 
-                 <!-- MULTIPLE ERROR -->
+                <!-- MULTIPLE ERROR -->
                 @error($modelName().'.*')
                     <div class="label-text-alt p-1 text-red-500">{{ $message }}</div>
                 @enderror

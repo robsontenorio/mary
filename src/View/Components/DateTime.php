@@ -8,6 +8,7 @@ use Illuminate\View\Component;
 
 class DateTime extends Component
 {
+
     public string $uuid;
 
     public function __construct(
@@ -16,6 +17,12 @@ class DateTime extends Component
         public ?string $iconRight = null,
         public ?string $hint = null,
         public ?bool $inline = false,
+        // Validations
+        public ?string $errorField = null,
+        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?bool $omitError = false,
+        public ?bool $firstErrorOnly = false,
+
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -23,6 +30,11 @@ class DateTime extends Component
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorFieldName(): ?string
+    {
+        return $this->errorField ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -54,7 +66,7 @@ class DateTime extends Component
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
                                     'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                    'input-error' => $errors->has($modelName())
+                                    'input-error' => $errors->has($errorFieldName())
                                 ])
                         }}
                     />
@@ -79,9 +91,15 @@ class DateTime extends Component
                 </div>
 
                 <!-- ERROR -->
-                @error($modelName())
-                    <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
-                @enderror
+                @if(!$omitError && $errors->has($errorFieldName()))
+                    @foreach($errors->get($errorFieldName()) as $message)
+                        @foreach(Arr::wrap($message) as $line)
+                            <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                            @break($firstErrorOnly)
+                        @endforeach
+                        @break($firstErrorOnly)
+                    @endforeach
+                @endif
 
                 <!-- HINT -->
                 @if($hint)

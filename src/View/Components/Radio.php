@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 
 class Radio extends Component
 {
+
     public string $uuid;
 
     public function __construct(
@@ -17,13 +18,23 @@ class Radio extends Component
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
+        // Validations
+        public ?string $errorField = null,
+        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?bool $omitError = false,
+        public ?bool $firstErrorOnly = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
 
-    public function name(): string
+    public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorFieldName(): ?string
+    {
+        return $this->errorField ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -46,7 +57,7 @@ class Radio extends Component
                         @foreach ($options as $option)
                             <input
                                 type="radio"
-                                name="{{ $name() }}"
+                                name="{{ $modelName() }}"
                                 value="{{ data_get($option, $optionValue) }}"
                                 aria-label="{{ data_get($option, $optionLabel) }}"
                                 {{ $attributes->whereStartsWith('wire:model') }}
@@ -54,10 +65,16 @@ class Radio extends Component
                                 />
                         @endforeach
                     </div>
-
-                    @error($name())
-                        <div class="text-red-500 label-text-alt pl-1">{{ $message }}</div>
-                    @enderror
+                    <!-- ERROR -->
+                    @if(!$omitError && $errors->has($errorFieldName()))
+                        @foreach($errors->get($errorFieldName()) as $message)
+                            @foreach(Arr::wrap($message) as $line)
+                                <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                                @break($firstErrorOnly)
+                            @endforeach
+                            @break($firstErrorOnly)
+                        @endforeach
+                    @endif
 
                     @if($hint)
                         <div class="label-text-alt text-gray-400 pl-1 mt-2">{{ $hint }}</div>

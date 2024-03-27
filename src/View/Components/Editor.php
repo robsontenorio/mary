@@ -15,14 +15,24 @@ class Editor extends Component
         public ?string $hint = null,
         public ?string $disk = 'public',
         public ?string $folder = 'editor',
-        public ?array $config = []
+        public ?array $config = [],
+        // Validations
+        public ?string $errorField = null,
+        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?bool $omitError = false,
+        public ?bool $firstErrorOnly = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function modelName(): ?string
     {
-        return $this->attributes->wire('model');
+        return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorFieldName(): ?string
+    {
+        return $this->errorField ?? $this->modelName();
     }
 
     public function setup(): string
@@ -114,9 +124,15 @@ class Editor extends Component
                     </div>
 
                     <!-- ERROR -->
-                    @error($modelName())
-                        <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
-                    @enderror
+                    @if(!$omitError && $errors->has($errorFieldName()))
+                        @foreach($errors->get($errorFieldName()) as $message)
+                            @foreach(Arr::wrap($message) as $line)
+                                <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                                @break($firstErrorOnly)
+                            @endforeach
+                            @break($firstErrorOnly)
+                        @endforeach
+                    @endif
 
                     <!-- HINT -->
                     @if($hint)

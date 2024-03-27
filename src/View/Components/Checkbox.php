@@ -8,17 +8,29 @@ use Illuminate\View\Component;
 
 class Checkbox extends Component
 {
+
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
         public ?bool $right = false,
-        public ?bool $tight = false
-    ) {
+        public ?bool $tight = false,
+        // Validations
+        public ?string $errorField = null,
+        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?bool $omitError = false,
+        public ?bool $firstErrorOnly = false,
+    )
+    {
     }
 
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorFieldName(): ?string
+    {
+        return $this->errorField ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -40,9 +52,15 @@ class Checkbox extends Component
                     </label>
 
                     <!-- ERROR -->
-                    @error($modelName())
-                        <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
-                    @enderror
+                    @if(!$omitError && $errors->has($errorFieldName()))
+                        @foreach($errors->get($errorFieldName()) as $message)
+                            @foreach(Arr::wrap($message) as $line)
+                                <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                                @break($firstErrorOnly)
+                            @endforeach
+                            @break($firstErrorOnly)
+                        @endforeach
+                    @endif
 
                     <!-- HINT -->
                     @if($hint)

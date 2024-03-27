@@ -33,7 +33,11 @@ class Choices extends Component
         public ?string $height = 'max-h-64',
         public Collection|array $options = new Collection(),
         public ?string $noResultText = 'No results found.',
-
+        // Validations
+        public ?string $errorField = null,
+        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?bool $omitError = false,
+        public ?bool $firstErrorOnly = false,
         // slots
         public mixed $item = null,
         public mixed $selection = null,
@@ -47,9 +51,14 @@ class Choices extends Component
         }
     }
 
-    public function modelName(): string
+    public function modelName(): ?string
     {
-        return $this->attributes->wire('model')->value();
+        return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorFieldName(): ?string
+    {
+        return $this->errorField ?? $this->modelName();
     }
 
     public function isReadonly(): bool
@@ -218,7 +227,7 @@ class Choices extends Component
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
                                     "select select-bordered select-primary w-full h-fit pr-16 pb-1 pt-1.5 inline-block cursor-pointer relative flex-1",
                                     'border border-dashed' => $isReadonly(),
-                                    'select-error' => $errors->has($modelName()),
+                                    'select-error' => $errors->has($errorFieldName()),
                                     'rounded-l-none' => $prepend,
                                     'rounded-r-none' => $append,
                                     'pl-10' => $icon,
@@ -339,9 +348,15 @@ class Choices extends Component
                         </div>
 
                         <!-- ERROR -->
-                        @error($modelName())
-                            <div class="text-red-500 label-text-alt p-1">{{ $message }}</div>
-                        @enderror
+                        @if(!$omitError && $errors->has($errorFieldName()))
+                            @foreach($errors->get($errorFieldName()) as $message)
+                                @foreach(Arr::wrap($message) as $line)
+                                    <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                                    @break($firstErrorOnly)
+                                @endforeach
+                                @break($firstErrorOnly)
+                            @endforeach
+                        @endif
 
                         <!-- HINT -->
                         @if($hint)
