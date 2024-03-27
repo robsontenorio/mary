@@ -8,7 +8,6 @@ use Illuminate\View\Component;
 
 class File extends Component
 {
-
     public string $uuid;
 
     public function __construct(
@@ -27,8 +26,7 @@ class File extends Component
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
 
-    )
-    {
+    ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
 
@@ -217,6 +215,11 @@ class File extends Component
                             @break($firstErrorOnly)
                         @endforeach
                     @endif
+
+                    <!-- MULTIPLE -->
+                    @error($modelName().'.*')
+                        <div class="text-red-500 label-text-alt p-1 pt-2">{{ $message }}</div>
+                    @enderror
 
                     <!-- HINT -->
                     @if($hint)

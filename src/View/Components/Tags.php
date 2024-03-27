@@ -8,7 +8,6 @@ use Illuminate\View\Component;
 
 class Tags extends Component
 {
-
     public string $uuid;
 
     public function __construct(
@@ -186,6 +185,11 @@ class Tags extends Component
                         @break($firstErrorOnly)
                     @endforeach
                 @endif
+
+                <!-- MULTIPLE ERROR -->
+                @error($modelName().'.*')
+                    <div class="label-text-alt p-1 text-red-500">{{ $message }}</div>
+                @enderror
 
                 @if ($hint)
                     <!-- HINT -->
