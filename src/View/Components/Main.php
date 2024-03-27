@@ -14,6 +14,7 @@ class Main extends Component
         public mixed $sidebar = null,
         public mixed $content = null,
         public mixed $footer = null,
+        public mixed $drawerFooter = null,
         public ?bool $fullWidth = false,
         public ?bool $withNav = false,
         public ?string $collapseText = 'Collapse',
@@ -28,9 +29,18 @@ class Main extends Component
                  <main @class(["w-full mx-auto", "max-w-screen-2xl" => !$fullWidth])>
                     <div class="drawer inline lg:grid lg:drawer-open">
                         <input id="{{ $sidebar?->attributes['drawer'] }}" type="checkbox" class="drawer-toggle" />
-                        <div {{ $content->attributes->class(["drawer-content w-full mx-auto p-5 lg:px-10 lg:py-5"]) }}>
-                            <!-- MAIN CONTENT -->
-                            {{ $content }}
+                        <div class="drawer-content overflow-auto w-full {{ $withNav ? 'h-[calc(100vh-73px)]' : 'h-screen' }}">
+                            <div {{ $content->attributes->class(["mx-auto p-5 lg:px-10 lg:py-5"]) }}>
+                                <!-- MAIN CONTENT -->
+                                {{ $content }}
+                            </div>
+
+                            <!-- DRAWER FOOTER -->
+                            @if($drawerFooter)
+                            <footer {{ $drawerFooter?->attributes->class(["mx-auto w-full", "max-w-screen-2xl" => !$fullWidth ]) }}>
+                                {{ $drawerFooter }}
+                            </footer>
+                            @endif
                         </div>
 
                         <!-- SIDEBAR -->
@@ -59,10 +69,11 @@ class Main extends Component
 
                                     {{
                                         $sidebar->attributes->class([
-                                            "flex flex-col !transition-all !duration-100 ease-out overflow-x-hidden overflow-y-auto h-screen",
+                                            "flex flex-col !transition-all !duration-100 ease-out overflow-x-hidden overflow-y-auto",
                                             "w-[70px] [&>*_summary::after]:hidden [&_.mary-hideable]:hidden [&_.display-when-collapsed]:block [&_.hidden-when-collapsed]:hidden" => session('mary-sidebar-collapsed') == 'true',
                                             "w-[270px] [&>*_summary::after]:block [&_.mary-hideable]:block [&_.hidden-when-collapsed]:block [&_.display-when-collapsed]:hidden" => session('mary-sidebar-collapsed') != 'true',
-                                            "pb-[73px]" => $withNav
+                                            "min-h-screen" => !$withNav,
+                                            "min-h-[calc(100vh-73px)]" => $withNav,
                                         ])
                                      }}
                                 >
@@ -83,9 +94,8 @@ class Main extends Component
                             </div>
                         @endif
                         <!-- END SIDEBAR-->
-
                     </div>
-                </main>
+                 </main>
 
                  <!-- FOOTER -->
                  @if($footer)
