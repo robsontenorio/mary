@@ -43,6 +43,7 @@ use Mary\View\Components\Menu;
 use Mary\View\Components\MenuItem;
 use Mary\View\Components\MenuSeparator;
 use Mary\View\Components\MenuSub;
+use Mary\View\Components\MenuTitle;
 use Mary\View\Components\Modal;
 use Mary\View\Components\Nav;
 use Mary\View\Components\Progress;
@@ -139,6 +140,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'menu-item', MenuItem::class);
         Blade::component($prefix . 'menu-separator', MenuSeparator::class);
         Blade::component($prefix . 'menu-sub', MenuSub::class);
+        Blade::component($prefix . 'menu-title', MenuTitle::class);
         Blade::component($prefix . 'main', Main::class);
         Blade::component($prefix . 'nav', Nav::class);
         Blade::component($prefix . 'progress', Progress::class);
