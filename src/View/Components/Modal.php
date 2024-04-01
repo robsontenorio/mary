@@ -12,7 +12,7 @@ class Modal extends Component
         public ?string $id = '',
         public ?string $title = null,
         public ?string $subtitle = null,
-        public ?string $class = null,
+        public ?string $boxClass = null,
         public ?bool $separator = false,
         public ?bool $persistent = false,
 
@@ -39,7 +39,7 @@ class Modal extends Component
                         @endif
                     @endif
                 >
-                    <div class="modal-box {{ $class }}">
+                    <div class="modal-box {{ $boxClass }}">
                         @if($title)
                             <x-mary-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" class="mb-5" />
                         @endif
