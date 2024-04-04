@@ -26,7 +26,7 @@ class ThemeToggle extends Component
                 <div>
                     <label
                         x-data="{
-                            theme: $persist('light').as('mary-theme'),
+                            theme: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light').as('mary-theme'),
                             init() {
                                 if (this.theme == 'dark') {
                                     this.$refs.sun.classList.add('swap-off');
@@ -34,12 +34,16 @@ class ThemeToggle extends Component
                                     this.$refs.moon.classList.add('swap-on');
                                     this.$refs.moon.classList.remove('swap-off');
                                 }
+                                this.setToggle()
                             },
-                            toggle() {
-                                this.theme = this.theme == 'light' ? 'dark' : 'light'
+                            setToggle() {
                                 document.documentElement.setAttribute('data-theme', this.theme)
                                 document.documentElement.setAttribute('class', this.theme)
                                 this.$dispatch('theme-changed', this.theme)
+                            },
+                            toggle() {
+                                this.theme = this.theme == 'light' ? 'dark' : 'light'
+                                this.setToggle()
                             }
                         }"
                         @mary-toggle-theme.window="toggle()"
