@@ -47,7 +47,7 @@ class Main extends Component
                                 }"
 
                                 @menu-sub-clicked="if(collapsed) { toggle() }"
-                                @class(["drawer-side z-20 lg:z-auto", "top-0 lg:top-[73px] lg:h-[calc(100vh-73px)]" => $withNav])
+                                @class(["drawer-side z-20 lg:z-auto", "top-0 lg:top-[73px]" => $withNav])
                             >
                                 <label for="{{ $sidebar?->attributes['drawer'] }}" aria-label="close sidebar" class="drawer-overlay"></label>
 
