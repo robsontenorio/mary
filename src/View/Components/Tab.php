@@ -19,11 +19,25 @@ class Tab extends Component
         $this->uuid = "mary" . md5(serialize($this));
     }
 
-    public function tabLabel(): string
+    public function tabLabel(string $label): string
     {
-        return $this->icon
-            ? Blade::render("<x-mary-icon name='" . $this->icon . "' class='mr-2 whitespace-nowrap' label='" . $this->label . "' />")
-            : $this->label;
+        $fromLabel = $this->label ? $this->label : $label;
+
+        if ($this->icon) {
+            return Blade::render("
+                <x-mary-icon name='" . $this->icon . "' class='mr-2 whitespace-nowrap'>
+                    <x-slot:label>
+                        {$fromLabel}
+                    </x-slot:label>
+                </x-mary-icon>
+            ");
+        }
+
+        return Blade::render("
+            <div class='mr-2 whitespace-nowrap'>
+                {$fromLabel}
+            </div>
+        ");
     }
 
     public function render(): View|Closure|string
@@ -34,7 +48,7 @@ class Tab extends Component
                         :class="{ 'tab-active': selected === '{{ $name }}' }"
                         data-name="{{ $name }}"
                         x-init="
-                                tabs.push({ name: '{{ $name }}', label: {{ json_encode($tabLabel()) }} });
+                                tabs.push({ name: '{{ $name }}', label: {{ json_encode($tabLabel($label)) }} });
                                 Livewire.hook('morph.removed', ({el}) => {
                                     if (el.getAttribute('data-name') == '{{ $name }}'){
                                         tabs = tabs.filter(i => i.name !== '{{ $name }}')
