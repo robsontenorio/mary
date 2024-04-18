@@ -165,15 +165,19 @@ class MaryInstallCommand extends Command
      */
     public function copyStubs(string $shouldInstallVolt): void
     {
-        $routes = base_path() . "{$this->ds}routes";
+        $composerJson = File::get(base_path() . "/composer.json");
+        $hasKit = str($composerJson)->contains('jetstream') || str($composerJson)->contains('breeze');
 
-        // If there is something in there, skip stubs
-        if (count(file("$routes{$this->ds}web.php")) > 20) {
+        if ($hasKit) {
+            $this->warn('---------------------------------------------');
+            $this->warn('🚨 Starter kit detected. Skipping demo components. 🚨');
+            $this->warn('---------------------------------------------');
             return;
         }
 
         $this->info("Copying stubs...\n");
 
+        $routes = base_path() . "{$this->ds}routes";
         $appViewComponents = "app{$this->ds}View{$this->ds}Components";
         $livewirePath = "app{$this->ds}Livewire";
         $layoutsPath = "resources{$this->ds}views{$this->ds}components{$this->ds}layouts";
