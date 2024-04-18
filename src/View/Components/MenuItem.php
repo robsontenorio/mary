@@ -16,6 +16,7 @@ class MenuItem extends Component
         public ?string $title = null,
         public ?string $icon = null,
         public ?string $link = null,
+        public ?string $route = null,
         public ?bool $external = false,
         public ?bool $noWireNavigate = false,
         public ?string $badge = null,
@@ -30,6 +31,10 @@ class MenuItem extends Component
     {
         if ($this->link == null) {
             return false;
+        }
+
+        if ($this->route) {
+            return request()->routeIs($this->route);
         }
 
         $link = url($this->link ?? '');
