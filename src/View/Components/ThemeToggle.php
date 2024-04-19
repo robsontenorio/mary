@@ -14,6 +14,8 @@ class ThemeToggle extends Component
         public ?string $value = null,
         public ?string $light = "Light",
         public ?string $dark = "Dark",
+        public ?string $lightTheme = "light",
+        public ?string $darkTheme = "dark",
         public ?bool $withLabel = false,
 
     ) {
@@ -26,9 +28,9 @@ class ThemeToggle extends Component
                 <div>
                     <label
                         x-data="{
-                            theme: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light').as('mary-theme'),
+                            theme: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches ? '{{ $darkTheme }}' : '{{ $lightTheme }}').as('mary-theme'),
                             init() {
-                                if (this.theme == 'dark') {
+                                if (this.theme == '{{ $darkTheme }}') {
                                     this.$refs.sun.classList.add('swap-off');
                                     this.$refs.sun.classList.remove('swap-on');
                                     this.$refs.moon.classList.add('swap-on');
@@ -42,7 +44,7 @@ class ThemeToggle extends Component
                                 this.$dispatch('theme-changed', this.theme)
                             },
                             toggle() {
-                                this.theme = this.theme == 'light' ? 'dark' : 'light'
+                                this.theme = this.theme == '{{ $lightTheme }}' ? '{{ $darkTheme }}' : '{{ $lightTheme }}'
                                 this.setToggle()
                             }
                         }"
