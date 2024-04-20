@@ -19,6 +19,7 @@ use Mary\View\Components\Checkbox;
 use Mary\View\Components\Choices;
 use Mary\View\Components\ChoicesOffline;
 use Mary\View\Components\Collapse;
+use Mary\View\Components\Colorpicker;
 use Mary\View\Components\DatePicker;
 use Mary\View\Components\DateTime;
 use Mary\View\Components\Diff;
@@ -116,6 +117,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'choices', Choices::class);
         Blade::component($prefix . 'choices-offline', ChoicesOffline::class);
         Blade::component($prefix . 'collapse', Collapse::class);
+        Blade::component($prefix . 'colorpicker', Colorpicker::class);
         Blade::component($prefix . 'datepicker', DatePicker::class);
         Blade::component($prefix . 'datetime', DateTime::class);
         Blade::component($prefix . 'diff', Diff::class);
