@@ -75,7 +75,7 @@ class Colorpicker extends Component
                     >
                         <input
                             type="color"
-                            class="cursor-pointer invisible w-4"
+                            class="cursor-pointer opacity-0 w-4"
                             x-ref="colorpicker"
                             x-on:click.stop=""
                             {{ $attributes->wire('model') }}
