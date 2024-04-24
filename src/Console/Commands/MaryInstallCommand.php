@@ -44,7 +44,7 @@ class MaryInstallCommand extends Command
         Artisan::call('view:clear');
 
         $this->info("\n");
-        $this->info("✅  Done! Run `yarn dev` or `npm run dev`");
+        $this->info("✅  Done! Run `yarn dev` or `npm run dev` or `bun run dev`");
         $this->info("🌟  Give it a star: https://github.com/robsontenorio/mary");
         $this->info("❤️  Sponsor this project: https://github.com/sponsors/robsontenorio\n");
     }
@@ -214,6 +214,7 @@ class MaryInstallCommand extends Command
 
         $yarn = Process::run($findCommand . ' yarn')->output();
         $npm = Process::run($findCommand . ' npm')->output();
+        $bun = Process::run($findCommand . ' bun')->output();
 
         $options = [];
 
@@ -225,8 +226,12 @@ class MaryInstallCommand extends Command
             $options = array_merge($options, ['npm install --save-dev' => 'npm']);
         }
 
+        if (Str::of($bun)->isNotEmpty()) {
+            $options = array_merge($options, ['bun i -D' => 'bun']);
+        }
+
         if (count($options) == 0) {
-            $this->error("You need yarn or npm installed.");
+            $this->error("You need yarn or npm or bun installed.");
 
             exit;
         }
