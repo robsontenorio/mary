@@ -8,8 +8,9 @@ use Illuminate\View\Component;
 
 class Toast extends Component
 {
-    public function __construct()
-    {
+    public function __construct(
+        public string $position = 'toast-top toast-end'
+    ) {
     }
 
     public function render(): View|Closure|string
@@ -29,7 +30,7 @@ class Toast extends Component
                 >
                     <div
                         class="toast rounded-md fixed cursor-pointer z-50"
-                        :class="toast.position"
+                        :class="toast.position || '{{ $position }}'"
                         x-show="show"
                         x-classes="alert alert-success alert-warning alert-error alert-info top-10 right-10 toast toast-top toast-bottom toast-center toast-end toast-middle toast-start"
                         @click="show = false"
