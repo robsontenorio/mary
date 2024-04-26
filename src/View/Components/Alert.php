@@ -15,6 +15,7 @@ class Alert extends Component
         public ?string $icon = null,
         public ?string $description = null,
         public ?bool $shadow = false,
+        public ?bool $dismissible = false,
 
         // Slots
         public mixed $actions = null
@@ -29,6 +30,7 @@ class Alert extends Component
                     wire:key="{{ $uuid }}"
                     {{ $attributes->whereDoesntStartWith('class') }}
                     {{ $attributes->class(['alert rounded-md', 'shadow-md' => $shadow])}}
+                    x-data="{ show: true }" x-show="show"
                 >
                     @if($icon)
                         <x-mary-icon :name="$icon" />
@@ -46,6 +48,10 @@ class Alert extends Component
                     <div class="flex items-center gap-3">
                         {{ $actions }}
                     </div>
+
+                    @if($dismissible)
+                        <x-button icon="o-x-mark" @click="show = false" class="btn-xs btn-ghost self-start justify-self-end p-0 absolute sm:static -order-1 sm:order-none" />
+                    @endif
                 </div>
             HTML;
     }
