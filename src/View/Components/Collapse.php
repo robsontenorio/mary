@@ -39,7 +39,14 @@ class Collapse extends Component
                             <input {{ $attributes->wire('model') }} type="checkbox" />
                         @endif
 
-                        <div {{ $heading->attributes->merge(["class" => "collapse-title text-xl font-medium"])  }}>
+                        <div
+                            {{ $heading->attributes->merge(["class" => "collapse-title text-xl font-medium"]) }}
+
+                            @if(isset($noJoin))
+                                :class="model == '{{ $name }}' && 'z-10'"
+                                @click="if (model == '{{ $name }}') model = null"
+                            @endif
+                        >
                             {{ $heading }}
                         </div>
                         <div {{ $content->attributes->merge(["class" => "collapse-content"]) }} wire:key="content-{{ $uuid }}">
