@@ -25,7 +25,7 @@ class MaryInstallCommand extends Command
         // Install Volt ?
         $shouldInstallVolt = $this->askForVolt();
 
-        //Yarn or Npm ?
+        //Yarn or Npm or Bun or Pnpm ?
         $packageManagerCommand = $this->askForPackageInstaller();
 
         // Install Livewire/Volt
@@ -44,7 +44,7 @@ class MaryInstallCommand extends Command
         Artisan::call('view:clear');
 
         $this->info("\n");
-        $this->info("✅  Done! Run `yarn dev` or `npm run dev` or `bun run dev`");
+        $this->info("✅  Done! Run `yarn dev` or `npm run dev` or `bun run dev` or `pnpm dev`");
         $this->info("🌟  Give it a star: https://github.com/robsontenorio/mary");
         $this->info("❤️  Sponsor this project: https://github.com/sponsors/robsontenorio\n");
     }
@@ -215,6 +215,7 @@ class MaryInstallCommand extends Command
         $yarn = Process::run($findCommand . ' yarn')->output();
         $npm = Process::run($findCommand . ' npm')->output();
         $bun = Process::run($findCommand . ' bun')->output();
+        $pnpm = Process::run($findCommand . ' pnpm')->output();
 
         $options = [];
 
@@ -230,8 +231,12 @@ class MaryInstallCommand extends Command
             $options = array_merge($options, ['bun i -D' => 'bun']);
         }
 
+        if (Str::of($pnpm)->isNotEmpty()) {
+            $options = array_merge($options, ['pnpm i -D' => 'pnpm']);
+        }
+
         if (count($options) == 0) {
-            $this->error("You need yarn or npm or bun installed.");
+            $this->error("You need yarn or npm or bun or pnpm installed.");
 
             exit;
         }
