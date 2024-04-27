@@ -50,7 +50,7 @@ class Alert extends Component
                     </div>
 
                     @if($dismissible)
-                        <x-button icon="o-x-mark" @click="show = false" class="btn-xs btn-ghost self-start justify-self-end p-0 absolute sm:static -order-1 sm:order-none" />
+                        <x-mary-button icon="o-x-mark" @click="show = false" class="btn-xs btn-ghost self-start justify-self-end p-0 absolute sm:static -order-1 sm:order-none" />
                     @endif
                 </div>
             HTML;
