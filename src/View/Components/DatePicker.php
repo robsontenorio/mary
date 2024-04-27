@@ -4,11 +4,11 @@ namespace Mary\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
 use Illuminate\View\Component;
 
 class DatePicker extends Component
 {
-
     public string $uuid;
 
     public function __construct(
@@ -23,8 +23,7 @@ class DatePicker extends Component
         public ?string $errorClass = 'text-red-500 label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
-    )
-    {
+    ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
 
@@ -43,12 +42,23 @@ class DatePicker extends Component
         $config = json_encode(array_merge([
             'dateFormat' => 'Y-m-d H:i',
             'altInput' => true,
-            'clickOpens' => !$this->attributes->has('readonly') || $this->attributes->get('readonly') == false,
-            'defaultDate' => 'x',
-        ], $this->config));
+            'clickOpens' => ! $this->attributes->has('readonly') || $this->attributes->get('readonly') == false,
+            'defaultDate' => '#model#',
+            'plugins' => ['#plugins#'],
+        ], Arr::except($this->config, ["plugins"])));
 
-        // Sets default date as current binded model
-        $config = str_replace('"x"', '$wire.' . $this->modelName(), $config);
+        // Plugins
+        $plugins = null;
+
+        foreach (Arr::get($this->config, 'plugins', []) as $plugin) {
+            $plugins .= "new " . key($plugin) . "( " . json_encode(current($plugin)) . " ),";
+        }
+
+        // Plugins
+        $config = str_replace('"#plugins#"', $plugins, $config);
+
+        // Sets default date as current bound model
+        $config = str_replace('"#model#"', '$wire.' . $this->modelName(), $config);
 
         return $config;
     }
