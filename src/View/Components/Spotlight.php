@@ -162,14 +162,20 @@ class Spotlight extends Component
                                     <a x-bind:href="item.link" class="mary-spotlight-element" wire:navigate tabindex="0">
                                         <div class="p-3 hover:bg-base-200 border border-t-0 border-base-200 dark:border-base-300" >
                                             <div class="flex gap-3 items-center">
-                                                <!-- AVATAR -->
+                                                <!-- ICON -->
                                                 <template x-if="item.icon">
                                                     <div x-html="item.icon"></div>
                                                 </template>
                                                 <!-- AVATAR -->
-                                                <template x-if="item.avatar && !item.icon">
+                                                <template x-if="item.avatar && !item.icon && !item.thumbnail">
                                                     <div>
                                                         <img :src="item.avatar" class="rounded-full w-11 h-11" />
+                                                    </div>
+                                                </template>
+                                                <!-- THUMBNAIL -->
+                                                <template x-if="item.thumbnail && !item.icon && !item.avatar">
+                                                    <div>
+                                                        <img :src="item.thumbnail" class="rounded-sm w-11 h-11" />
                                                     </div>
                                                 </template>
                                                 <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0 mary-hideable">
