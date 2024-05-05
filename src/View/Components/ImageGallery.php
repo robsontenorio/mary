@@ -12,6 +12,7 @@ class ImageGallery extends Component
 
     public function __construct(
         public array $images,
+        public bool $titleImage = false,
         public ?bool $withArrows = false,
         public ?bool $withIndicators = false,
         public ?array $captions = [], // Array containing captions for each image
@@ -136,12 +137,13 @@ class ImageGallery extends Component
                                 href="{{ $image }}"
                                 target="_blank"
                                 data-pswp-width="200"
-                                data-pswp-height="200"
-                            >
+                                data-pswp-height="200">
                                 <img
                                     src="{{ $image }}"
                                     @if (!empty($captions) && array_key_exists($loop->iteration-1, $captions))
-                                        title="{{ $captions[$loop->iteration-1] }}"
+                                        @if ($titleImage)
+                                            title="{{ $captions[$loop->iteration-1] }}"
+                                        @endif
                                         alt="{{ $captions[$loop->iteration-1] }}"
                                     @endif
                                     class="object-cover hover:opacity-70"
