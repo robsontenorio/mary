@@ -18,6 +18,8 @@ class DatePicker extends Component
         public ?string $hint = null,
         public ?bool $inline = false,
         public ?array $config = [],
+        public ?string $minDate = '',
+        public ?string $maxDate = '',
         // Validations
         public ?string $errorField = null,
         public ?string $errorClass = 'text-red-500 label-text-alt p-1',
@@ -45,6 +47,8 @@ class DatePicker extends Component
             'clickOpens' => ! $this->attributes->has('readonly') || $this->attributes->get('readonly') == false,
             'defaultDate' => '#model#',
             'plugins' => ['#plugins#'],
+            'minDate' => $this->minDate,
+            'maxDate' => $this->maxDate
         ], Arr::except($this->config, ["plugins"])));
 
         // Plugins
