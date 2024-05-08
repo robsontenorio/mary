@@ -36,7 +36,7 @@ class Tabs extends Component
                                      });
                                  }
                         }"
-                        class="relative"
+                        class="relative w-full"
                     >
                         <!-- TAB LABELS -->
                         <div class="border-b-2 border-b-base-200 flex overflow-x-auto">
