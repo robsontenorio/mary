@@ -16,6 +16,7 @@ class Calendar extends Component
         public ?int $months = 1,
         public ?string $locale = 'en-EN',
         public ?bool $weekendHighlight = false,
+        public ?bool $sundayStart = false,
         public ?array $config = [],
         public ?array $events = [],
     ) {
@@ -38,6 +39,7 @@ class Calendar extends Component
                 'selection' => [
                     'day' => false,
                 ],
+                'iso8601' => !$this->sundayStart,
             ],
             'CSSClasses' => 'y',
             'actions' => 'x',
