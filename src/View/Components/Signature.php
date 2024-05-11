@@ -55,16 +55,15 @@ class Signature extends Component
                                 let canvas = document.getElementById('{{ $uuid }}signature')
                                 this.signature = new SignaturePad(canvas, {{ $setup() }});
 
-                                // Populate 
-                                this.signature.fromDataURL(this.value); 
-            
                                 // Resize
                                 const ratio = Math.max(window.devicePixelRatio || 1, 1);
                                 canvas.width = canvas.offsetWidth * ratio;
                                 canvas.height = canvas.offsetHeight * ratio;
                                 canvas.getContext('2d').scale(ratio, ratio);
-                                this.signature.fromData(this.signature.toData());
 
+                                // Populate 
+                                this.signature.fromDataURL(this.value); 
+            
                                 // Event
                                 this.signature.addEventListener('endStroke', () =>  this.extract() );
                             },
