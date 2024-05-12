@@ -24,6 +24,11 @@ You can read the official documentation on the [maryUI website](https://mary-ui.
 
 Let's keep pushing it, [sponsor me](https://github.com/sponsors/robsontenorio) ❤️
 
+## Discord 
+
+Come to say hello on [maryUI Discord](https://discord.gg/YyFR8dnQ)
+
+
 ## Follow me
 
 [@robsontenorio](https://twitter.com/robsontenorio)
