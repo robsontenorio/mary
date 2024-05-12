@@ -58,7 +58,7 @@ class DatePicker extends Component
         $config = str_replace('"#plugins#"', $plugins, $config);
 
         // Sets default date as current bound model
-        $config = str_replace('"#model#"', '$wire.entangle("' . $this->modelName().'").initialValue', $config);
+        $config = str_replace('"#model#"', '$wire.get("' . $this->modelName().'")', $config);
 
         return $config;
     }
