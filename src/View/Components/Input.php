@@ -103,7 +103,7 @@ class Input extends Component
                     @if($money)
                         <div
                             wire:key="money-{{ rand() }}"
-                            x-data="{ amount: $wire.entangle('{{ $modelName() }}') }" x-init="$nextTick(() => new Currency($refs.myInput, {{ $moneySettings() }}))"
+                            x-data="{ amount: $wire.get('{{ $modelName() }}') }" x-init="$nextTick(() => new Currency($refs.myInput, {{ $moneySettings() }}))"
                         >
                     @endif
 
@@ -115,7 +115,7 @@ class Input extends Component
                         @if($money)
                             x-ref="myInput"
                             :value="amount"
-                            @input="$nextTick(() => amount = Currency.getUnmasked())"
+                            @input="$nextTick(() => $wire.set('{{ $modelName() }}', Currency.getUnmasked(), false))"
                             inputmode="numeric"
                         @endif
 
