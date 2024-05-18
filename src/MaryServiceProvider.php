@@ -29,6 +29,7 @@ use Mary\View\Components\Editor;
 use Mary\View\Components\Errors;
 use Mary\View\Components\File;
 use Mary\View\Components\Form;
+use Mary\View\Components\GroupedSelect;
 use Mary\View\Components\Header;
 use Mary\View\Components\Hr;
 use Mary\View\Components\Icon;
@@ -129,6 +130,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'errors', Errors::class);
         Blade::component($prefix . 'file', File::class);
         Blade::component($prefix . 'form', Form::class);
+        Blade::component($prefix . 'grouped-select', GroupedSelect::class);
         Blade::component($prefix . 'header', Header::class);
         Blade::component($prefix . 'hr', Hr::class);
         Blade::component($prefix . 'icon', Icon::class);
@@ -220,7 +222,7 @@ class MaryServiceProvider extends ServiceProvider
 
         // Register the service the package provides.
         $this->app->singleton('mary', function ($app) {
-            return new Mary;
+            return new Mary();
         });
     }
 
