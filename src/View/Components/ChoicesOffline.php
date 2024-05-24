@@ -10,7 +10,6 @@ use Illuminate\View\Component;
 
 class ChoicesOffline extends Component
 {
-
     public string $uuid;
 
     public function __construct(
@@ -119,7 +118,7 @@ class ChoicesOffline extends Component
                             },
                             get isSelectionEmpty() {
                                 return this.isSingle
-                                    ? this.selection == null
+                                    ? this.selection == null || this.selection == ''
                                     : this.selection.length == 0
                             },
                             selectAll() {
@@ -233,7 +232,7 @@ class ChoicesOffline extends Component
 
                             <!-- CLEAR ICON  -->
                             @if(! $isReadonly() && ! $isDisabled())
-                                <x-mary-icon @click="reset()"  name="o-x-mark" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                                <x-mary-icon @click="reset()"  name="o-x-mark" x-show="!isSelectionEmpty" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
                             @endif
 
                             <!-- SELECTED OPTIONS -->
