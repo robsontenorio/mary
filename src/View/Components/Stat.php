@@ -39,14 +39,14 @@ class Stat extends Component
                         data-tip="{{ $tooltip }}"
                     @endif
                 >
-                    <div class="flex items-center gap-3 flex-row">
+                    <div class="flex items-center gap-3">
                         @if($icon)
                             <div class="  {{ $color }}">
                                 <x-mary-icon :name="$icon" class="w-9 h-9" />
                             </div>
                         @endif
 
-                        <div class="ltr:text-left rtl:text-right">
+                        <div class="text-left rtl:text-right">
                             @if($title)
                                 <div class="text-xs text-gray-500 whitespace-nowrap">{{ $title }}</div>
                             @endif
