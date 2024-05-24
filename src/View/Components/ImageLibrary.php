@@ -144,7 +144,7 @@ class ImageLibrary extends Component
                     >
                         <div
                             x-data="{ sortable: null }"
-                            x-init="sortable = new Sortable($el, { animation: 150, ghostClass: 'bg-base-300', delay: 100, onEnd: (ev) => refreshMediaOrder(sortable.toArray()) })"
+                            x-init="sortable = new Sortable($el, { animation: 150, ghostClass: 'bg-base-300', filter: '.ignore-drag', onEnd: (ev) => refreshMediaOrder(sortable.toArray()) })"
                             class="border border-dotted border-primary rounded-lg"
                         >
                             @foreach($preview as $key => $image)
@@ -174,9 +174,9 @@ class ImageLibrary extends Component
                                     </div>
 
                                     <!-- ACTIONS -->
-                                    <div class="absolute flex flex-col gap-2 top-3 left-3 cursor-pointer  p-2 rounded-lg">
-                                        <x-mary-button @click="removeMedia('{{ $image['uuid'] }}', '{{ $image['url'] }}')"  icon="o-x-circle" :tooltip="$removeText"  class="btn-sm btn-ghost btn-circle ignore-elements" />
-                                        <x-mary-button @click="crop('image-{{ $modelName().'.'.$key  }}-{{ $uuid }}')" icon="o-scissors" :tooltip="$cropText"  class="btn-sm btn-ghost btn-circle ignore-elements" />
+                                    <div class="absolute flex flex-col gap-2 top-3 left-3 cursor-pointer  p-2 rounded-lg ignore-drag">
+                                        <x-mary-button @click="removeMedia('{{ $image['uuid'] }}', '{{ $image['url'] }}')"  icon="o-x-circle" :tooltip="$removeText"  class="btn-sm btn-ghost btn-circle" />
+                                        <x-mary-button @click="crop('image-{{ $modelName().'.'.$key  }}-{{ $uuid }}')" icon="o-scissors" :tooltip="$cropText"  class="btn-sm btn-ghost btn-circle" />
                                     </div>
                                 </div>
                             @endforeach
