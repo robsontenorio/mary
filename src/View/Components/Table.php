@@ -149,23 +149,53 @@ class Table extends Component
         return <<<'HTML'
                 <div x-data="{
                                 selection: @entangle($attributes->wire('model')),
+                                pageIds: {{ json_encode($getAllIds()) }},
+                                isSelectable: {{ json_encode($selectable) }},
                                 colspanSize: 0,
-                                toggleSelection(checked){
-                                    checked ? this.selection = @js($getAllIds()) : this.selection = []
+                                init() {
+                                    this.colspanSize = $refs.headers.childElementCount
+
+                                    if (this.isSelectable) {
+                                        this.handleCheckAll()
+                                    }
                                 },
-                                toggleExpand(key){
+                                isExpanded(key) {
+                                    return this.selection.includes(key)
+                                },
+                                isPageFullSelected() {
+                                    return [...this.selection]
+                                                .sort((a, b) => b - a)
+                                                .toString()
+                                                .includes([...this.pageIds].sort((a, b) => b - a).toString())
+                                },
+                                toggleCheck(checked, content) {
+                                    this.$dispatch('row-selection', { row: content, selected: checked });
+                                    this.handleCheckAll()
+                                },
+                                toggleCheckAll(checked) {
+                                    checked ? this.pushIds() : this.removeIds()
+                                },
+                                toggleExpand(key) {
                                      this.selection.includes(key)
                                         ? this.selection = this.selection.filter(i => i !== key)
                                         : this.selection.push(key)
                                 },
-                                isExpanded(key){
-                                    return this.selection.includes(key)
+                                pushIds() {
+                                    this.selection.push(...this.pageIds.filter(i => !this.selection.includes(i)))
                                 },
-                                init() {
-                                    this.colspanSize = $refs.headers.childElementCount
+                                removeIds() {
+                                    this.selection =  this.selection.filter(i => !this.pageIds.includes(i) )
+                                },
+                                handleCheckAll() {
+                                    this.$nextTick(() => {
+                                            this.isPageFullSelected()
+                                                ? this.$refs.mainCheckbox.checked = true
+                                                : this.$refs.mainCheckbox.checked = false
+                                        })
                                 }
                              }"
-                                class="overflow-x-auto"
+
+                     class="overflow-x-auto"
                 >
                     <table
                         {{
@@ -181,14 +211,14 @@ class Table extends Component
                         <!-- HEADERS -->
                         <thead @class(["text-black dark:text-gray-200", "hidden" => $noHeaders])>
                             <tr x-ref="headers">
-                                <!-- CHECKBOX -->
+                                <!-- CHECKALL -->
                                 @if($selectable)
-                                    <th class="w-1">
+                                    <th class="w-1" wire:key="{{ $uuid }}-checkall-{{ implode(',', $getAllIds()) }}">
                                         <input
                                             type="checkbox"
                                             class="checkbox checkbox-sm"
                                             x-ref="mainCheckbox"
-                                            @click="toggleSelection($el.checked)" />
+                                            @click="toggleCheckAll($el.checked)" />
                                     </th>
                                 @endif
 
@@ -242,8 +272,8 @@ class Table extends Component
                                                 type="checkbox"
                                                 class="checkbox checkbox-sm checkbox-primary"
                                                 value="{{ data_get($row, $selectableKey) }}"
-                                                x-model="selection"
-                                                @click="$dispatch('row-selection', { row: {{ json_encode($row) }}, selected: $el.checked }); $refs.mainCheckbox.checked = false" />
+                                                x-model.number="selection"
+                                                @click="toggleCheck($el.checked, {{ json_encode($row) }})" />
                                         </td>
                                     @endif
 
