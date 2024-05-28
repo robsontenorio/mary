@@ -44,10 +44,9 @@ class Dropdown extends Component
                 @endif
 
                 <ul
-                    class="p-2 shadow menu z-[1] border border-base-200 bg-base-100 dark:bg-base-200 rounded-box"
+                    class="p-2 shadow menu z-[1] border border-base-200 bg-base-100 dark:bg-base-200 rounded-box w-auto min-w-max"
                     @click="open = false"
                     x-anchor.{{ $right ? 'bottom-end' : 'bottom-start' }}="$refs.button"
-                    style="min-width: max-content; width: auto;"
                 >
                     <div wire:key="dropdown-slot-{{ $uuid }}">
                         {{ $slot }}
