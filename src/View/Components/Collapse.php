@@ -14,6 +14,7 @@ class Collapse extends Component
         public ?string $name = null,
         public ?bool $collapsePlusMinus = false,
         public ?bool $separator = false,
+        public ?bool $noIcon = false,
 
         // Slots
         public mixed $heading = null,
@@ -28,8 +29,15 @@ class Collapse extends Component
                 @aware(['noJoin' => null])
 
                 <div
-                    {{ $attributes->merge(['class' => 'collapse border border-base-300']) }}
-                    :class="{'join-item': '{{ ! $noJoin }}', 'collapse-arrow': '{{ ! $collapsePlusMinus }}', 'collapse-plus': '{{ $collapsePlusMinus }}'}"
+                    {{
+                        $attributes->class([
+                            'collapse border border-base-300',
+                            'join-item' => !$noJoin,
+                            'collapse-arrow' => !$collapsePlusMinus && !$noIcon,
+                            'collapse-plus' => $collapsePlusMinus && !$noIcon
+                        ])
+                    }}
+
                     wire:key="collapse-{{ $uuid }}"
                 >
                         <!-- Detects if it is inside an accordion.  -->
