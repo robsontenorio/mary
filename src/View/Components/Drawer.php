@@ -17,6 +17,7 @@ class Drawer extends Component
         public ?string $subtitle = null,
         public ?bool $separator = false,
         public ?bool $withCloseButton = false,
+        public ?bool $closeOnEscape = false,
 
         //Slots
         public ?string $actions = null
@@ -52,6 +53,10 @@ class Drawer extends Component
                         }
                     }"
 
+                    @if($closeOnEscape)
+                        @keydown.window.escape="close()"
+                    @endif
+                    
                     x-trap="open" x-bind:inert="!open"
                     @class(["drawer absolute z-50", "drawer-end" => $right])
                 >
