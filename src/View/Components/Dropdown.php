@@ -15,7 +15,7 @@ class Dropdown extends Component
         public ?string $icon = 'o-chevron-down',
         public ?bool $right = false,
 
-        //Slots
+        // Slots
         public mixed $trigger = null
     ) {
         $this->uuid = "mary" . md5(serialize($this));
@@ -44,12 +44,12 @@ class Dropdown extends Component
                 @endif
 
                 <ul
-                    class="p-2 shadow menu z-[1] border border-base-200 bg-base-100 dark:bg-base-200 rounded-box whitespace-nowrap"
+                    class="p-2 shadow menu z-[1] border border-base-200 bg-base-100 dark:bg-base-200 rounded-box w-auto min-w-max"
                     @click="open = false"
                     x-anchor.{{ $right ? 'bottom-end' : 'bottom-start' }}="$refs.button"
                 >
                     <div wire:key="dropdown-slot-{{ $uuid }}">
-                    {{ $slot }}
+                        {{ $slot }}
                     </div>
                 </ul>
             </details>
