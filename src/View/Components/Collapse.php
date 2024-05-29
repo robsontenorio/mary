@@ -15,6 +15,7 @@ class Collapse extends Component
         public ?bool $collapsePlusMinus = false,
         public ?bool $separator = false,
         public ?bool $noIcon = false,
+        public ?bool $isOpen = false,
 
         // Slots
         public mixed $heading = null,
@@ -42,9 +43,9 @@ class Collapse extends Component
                 >
                         <!-- Detects if it is inside an accordion.  -->
                         @if(isset($noJoin))
-                            <input type="radio" value="{{ $name }}" x-model="model" />
+                            <input type="radio" value="{{ $name }}" x-model="model" @if($isOpen) checked @endif />
                         @else
-                            <input {{ $attributes->wire('model') }} type="checkbox" />
+                            <input {{ $attributes->wire('model') }} type="checkbox" @if($isOpen) checked @endif />
                         @endif
 
                         <div
