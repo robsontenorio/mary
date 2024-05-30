@@ -18,6 +18,8 @@ return [
      */
     'prefix' => '',
 
+    'route_prefix' => '',
+
     /**
      * Components settings
      */
@@ -27,4 +29,3 @@ return [
         ]
     ]
 ];
-
