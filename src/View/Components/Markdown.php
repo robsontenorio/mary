@@ -66,7 +66,7 @@ class Markdown extends Component
             <div>
                 <!-- STANDARD LABEL -->
                 @if($label)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                    <div for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
                         <span>
                             {{ $label }}
 
@@ -74,7 +74,7 @@ class Markdown extends Component
                                 <span class="text-error">*</span>
                             @endif
                         </span>
-                    </label>
+                    </div>
                 @endif
 
                 <!-- EDITOR -->
@@ -135,7 +135,7 @@ class Markdown extends Component
                         @break($firstErrorOnly)
                     @endforeach
                 @endif
-                
+
             </div>
             HTML;
     }

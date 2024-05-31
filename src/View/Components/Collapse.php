@@ -42,9 +42,9 @@ class Collapse extends Component
                 >
                         <!-- Detects if it is inside an accordion.  -->
                         @if(isset($noJoin))
-                            <input type="radio" value="{{ $name }}" x-model="model" />
+                            <input id="radio-{{ $uuid }}" type="radio" value="{{ $name }}" x-model="model" />
                         @else
-                            <input {{ $attributes->wire('model') }} type="checkbox" />
+                            <input id="checkbox-{{ $uuid }}" {{ $attributes->wire('model') }} type="checkbox" />
                         @endif
 
                         <div
