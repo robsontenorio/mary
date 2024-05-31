@@ -48,6 +48,7 @@ use Mary\View\Components\MenuTitle;
 use Mary\View\Components\Modal;
 use Mary\View\Components\Nav;
 use Mary\View\Components\Pin;
+use Mary\View\Components\Popover;
 use Mary\View\Components\Progress;
 use Mary\View\Components\ProgressRadial;
 use Mary\View\Components\Radio;
@@ -150,6 +151,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'main', Main::class);
         Blade::component($prefix . 'nav', Nav::class);
         Blade::component($prefix . 'pin', Pin::class);
+        Blade::component($prefix . 'popover', Popover::class);
         Blade::component($prefix . 'progress', Progress::class);
         Blade::component($prefix . 'progress-radial', ProgressRadial::class);
         Blade::component($prefix . 'radio', Radio::class);
