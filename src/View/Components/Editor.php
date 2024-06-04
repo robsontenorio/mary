@@ -93,6 +93,7 @@ class Editor extends Component
 
                                 setup: function(editor) {
                                     editor.on('keyup', (e) => value = editor.getContent())
+                                    editor.on('change', (e) => value = editor.getContent())
                                     editor.on('init', () =>  editor.setContent(value ?? ''))
                                     editor.on('OpenWindow', (e) => tinymce.activeEditor.topLevelWindow = e.dialog)
                                 },
