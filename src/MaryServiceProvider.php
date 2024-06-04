@@ -207,7 +207,7 @@ class MaryServiceProvider extends ServiceProvider
              */
             $name = str_replace('.', '___', $name);
 
-            return "<?php \$__env->slot({$name}, function({$functionArguments}) use ({$uses}) { ?>";
+            return "<?php \$loop = null; \$__env->slot({$name}, function({$functionArguments}) use ({$uses}) { \$loop = (object) \$__env->getLoopStack()[0] ?>";
         });
 
         Blade::directive('endscope', function () {
