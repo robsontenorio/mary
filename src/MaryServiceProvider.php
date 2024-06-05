@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Mary\Console\Commands\MaryBootcampCommand;
 use Mary\Console\Commands\MaryInstallCommand;
-use Illuminate\Support\Facades\File as FileFacade;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class MaryServiceProvider extends ServiceProvider
@@ -59,7 +59,7 @@ class MaryServiceProvider extends ServiceProvider
         $namespace = 'Mary\\View\\Components\\';
 
         // Iterate over all files in the components directory
-        foreach (FileFacade::allFiles($componentsPath) as $file) {
+        foreach (File::allFiles($componentsPath) as $file) {
             // Get the file name without its extension
             $fileName = $file->getFilenameWithoutExtension();
 
