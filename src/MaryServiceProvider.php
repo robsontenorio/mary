@@ -14,7 +14,7 @@ class MaryServiceProvider extends ServiceProvider
 {
     // List of components that should have a special alias
     // No matter if components has custom prefix or not,
-    // we also register alias for bellow componentsto avoid naming collision,
+    // we also register alias for bellow components to avoid naming collision,
     // because they are used inside some Mary's components itself.
     protected $specialComponents = [
         'Button',
