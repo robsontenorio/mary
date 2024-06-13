@@ -14,8 +14,6 @@ class Dropdown extends Component
         public ?string $label = null,
         public ?string $icon = 'o-chevron-down',
         public ?bool $right = false,
-
-        // Slots
         public mixed $trigger = null
     ) {
         $this->uuid = "mary" . md5(serialize($this));
@@ -24,35 +22,42 @@ class Dropdown extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <details
-                x-data="{open: false}"
-                @click.outside="open = false"
-                :open="open"
-                class="dropdown"
-            >
+            <div x-data="{ open: false }" class="relative dropdown">
                 <!-- CUSTOM TRIGGER -->
                 @if($trigger)
-                    <summary x-ref="button" @click.prevent="open = !open" {{ $trigger->attributes->class(['list-none']) }}>
+                    <div x-ref="dropdownButton" @click="open = !open" {{ $trigger->attributes->class(['cursor-pointer']) }}>
                         {{ $trigger }}
-                    </summary>
+                    </div>
                 @else
-                    <!-- DEFAULT TRIGGER -->
-                    <summary x-ref="button" @click.prevent="open = !open" {{ $attributes->class(["btn normal-case"]) }}>
+                    <div x-ref="dropdownButton" @click="open = !open" {{ $attributes->class(["btn normal-case cursor-pointer"]) }}>
                         {{ $label }}
                         <x-mary-icon :name="$icon" />
-                    </summary>
+                    </div>
                 @endif
 
-                <ul
-                    class="p-2 shadow menu z-[1] border border-base-200 bg-base-100 dark:bg-base-200 rounded-box w-auto min-w-max"
-                    @click="open = false"
-                    x-anchor.{{ $right ? 'bottom-end' : 'bottom-start' }}="$refs.button"
-                >
-                    <div wire:key="dropdown-slot-{{ $uuid }}">
-                        {{ $slot }}
+                <template x-if="open">
+                    <div
+                        class="fixed inset-0 z-50 items-center justify-center"
+                        @click="open = false"
+                    >
+                        <div
+                            x-show="open"
+                            x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute z-50 w-auto p-2 border shadow border-base-200 bg-base-100 dark:bg-base-200 rounded-box min-w-max menu"
+                            :style="{'top': ($refs.dropdownButton.getBoundingClientRect().bottom + window.scrollY) + 'px', 'left': ($refs.dropdownButton.getBoundingClientRect().left + window.scrollX) + 'px'}"
+                        >
+                            <div wire:key="dropdown-slot-{{ $uuid }}">
+                                {{ $slot }}
+                            </div>
+                        </div>
                     </div>
-                </ul>
-            </details>
+                </template>
+            </div>
         HTML;
     }
 }
