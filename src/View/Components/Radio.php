@@ -18,6 +18,7 @@ class Radio extends Component
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
+        public ?string $nullOption = null,
         // Validations
         public ?string $errorField = null,
         public ?string $errorClass = 'text-red-500 label-text-alt p-1',
@@ -64,6 +65,16 @@ class Radio extends Component
                                 {{ $attributes->class(["join-item capitalize btn input-bordered input bg-base-200"]) }}
                                 />
                         @endforeach
+                        @if ($nullOption)
+                            <input
+                                type="radio"
+                                name="{{ $modelName() }}"
+                                value=""
+                                aria-label="{{ $nullOption }}"
+                                {{ $attributes->whereStartsWith('wire:model') }}
+                                {{ $attributes->class(["join-item capitalize btn input-bordered input bg-base-200"]) }}
+                            />
+                        @endif
                     </div>
                     <!-- ERROR -->
                     @if(!$omitError && $errors->has($errorFieldName()))
