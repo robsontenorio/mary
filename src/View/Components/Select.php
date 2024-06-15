@@ -103,7 +103,11 @@ class Select extends Component
                         @endif
 
                         @foreach ($options as $option)
-                            <option value="{{ $option[$optionValue] }}" @if(isset($option['disabled'])) disabled @endif>{{ $option[$optionLabel] }}</option>
+                            @if (is_array($option))
+                                <option value="{{ $option[$optionValue] }}" @if(isset($option['disabled'])) disabled @endif>{{ $option[$optionLabel] }}</option>
+                            @else
+                                <option value="{{ $option->value }}">{{ $option->name }}</option>
+                            @endif
                         @endforeach
                     </select>
 
