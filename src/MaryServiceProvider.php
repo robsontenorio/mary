@@ -7,71 +7,30 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Mary\Console\Commands\MaryBootcampCommand;
 use Mary\Console\Commands\MaryInstallCommand;
-use Mary\View\Components\Accordion;
-use Mary\View\Components\Alert;
-use Mary\View\Components\Avatar;
-use Mary\View\Components\Badge;
-use Mary\View\Components\Button;
-use Mary\View\Components\Calendar;
-use Mary\View\Components\Card;
-use Mary\View\Components\Chart;
-use Mary\View\Components\Checkbox;
-use Mary\View\Components\Choices;
-use Mary\View\Components\ChoicesOffline;
-use Mary\View\Components\Collapse;
-use Mary\View\Components\Colorpicker;
-use Mary\View\Components\DatePicker;
-use Mary\View\Components\DateTime;
-use Mary\View\Components\Diff;
-use Mary\View\Components\Drawer;
-use Mary\View\Components\Dropdown;
-use Mary\View\Components\Editor;
-use Mary\View\Components\Errors;
-use Mary\View\Components\File;
-use Mary\View\Components\Form;
-use Mary\View\Components\Header;
-use Mary\View\Components\Hr;
-use Mary\View\Components\Icon;
-use Mary\View\Components\ImageGallery;
-use Mary\View\Components\ImageLibrary;
-use Mary\View\Components\Input;
-use Mary\View\Components\Kbd;
-use Mary\View\Components\ListItem;
-use Mary\View\Components\Loading;
-use Mary\View\Components\Main;
-use Mary\View\Components\Markdown;
-use Mary\View\Components\Menu;
-use Mary\View\Components\MenuItem;
-use Mary\View\Components\MenuSeparator;
-use Mary\View\Components\MenuSub;
-use Mary\View\Components\MenuTitle;
-use Mary\View\Components\Modal;
-use Mary\View\Components\Nav;
-use Mary\View\Components\Pin;
-use Mary\View\Components\Popover;
-use Mary\View\Components\Progress;
-use Mary\View\Components\ProgressRadial;
-use Mary\View\Components\Radio;
-use Mary\View\Components\Range;
-use Mary\View\Components\Select;
-use Mary\View\Components\SelectGroup;
-use Mary\View\Components\Signature;
-use Mary\View\Components\Spotlight;
-use Mary\View\Components\Stat;
-use Mary\View\Components\Step;
-use Mary\View\Components\Steps;
-use Mary\View\Components\Tab;
-use Mary\View\Components\Table;
-use Mary\View\Components\Tabs;
-use Mary\View\Components\Tags;
-use Mary\View\Components\Textarea;
-use Mary\View\Components\ThemeToggle;
-use Mary\View\Components\TimelineItem;
-use Mary\View\Components\Toast;
-use Mary\View\Components\Toggle;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class MaryServiceProvider extends ServiceProvider
 {
+    // List of components that should have a special alias
+    // No matter if components has custom prefix or not,
+    // we also register alias for bellow components to avoid naming collision,
+    // because they are used inside some Mary's components itself.
+    protected $specialComponents = [
+        'Button',
+        'Card',
+        'Icon',
+        'Input',
+        'ListItem',
+        'Modal',
+        'Menu',
+        'MenuItem',
+        'Header',
+    ];
+
+    // Prefix for special components
+    protected $specialPrefix = 'mary-';
+
     /**
      * Perform post-registration booting of services.
      */
@@ -90,87 +49,36 @@ class MaryServiceProvider extends ServiceProvider
 
     public function registerComponents()
     {
-        // Just rename <x-icon> provided by BladeUI Icons to <x-svg> to not collide with ours
+        // Rename the <x-icon> component provided by BladeUI Icons to <x-svg> to avoid conflicts with our own <x-icon>
         Blade::component('BladeUI\Icons\Components\Icon', 'svg');
 
-        // No matter if components has custom prefix or not,
-        // we also register bellow alias to avoid naming collision,
-        // because they are used inside some Mary's components itself.
-        Blade::component('mary-button', Button::class);
-        Blade::component('mary-card', Card::class);
-        Blade::component('mary-icon', Icon::class);
-        Blade::component('mary-input', Input::class);
-        Blade::component('mary-list-item', ListItem::class);
-        Blade::component('mary-modal', Modal::class);
-        Blade::component('mary-menu', Menu::class);
-        Blade::component('mary-menu-item', MenuItem::class);
-        Blade::component('mary-header', Header::class);
+        // Define the path to the directory containing the components in the vendor directory
+        $componentsPath = base_path('vendor/robsontenorio/mary/src/View/Components');
 
-        $prefix = config('mary.prefix');
+        // Base namespace for the components
+        $namespace = 'Mary\\View\\Components\\';
 
-        // Blade
-        Blade::component($prefix . 'accordion', Accordion::class);
-        Blade::component($prefix . 'alert', Alert::class);
-        Blade::component($prefix . 'avatar', Avatar::class);
-        Blade::component($prefix . 'badge', Badge::class);
-        Blade::component($prefix . 'button', Button::class);
-        Blade::component($prefix . 'calendar', Calendar::class);
-        Blade::component($prefix . 'card', Card::class);
-        Blade::component($prefix . 'chart', Chart::class);
-        Blade::component($prefix . 'checkbox', Checkbox::class);
-        Blade::component($prefix . 'choices', Choices::class);
-        Blade::component($prefix . 'choices-offline', ChoicesOffline::class);
-        Blade::component($prefix . 'collapse', Collapse::class);
-        Blade::component($prefix . 'colorpicker', Colorpicker::class);
-        Blade::component($prefix . 'datepicker', DatePicker::class);
-        Blade::component($prefix . 'datetime', DateTime::class);
-        Blade::component($prefix . 'diff', Diff::class);
-        Blade::component($prefix . 'drawer', Drawer::class);
-        Blade::component($prefix . 'dropdown', Dropdown::class);
-        Blade::component($prefix . 'editor', Editor::class);
-        Blade::component($prefix . 'errors', Errors::class);
-        Blade::component($prefix . 'file', File::class);
-        Blade::component($prefix . 'form', Form::class);
-        Blade::component($prefix . 'select-group', SelectGroup::class);
-        Blade::component($prefix . 'header', Header::class);
-        Blade::component($prefix . 'hr', Hr::class);
-        Blade::component($prefix . 'icon', Icon::class);
-        Blade::component($prefix . 'image-gallery', ImageGallery::class);
-        Blade::component($prefix . 'image-library', ImageLibrary::class);
-        Blade::component($prefix . 'input', Input::class);
-        Blade::component($prefix . 'kbd', Kbd::class);
-        Blade::component($prefix . 'list-item', ListItem::class);
-        Blade::component($prefix . 'loading', Loading::class);
-        Blade::component($prefix . 'markdown', Markdown::class);
-        Blade::component($prefix . 'modal', Modal::class);
-        Blade::component($prefix . 'menu', Menu::class);
-        Blade::component($prefix . 'menu-item', MenuItem::class);
-        Blade::component($prefix . 'menu-separator', MenuSeparator::class);
-        Blade::component($prefix . 'menu-sub', MenuSub::class);
-        Blade::component($prefix . 'menu-title', MenuTitle::class);
-        Blade::component($prefix . 'main', Main::class);
-        Blade::component($prefix . 'nav', Nav::class);
-        Blade::component($prefix . 'pin', Pin::class);
-        Blade::component($prefix . 'popover', Popover::class);
-        Blade::component($prefix . 'progress', Progress::class);
-        Blade::component($prefix . 'progress-radial', ProgressRadial::class);
-        Blade::component($prefix . 'radio', Radio::class);
-        Blade::component($prefix . 'range', Range::class);
-        Blade::component($prefix . 'select', Select::class);
-        Blade::component($prefix . 'signature', Signature::class);
-        Blade::component($prefix . 'spotlight', Spotlight::class);
-        Blade::component($prefix . 'stat', Stat::class);
-        Blade::component($prefix . 'steps', Steps::class);
-        Blade::component($prefix . 'step', Step::class);
-        Blade::component($prefix . 'table', Table::class);
-        Blade::component($prefix . 'tab', Tab::class);
-        Blade::component($prefix . 'tabs', Tabs::class);
-        Blade::component($prefix . 'tags', Tags::class);
-        Blade::component($prefix . 'textarea', Textarea::class);
-        Blade::component($prefix . 'timeline-item', TimelineItem::class);
-        Blade::component($prefix . 'theme-toggle', ThemeToggle::class);
-        Blade::component($prefix . 'toast', Toast::class);
-        Blade::component($prefix . 'toggle', Toggle::class);
+        // Iterate over all files in the components directory
+        foreach (File::allFiles($componentsPath) as $file) {
+            // Get the file name without its extension
+            $fileName = $file->getFilenameWithoutExtension();
+
+            // Construct the full class name of the component
+            $componentClass = $namespace . $fileName;
+
+            // Convert the file name to kebab-case for the component alias
+            $componentAlias = Str::kebab($fileName);
+
+            // Register the Blade component with its kebab-case alias
+            Blade::component($componentAlias, $componentClass);
+
+            // Check if the component is in the special components list
+            if (in_array($fileName, $this->specialComponents)) {
+                // Register the special alias for the component
+                $specialAlias = $this->specialPrefix . $componentAlias;
+                Blade::component($specialAlias, $componentClass);
+            }
+        }
     }
 
     public function registerBladeDirectives(): void
