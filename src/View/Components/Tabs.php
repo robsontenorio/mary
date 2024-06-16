@@ -11,7 +11,7 @@ class Tabs extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $selected = null
+        public ?string $selected = null,
         public string $labelClass = 'font-semibold border-b-2 border-b-base-300',
         public string $activeClass = 'border-b-2 border-b-gray-600 dark:border-b-gray-400',
         public string $labelDivClass = 'border-b-2 border-b-base-200 flex overflow-x-auto',
@@ -41,6 +41,7 @@ class Tabs extends Component
                                  }
                         }"
                         class="{{ $tabsClass }}"
+                        x-class="font-semibold border-b-2 border-b-base-300 border-b-gray-600 dark:border-b-gray-400 border-b-base-200 flex overflow-x-auto relative w-full"
                     >
                         <!-- TAB LABELS -->
                         <div class="{{ $labelDivClass }}">
