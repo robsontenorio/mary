@@ -42,8 +42,12 @@ return new class extends Migration {
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('country_id');
+            $table->dropColumn('avatar');
+            $table->dropColumn('bio');
         });
 
         Schema::dropIfExists('countries');
+        Schema::dropIfExists('languages');
+        Schema::dropIfExists('language_user');
     }
 };
