@@ -34,7 +34,7 @@ class Tab extends Component
         }
 
         return Blade::render("
-            <div class='mr-2 whitespace-nowrap'>
+            <div class='whitespace-nowrap'>
                 {$fromLabel}
             </div>
         ");

@@ -12,7 +12,7 @@ class Form extends Component
 
         // Slots
         public mixed $actions = null,
-        public ?bool $noseparator = false,
+        public ?bool $noSeparator = false,
     ) {
         //
     }
@@ -20,15 +20,15 @@ class Form extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <form 
-                    {{ $attributes->whereDoesntStartWith('class') }} 
+                <form
+                    {{ $attributes->whereDoesntStartWith('class') }}
                     {{ $attributes->class(['grid grid-flow-row auto-rows-min gap-3']) }}
                 >
 
                     {{ $slot }}
 
                     @if ($actions)
-                        @if(!$noseparator)
+                        @if(!$noSeparator)
                             <hr class="my-3" />
                         @endif
 

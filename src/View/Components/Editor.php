@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class Editor extends Component
 {
     public string $uuid;
+    public string $uploadUrl;
 
     public function __construct(
         public ?string $label = null,
@@ -23,6 +24,7 @@ class Editor extends Component
         public ?bool $firstErrorOnly = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
+        $this->uploadUrl = route('mary.upload', absolute: false);
     }
 
     public function modelName(): ?string
@@ -76,7 +78,7 @@ class Editor extends Component
                         x-data="
                             {
                                 value: @entangle($attributes->wire('model')),
-                                uploadUrl: '/mary/upload?disk={{ $disk }}&folder={{ $folder }}&_token={{ csrf_token() }}'
+                                uploadUrl: '{{ $uploadUrl }}?disk={{ $disk }}&folder={{ $folder }}&_token={{ csrf_token() }}'
                             }"
                         x-init="
                             tinymce.init({
