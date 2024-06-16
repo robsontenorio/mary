@@ -119,7 +119,7 @@ class ImageLibrary extends Component
                             this.cropper.getCroppedCanvas().toBlob((blob) => {
                                 @this.upload(this.croppingId, blob,
                                     (uploadedFilename) => { this.refreshMediaSources() },
-                                    (error) => {  },
+                                    (error) => { this.progress = 0; },
                                     (event) => { this.progress = event.detail.progress;  }
                                 )
                             })
