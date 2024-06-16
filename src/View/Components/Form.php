@@ -11,7 +11,8 @@ class Form extends Component
     public function __construct(
 
         // Slots
-        public mixed $actions = null
+        public mixed $actions = null,
+        public ?bool $noseparator = false,
     ) {
         //
     }
@@ -27,7 +28,9 @@ class Form extends Component
                     {{ $slot }}
 
                     @if ($actions)
-                        <hr class="my-3" />
+                        @if(!$noseparator)
+                            <hr class="my-3" />
+                        @endif
 
                         <div class="flex justify-end gap-3">
                             {{ $actions}}
