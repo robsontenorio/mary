@@ -259,11 +259,6 @@ class Table extends Component
                         <!-- ROWS -->
                         <tbody>
                             @foreach($rows as $k => $row)
-                                @php
-                                    # helper variable to provide the loop context
-                                    $this->loop = $loop;
-                                @endphp
-
                                 <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50 {{ $rowClasses($row) }}" @click="$dispatch('row-click', {{ json_encode($row) }});">
                                     <!-- CHECKBOX -->
                                     @if($selectable)
@@ -326,7 +321,7 @@ class Table extends Component
 
                                     <!-- ACTIONS -->
                                     @if($actions)
-                                        <td class="text-right py-0" @click="event.stopPropagation()">{{ $actions($row) }}</td>
+                                        <td class="text-right py-0">{{ $actions($row) }}</td>
                                     @endif
                                 </tr>
 
