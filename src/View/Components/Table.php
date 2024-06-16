@@ -326,7 +326,7 @@ class Table extends Component
 
                                     <!-- ACTIONS -->
                                     @if($actions)
-                                        <td class="text-right py-0" @click="event.stopPropagation()">{{ $actions($row) }}</td>
+                                        <td class="text-right py-0">{{ $actions($row) }}</td>
                                     @endif
                                 </tr>
 
