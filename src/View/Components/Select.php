@@ -9,7 +9,6 @@ use Illuminate\View\Component;
 
 class Select extends Component
 {
-
     public string $uuid;
 
     public function __construct(
@@ -32,8 +31,7 @@ class Select extends Component
         public ?string $errorClass = 'text-red-500 label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
-    )
-    {
+    ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
 
@@ -103,11 +101,7 @@ class Select extends Component
                         @endif
 
                         @foreach ($options as $option)
-                            @if (is_array($option))
-                                <option value="{{ $option[$optionValue] }}" @if(isset($option['disabled'])) disabled @endif>{{ $option[$optionLabel] }}</option>
-                            @else
-                                <option value="{{ $option->value }}">{{ $option->name }}</option>
-                            @endif
+                            <option value="{{ data_get($option, $optionValue) }}" @if(data_get($option, 'disabled')) disabled @endif>{{ data_get($option, $optionLabel) }}</option>
                         @endforeach
                     </select>
 
