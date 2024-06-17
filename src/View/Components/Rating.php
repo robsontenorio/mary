@@ -36,7 +36,7 @@ class Rating extends Component
                             name="{{ $modelName() }}"
                             value="{{ $i }}"
                             {{ $attributes->whereStartsWith('wire:model') }}
-                            {{ $attributes->class(["mask mask-star-2 bg-yellow-400"]) }}
+                            {{ $attributes->class(["mask mask-star-2"]) }}
                         />
                     @endfor
                 </div>
