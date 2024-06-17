@@ -22,6 +22,7 @@ class Stat extends Component
         public ?string $tooltipLeft = null,
         public ?string $tooltipRight = null,
         public ?string $tooltipBottom = null,
+        public ?bool $shadow = false,
 
     ) {
         $this->uuid = "mary" . md5(serialize($this));
@@ -33,7 +34,7 @@ class Stat extends Component
     {
         return <<<'HTML'
                 <div
-                    {{ $attributes->class(["bg-base-100 rounded-lg px-5 py-4  w-full", "lg:tooltip $tooltipPosition" => $tooltip]) }}
+                    {{ $attributes->class(["bg-base-100 rounded-lg px-5 py-4  w-full", "lg:tooltip $tooltipPosition" => $tooltip, 'shadow-md' => $shadow]) }}
 
                     @if($tooltip)
                         data-tip="{{ $tooltip }}"
