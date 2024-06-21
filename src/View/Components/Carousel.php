@@ -9,6 +9,7 @@ use Illuminate\View\View;
 class Carousel extends Component
 {
     public string $uuid;
+    public bool $associative = false;
 
     public function __construct(
         public array $images,
@@ -16,6 +17,9 @@ class Carousel extends Component
         public ?bool $withIndicators = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
+        $this->associative =  gettype($this->images[0])=="array"
+        ? true
+        : false;
     }
 
     public function render(): View|Closure|string
@@ -30,7 +34,9 @@ class Carousel extends Component
                         @for($i=0; $i < count($images); $i++)
 
                             <div id="slide{{$i}}" class="carousel-item relative w-full justify-center">
-                                <img src="{!! $images[$i] !!}" class="w-full h-full" />
+                                <a @if($associative) href="{!! $images[$i]['link'] !!}" @endif >
+                                    <img src="{!! $associative ? $images[$i]['image']: $images[$i] !!}" class="w-full h-full" />
+                                </a>
                                 <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                                     <a
                                         href="#slide{{($i==0)?$i:$i-1}}"
@@ -41,17 +47,18 @@ class Carousel extends Component
                                 </div>
                             </div>
                         @endfor
-                    </div>
+                </div>
 
                 @else
                     <div
                         {{ $attributes->class(['carousel rounded-box']) }}
                         wire:key="{{ $uuid }}">
-
                         @if($images)
                             @for($i=0; $i < count($images); $i++)
                                 <div id='image{!!$i!!}' class="carousel-item">
-                                    <img  src="{!! $images[$i] !!}"  />
+                                    <a @if($associative) href="{!! $images[$i]['link'] !!}" @endif>
+                                        <img  src="{!! $associative ? $images[$i]['image']: $images[$i] !!}"  />
+                                    </a>
                                 </div>
                             @endfor
                         @endif
