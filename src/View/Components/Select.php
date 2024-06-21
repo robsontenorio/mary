@@ -74,7 +74,7 @@ class Select extends Component
 
                 <!-- PREPEND -->
                 @if($prepend)
-                    <div class="rounded-l-lg flex items-center bg-base-200">
+                    <div class="rounded-s-lg flex items-center bg-base-200">
                         {{ $prepend }}
                     </div>
                 @endif
@@ -85,11 +85,11 @@ class Select extends Component
                         {{ $attributes->whereDoesntStartWith('class') }}
                         {{ $attributes->class([
                                     'select select-primary w-full font-normal',
-                                    'pl-10' => ($icon),
+                                    'ps-10' => ($icon),
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
-                                    'rounded-l-none' => $prepend,
-                                    'rounded-r-none' => $append,
+                                    'rounded-s-none' => $prepend,
+                                    'rounded-e-none' => $append,
                                     'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                     'select-error' => $errors->has($errorFieldName())
                                 ])
@@ -107,17 +107,17 @@ class Select extends Component
 
                     <!-- ICON -->
                     @if($icon)
-                        <x-mary-icon :name="$icon" class="absolute pointer-events-none top-1/2 -translate-y-1/2 left-3 text-gray-400" />
+                        <x-mary-icon :name="$icon" class="absolute pointer-events-none top-1/2 -translate-y-1/2 start-3 text-gray-400" />
                     @endif
 
                     <!-- RIGHT ICON  -->
                     @if($iconRight)
-                        <x-mary-icon :name="$iconRight" class="absolute pointer-events-none top-1/2 right-8 -translate-y-1/2 text-gray-400 " />
+                        <x-mary-icon :name="$iconRight" class="absolute pointer-events-none top-1/2 end-8 -translate-y-1/2 text-gray-400 " />
                     @endif
 
                     <!-- INLINE LABEL -->
                     @if($label && $inline)
-                        <label for="{{ $uuid }}" class="absolute pointer-events-none text-gray-500 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) left-9 @else left-3 @endif">
+                        <label for="{{ $uuid }}" class="absolute pointer-events-none text-gray-500 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) start-9 @else start-3 @endif">
                             {{ $label }}
                         </label>
                     @endif
@@ -125,7 +125,7 @@ class Select extends Component
 
                 <!-- APPEND -->
                 @if($append)
-                    <div class="rounded-r-lg flex items-center bg-base-200">
+                    <div class="rounded-e-lg flex items-center bg-base-200">
                         {{ $append }}
                     </div>
                 @endif
@@ -148,7 +148,7 @@ class Select extends Component
 
                 <!-- HINT -->
                 @if($hint)
-                    <div class="label-text-alt text-gray-400 pl-1 mt-2">{{ $hint }}</div>
+                    <div class="label-text-alt text-gray-400 ps-1 mt-2">{{ $hint }}</div>
                 @endif
             </div>
         HTML;

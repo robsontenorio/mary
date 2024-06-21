@@ -127,27 +127,27 @@ class Tags extends Component
 
                     {{
                         $attributes->except(['wire:model', 'wire:model.live'])->class([
-                            "input input-bordered input-primary w-full h-fit pr-16 pt-1.5 pb-1 min-h-[47px] inline-block cursor-pointer relative",
+                            "input input-bordered input-primary w-full h-fit pe-16 pt-1.5 pb-1 min-h-[47px] inline-block cursor-pointer relative",
                             'border border-dashed' => $isReadonly(),
                             'input-error' => $errors->has($errorFieldName()) || $errors->has($errorFieldName().'*'),
-                            'pl-10' => $icon,
+                            'ps-10' => $icon,
                         ])
                     }}
                 >
                     <!-- ICON  -->
                     @if($icon)
-                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
+                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-gray-400 pointer-events-none" />
                     @endif
 
                     <!-- CLEAR ICON  -->
                     @if(! $isReadonly())
-                        <x-mary-icon @click="clearAll()" x-show="tags.length"  name="o-x-mark" class="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                        <x-mary-icon @click="clearAll()" x-show="tags.length"  name="o-x-mark" class="absolute top-1/2 end-4 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
                     @endif
 
                     <!--  TAGS  -->
                     <span wire:key="tags-{{ $uuid }}">
                         <template :key="index" x-for="(tag, index) in tags">
-                            <div class="mary-tags-element bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
+                            <div class="mary-tags-element bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 mt-0.5 mb-1.5 last:me-0 inline-block rounded cursor-pointer">
                                 <span x-text="tag"></span>
                                 <x-mary-icon @click="remove(index)" x-show="!isReadonly" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
                             </div>
