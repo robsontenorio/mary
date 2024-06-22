@@ -14,6 +14,7 @@ use Mary\View\Components\Badge;
 use Mary\View\Components\Button;
 use Mary\View\Components\Calendar;
 use Mary\View\Components\Card;
+use Mary\View\Components\Carousel;
 use Mary\View\Components\Chart;
 use Mary\View\Components\Checkbox;
 use Mary\View\Components\Choices;
@@ -173,6 +174,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'theme-toggle', ThemeToggle::class);
         Blade::component($prefix . 'toast', Toast::class);
         Blade::component($prefix . 'toggle', Toggle::class);
+        Blade::component($prefix . 'carousel', Carousel::class);
     }
 
     public function registerBladeDirectives(): void
