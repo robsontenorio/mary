@@ -259,7 +259,13 @@ class Table extends Component
                         <!-- ROWS -->
                         <tbody>
                             @foreach($rows as $k => $row)
-                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50 {{ $rowClasses($row) }}" @click="$dispatch('row-click', {{ json_encode($row) }});">
+                                <tr
+                                    wire:key="{{ $uuid }}-{{ $k }}"
+                                    class="hover:bg-base-200/50 {{ $rowClasses($row) }}"
+                                    @if($attributes->has('@row-click'))
+                                        @click="$dispatch('row-click', {{ json_encode($row) }});"
+                                    @endif
+                                >
                                     <!-- CHECKBOX -->
                                     @if($selectable)
                                         <td class="w-1">
