@@ -8,19 +8,22 @@ use Illuminate\View\Component;
 
 class Toggle extends Component
 {
+    public string $uuid;
+
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
         public ?bool $right = false,
         public ?bool $tight = false
     ) {
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
                 <div>
-                    <label class="flex items-center gap-3 cursor-pointer">
+                    <label for="{{ $uuid }}" class="flex items-center gap-3 cursor-pointer">
 
                         @if($right)
                             <span @class(["flex-1" => !$tight])>
@@ -28,7 +31,7 @@ class Toggle extends Component
                             </span>
                         @endif
 
-                        <input type="checkbox" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['toggle toggle-primary']) }}  />
+                        <input id="{{ $uuid }}" type="checkbox" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['toggle toggle-primary']) }}  />
 
                         @if(!$right)
                             {{ $label}}

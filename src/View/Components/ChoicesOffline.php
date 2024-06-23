@@ -186,7 +186,7 @@ class ChoicesOffline extends Component
                     >
                         <!-- STANDARD LABEL -->
                         @if($label)
-                            <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                            <div class="pt-0 label label-text font-semibold">
                                 <span>
                                     {{ $label }}
 
@@ -194,7 +194,7 @@ class ChoicesOffline extends Component
                                         <span class="text-error">*</span>
                                     @endif
                                 </span>
-                            </label>
+                            </div>
                         @endif
 
                         <!-- PREPEND/APPEND CONTAINER -->
@@ -261,6 +261,7 @@ class ChoicesOffline extends Component
 
                             <!-- INPUT SEARCH -->
                             <input
+                                id="{{ $uuid }}"
                                 x-ref="searchInput"
                                 x-model="search"
                                 @keyup="lookup()"

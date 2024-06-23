@@ -134,7 +134,7 @@ class ImageLibrary extends Component
                 >
                     <!-- STANDARD LABEL -->
                     @if($label)
-                        <label class="pt-0 label label-text font-semibold">{{ $label }}</label>
+                        <div class="pt-0 label label-text font-semibold">{{ $label }}</div>
                     @endif
 
                     <!-- PREVIEW AREA -->

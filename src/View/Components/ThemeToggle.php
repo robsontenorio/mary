@@ -27,6 +27,7 @@ class ThemeToggle extends Component
         return <<<'HTML'
                 <div>
                     <label
+                        for="{{ $uuid }}"
                         x-data="{
                             theme: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches ? '{{ $darkTheme }}' : '{{ $lightTheme }}').as('mary-theme'),
                             init() {
@@ -51,7 +52,7 @@ class ThemeToggle extends Component
                         @mary-toggle-theme.window="toggle()"
                         {{ $attributes->class("swap swap-rotate") }}
                     >
-                        <input type="checkbox" class="theme-controller opacity-0" @click="toggle()" :value="theme" />
+                        <input id="{{ $uuid }}" type="checkbox" class="theme-controller opacity-0" @click="toggle()" :value="theme" />
                         <x-mary-icon x-ref="sun" name="o-sun" class="swap-on" />
                         <x-mary-icon x-ref="moon" name="o-moon" class="swap-off"  />
                     </label>

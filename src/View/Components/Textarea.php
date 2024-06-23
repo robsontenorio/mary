@@ -57,6 +57,9 @@ class Textarea extends Component
 
                         {{
                             $attributes
+                            ->merge([
+                                'id' => $uuid
+                            ])
                             ->class([
                                 'textarea textarea-primary w-full peer',
                                 'pt-5' => ($inline && $label),
