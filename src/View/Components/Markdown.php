@@ -119,7 +119,7 @@ class Markdown extends Component
                     <div class="relative disabled" :class="uploading && 'pointer-events-none opacity-50'">
                         <textarea x-ref="markdown{{ $uuid }}"></textarea>
 
-                        <div class="absolute top-1/2 left-1/2 !opacity-100 text-center hidden" :class="uploading && '!block'">
+                        <div class="absolute top-1/2 start-1/2 !opacity-100 text-center hidden" :class="uploading && '!block'">
                             <div>Uploading</div>
                             <div class="loading loading-dots"></div>
                         </div>

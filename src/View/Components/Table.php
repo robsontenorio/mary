@@ -274,7 +274,7 @@ class Table extends Component
 
                                     <!-- EXPAND ICON -->
                                     @if($expandable)
-                                        <td class="w-1 pr-0">
+                                        <td class="w-1 pe-0">
                                             <x-mary-icon
                                                 name="o-chevron-down"
                                                 ::class="isExpanded({{ data_get($row, $expandableKey) }}) || '-rotate-90 !text-current !bg-base-200'"

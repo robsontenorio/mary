@@ -77,7 +77,7 @@ class Radio extends Component
                     @endif
 
                     @if($hint)
-                        <div class="label-text-alt text-gray-400 pl-1 mt-2">{{ $hint }}</div>
+                        <div class="label-text-alt text-gray-400 ps-1 mt-2">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;

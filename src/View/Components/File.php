@@ -188,7 +188,7 @@ class File extends Component
                                 x-cloak
                                 :style="`--value:${progress}; --size:1.5rem; --thickness: 4px;`"
                                 :class="!processing && 'hidden'"
-                                class="radial-progress text-success absolute top-5 left-5 bg-neutral"
+                                class="radial-progress text-success absolute top-5 start-5 bg-neutral"
                                 role="progressbar"
                             ></div>
                         </div>

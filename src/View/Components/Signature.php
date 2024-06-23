@@ -90,7 +90,7 @@ class Signature extends Component
                             <canvas id="{{ $uuid }}signature" height="{{ $height }}" class="rounded-lg block w-full select-none touch-none"></canvas>
 
                             <!-- CLEAR BUTTON -->
-                            <div class="absolute right-2 top-1/2 -translate-y-1/2 ">
+                            <div class="absolute end-2 top-1/2 -translate-y-1/2 ">
                                 <x-mary-button icon="o-backspace" :label="$clearText" @click="clear" class="btn-sm btn-ghost text-neutral" />
                             </div>
                         </div>
