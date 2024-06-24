@@ -48,7 +48,7 @@ class DatePicker extends Component
         ], Arr::except($this->config, ["plugins"])));
 
         // Plugins
-        $plugins = null;
+        $plugins = "";
 
         foreach (Arr::get($this->config, 'plugins', []) as $plugin) {
             $plugins .= "new " . key($plugin) . "( " . json_encode(current($plugin)) . " ),";
@@ -58,7 +58,7 @@ class DatePicker extends Component
         $config = str_replace('"#plugins#"', $plugins, $config);
 
         // Sets default date as current bound model
-        $config = str_replace('"#model#"', '$wire.get("' . $this->modelName().'")', $config);
+        $config = str_replace('"#model#"', '$wire.get("' . $this->modelName() . '")', $config);
 
         return $config;
     }
