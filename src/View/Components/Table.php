@@ -144,6 +144,11 @@ class Table extends Component
         return Arr::join($classes, ' ');
     }
 
+    public function selectableModifier(): string
+    {
+        return is_string($this->getAllIds()[0] ?? null) ? "" : ".number";
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'HTML'
@@ -273,7 +278,7 @@ class Table extends Component
                                                 type="checkbox"
                                                 class="checkbox checkbox-sm checkbox-primary"
                                                 value="{{ data_get($row, $selectableKey) }}"
-                                                x-model.number="selection"
+                                                x-model{{ $selectableModifier() }}="selection"
                                                 @click="toggleCheck($el.checked, {{ json_encode($row) }})" />
                                         </td>
                                     @endif
