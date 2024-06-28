@@ -50,7 +50,7 @@ body:
       value: |        
         ❌ Don't paste your entire component code, it is hard to debug it.
         
-        ✅ Paste only the MINIMAL code that reproduces your issue.
+        ✅ Paste only the MINIMAL code that reproduces your issue (PHP/BLADE).
 
         ❌ Don't paste code as screenshot. 
         
