@@ -47,10 +47,14 @@ body:
     attributes:
       label: What happened?
       placeholder: Tell us what you see!
-      value: |
-        ✅ For sure you can paste screenshots.
+      value: |        
+        ❌ Don't paste your entire component code, it is hard to debug it.
+        
+        ✅ Paste only the MINIMAL code that reproduces your issue.
 
-        ❌ Please, don't paste code as screenshot. Paste as formatted markdown code.
+        ❌ Don't paste code as screenshot. 
+        
+        ✅ Paste code as formatted markdown.
 
         PHP
 
