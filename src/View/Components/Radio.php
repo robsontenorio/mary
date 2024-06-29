@@ -60,6 +60,7 @@ class Radio extends Component
                                 name="{{ $modelName() }}"
                                 value="{{ data_get($option, $optionValue) }}"
                                 aria-label="{{ data_get($option, $optionLabel) }}"
+                                @if(data_get($option, 'disabled')) disabled @endif
                                 {{ $attributes->whereStartsWith('wire:model') }}
                                 {{ $attributes->class(["join-item capitalize btn input-bordered input bg-base-200"]) }}
                                 />
