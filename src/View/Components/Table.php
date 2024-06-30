@@ -144,6 +144,11 @@ class Table extends Component
         return Arr::join($classes, ' ');
     }
 
+    public function selectableModifier(): string
+    {
+        return is_string($this->getAllIds()[0] ?? null) ? "" : ".number";
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'HTML'
@@ -259,7 +264,13 @@ class Table extends Component
                         <!-- ROWS -->
                         <tbody>
                             @foreach($rows as $k => $row)
-                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50 {{ $rowClasses($row) }}" @click="$dispatch('row-click', {{ json_encode($row) }});">
+                                <tr
+                                    wire:key="{{ $uuid }}-{{ $k }}"
+                                    class="hover:bg-base-200/50 {{ $rowClasses($row) }}"
+                                    @if($attributes->has('@row-click'))
+                                        @click="$dispatch('row-click', {{ json_encode($row) }});"
+                                    @endif
+                                >
                                     <!-- CHECKBOX -->
                                     @if($selectable)
                                         <td class="w-1">
@@ -267,7 +278,7 @@ class Table extends Component
                                                 type="checkbox"
                                                 class="checkbox checkbox-sm checkbox-primary"
                                                 value="{{ data_get($row, $selectableKey) }}"
-                                                x-model.number="selection"
+                                                x-model{{ $selectableModifier() }}="selection"
                                                 @click="toggleCheck($el.checked, {{ json_encode($row) }})" />
                                         </td>
                                     @endif
