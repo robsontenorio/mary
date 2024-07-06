@@ -14,7 +14,8 @@ class Dropdown extends Component
         public ?string $label = null,
         public ?string $icon = 'o-chevron-down',
         public ?bool $right = false,
-
+        public ?bool $top = false,
+        public ?bool $noXAnchor = false,
         // Slots
         public mixed $trigger = null
     ) {
@@ -29,6 +30,12 @@ class Dropdown extends Component
                 @click.outside="open = false"
                 :open="open"
                 class="dropdown"
+                @class([
+                    'dropdown',
+                    'dropdown-right' => ($noXAnchor && $right),
+                    'dropdown-top' => ($noXAnchor && $top),
+                    'dropdown-end' => $noXAnchor,
+                ])
             >
                 <!-- CUSTOM TRIGGER -->
                 @if($trigger)
@@ -44,9 +51,14 @@ class Dropdown extends Component
                 @endif
 
                 <ul
-                    class="p-2 shadow menu z-[1] border border-base-200 bg-base-100 dark:bg-base-200 rounded-box w-auto min-w-max"
+                    @class([ 
+                        'p-2','shadow','menu','z-[1]','border','border-base-200','bg-base-100','dark:bg-base-200','rounded-box','w-auto','min-w-max',
+                        'dropdown-content' => $noXAnchor,
+                    ]) 
                     @click="open = false"
+                    @if(!$noXAnchor)
                     x-anchor.{{ $right ? 'bottom-end' : 'bottom-start' }}="$refs.button"
+                    @endif
                 >
                     <div wire:key="dropdown-slot-{{ $uuid }}">
                         {{ $slot }}
