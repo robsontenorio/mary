@@ -27,6 +27,8 @@ class Table extends Component
         public ?string $expandableKey = 'id',
         public ?string $link = null,
         public ?bool $withPagination = false,
+        public ?string $perPage = '',
+        public ?array $perPageValues = [10, 20, 50, 100],
         public ?array $sortBy = [],
         public ?array $rowDecoration = [],
         public ?array $cellDecoration = [],
@@ -350,11 +352,7 @@ class Table extends Component
 
                     <!-- Pagination -->
                     @if($withPagination)
-                        <div class="mary-table-pagination">
-                            <div class="border border-x-0 border-t-0 border-b-1 border-b-base-300 mb-5"></div>
-
-                            {{ $rows->onEachSide(1)->links(data: ['scrollTo' => false])  }}
-                        </div>
+                        <x-mary-pagination :rows="$rows" :per-page-values="$perPageValues" wire:model.live="{{ $perPage }}" />
                     @endif
                 </div>
             HTML;
