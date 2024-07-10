@@ -27,7 +27,7 @@ class Table extends Component
         public ?string $expandableKey = 'id',
         public ?string $link = null,
         public ?bool $withPagination = false,
-        public ?string $perPage = '',
+        public ?string $perPage = null,
         public ?array $perPageValues = [10, 20, 50, 100],
         public ?array $sortBy = [],
         public ?array $rowDecoration = [],

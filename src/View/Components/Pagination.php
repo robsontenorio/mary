@@ -26,7 +26,7 @@ class Pagination extends Component
 
     public function isShowable(): bool
     {
-        return $this->modelName() !== null && $this->rows instanceof LengthAwarePaginator;
+        return !empty($this->modelName()) && $this->rows instanceof LengthAwarePaginator;
     }
 
     public function render(): View|Closure|string
