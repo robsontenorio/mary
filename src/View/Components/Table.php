@@ -240,7 +240,7 @@ class Table extends Component
 
                                 @foreach($headers as $header)
                                      @php
-                                        <!-- SKIP THE HIDDEN COLUMN -->
+                                        # SKIP THE HIDDEN COLUMN
                                         if($isHidden($header)) continue;
 
                                         # Scoped slot`s name like `user.city` are compiled to `user___city` through `@scope / @endscope`.
@@ -306,7 +306,7 @@ class Table extends Component
                                     <!--  ROW VALUES -->
                                     @foreach($headers as $header)
                                         @php
-                                            <!-- SKIP THE HIDDEN COLUMN -->
+                                            # SKIP THE HIDDEN COLUMN
                                             if($isHidden($header)) continue;
 
                                             # Scoped slot`s name like `user.city` are compiled to `user___city` through `@scope / @endscope`.
