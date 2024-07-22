@@ -247,7 +247,7 @@ class Table extends Component
                                         # So we use current `$header` key  to find that slot on context.
                                         $temp_key = str_replace('.', '___', $header['key'])
                                     @endphp
-                                    
+
                                     <th
                                         class="@if($isSortable($header)) cursor-pointer hover:bg-base-200 @endif {{ $header['class'] ?? ' ' }}"
 
