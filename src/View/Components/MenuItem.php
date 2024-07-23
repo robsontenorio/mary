@@ -22,7 +22,8 @@ class MenuItem extends Component
         public ?string $badge = null,
         public ?string $badgeClasses = null,
         public ?bool $active = false,
-        public ?bool $separator = false
+        public ?bool $separator = false,
+        public ?bool $enabled = true,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -49,6 +50,10 @@ class MenuItem extends Component
 
     public function render(): View|Closure|string
     {
+        if ($this->enabled === false) {
+            return '';
+        }
+
         return <<<'HTML'
                 @aware(['activateByRoute' => false, 'activeBgColor' => 'bg-base-300'])
 
