@@ -5,6 +5,7 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Livewire\WireDirective;
 
 class Drawer extends Component
 {
@@ -32,6 +33,10 @@ class Drawer extends Component
 
     public function modelName(): ?string
     {
+        if($this->attributes->wire('model') instanceof  WireDirective) {
+            return $this->attributes->wire('model')->value();
+        }
+
         return $this->attributes->wire('model');
     }
 
