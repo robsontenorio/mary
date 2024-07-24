@@ -48,6 +48,7 @@ use Mary\View\Components\MenuSub;
 use Mary\View\Components\MenuTitle;
 use Mary\View\Components\Modal;
 use Mary\View\Components\Nav;
+use Mary\View\Components\Pagination;
 use Mary\View\Components\Pin;
 use Mary\View\Components\Popover;
 use Mary\View\Components\Progress;
@@ -107,6 +108,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('mary-menu', Menu::class);
         Blade::component('mary-menu-item', MenuItem::class);
         Blade::component('mary-header', Header::class);
+        Blade::component('mary-pagination', Pagination::class);
 
         $prefix = config('mary.prefix');
 
@@ -152,6 +154,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'menu-title', MenuTitle::class);
         Blade::component($prefix . 'main', Main::class);
         Blade::component($prefix . 'nav', Nav::class);
+        Blade::component($prefix . 'pagination', Pagination::class);
         Blade::component($prefix . 'pin', Pin::class);
         Blade::component($prefix . 'popover', Popover::class);
         Blade::component($prefix . 'progress', Progress::class);
