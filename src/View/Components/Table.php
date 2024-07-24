@@ -74,6 +74,12 @@ class Table extends Component
         return count($this->sortBy) && ($header['sortable'] ?? true);
     }
 
+    // Check if header is hidden
+    public function isHidden(mixed $header): bool
+    {
+        return $header['hidden'] ?? false;
+    }
+
     // Check if is currently sorted by this header
     public function isSortedBy(mixed $header): bool
     {
@@ -234,6 +240,9 @@ class Table extends Component
 
                                 @foreach($headers as $header)
                                      @php
+                                        # SKIP THE HIDDEN COLUMN
+                                        if($isHidden($header)) continue;
+
                                         # Scoped slot`s name like `user.city` are compiled to `user___city` through `@scope / @endscope`.
                                         # So we use current `$header` key  to find that slot on context.
                                         $temp_key = str_replace('.', '___', $header['key'])
@@ -297,6 +306,9 @@ class Table extends Component
                                     <!--  ROW VALUES -->
                                     @foreach($headers as $header)
                                         @php
+                                            # SKIP THE HIDDEN COLUMN
+                                            if($isHidden($header)) continue;
+
                                             # Scoped slot`s name like `user.city` are compiled to `user___city` through `@scope / @endscope`.
                                             # So we use current `$header` key  to find that slot on context.
                                             $temp_key = str_replace('.', '___', $header['key'])
