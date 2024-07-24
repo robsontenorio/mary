@@ -16,7 +16,7 @@ class Pagination extends Component
         public ArrayAccess|array $rows,
         public ?array $perPageValues = [10, 20, 50, 100],
     ) {
-        $this->uuid = "mary".md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function modelName(): ?string
@@ -26,15 +26,15 @@ class Pagination extends Component
 
     public function isShowable(): bool
     {
-        return !empty($this->modelName()) && $this->rows instanceof LengthAwarePaginator;
+        return ! empty($this->modelName()) && $this->rows instanceof LengthAwarePaginator;
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
             <div class="mary-table-pagination">
-                <div {{ $attributes->class(["border border-x-0 border-t-0 border-b-1 border-b-base-300 mb-5"]) }}></div>
-                <div class="justify-between md:flex md:flex-row w-auto md:w-full items-center py-3 overflow-y-auto pl-2 pr-2 relative">
+                <div {{ $attributes->class(["border border-t-0 mb-2 border-b-base-200"]) }}></div>
+                <div class="justify-between md:flex md:flex-row w-auto md:w-full items-center overflow-y-auto pl-2 pr-2 relative">
                     @if($isShowable())
                     <div class="flex flex-row justify-center md:justify-start mb-2 md:mb-0">
                         <select id="{{ $uuid }}" @if(!empty($modelName())) wire:model.live="{{ $modelName() }}" @endif
