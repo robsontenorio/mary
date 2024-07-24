@@ -352,7 +352,11 @@ class Table extends Component
 
                     <!-- Pagination -->
                     @if($withPagination)
-                        <x-mary-pagination :rows="$rows" :per-page-values="$perPageValues" wire:model.live="{{ $perPage }}" />
+                        @if($perPage)
+                            <x-mary-pagination :rows="$rows" :per-page-values="$perPageValues" wire:model.live="{{ $perPage }}" />                          
+                        @else 
+                            <x-mary-pagination :rows="$rows" :per-page-values="$perPageValues" />
+                        @endif 
                     @endif
                 </div>
             HTML;
