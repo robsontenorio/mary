@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
+use Illuminate\Support\Stringable;
 
 class Icon extends Component
 {
@@ -18,7 +19,7 @@ class Icon extends Component
         $this->uuid = "mary" . md5(serialize($this));
     }
 
-    public function icon(): string
+    public function icon(): string|Stringable
     {
         $name = Str::of($this->name);
 
