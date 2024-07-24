@@ -31,12 +31,8 @@ class Drawer extends Component
         return $this->id ?? $this->attributes?->wire('model')->value();
     }
 
-    public function modelName(): ?string
+    public function modelName(): WireDirective
     {
-        if($this->attributes->wire('model') instanceof  WireDirective) {
-            return $this->attributes->wire('model')->value();
-        }
-
         return $this->attributes->wire('model');
     }
 
@@ -61,7 +57,7 @@ class Drawer extends Component
                     @if($closeOnEscape)
                         @keydown.window.escape="close()"
                     @endif
-                    
+
                     x-trap="open" x-bind:inert="!open"
                     @class(["drawer absolute z-50", "drawer-end" => $right])
                 >
