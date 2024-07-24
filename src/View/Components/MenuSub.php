@@ -14,12 +14,17 @@ class MenuSub extends Component
         public ?string $title = null,
         public ?string $icon = null,
         public bool $open = false,
+        public ?bool $enabled = true,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function render(): View|Closure|string
     {
+        if ($this->enabled === false) {
+            return '';
+        }
+
         return <<<'HTML'
                 @aware(['activeBgColor' => 'bg-base-300'])
 
