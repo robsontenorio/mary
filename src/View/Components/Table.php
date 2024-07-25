@@ -32,12 +32,16 @@ class Table extends Component
         public ?array $sortBy = [],
         public ?array $rowDecoration = [],
         public ?array $cellDecoration = [],
+        public ?bool $showEmptyText = false,
+        public mixed $emptyText = 'No records found.',
 
         // Slots
         public mixed $actions = null,
         public mixed $tr = null,
         public mixed $cell = null,
-        public mixed $expansion = null
+        public mixed $expansion = null,
+        public mixed $empty = null,
+
     ) {
         if ($this->selectable && $this->expandable) {
             throw new Exception("You can not combine `expandable` with `selectable`.");
@@ -362,13 +366,26 @@ class Table extends Component
                         </tbody>
                     </table>
 
+                    @if(empty($rows))
+                        @if($showEmptyText)
+                            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+                                {{ $emptyText }}
+                            </div>
+                        @endif
+                        @if($empty)
+                            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+                                {{ $empty }}
+                            </div>
+                        @endif
+                    @endif
+
                     <!-- Pagination -->
                     @if($withPagination)
                         @if($perPage)
-                            <x-mary-pagination :rows="$rows" :per-page-values="$perPageValues" wire:model.live="{{ $perPage }}" />                          
-                        @else 
+                            <x-mary-pagination :rows="$rows" :per-page-values="$perPageValues" wire:model.live="{{ $perPage }}" />
+                        @else
                             <x-mary-pagination :rows="$rows" :per-page-values="$perPageValues" />
-                        @endif 
+                        @endif
                     @endif
                 </div>
             HTML;
