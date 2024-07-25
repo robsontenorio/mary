@@ -366,7 +366,7 @@ class Table extends Component
                         </tbody>
                     </table>
 
-                    @if(empty($rows))
+                    @if(count($rows) === 0)
                         @if($showEmptyText)
                             <div class="text-center py-4 text-gray-500 dark:text-gray-400">
                                 {{ $emptyText }}
