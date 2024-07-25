@@ -29,12 +29,11 @@ class Dropdown extends Component
                 x-data="{open: false}"
                 @click.outside="open = false"
                 :open="open"
-                class="dropdown"
                 @class([
                     'dropdown',
-                    'dropdown-right' => ($noXAnchor && $right),
+                    'dropdown-end' => ($noXAnchor && $right),
                     'dropdown-top' => ($noXAnchor && $top),
-                    'dropdown-end' => $noXAnchor,
+                    'dropdown-bottom' => $noXAnchor,
                 ])
             >
                 <!-- CUSTOM TRIGGER -->
@@ -51,13 +50,13 @@ class Dropdown extends Component
                 @endif
 
                 <ul
-                    @class([ 
+                    @class([
                         'p-2','shadow','menu','z-[1]','border','border-base-200','bg-base-100','dark:bg-base-200','rounded-box','w-auto','min-w-max',
                         'dropdown-content' => $noXAnchor,
-                    ]) 
+                    ])
                     @click="open = false"
                     @if(!$noXAnchor)
-                    x-anchor.{{ $right ? 'bottom-end' : 'bottom-start' }}="$refs.button"
+                        x-anchor.{{ $right ? 'bottom-end' : 'bottom-start' }}="$refs.button"
                     @endif
                 >
                     <div wire:key="dropdown-slot-{{ $uuid }}">
