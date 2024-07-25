@@ -9,7 +9,6 @@ use Illuminate\View\Component;
 
 class Radio extends Component
 {
-
     public string $uuid;
 
     public function __construct(
@@ -62,7 +61,12 @@ class Radio extends Component
                                 aria-label="{{ data_get($option, $optionLabel) }}"
                                 @if(data_get($option, 'disabled')) disabled @endif
                                 {{ $attributes->whereStartsWith('wire:model') }}
-                                {{ $attributes->class(["join-item capitalize btn input-bordered input bg-base-200"]) }}
+                                {{
+                                    $attributes->class([
+                                        "join-item capitalize btn input-bordered input bg-base-200",
+                                        "border !input-bordered" => data_get($option, 'disabled')
+                                    ])
+                                }}
                                 />
                         @endforeach
                     </div>
