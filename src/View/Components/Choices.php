@@ -270,6 +270,7 @@ class Choices extends Component
 
                             <!-- INPUT SEARCH -->
                             <input
+                                id="{{ $uuid }}"
                                 x-ref="searchInput"
                                 @input="focus()"
                                 :required="isRequired && isSelectionEmpty"

@@ -232,6 +232,7 @@ class Table extends Component
                                 @if($selectable)
                                     <th class="w-1" wire:key="{{ $uuid }}-checkall-{{ implode(',', $getAllIds()) }}">
                                         <input
+                                            id="checkAll-{{ $uuid }}"
                                             type="checkbox"
                                             class="checkbox checkbox-sm"
                                             x-ref="mainCheckbox"
@@ -290,6 +291,7 @@ class Table extends Component
                                     @if($selectable)
                                         <td class="w-1">
                                             <input
+                                                id="checkbox-{{ $uuid }}-{{ $k }}"
                                                 type="checkbox"
                                                 class="checkbox checkbox-sm checkbox-primary"
                                                 value="{{ data_get($row, $selectableKey) }}"

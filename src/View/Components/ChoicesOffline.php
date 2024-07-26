@@ -261,6 +261,7 @@ class ChoicesOffline extends Component
 
                             <!-- INPUT SEARCH -->
                             <input
+                                id="{{ $uuid }}"
                                 x-ref="searchInput"
                                 x-model="search"
                                 @keyup="lookup()"

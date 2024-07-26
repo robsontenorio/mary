@@ -8,6 +8,7 @@ use Illuminate\View\Component;
 
 class Checkbox extends Component
 {
+    public string $uuid;
 
     public function __construct(
         public ?string $label = null,
@@ -19,8 +20,8 @@ class Checkbox extends Component
         public ?string $errorClass = 'text-red-500 label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
-    )
-    {
+    ) {
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function modelName(): ?string
@@ -37,14 +38,17 @@ class Checkbox extends Component
     {
         return <<<'HTML'
                 <div>
-                    <label class="flex gap-3 items-center cursor-pointer">
+                    <label for="{{ $uuid }}" class="flex gap-3 items-center cursor-pointer">
                         @if($right)
                             <span @class(["flex-1" => !$tight])>
                                 {{ $label}}
                             </span>
                         @endif
 
-                        <input type="checkbox" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['checkbox checkbox-primary']) }}  />
+                        <input
+                            type="checkbox"
+                            {{ $attributes->whereDoesntStartWith('class') }}
+                            {{ $attributes->merge(["id" => $uuid])->class(['checkbox checkbox-primary']) }}  />
 
                         @if(!$right)
                             {{ $label}}

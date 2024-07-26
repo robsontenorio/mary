@@ -41,7 +41,7 @@ class Radio extends Component
         return <<<'HTML'
                 <div>
                     @if($label)
-                        <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                        <div class="pt-0 label label-text font-semibold">
                             <span>
                                 {{ $label }}
 
@@ -49,7 +49,7 @@ class Radio extends Component
                                     <span class="text-error">*</span>
                                 @endif
                             </span>
-                        </label>
+                        </div>
                     @endif
 
                     <div class="join">

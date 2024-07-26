@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class Editor extends Component
 {
     public string $uuid;
+
     public string $uploadUrl;
 
     public function __construct(
@@ -123,7 +124,7 @@ class Editor extends Component
                         x-on:livewire:navigating.window="tinymce.activeEditor.destroy();"
                         wire:ignore
                     >
-                        <input x-ref="tinymce" type="textarea" {{ $attributes->whereDoesntStartWith('wire:model') }} />
+                        <input id="{{ $uuid }}" x-ref="tinymce" type="textarea" {{ $attributes->whereDoesntStartWith('wire:model') }} />
                     </div>
 
                     <!-- ERROR -->

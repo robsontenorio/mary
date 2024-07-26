@@ -42,7 +42,7 @@ class Drawer extends Component
                 <div
                     x-data="{
                         open:
-                            @if($modelName())
+                            @if($modelName()->value)
                                 @entangle($modelName())
                             @else
                                 false
