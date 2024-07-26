@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class Markdown extends Component
 {
     public string $uuid;
+
     public string $uploadUrl;
 
     public function __construct(
@@ -68,7 +69,7 @@ class Markdown extends Component
             <div>
                 <!-- STANDARD LABEL -->
                 @if($label)
-                    <div for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
                         <span>
                             {{ $label }}
 
@@ -76,7 +77,7 @@ class Markdown extends Component
                                 <span class="text-error">*</span>
                             @endif
                         </span>
-                    </div>
+                    </label>
                 @endif
 
                 <!-- EDITOR -->
@@ -117,7 +118,7 @@ class Markdown extends Component
                     x-on:livewire:navigating.window="editor.toTextArea(); editor = null"
                 >
                     <div class="relative disabled" :class="uploading && 'pointer-events-none opacity-50'">
-                        <textarea x-ref="markdown{{ $uuid }}"></textarea>
+                        <textarea id="{{ $uuid }}" x-ref="markdown{{ $uuid }}"></textarea>
 
                         <div class="absolute top-1/2 start-1/2 !opacity-100 text-center hidden" :class="uploading && '!block'">
                             <div>Uploading</div>

@@ -195,7 +195,7 @@ class Choices extends Component
                     >
                         <!-- STANDARD LABEL -->
                         @if($label)
-                            <div class="pt-0 label label-text font-semibold">
+                            <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
                                 <span>
                                     {{ $label }}
 
@@ -203,7 +203,7 @@ class Choices extends Component
                                         <span class="text-error">*</span>
                                     @endif
                                 </span>
-                            </div>
+                            </label>
                         @endif
 
                         <!-- PREPEND/APPEND CONTAINER -->

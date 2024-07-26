@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class Editor extends Component
 {
     public string $uuid;
+
     public string $uploadUrl;
 
     public function __construct(
@@ -62,7 +63,7 @@ class Editor extends Component
                 <div>
                     <!-- STANDARD LABEL -->
                     @if($label)
-                        <div for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                        <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
                             <span>
                                 {{ $label }}
 
@@ -70,7 +71,7 @@ class Editor extends Component
                                     <span class="text-error">*</span>
                                 @endif
                             </span>
-                        </div>
+                        </label>
                     @endif
 
                     <!--  EDITOR  -->
@@ -123,7 +124,7 @@ class Editor extends Component
                         x-on:livewire:navigating.window="tinymce.activeEditor.destroy();"
                         wire:ignore
                     >
-                        <input x-ref="tinymce" type="textarea" {{ $attributes->whereDoesntStartWith('wire:model') }} />
+                        <input id="{{ $uuid }}" x-ref="tinymce" type="textarea" {{ $attributes->whereDoesntStartWith('wire:model') }} />
                     </div>
 
                     <!-- ERROR -->
