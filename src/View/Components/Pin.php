@@ -77,6 +77,7 @@ class Pin extends Component
                         <div class="flex gap-3" id="pin{{ $uuid }}">
                             @foreach(range(0, $size - 1) as $i)
                                 <input
+                                    id="{{ $uuid }}-pin-{{ $i }}"
                                     type="text"
                                     class="input input-primary !w-14 font-black text-2xl text-center"
                                     maxlength="1"
