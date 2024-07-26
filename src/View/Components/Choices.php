@@ -213,7 +213,7 @@ class Choices extends Component
 
                         <!-- PREPEND -->
                         @if($prepend)
-                            <div class="rounded-l-lg flex items-center bg-base-200">
+                            <div class="rounded-s-lg flex items-center bg-base-200">
                                 {{ $prepend }}
                             </div>
                         @endif
@@ -225,34 +225,34 @@ class Choices extends Component
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
-                                    "select select-bordered select-primary w-full h-fit pr-16 pb-1 pt-1.5 inline-block cursor-pointer relative flex-1",
+                                    "select select-bordered select-primary w-full h-fit pe-16 pb-1 pt-1.5 inline-block cursor-pointer relative flex-1",
                                     'border border-dashed' => $isReadonly(),
                                     'select-error' => $errors->has($errorFieldName()),
-                                    'rounded-l-none' => $prepend,
-                                    'rounded-r-none' => $append,
-                                    'pl-10' => $icon,
+                                    'rounded-s-none' => $prepend,
+                                    'rounded-e-none' => $append,
+                                    'ps-10' => $icon,
                                 ])
                             }}
                         >
                             <!-- ICON  -->
                             @if($icon)
-                                <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400 pointer-events-none" />
+                                <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-gray-400 pointer-events-none" />
                             @endif
 
                             <!-- CLEAR ICON  -->
                             @if(! $isReadonly() && ! $isDisabled())
-                                <x-mary-icon @click="reset()"  name="o-x-mark" x-show="!isSelectionEmpty" class="absolute top-1/2 right-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                                <x-mary-icon @click="reset()"  name="o-x-mark" x-show="!isSelectionEmpty" class="absolute top-1/2 end-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
                             @endif
 
                             <!-- SELECTED OPTIONS -->
                             <span wire:key="selected-options-{{ $uuid }}">
                                 @if($compact)
-                                    <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 rounded inline-block cursor-pointer">
+                                    <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 mt-0.5 mb-1.5 last:me-0 rounded inline-block cursor-pointer">
                                         <span class="font-black" x-text="selectedOptions.length"></span> {{ $compactText }}
                                     </div>
                                 @else
                                     <template x-for="(option, index) in selectedOptions" :key="index">
-                                        <div class="mary-choices-element bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 mr-2 mt-0.5 mb-1.5 last:mr-0 inline-block rounded cursor-pointer">
+                                        <div class="mary-choices-element bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 mt-0.5 mb-1.5 last:me-0 inline-block rounded cursor-pointer">
                                             <!-- SELECTION SLOT -->
                                              @if($selection)
                                                 <span x-html="document.getElementById('selection-{{ $uuid . '-\' + option.'. $optionValue }}).innerHTML"></span>
@@ -286,7 +286,7 @@ class Choices extends Component
 
                         <!-- APPEND -->
                         @if($append)
-                            <div class="rounded-r-lg flex items-center bg-base-200">
+                            <div class="rounded-e-lg flex items-center bg-base-200">
                                 {{ $append }}
                             </div>
                         @endif
@@ -307,7 +307,7 @@ class Choices extends Component
                                @if($allowAll)
                                    <div
                                         wire:key="allow-all-{{ rand() }}"
-                                        class="font-bold   border border-l-4 border-b-base-200 hover:bg-base-200"
+                                        class="font-bold   border border-s-4 border-b-base-200 hover:bg-base-200"
                                    >
                                         <div x-show="!isAllSelected" @click="selectAll()" class="p-3 underline decoration-wavy decoration-info">{{ $allowAllText }}</div>
                                         <div x-show="isAllSelected" @click="reset()" class="p-3 underline decoration-wavy decoration-error">{{ $removeAllText }}</div>
@@ -318,7 +318,7 @@ class Choices extends Component
                                 <div
                                     x-show="noResults"
                                     wire:key="no-results-{{ rand() }}"
-                                    class="p-3 decoration-wavy decoration-warning underline font-bold border border-l-4 border-l-warning border-b-base-200"
+                                    class="p-3 decoration-wavy decoration-warning underline font-bold border border-s-4 border-s-warning border-b-base-200"
                                 >
                                     {{ $noResultText }}
                                 </div>
@@ -327,8 +327,8 @@ class Choices extends Component
                                     <div
                                         wire:key="option-{{ data_get($option, $optionValue) }}"
                                         @click="toggle({{ $getOptionValue($option) }})"
-                                        :class="isActive({{ $getOptionValue($option) }}) && 'border-l-4 border-l-primary'"
-                                        class="border-l-4"
+                                        :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-primary'"
+                                        class="border-s-4"
                                     >
                                         <!-- ITEM SLOT -->
                                         @if($item)

@@ -38,7 +38,7 @@ class Errors extends Component
                                     @endif
 
                                     <div @class(["mt-5" => $title || $description])>
-                                        <ul class="list-disc ml-5">
+                                        <ul class="list-disc ms-5">
                                            @foreach ($errors->all() as $error)
                                                <li>{{ $error }}</li>
                                            @endforeach

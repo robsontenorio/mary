@@ -8,6 +8,8 @@ use Illuminate\View\Component;
 
 class Main extends Component
 {
+    public string $url;
+
     public function __construct(
 
         // Slots
@@ -20,13 +22,18 @@ class Main extends Component
         public ?string $collapseIcon = 'o-bars-3-bottom-right',
         public ?bool $collapsible = false,
     ) {
+        $this->url = route('mary.toogle-sidebar', absolute: false);
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
                  <main @class(["w-full mx-auto", "max-w-screen-2xl" => !$fullWidth])>
-                    <div class="drawer inline lg:grid lg:drawer-open">
+                    <div @class([
+                        "drawer lg:drawer-open",
+                        "drawer-end" => $sidebar?->attributes['right'],
+                        "max-sm:drawer-end" => $sidebar?->attributes['right-mobile'],
+                    ])>
                         <input id="{{ $sidebar?->attributes['drawer'] }}" type="checkbox" class="drawer-toggle" />
                         <div {{ $content->attributes->class(["drawer-content w-full mx-auto p-5 lg:px-10 lg:py-5"]) }}>
                             <!-- MAIN CONTENT -->
@@ -41,7 +48,7 @@ class Main extends Component
                                     collapseText: '{{ $collapseText }}',
                                     toggle() {
                                         this.collapsed = !this.collapsed;
-                                        fetch('/mary/toogle-sidebar?collapsed=' + this.collapsed);
+                                        fetch('{{ $url }}?collapsed=' + this.collapsed);
                                         this.$dispatch('sidebar-toggled', this.collapsed);
                                     }
                                 }"

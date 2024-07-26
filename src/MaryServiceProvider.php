@@ -14,6 +14,7 @@ use Mary\View\Components\Badge;
 use Mary\View\Components\Button;
 use Mary\View\Components\Calendar;
 use Mary\View\Components\Card;
+use Mary\View\Components\Carousel;
 use Mary\View\Components\Chart;
 use Mary\View\Components\Checkbox;
 use Mary\View\Components\Choices;
@@ -47,12 +48,14 @@ use Mary\View\Components\MenuSub;
 use Mary\View\Components\MenuTitle;
 use Mary\View\Components\Modal;
 use Mary\View\Components\Nav;
+use Mary\View\Components\Pagination;
 use Mary\View\Components\Pin;
 use Mary\View\Components\Popover;
 use Mary\View\Components\Progress;
 use Mary\View\Components\ProgressRadial;
 use Mary\View\Components\Radio;
 use Mary\View\Components\Range;
+use Mary\View\Components\Rating;
 use Mary\View\Components\Select;
 use Mary\View\Components\SelectGroup;
 use Mary\View\Components\Signature;
@@ -105,6 +108,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('mary-menu', Menu::class);
         Blade::component('mary-menu-item', MenuItem::class);
         Blade::component('mary-header', Header::class);
+        Blade::component('mary-pagination', Pagination::class);
 
         $prefix = config('mary.prefix');
 
@@ -150,12 +154,14 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'menu-title', MenuTitle::class);
         Blade::component($prefix . 'main', Main::class);
         Blade::component($prefix . 'nav', Nav::class);
+        Blade::component($prefix . 'pagination', Pagination::class);
         Blade::component($prefix . 'pin', Pin::class);
         Blade::component($prefix . 'popover', Popover::class);
         Blade::component($prefix . 'progress', Progress::class);
         Blade::component($prefix . 'progress-radial', ProgressRadial::class);
         Blade::component($prefix . 'radio', Radio::class);
         Blade::component($prefix . 'range', Range::class);
+        Blade::component($prefix . 'rating', Rating::class);
         Blade::component($prefix . 'select', Select::class);
         Blade::component($prefix . 'signature', Signature::class);
         Blade::component($prefix . 'spotlight', Spotlight::class);
@@ -171,6 +177,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'theme-toggle', ThemeToggle::class);
         Blade::component($prefix . 'toast', Toast::class);
         Blade::component($prefix . 'toggle', Toggle::class);
+        Blade::component($prefix . 'carousel', Carousel::class);
     }
 
     public function registerBladeDirectives(): void
@@ -207,7 +214,7 @@ class MaryServiceProvider extends ServiceProvider
              */
             $name = str_replace('.', '___', $name);
 
-            return "<?php \$__env->slot({$name}, function({$functionArguments}) use ({$uses}) { ?>";
+            return "<?php \$loop = null; \$__env->slot({$name}, function({$functionArguments}) use ({$uses}) { \$loop = (object) \$__env->getLoopStack()[0] ?>";
         });
 
         Blade::directive('endscope', function () {

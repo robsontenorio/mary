@@ -5,6 +5,7 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Livewire\WireDirective;
 
 class Drawer extends Component
 {
@@ -30,7 +31,7 @@ class Drawer extends Component
         return $this->id ?? $this->attributes?->wire('model')->value();
     }
 
-    public function modelName(): ?string
+    public function modelName(): WireDirective
     {
         return $this->attributes->wire('model');
     }
@@ -56,7 +57,7 @@ class Drawer extends Component
                     @if($closeOnEscape)
                         @keydown.window.escape="close()"
                     @endif
-                    
+
                     x-trap="open" x-bind:inert="!open"
                     @class(["drawer absolute z-50", "drawer-end" => $right])
                 >

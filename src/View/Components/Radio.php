@@ -59,8 +59,14 @@ class Radio extends Component
                                 name="{{ $modelName() }}"
                                 value="{{ data_get($option, $optionValue) }}"
                                 aria-label="{{ data_get($option, $optionLabel) }}"
+                                @if(data_get($option, 'disabled')) disabled @endif
                                 {{ $attributes->whereStartsWith('wire:model') }}
-                                {{ $attributes->class(["join-item capitalize btn input-bordered input bg-base-200"]) }}
+                                {{
+                                    $attributes->class([
+                                        "join-item capitalize btn input-bordered input bg-base-200",
+                                        "border !input-bordered" => data_get($option, 'disabled')
+                                    ])
+                                }}
                                 />
                         @endforeach
                     </div>
@@ -76,7 +82,7 @@ class Radio extends Component
                     @endif
 
                     @if($hint)
-                        <div class="label-text-alt text-gray-400 pl-1 mt-2">{{ $hint }}</div>
+                        <div class="label-text-alt text-gray-400 ps-1 mt-2">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;

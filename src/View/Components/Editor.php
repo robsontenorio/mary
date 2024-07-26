@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class Editor extends Component
 {
     public string $uuid;
+    public string $uploadUrl;
 
     public function __construct(
         public ?string $label = null,
@@ -23,6 +24,7 @@ class Editor extends Component
         public ?bool $firstErrorOnly = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
+        $this->uploadUrl = route('mary.upload', absolute: false);
     }
 
     public function modelName(): ?string
@@ -76,7 +78,7 @@ class Editor extends Component
                         x-data="
                             {
                                 value: @entangle($attributes->wire('model')),
-                                uploadUrl: '/mary/upload?disk={{ $disk }}&folder={{ $folder }}&_token={{ csrf_token() }}'
+                                uploadUrl: '{{ $uploadUrl }}?disk={{ $disk }}&folder={{ $folder }}&_token={{ csrf_token() }}'
                             }"
                         x-init="
                             tinymce.init({
@@ -93,6 +95,7 @@ class Editor extends Component
 
                                 setup: function(editor) {
                                     editor.on('keyup', (e) => value = editor.getContent())
+                                    editor.on('change', (e) => value = editor.getContent())
                                     editor.on('init', () =>  editor.setContent(value ?? ''))
                                     editor.on('OpenWindow', (e) => tinymce.activeEditor.topLevelWindow = e.dialog)
                                 },
@@ -136,7 +139,7 @@ class Editor extends Component
 
                     <!-- HINT -->
                     @if($hint)
-                        <div class="label-text-alt text-gray-400 pl-1 mt-2">{{ $hint }}</div>
+                        <div class="label-text-alt text-gray-400 ps-1 mt-2">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;

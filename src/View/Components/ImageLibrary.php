@@ -119,7 +119,7 @@ class ImageLibrary extends Component
                             this.cropper.getCroppedCanvas().toBlob((blob) => {
                                 @this.upload(this.croppingId, blob,
                                     (uploadedFilename) => { this.refreshMediaSources() },
-                                    (error) => {  },
+                                    (error) => { this.progress = 0; },
                                     (event) => { this.progress = event.detail.progress;  }
                                 )
                             })
@@ -149,7 +149,7 @@ class ImageLibrary extends Component
                         >
                             @foreach($preview as $key => $image)
                                 <div class="relative border-b-primary border-b border-dotted last:border-none cursor-move hover:bg-base-200/50" data-id="{{ $image['uuid'] }}">
-                                    <div wire:key="preview-{{ $image['uuid'] }}" class="py-2 pl-16 pr-10 tooltip" data-tip="{{ $changeText }}">
+                                    <div wire:key="preview-{{ $image['uuid'] }}" class="py-2 ps-16 pe-10 tooltip" data-tip="{{ $changeText }}">
                                         <!-- IMAGE -->
                                         <img
                                             src="{{ $image['url'] }}"
@@ -174,7 +174,7 @@ class ImageLibrary extends Component
                                     </div>
 
                                     <!-- ACTIONS -->
-                                    <div class="absolute flex flex-col gap-2 top-3 left-3 cursor-pointer  p-2 rounded-lg ignore-drag">
+                                    <div class="absolute flex flex-col gap-2 top-3 start-3 cursor-pointer  p-2 rounded-lg ignore-drag">
                                         <x-mary-button @click="removeMedia('{{ $image['uuid'] }}', '{{ $image['url'] }}')"  icon="o-x-circle" :tooltip="$removeText"  class="btn-sm btn-ghost btn-circle" />
                                         <x-mary-button @click="crop('image-{{ $modelName().'.'.$key  }}-{{ $uuid }}')" icon="o-scissors" :tooltip="$cropText"  class="btn-sm btn-ghost btn-circle" />
                                     </div>

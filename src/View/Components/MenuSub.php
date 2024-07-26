@@ -12,13 +12,19 @@ class MenuSub extends Component
 
     public function __construct(
         public ?string $title = null,
-        public ?string $icon = null
+        public ?string $icon = null,
+        public bool $open = false,
+        public ?bool $enabled = true,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function render(): View|Closure|string
     {
+        if ($this->enabled === false) {
+            return '';
+        }
+
         return <<<'HTML'
                 @aware(['activeBgColor' => 'bg-base-300'])
 
@@ -29,7 +35,7 @@ class MenuSub extends Component
                 <li
                     x-data="
                     {
-                        show: @if($submenuActive) true @else false @endif,
+                        show: @if($submenuActive || $open) true @else false @endif,
                         toggle(){
                             // From parent Sidebar
                             if (this.collapsed) {

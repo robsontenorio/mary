@@ -27,15 +27,21 @@ class Table extends Component
         public ?string $expandableKey = 'id',
         public ?string $link = null,
         public ?bool $withPagination = false,
+        public ?string $perPage = null,
+        public ?array $perPageValues = [10, 20, 50, 100],
         public ?array $sortBy = [],
         public ?array $rowDecoration = [],
         public ?array $cellDecoration = [],
+        public ?bool $showEmptyText = false,
+        public mixed $emptyText = 'No records found.',
 
         // Slots
         public mixed $actions = null,
         public mixed $tr = null,
         public mixed $cell = null,
-        public mixed $expansion = null
+        public mixed $expansion = null,
+        public mixed $empty = null,
+
     ) {
         if ($this->selectable && $this->expandable) {
             throw new Exception("You can not combine `expandable` with `selectable`.");
@@ -72,6 +78,12 @@ class Table extends Component
     public function isSortable(mixed $header): bool
     {
         return count($this->sortBy) && ($header['sortable'] ?? true);
+    }
+
+    // Check if header is hidden
+    public function isHidden(mixed $header): bool
+    {
+        return $header['hidden'] ?? false;
     }
 
     // Check if is currently sorted by this header
@@ -142,6 +154,11 @@ class Table extends Component
         }
 
         return Arr::join($classes, ' ');
+    }
+
+    public function selectableModifier(): string
+    {
+        return is_string($this->getAllIds()[0] ?? null) ? "" : ".number";
     }
 
     public function render(): View|Closure|string
@@ -230,6 +247,9 @@ class Table extends Component
 
                                 @foreach($headers as $header)
                                      @php
+                                        # SKIP THE HIDDEN COLUMN
+                                        if($isHidden($header)) continue;
+
                                         # Scoped slot`s name like `user.city` are compiled to `user___city` through `@scope / @endscope`.
                                         # So we use current `$header` key  to find that slot on context.
                                         $temp_key = str_replace('.', '___', $header['key'])
@@ -260,12 +280,13 @@ class Table extends Component
                         <!-- ROWS -->
                         <tbody>
                             @foreach($rows as $k => $row)
-                                @php
-                                    # helper variable to provide the loop context
-                                    $this->loop = $loop;
-                                @endphp
-
-                                <tr wire:key="{{ $uuid }}-{{ $k }}" class="hover:bg-base-200/50 {{ $rowClasses($row) }}" @click="$dispatch('row-click', {{ json_encode($row) }});">
+                                <tr
+                                    wire:key="{{ $uuid }}-{{ $k }}"
+                                    class="hover:bg-base-200/50 {{ $rowClasses($row) }}"
+                                    @if($attributes->has('@row-click'))
+                                        @click="$dispatch('row-click', {{ json_encode($row) }});"
+                                    @endif
+                                >
                                     <!-- CHECKBOX -->
                                     @if($selectable)
                                         <td class="w-1">
@@ -274,14 +295,14 @@ class Table extends Component
                                                 type="checkbox"
                                                 class="checkbox checkbox-sm checkbox-primary"
                                                 value="{{ data_get($row, $selectableKey) }}"
-                                                x-model.number="selection"
+                                                x-model{{ $selectableModifier() }}="selection"
                                                 @click="toggleCheck($el.checked, {{ json_encode($row) }})" />
                                         </td>
                                     @endif
 
                                     <!-- EXPAND ICON -->
                                     @if($expandable)
-                                        <td class="w-1 pr-0">
+                                        <td class="w-1 pe-0">
                                             <x-mary-icon
                                                 name="o-chevron-down"
                                                 ::class="isExpanded({{ data_get($row, $expandableKey) }}) || '-rotate-90 !text-current !bg-base-200'"
@@ -293,6 +314,9 @@ class Table extends Component
                                     <!--  ROW VALUES -->
                                     @foreach($headers as $header)
                                         @php
+                                            # SKIP THE HIDDEN COLUMN
+                                            if($isHidden($header)) continue;
+
                                             # Scoped slot`s name like `user.city` are compiled to `user___city` through `@scope / @endscope`.
                                             # So we use current `$header` key  to find that slot on context.
                                             $temp_key = str_replace('.', '___', $header['key'])
@@ -328,7 +352,7 @@ class Table extends Component
 
                                     <!-- ACTIONS -->
                                     @if($actions)
-                                        <td class="text-right py-0" @click="event.stopPropagation()">{{ $actions($row) }}</td>
+                                        <td class="text-right py-0">{{ $actions($row) }}</td>
                                     @endif
                                 </tr>
 
@@ -344,13 +368,26 @@ class Table extends Component
                         </tbody>
                     </table>
 
+                    @if(count($rows) === 0)
+                        @if($showEmptyText)
+                            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+                                {{ $emptyText }}
+                            </div>
+                        @endif
+                        @if($empty)
+                            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+                                {{ $empty }}
+                            </div>
+                        @endif
+                    @endif
+
                     <!-- Pagination -->
                     @if($withPagination)
-                        <div class="mary-table-pagination">
-                            <div class="border border-x-0 border-t-0 border-b-1 border-b-base-300 mb-5"></div>
-
-                            {{ $rows->onEachSide(1)->links(data: ['scrollTo' => false])  }}
-                        </div>
+                        @if($perPage)
+                            <x-mary-pagination :rows="$rows" :per-page-values="$perPageValues" wire:model.live="{{ $perPage }}" />
+                        @else
+                            <x-mary-pagination :rows="$rows" :per-page-values="$perPageValues" />
+                        @endif
                     @endif
                 </div>
             HTML;

@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class Markdown extends Component
 {
     public string $uuid;
+    public string $uploadUrl;
 
     public function __construct(
         public ?string $label = null,
@@ -22,6 +23,7 @@ class Markdown extends Component
         public ?bool $firstErrorOnly = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
+        $this->uploadUrl = route('mary.upload', absolute: false);
     }
 
     public function modelName(): ?string
@@ -83,7 +85,7 @@ class Markdown extends Component
                         {
                             editor: null,
                             value: @entangle($attributes->wire('model')),
-                            uploadUrl: '/mary/upload?disk={{ $disk }}&folder={{ $folder }}&_token={{ csrf_token() }}',
+                            uploadUrl: '{{ $uploadUrl }}?disk={{ $disk }}&folder={{ $folder }}&_token={{ csrf_token() }}',
                             uploading: false,
                             init() {
                                 this.editor = new EasyMDE({
@@ -117,7 +119,7 @@ class Markdown extends Component
                     <div class="relative disabled" :class="uploading && 'pointer-events-none opacity-50'">
                         <textarea x-ref="markdown{{ $uuid }}"></textarea>
 
-                        <div class="absolute top-1/2 left-1/2 !opacity-100 text-center hidden" :class="uploading && '!block'">
+                        <div class="absolute top-1/2 start-1/2 !opacity-100 text-center hidden" :class="uploading && '!block'">
                             <div>Uploading</div>
                             <div class="loading loading-dots"></div>
                         </div>
