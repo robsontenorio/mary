@@ -15,6 +15,7 @@ class Editor extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 ps-1 mt-2',
         public ?string $disk = 'public',
         public ?string $folder = 'editor',
         public ?array $config = [],
@@ -140,7 +141,7 @@ class Editor extends Component
 
                     <!-- HINT -->
                     @if($hint)
-                        <div class="label-text-alt text-gray-400 ps-1 mt-2">{{ $hint }}</div>
+                        <div class="{{ $hintClass }}">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;

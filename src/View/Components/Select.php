@@ -16,6 +16,7 @@ class Select extends Component
         public ?string $icon = null,
         public ?string $iconRight = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 ps-1 mt-2',
         public ?string $placeholder = null,
         public ?string $placeholderValue = null,
         public ?bool $inline = false,
@@ -148,7 +149,7 @@ class Select extends Component
 
                 <!-- HINT -->
                 @if($hint)
-                    <div class="label-text-alt text-gray-400 ps-1 mt-2">{{ $hint }}</div>
+                    <div class="{{ $hintClass }}">{{ $hint }}</div>
                 @endif
             </div>
         HTML;

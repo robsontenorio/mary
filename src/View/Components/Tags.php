@@ -13,6 +13,7 @@ class Tags extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt p-1 pb-0 text-gray-400',
         public ?string $icon = null,
         // Validations
         public ?string $errorField = null,
@@ -193,7 +194,7 @@ class Tags extends Component
 
                 @if ($hint)
                     <!-- HINT -->
-                    <div class="label-text-alt p-1 pb-0 text-gray-400">{{ $hint }}</div>
+                    <div class="{{ $hintClass }}">{{ $hint }}</div>
                 @endif
             </div>
         HTML;

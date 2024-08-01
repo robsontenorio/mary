@@ -15,6 +15,7 @@ class Input extends Component
         public ?string $icon = null,
         public ?string $iconRight = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
         public ?string $prefix = null,
         public ?string $suffix = null,
         public ?bool $inline = false,
@@ -196,7 +197,7 @@ class Input extends Component
 
                 <!-- HINT -->
                 @if($hint)
-                    <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
+                    <div class="{{ $hintClass }}">{{ $hint }}</div>
                 @endif
             </div>
             HTML;
