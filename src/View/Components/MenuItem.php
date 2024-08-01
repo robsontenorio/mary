@@ -45,7 +45,7 @@ class MenuItem extends Component
             return true;
         }
 
-        return $this->link != '/' && Str::startsWith($route, $link);
+        return $this->link != '/' && Str::is($route, $link);
     }
 
     public function render(): View|Closure|string
