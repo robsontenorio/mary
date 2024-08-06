@@ -19,6 +19,7 @@ class Drawer extends Component
         public ?bool $separator = false,
         public ?bool $withCloseButton = false,
         public ?bool $closeOnEscape = false,
+        public ?bool $withoutTrapFocus = false,
 
         //Slots
         public ?string $actions = null
@@ -58,7 +59,10 @@ class Drawer extends Component
                         @keydown.window.escape="close()"
                     @endif
 
-                    x-trap="open" x-bind:inert="!open"
+                    @if(!$withoutTrapFocus)
+                        x-trap="open" x-bind:inert="!open"
+                    @endif
+
                     @class(["drawer absolute z-50", "drawer-end" => $right])
                 >
                     <!-- Toggle visibility  -->
