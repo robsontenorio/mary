@@ -211,10 +211,9 @@ class Table extends Component
                                         })
                                 }
                              }"
-
-                     class="overflow-x-auto"
                 >
-                    <table
+                <div class="overflow-x-auto">
+                <table
                         {{
                             $attributes
                                 ->except('wire:model')
@@ -380,7 +379,7 @@ class Table extends Component
                             </div>
                         @endif
                     @endif
-
+                </div>
                     <!-- Pagination -->
                     @if($withPagination)
                         @if($perPage)
