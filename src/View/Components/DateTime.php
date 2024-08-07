@@ -16,6 +16,7 @@ class DateTime extends Component
         public ?string $icon = null,
         public ?string $iconRight = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
         public ?bool $inline = false,
         // Validations
         public ?string $errorField = null,
@@ -103,7 +104,7 @@ class DateTime extends Component
 
                 <!-- HINT -->
                 @if($hint)
-                    <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
+                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
                 @endif
 
             </div>

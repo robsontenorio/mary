@@ -15,6 +15,7 @@ class Colorpicker extends Component
         public ?string $icon = '',
         public ?string $iconRight = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
         public ?bool $inline = false,
         public ?bool $clearable = false,
 
@@ -140,7 +141,7 @@ class Colorpicker extends Component
 
                 <!-- HINT -->
                 @if($hint)
-                    <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
+                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
                 @endif
             </div>
             HTML;

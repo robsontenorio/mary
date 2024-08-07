@@ -14,6 +14,7 @@ class Radio extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 ps-1 mt-2',
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
@@ -82,7 +83,7 @@ class Radio extends Component
                     @endif
 
                     @if($hint)
-                        <div class="label-text-alt text-gray-400 ps-1 mt-2">{{ $hint }}</div>
+                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 ps-1 mt-2">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;

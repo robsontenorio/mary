@@ -13,6 +13,7 @@ class Range extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
         public ?int $min = 0,
         public ?int $max = 100,
         // Validations
@@ -72,7 +73,7 @@ class Range extends Component
 
                     <!-- HINT -->
                     @if($hint)
-                        <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
+                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;
