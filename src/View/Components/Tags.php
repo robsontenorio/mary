@@ -194,7 +194,7 @@ class Tags extends Component
 
                 @if ($hint)
                     <!-- HINT -->
-                    <div class="{{ $hintClass }}">{{ $hint }}</div>
+                    <div class="{{ $hintClass }}" x-classes="label-text-alt p-1 pb-0 text-gray-400">{{ $hint }}</div>
                 @endif
             </div>
         HTML;

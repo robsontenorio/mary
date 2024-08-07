@@ -91,7 +91,7 @@ class Textarea extends Component
 
                 <!-- HINT -->
                 @if($hint)
-                    <div class="{{ $hintClass }}">{{ $hint }}</div>
+                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
                 @endif
             </div>
             HTML;
