@@ -65,6 +65,7 @@ class Colorpicker extends Component
                         @class([
                                 "rounded-s-lg flex items-center",
                                 "border border-primary border-e-0 px-4 cursor-pointer",
+                                "focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary",
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                 "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError

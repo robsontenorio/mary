@@ -37,6 +37,11 @@ class Textarea extends Component
     {
         return <<<'HTML'
             <div>
+                @php
+                    // Wee need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
+                    $uuid = $uuid . $modelName()
+                @endphp
+
                 <!-- STANDARD LABEL -->
                 @if($label && !$inline)
                     <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
