@@ -58,12 +58,13 @@ class Textarea extends Component
                 <div class="flex-1 relative">
                     <!-- INPUT -->
                     <textarea
-                        id="{{ $uuid }}"
                         placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
 
                         {{
                             $attributes
-                            ->merge([])
+                             ->merge([
+                                 'id' => $uuid
+                             ])
                             ->class([
                                 'textarea textarea-primary w-full peer',
                                 'pt-5' => ($inline && $label),
