@@ -60,6 +60,10 @@ class Editor extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
+                @php
+                    // Wee need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
+                    $uuid = $uuid . $modelName()
+                @endphp
                 <div>
                     <!-- STANDARD LABEL -->
                     @if($label)
