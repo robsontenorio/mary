@@ -103,6 +103,10 @@ class Editor extends Component
                                     editor.on('change', (e) => value = editor.getContent())
                                     editor.on('init', () =>  editor.setContent(value ?? ''))
                                     editor.on('OpenWindow', (e) => tinymce.activeEditor.topLevelWindow = e.dialog)
+                                    $watch('value', function (newValue) {
+                                        if (newValue !== editor.getContent()) {
+                                        editor.resetContent(newValue || '');
+                                    }})
                                 },
                                 file_picker_callback: function(cb, value, meta) {
                                     const formData = new FormData()
