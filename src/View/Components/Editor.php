@@ -5,7 +5,6 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Livewire\Attributes\On;
 
 class Editor extends Component
 {
@@ -27,12 +26,6 @@ class Editor extends Component
     ) {
         $this->uuid = "mary" . md5(serialize($this));
         $this->uploadUrl = route('mary.upload', absolute: false);
-    }
-
-    #[On('refresh-editor')]
-    public function refreshEditor()
-    {
-
     }
 
     public function modelName(): ?string
