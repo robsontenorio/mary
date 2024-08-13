@@ -5,6 +5,7 @@ namespace Mary\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Livewire\Attributes\On;
 
 class Editor extends Component
 {
@@ -26,6 +27,12 @@ class Editor extends Component
     ) {
         $this->uuid = "mary" . md5(serialize($this));
         $this->uploadUrl = route('mary.upload', absolute: false);
+    }
+
+    #[On('refresh-editor')]
+    public function refreshEditor()
+    {
+
     }
 
     public function modelName(): ?string
@@ -103,6 +110,10 @@ class Editor extends Component
                                     editor.on('change', (e) => value = editor.getContent())
                                     editor.on('init', () =>  editor.setContent(value ?? ''))
                                     editor.on('OpenWindow', (e) => tinymce.activeEditor.topLevelWindow = e.dialog)
+                                    $watch('value', function (newValue) {
+                                        if (newValue !== editor.getContent()) {
+                                        editor.resetContent(newValue || '');
+                                    }})
                                 },
                                 file_picker_callback: function(cb, value, meta) {
                                     const formData = new FormData()
