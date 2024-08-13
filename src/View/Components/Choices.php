@@ -195,7 +195,7 @@ class Choices extends Component
                     >
                         <!-- STANDARD LABEL -->
                         @if($label)
-                            <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                            <div class="pt-0 label label-text font-semibold">
                                 <span>
                                     {{ $label }}
 
@@ -203,7 +203,7 @@ class Choices extends Component
                                         <span class="text-error">*</span>
                                     @endif
                                 </span>
-                            </label>
+                            </div>
                         @endif
 
                         <!-- PREPEND/APPEND CONTAINER -->
@@ -270,7 +270,6 @@ class Choices extends Component
 
                             <!-- INPUT SEARCH -->
                             <input
-                                id="{{ $uuid }}"
                                 x-ref="searchInput"
                                 @input="focus()"
                                 :required="isRequired && isSelectionEmpty"
