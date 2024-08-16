@@ -24,6 +24,7 @@ class MenuItem extends Component
         public ?bool $active = false,
         public ?bool $separator = false,
         public ?bool $enabled = true,
+        public ?bool $exact = false
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -45,7 +46,7 @@ class MenuItem extends Component
             return true;
         }
 
-        return $this->link != '/' && Str::startsWith($route, $link);
+        return !$this->exact && $this->link != '/' && Str::startsWith($route, $link);
     }
 
     public function render(): View|Closure|string
