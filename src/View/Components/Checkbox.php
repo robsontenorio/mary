@@ -13,6 +13,8 @@ class Checkbox extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
+
         public ?bool $right = false,
         public ?bool $tight = false,
         // Validations
@@ -68,7 +70,7 @@ class Checkbox extends Component
 
                     <!-- HINT -->
                     @if($hint)
-                        <div class="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
+                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
                     @endif
                 </div>
         HTML;

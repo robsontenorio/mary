@@ -16,6 +16,8 @@ class Choices extends Component
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
+
         public ?bool $searchable = false,
         public ?bool $single = false,
         public ?bool $compact = false,
@@ -360,7 +362,7 @@ class Choices extends Component
 
                         <!-- HINT -->
                         @if($hint)
-                            <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
+                            <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
                         @endif
                     </div>
                 </div>
