@@ -48,7 +48,10 @@ class Tab extends Component
                         :class="{ 'tab-active': selected === '{{ $name }}' }"
                         data-name="{{ $name }}"
                         x-init="
-                                tabs.push({ name: '{{ $name }}', label: {{ json_encode($tabLabel($label)) }} });
+                                const newItem = { name: '{{ $name }}', label: {{ json_encode($tabLabel($label)) }} };
+                                const index = tabs.findIndex(item => item.name === '{{ $name }}');
+                                index !== -1 ? tabs[index] = newItem : tabs.push(newItem);
+
                                 Livewire.hook('morph.removed', ({el}) => {
                                     if (el.getAttribute('data-name') == '{{ $name }}'){
                                         tabs = tabs.filter(i => i.name !== '{{ $name }}')
