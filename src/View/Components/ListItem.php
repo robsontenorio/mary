@@ -55,7 +55,7 @@ class ListItem extends Component
                     @endif
 
                     @if(!is_string($avatar))
-                        <div class="py-3">
+                        <div {{ $avatar->attributes->class(["py-3"]) }}>
                             {{ $avatar }}
                         </div>
                     @endif
@@ -92,8 +92,7 @@ class ListItem extends Component
                         @if($link && !Str::of($actions)->contains([':click', '@click' , 'href']))
                             <a href="{{ $link }}" wire:navigate>
                         @endif
-
-                            <div class="py-3 flex items-center gap-3 mary-hideable">
+                            <div {{ $actions->attributes->class(["py-3 flex items-center gap-3 mary-hideable"]) }}>
                                     {{ $actions }}
                             </div>
 
