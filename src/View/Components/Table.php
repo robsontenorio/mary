@@ -306,7 +306,7 @@ class Table extends Component
                                                 name="o-chevron-down"
                                                 ::class="isExpanded({{ data_get($row, $expandableKey) }}) || '-rotate-90 !text-current !bg-base-200'"
                                                 class="cursor-pointer p-2 w-8 h-8 bg-base-300 rounded-lg"
-                                                @click="toggleExpand({{ data_get($row, $expandableKey) }});" />
+                                                @click="toggleExpand('{{ data_get($row, $expandableKey) }}');" />
                                         </td>
                                      @endif
 
