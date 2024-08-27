@@ -86,6 +86,12 @@ class Table extends Component
         return $header['hidden'] ?? false;
     }
 
+    // Check if link should be shown in cell
+    public function hasLink(mixed $header): bool
+    {
+        return $this->link && empty($header['disableLink']);
+    }
+
     // Check if is currently sorted by this header
     public function isSortedBy(mixed $header): bool
     {
@@ -323,26 +329,26 @@ class Table extends Component
 
                                         <!--  HAS CUSTOM SLOT ? -->
                                         @if(isset(${"cell_".$temp_key}))
-                                            <td @class([$cellClasses($row, $header), "p-0" => $link])>
-                                                @if($link)
+                                            <td @class([$cellClasses($row, $header), "p-0" => $hasLink($header)])>
+                                                @if($hasLink($header))
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
                                                 @endif
 
                                                 {{ ${"cell_".$temp_key}($row)  }}
 
-                                                @if($link)
+                                                @if($hasLink($header))
                                                     </a>
                                                  @endif
                                             </td>
                                         @else
-                                            <td @class([$cellClasses($row, $header), "p-0" => $link])>
-                                                @if($link)
+                                            <td @class([$cellClasses($row, $header), "p-0" => $hasLink($header)])>
+                                                @if($hasLink($header))
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
                                                 @endif
 
                                                 {{ data_get($row, $header['key']) }}
 
-                                                @if($link)
+                                                @if($hasLink($header))
                                                     </a>
                                                 @endif
                                             </td>
