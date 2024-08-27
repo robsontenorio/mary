@@ -125,6 +125,9 @@ class Table extends Component
     {
         $link = $this->link;
 
+        // Transform from `route()` pattern
+        $link = Str::of($link)->replace('%5B', '{')->replace('%5D', '}');
+
         // Extract tokens like {id}, {city.name} ...
         $tokens = Str::of($link)->matchAll('/\{(.*?)\}/');
 
