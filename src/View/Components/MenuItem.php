@@ -83,6 +83,7 @@ class MenuItem extends Component
                             <x-mary-icon :name="$icon" />
                         @endif
 
+                        @if($title || $slot->isNotEmpty())
                         <span class="mary-hideable whitespace-nowrap truncate">
                             @if($title)
                                 {{ $title }}
@@ -94,6 +95,7 @@ class MenuItem extends Component
                                 {{ $slot }}
                             @endif
                         </span>
+                        @endif
                     </a>
                 </li>
             HTML;
