@@ -16,6 +16,7 @@ class ChoicesOffline extends Component
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
         public ?bool $searchable = false,
         public ?bool $single = false,
         public ?bool $compact = false,
@@ -91,6 +92,7 @@ class ChoicesOffline extends Component
                         @keyup.esc = "clear()"
 
                         x-data="{
+                            id: $id('{{ $uuid }}'),
                             options: {{ json_encode($options) }},
                             isSingle: {{ json_encode($single) }},
                             isSearchable: {{ json_encode($searchable) }},
@@ -186,7 +188,7 @@ class ChoicesOffline extends Component
                     >
                         <!-- STANDARD LABEL -->
                         @if($label)
-                            <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                            <label :for="id" class="pt-0 label label-text font-semibold">
                                 <span>
                                     {{ $label }}
 
@@ -261,7 +263,7 @@ class ChoicesOffline extends Component
 
                             <!-- INPUT SEARCH -->
                             <input
-                                id="{{ $uuid }}"
+                                :id="id"
                                 x-ref="searchInput"
                                 x-model="search"
                                 @keyup="lookup()"
@@ -352,7 +354,7 @@ class ChoicesOffline extends Component
 
                         <!-- HINT -->
                         @if($hint)
-                            <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
+                            <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
                         @endif
                     </div>
                 </div>

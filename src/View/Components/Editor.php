@@ -15,6 +15,7 @@ class Editor extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 ps-1 mt-2',
         public ?string $disk = 'public',
         public ?string $folder = 'editor',
         public ?array $config = [],
@@ -60,6 +61,10 @@ class Editor extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
+                @php
+                    // Wee need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
+                    $uuid = $uuid . $modelName()
+                @endphp
                 <div>
                     <!-- STANDARD LABEL -->
                     @if($label)
@@ -99,6 +104,13 @@ class Editor extends Component
                                     editor.on('change', (e) => value = editor.getContent())
                                     editor.on('init', () =>  editor.setContent(value ?? ''))
                                     editor.on('OpenWindow', (e) => tinymce.activeEditor.topLevelWindow = e.dialog)
+
+                                    // Handles a case where people try to change contents on the fly from Livewire methods
+                                    $watch('value', function (newValue) {
+                                        if (newValue !== editor.getContent()) {
+                                            editor.resetContent(newValue || '');
+                                        }
+                                    })
                                 },
                                 file_picker_callback: function(cb, value, meta) {
                                     const formData = new FormData()
@@ -140,7 +152,7 @@ class Editor extends Component
 
                     <!-- HINT -->
                     @if($hint)
-                        <div class="label-text-alt text-gray-400 ps-1 mt-2">{{ $hint }}</div>
+                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 ps-1 mt-2">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;

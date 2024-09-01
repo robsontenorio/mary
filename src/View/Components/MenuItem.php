@@ -24,6 +24,7 @@ class MenuItem extends Component
         public ?bool $active = false,
         public ?bool $separator = false,
         public ?bool $enabled = true,
+        public ?bool $exact = false
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -45,7 +46,7 @@ class MenuItem extends Component
             return true;
         }
 
-        return $this->link != '/' && Str::startsWith($route, $link);
+        return !$this->exact && $this->link != '/' && Str::startsWith($route, $link);
     }
 
     public function render(): View|Closure|string
@@ -82,6 +83,7 @@ class MenuItem extends Component
                             <x-mary-icon :name="$icon" />
                         @endif
 
+                        @if($title || $slot->isNotEmpty())
                         <span class="mary-hideable whitespace-nowrap truncate">
                             @if($title)
                                 {{ $title }}
@@ -93,6 +95,7 @@ class MenuItem extends Component
                                 {{ $slot }}
                             @endif
                         </span>
+                        @endif
                     </a>
                 </li>
             HTML;

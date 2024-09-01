@@ -15,6 +15,7 @@ class Colorpicker extends Component
         public ?string $icon = '',
         public ?string $iconRight = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
         public ?bool $inline = false,
         public ?bool $clearable = false,
 
@@ -65,6 +66,7 @@ class Colorpicker extends Component
                         @class([
                                 "rounded-s-lg flex items-center",
                                 "border border-primary border-e-0 px-4 cursor-pointer",
+                                "focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary",
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                 "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
@@ -139,7 +141,7 @@ class Colorpicker extends Component
 
                 <!-- HINT -->
                 @if($hint)
-                    <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
+                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
                 @endif
             </div>
             HTML;

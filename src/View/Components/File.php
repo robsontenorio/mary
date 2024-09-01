@@ -13,6 +13,7 @@ class File extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
+        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
         public ?bool $hideProgress = false,
         public ?bool $cropAfterChange = false,
         public ?string $changeText = "Change",
@@ -196,7 +197,7 @@ class File extends Component
                         <!-- CROP MODAL -->
                         <div @click.prevent="" x-ref="crop" wire:ignore>
                             <x-mary-modal id="maryCrop{{ $uuid }}" x-ref="maryCrop" :title="$cropTitleText" separator class="backdrop-blur-sm" persistent @keydown.window.esc.prevent="">
-                                <img src="#" />
+                                <img src="" />
                                 <x-slot:actions>
                                     <x-mary-button :label="$cropCancelText" @click="close()" />
                                     <x-mary-button :label="$cropSaveText" class="btn-primary" @click="save()" ::disabled="processing" />
@@ -223,7 +224,7 @@ class File extends Component
 
                     <!-- HINT -->
                     @if($hint)
-                        <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
+                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;

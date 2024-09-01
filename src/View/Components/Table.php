@@ -86,6 +86,12 @@ class Table extends Component
         return $header['hidden'] ?? false;
     }
 
+    // Check if link should be shown in cell
+    public function hasLink(mixed $header): bool
+    {
+        return $this->link && empty($header['disableLink']);
+    }
+
     // Check if is currently sorted by this header
     public function isSortedBy(mixed $header): bool
     {
@@ -118,6 +124,9 @@ class Table extends Component
     public function redirectLink(mixed $row): string
     {
         $link = $this->link;
+
+        // Transform from `route()` pattern
+        $link = Str::of($link)->replace('%5B', '{')->replace('%5D', '}');
 
         // Extract tokens like {id}, {city.name} ...
         $tokens = Str::of($link)->matchAll('/\{(.*?)\}/');
@@ -304,9 +313,9 @@ class Table extends Component
                                         <td class="w-1 pe-0">
                                             <x-mary-icon
                                                 name="o-chevron-down"
-                                                ::class="isExpanded({{ data_get($row, $expandableKey) }}) || '-rotate-90 !text-current !bg-base-200'"
+                                                ::class="isExpanded('{{ data_get($row, $expandableKey) }}') || '-rotate-90 !text-current !bg-base-200'"
                                                 class="cursor-pointer p-2 w-8 h-8 bg-base-300 rounded-lg"
-                                                @click="toggleExpand({{ data_get($row, $expandableKey) }});" />
+                                                @click="toggleExpand('{{ data_get($row, $expandableKey) }}');" />
                                         </td>
                                      @endif
 
@@ -323,26 +332,26 @@ class Table extends Component
 
                                         <!--  HAS CUSTOM SLOT ? -->
                                         @if(isset(${"cell_".$temp_key}))
-                                            <td @class([$cellClasses($row, $header), "p-0" => $link])>
-                                                @if($link)
+                                            <td @class([$cellClasses($row, $header), "p-0" => $hasLink($header)])>
+                                                @if($hasLink($header))
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
                                                 @endif
 
                                                 {{ ${"cell_".$temp_key}($row)  }}
 
-                                                @if($link)
+                                                @if($hasLink($header))
                                                     </a>
                                                  @endif
                                             </td>
                                         @else
-                                            <td @class([$cellClasses($row, $header), "p-0" => $link])>
-                                                @if($link)
+                                            <td @class([$cellClasses($row, $header), "p-0" => $hasLink($header)])>
+                                                @if($hasLink($header))
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
                                                 @endif
 
                                                 {{ data_get($row, $header['key']) }}
 
-                                                @if($link)
+                                                @if($hasLink($header))
                                                     </a>
                                                 @endif
                                             </td>
@@ -357,7 +366,7 @@ class Table extends Component
 
                                 <!-- EXPANSION SLOT -->
                                 @if($expandable)
-                                    <tr wire:key="{{ $uuid }}-{{ $k }}--expand" :class="isExpanded({{ data_get($row, $expandableKey) }}) || 'hidden'">
+                                    <tr wire:key="{{ $uuid }}-{{ $k }}--expand" :class="isExpanded('{{ data_get($row, $expandableKey) }}') || 'hidden'">
                                         <td :colspan="colspanSize">
                                             {{ $expansion($row) }}
                                         </td>
