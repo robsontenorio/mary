@@ -34,7 +34,7 @@ class Table extends Component
         public ?array $cellDecoration = [],
         public ?bool $showEmptyText = false,
         public mixed $emptyText = 'No records found.',
-        public string $tableContainerClass = 'overflow-x-auto',
+        public string $containerClass = 'overflow-x-auto',
 
         // Slots
         public mixed $actions = null,
@@ -222,7 +222,7 @@ class Table extends Component
                                 }
                              }"
                 >
-                <div class="{{ $tableContainerClass }}">
+                <div class="{{ $containerClass }}">
                 <table
                         {{
                             $attributes
