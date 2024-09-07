@@ -68,7 +68,7 @@ class Table extends Component
     {
         // Pagination
         if ($this->rows instanceof ArrayAccess) {
-            return $this->rows->pluck($this->selectableKey)->all();
+            return collect($this->rows)->pluck($this->selectableKey)->all();
         }
 
         return collect($this->rows)->pluck($this->selectableKey)->all();
@@ -114,7 +114,7 @@ class Table extends Component
         }
 
         $direction = $this->isSortedBy($header)
-            ? $this->sortBy['direction'] == 'asc' ? 'desc' : 'asc'
+            ? $this->sortBy['direction'] == ('asc' ? 'desc' : 'asc')
             : 'asc';
 
         return ['column' => $header['sortBy'] ?? $header['key'], 'direction' => $direction];
@@ -225,7 +225,7 @@ class Table extends Component
                 <table
                         {{
                             $attributes
-                                ->except('wire:model')
+                                ->whereDoesntStartWith('wire:model')
                                 ->class([
                                     'table',
                                     'table-zebra' => $striped,
