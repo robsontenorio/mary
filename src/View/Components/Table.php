@@ -230,9 +230,9 @@ class Table extends Component
                                     'table',
                                     'table-zebra' => $striped && !$expandable,
                                     'cursor-pointer' => $attributes->hasAny(['@row-click', 'link']),
-                                    '[&_tr:nth-child(4n+3):not(.expansion)]:bg-[oklch(var(--b2)/var(--tw-bg-opacity))]' => $expandable,
-                                    '[&_tr:nth-child(4n+3):not(.expansion):hover]:bg-[oklch(var(--b3)/var(--tw-bg-opacity))]' => $expandable,
-                                    '[&_tr.active:not(.expansion)]:bg-[oklch(var(--b2)/var(--tw-bg-opacity))] [&_tr.active:nth-child(even):not(.expansion)]:bg-[oklch(var(--b3)/var(--tw-bg-opacity))]' => $expandable,
+                                    '[&_tr:nth-child(4n+3):not(.expansion)]:bg-[oklch(var(--b2)/var(--tw-bg-opacity))]' => $striped && $expandable,
+                                    '[&_tr:nth-child(4n+3):not(.expansion):hover]:bg-[oklch(var(--b3)/var(--tw-bg-opacity))]' => $striped && $expandable,
+                                    '[&_tr.active:not(.expansion)]:bg-[oklch(var(--b2)/var(--tw-bg-opacity))] [&_tr.active:nth-child(even):not(.expansion)]:bg-[oklch(var(--b3)/var(--tw-bg-opacity))]' => $striped && $expandable,
                                 ])
                         }}
                     >
