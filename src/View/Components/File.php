@@ -119,6 +119,7 @@ class File extends Component
                             this.imageCrop.src = this.imagePreview.src
 
                             this.cropper.getCroppedCanvas().toBlob((blob) => {
+                                blob.name = $wire.el.querySelector('#{{ $uuid }}').files[0].name
                                 @this.upload('{{ $attributes->wire('model')->value }}', blob,
                                     (uploadedFilename) => {  },
                                     (error) => {  },
