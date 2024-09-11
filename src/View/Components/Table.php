@@ -228,11 +228,9 @@ class Table extends Component
                                 ->except('wire:model')
                                 ->class([
                                     'table',
-                                    'table-zebra' => $striped && !$expandable,
-                                    'cursor-pointer' => $attributes->hasAny(['@row-click', 'link']),
-                                    '[&_tr:nth-child(4n+3):not(.expansion)]:bg-[oklch(var(--b2)/var(--tw-bg-opacity))]' => $striped && $expandable,
-                                    '[&_tr:nth-child(4n+3):not(.expansion):hover]:bg-[oklch(var(--b3)/var(--tw-bg-opacity))]' => $striped && $expandable,
-                                    '[&_tr.active:not(.expansion)]:bg-[oklch(var(--b2)/var(--tw-bg-opacity))] [&_tr.active:nth-child(even):not(.expansion)]:bg-[oklch(var(--b3)/var(--tw-bg-opacity))]' => $striped && $expandable,
+                                    'table-zebra' => $striped,
+                                    '[&_tr:nth-child(4n+3)]:bg-base-200' => $striped && $expandable,
+                                    'cursor-pointer' => $attributes->hasAny(['@row-click', 'link'])
                                 ])
                         }}
                     >
@@ -369,7 +367,7 @@ class Table extends Component
 
                                 <!-- EXPANSION SLOT -->
                                 @if($expandable)
-                                    <tr wire:key="{{ $uuid }}-{{ $k }}--expand" class="expansion [&:nth-child(4n)]:!bg-[oklch(var(--b2)/var(--tw-bg-opacity))]" :class="isExpanded('{{ data_get($row, $expandableKey) }}') || 'hidden'">
+                                    <tr wire:key="{{ $uuid }}-{{ $k }}--expand" class="!bg-inherit" :class="isExpanded('{{ data_get($row, $expandableKey) }}') || 'hidden'">
                                         <td :colspan="colspanSize">
                                             {{ $expansion($row) }}
                                         </td>
