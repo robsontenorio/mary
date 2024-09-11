@@ -229,6 +229,7 @@ class Table extends Component
                                 ->class([
                                     'table',
                                     'table-zebra' => $striped,
+                                    '[&_tr:nth-child(4n+3)]:bg-base-200' => $striped && $expandable,
                                     'cursor-pointer' => $attributes->hasAny(['@row-click', 'link'])
                                 ])
                         }}
@@ -313,7 +314,7 @@ class Table extends Component
                                         <td class="w-1 pe-0">
                                             <x-mary-icon
                                                 name="o-chevron-down"
-                                                ::class="isExpanded('{{ data_get($row, $expandableKey) }}') || '-rotate-90 !text-current !bg-base-200'"
+                                                ::class="isExpanded('{{ data_get($row, $expandableKey) }}') || '-rotate-90 !text-current'"
                                                 class="cursor-pointer p-2 w-8 h-8 bg-base-300 rounded-lg"
                                                 @click="toggleExpand('{{ data_get($row, $expandableKey) }}');" />
                                         </td>
@@ -366,7 +367,7 @@ class Table extends Component
 
                                 <!-- EXPANSION SLOT -->
                                 @if($expandable)
-                                    <tr wire:key="{{ $uuid }}-{{ $k }}--expand" :class="isExpanded('{{ data_get($row, $expandableKey) }}') || 'hidden'">
+                                    <tr wire:key="{{ $uuid }}-{{ $k }}--expand" class="!bg-inherit" :class="isExpanded('{{ data_get($row, $expandableKey) }}') || 'hidden'">
                                         <td :colspan="colspanSize">
                                             {{ $expansion($row) }}
                                         </td>
