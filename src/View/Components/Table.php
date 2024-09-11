@@ -228,8 +228,6 @@ class Table extends Component
                              }"
                 >
                 <div class="overflow-x-auto">
-                CASA
-                @dump($getAllIds());
                 <table
                         {{
                             $attributes
