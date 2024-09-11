@@ -66,12 +66,11 @@ class Table extends Component
     // Get all ids for selectable and expandable features
     public function getAllIds(): array
     {
-        // Pagination
-        if ($this->rows instanceof ArrayAccess) {
-            return $this->rows->pluck($this->selectableKey)->all();
+        if (is_array($this->rows)) {
+            return collect($this->rows)->pluck($this->selectableKey)->all();
         }
 
-        return collect($this->rows)->pluck($this->selectableKey)->all();
+        return $this->rows->pluck($this->selectableKey)->all();
     }
 
     // Check if header is sortable
@@ -114,7 +113,7 @@ class Table extends Component
         }
 
         $direction = $this->isSortedBy($header)
-            ? $this->sortBy['direction'] == 'asc' ? 'desc' : 'asc'
+            ? $this->sortBy['direction'] == ('asc' ? 'desc' : 'asc')
             : 'asc';
 
         return ['column' => $header['sortBy'] ?? $header['key'], 'direction' => $direction];
@@ -168,6 +167,13 @@ class Table extends Component
     public function selectableModifier(): string
     {
         return is_string($this->getAllIds()[0] ?? null) ? "" : ".number";
+    }
+
+    public function getKeyValue($row, $key): mixed
+    {
+        $value = data_get($row, $this->$key);
+
+        return is_numeric($value) && ! str($value)->startsWith('0') ? $value : "'$value'";
     }
 
     public function render(): View|Closure|string
@@ -225,7 +231,7 @@ class Table extends Component
                 <table
                         {{
                             $attributes
-                                ->except('wire:model')
+                                ->whereDoesntStartWith('wire:model')
                                 ->class([
                                     'table',
                                     'table-zebra' => $striped,
@@ -314,9 +320,9 @@ class Table extends Component
                                         <td class="w-1 pe-0">
                                             <x-mary-icon
                                                 name="o-chevron-down"
-                                                ::class="isExpanded('{{ data_get($row, $expandableKey) }}') || '-rotate-90 !text-current'"
+                                                ::class="isExpanded({{ $getKeyValue($row, 'expandableKey') }}) || '-rotate-90 !text-current'"
                                                 class="cursor-pointer p-2 w-8 h-8 bg-base-300 rounded-lg"
-                                                @click="toggleExpand('{{ data_get($row, $expandableKey) }}');" />
+                                                @click="toggleExpand({{ $getKeyValue($row, 'expandableKey') }});" />
                                         </td>
                                      @endif
 
@@ -367,7 +373,7 @@ class Table extends Component
 
                                 <!-- EXPANSION SLOT -->
                                 @if($expandable)
-                                    <tr wire:key="{{ $uuid }}-{{ $k }}--expand" class="!bg-inherit" :class="isExpanded('{{ data_get($row, $expandableKey) }}') || 'hidden'">
+                                    <tr wire:key="{{ $uuid }}-{{ $k }}--expand" class="!bg-inherit" :class="isExpanded({{ $getKeyValue($row, 'expandableKey') }}) || 'hidden'">
                                         <td :colspan="colspanSize">
                                             {{ $expansion($row) }}
                                         </td>
