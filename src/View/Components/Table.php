@@ -228,7 +228,7 @@ class Table extends Component
                                 }
                              }"
                 >
-                <div class="{{ $containerClass }}">
+                <div class="{{ $containerClass }}" x-classes="overflow-x-auto">
                 <table
                         {{
                             $attributes
