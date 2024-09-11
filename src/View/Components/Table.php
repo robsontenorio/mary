@@ -114,7 +114,7 @@ class Table extends Component
         }
 
         $direction = $this->isSortedBy($header)
-            ? $this->sortBy['direction'] == ('asc' ? 'desc' : 'asc')
+            ? ($this->sortBy['direction'] == 'asc') ? 'desc' : 'asc'
             : 'asc';
 
         return ['column' => $header['sortBy'] ?? $header['key'], 'direction' => $direction];
