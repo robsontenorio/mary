@@ -259,7 +259,7 @@ class Choices extends Component
                                              @if($selection)
                                                 <span x-html="document.getElementById('selection-{{ $uuid . '-\' + option.'. $optionValue }}).innerHTML"></span>
                                              @else
-                                                <span x-text="option.{{ $optionLabel }}"></span>
+                                                <span x-text="option?.{{ $optionLabel }}"></span>
                                              @endif
 
                                             <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
