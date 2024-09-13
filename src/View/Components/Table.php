@@ -25,6 +25,7 @@ class Table extends Component
         public ?string $selectableKey = 'id',
         public ?bool $expandable = false,
         public ?string $expandableKey = 'id',
+        public mixed $expandableCondition = null,
         public ?string $link = null,
         public ?bool $withPagination = false,
         public ?string $perPage = null,
@@ -319,11 +320,13 @@ class Table extends Component
                                     <!-- EXPAND ICON -->
                                     @if($expandable)
                                         <td class="w-1 pe-0">
-                                            <x-mary-icon
-                                                name="o-chevron-down"
-                                                ::class="isExpanded({{ $getKeyValue($row, 'expandableKey') }}) || '-rotate-90 !text-current'"
-                                                class="cursor-pointer p-2 w-8 h-8 bg-base-300 rounded-lg"
-                                                @click="toggleExpand({{ $getKeyValue($row, 'expandableKey') }});" />
+                                            @if(data_get($row, $expandableCondition))
+                                                <x-mary-icon
+                                                    name="o-chevron-down"
+                                                    ::class="isExpanded({{ $getKeyValue($row, 'expandableKey') }}) || '-rotate-90 !text-current'"
+                                                    class="cursor-pointer p-2 w-8 h-8 bg-base-300 rounded-lg"
+                                                    @click="toggleExpand({{ $getKeyValue($row, 'expandableKey') }});" />
+                                            @endif
                                         </td>
                                      @endif
 
