@@ -204,6 +204,7 @@ class MaryServiceProvider extends ServiceProvider
             $uses = Arr::except(array_flip($directiveArguments), [$name, $functionArguments]);
             $uses = array_flip($uses);
             array_push($uses, '$__env');
+            array_push($uses, '$__bladeCompiler');
             $uses = implode(',', $uses);
 
             /**
