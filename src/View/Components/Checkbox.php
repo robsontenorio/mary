@@ -44,6 +44,10 @@ class Checkbox extends Component
                         @if($right)
                             <span @class(["flex-1" => !$tight])>
                                 {{ $label}}
+
+                                @if($attributes->get('required'))
+                                    <span class="text-error">*</span>
+                                @endif
                             </span>
                         @endif
 
@@ -54,6 +58,10 @@ class Checkbox extends Component
 
                         @if(!$right)
                             {{ $label}}
+
+                            @if($attributes->get('required'))
+                                <span class="text-error">*</span>
+                            @endif
                         @endif
                     </label>
 
