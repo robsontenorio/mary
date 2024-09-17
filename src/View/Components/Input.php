@@ -15,7 +15,7 @@ class Input extends Component
         public ?string $icon = null,
         public ?string $iconRight = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
+        public ?string $hintClass = 'label-text-alt text-base-content/50 py-1 pb-0',
         public ?string $prefix = null,
         public ?string $suffix = null,
         public ?bool $inline = false,
@@ -28,7 +28,7 @@ class Input extends Component
         public mixed $append = null,
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?string $errorClass = 'text-error label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
@@ -53,6 +53,11 @@ class Input extends Component
                 'locales' => $this->locale
             ]
         ]);
+    }
+
+    public function getInputClasses(): ?string
+    {
+        return str($this->attributes->get('class'))->matchAll('/input-\w+/')->prepend("input")->join(" ");
     }
 
     public function render(): View|Closure|string
@@ -86,8 +91,8 @@ class Input extends Component
                 @if($prefix || $prepend)
                     <div
                         @class([
-                                "rounded-s-lg flex items-center bg-base-200",
-                                "border border-primary border-e-0 px-4" => $prefix,
+                                "input input-bordered h-auto rounded-s-lg flex items-center !bg-base-200",
+                                "$getInputClasses rounded-e-none border-e-0 px-4" => $prefix,
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                 "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
@@ -123,13 +128,14 @@ class Input extends Component
                                 ->merge(['type' => 'text'])
                                 ->except($money ? 'wire:model' : '')
                                 ->class([
-                                    'input input-primary w-full peer',
+                                    'input input-bordered w-full peer',
                                     'ps-10' => ($icon),
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
                                     'rounded-s-none' => $prefix || $prepend,
                                     'rounded-e-none' => $suffix || $append,
                                     'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
+                                    '!border-base-300' => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                     'input-error' => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                             ])
                         }}
@@ -137,22 +143,22 @@ class Input extends Component
 
                     <!-- ICON  -->
                     @if($icon)
-                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-gray-400 pointer-events-none" />
+                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-base-content/50 pointer-events-none" />
                     @endif
 
                     <!-- CLEAR ICON  -->
                     @if($clearable)
-                        <x-mary-icon @click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="absolute top-1/2 end-3 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                        <x-mary-icon @click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="absolute top-1/2 end-3 -translate-y-1/2 cursor-pointer text-base-content/50 hover:text-base-content/80" />
                     @endif
 
                     <!-- RIGHT ICON  -->
                     @if($iconRight)
-                        <x-mary-icon :name="$iconRight" @class(["absolute top-1/2 end-3 -translate-y-1/2 text-gray-400 pointer-events-none", "!end-10" => $clearable]) />
+                        <x-mary-icon :name="$iconRight" @class(["absolute top-1/2 end-3 -translate-y-1/2 text-base-content/50 pointer-events-none", "!end-10" => $clearable]) />
                     @endif
 
                     <!-- INLINE LABEL -->
                     @if($label && $inline)
-                        <label for="{{ $uuid }}" class="absolute text-gray-400 duration-300 transform -translate-y-1 scale-75 top-2 origin-left rtl:origin-right rounded px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) start-9 @else start-3 @endif">
+                        <label for="{{ $uuid }}" class="absolute text-base-content/50 duration-300 transform -translate-y-1 scale-75 top-2 origin-left rtl:origin-right rounded px-2 peer-focus:px-2 peer-focus:text-base-content peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) start-9 @else start-3 @endif">
                             {{ $label }}
                         </label>
                     @endif
@@ -168,9 +174,9 @@ class Input extends Component
                 @if($suffix || $append)
                      <div
                         @class([
-                                "rounded-e-lg flex items-center bg-base-200",
-                                "border border-primary border-s-0 px-4" => $suffix,
-                                "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
+                                "input input-bordered h-auto rounded-e-lg flex items-center !bg-base-200",
+                                "$getInputClasses border-s-0 rounded-s-none px-4" => $suffix,
+                                "border-0 !bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                 "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                             ])
@@ -188,7 +194,7 @@ class Input extends Component
                 @if(!$omitError && $errors->has($errorFieldName()))
                     @foreach($errors->get($errorFieldName()) as $message)
                         @foreach(Arr::wrap($message) as $line)
-                            <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                            <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
                             @break($firstErrorOnly)
                         @endforeach
                         @break($firstErrorOnly)
@@ -197,7 +203,7 @@ class Input extends Component
 
                 <!-- HINT -->
                 @if($hint)
-                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
+                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
                 @endif
             </div>
             HTML;
