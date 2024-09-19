@@ -142,7 +142,7 @@ class Input extends Component
 
                     {{-- CLEAR ICON  --}}
                     @if($clearable)
-                        <x-mary-icon y-on:click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="absolute top-1/2 end-3 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                        <x-mary-icon x-on:click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="absolute top-1/2 end-3 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
                     @endif
 
                     {{-- RIGHT ICON  --}}
