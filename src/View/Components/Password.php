@@ -26,8 +26,8 @@ class Password extends Component
         public ?bool $inline = false,
         public ?bool $clearable = false,
         // Password
-        public ?string $passwordIcon = 'o-lock-closed',
-        public ?string $passwordVisibleIcon = 'o-lock-open',
+        public ?string $passwordIcon = 'o-eye-slash',
+        public ?string $passwordVisibleIcon = 'o-eye',
         public ?bool $right = false,
         public ?bool $onlyPassword = false,
 
