@@ -58,12 +58,13 @@ class Calendar extends Component
 
     public function popups()
     {
-        return collect($this->events)->flatMap(function ($event) {
+        $result = [];
+
+        collect($this->events)->each(function ($event) use (&$result) {
+            $dates = [];
+
             if ($range = $event['range'] ?? []) {
-                $dates = [];
-
                 $period = CarbonPeriod::create($range[0], $range[1]);
-
                 foreach ($period as $date) {
                     $dates[] = Carbon::parse($date)->format('Y-m-d');
                 }
@@ -73,15 +74,22 @@ class Calendar extends Component
                 $dates = [Carbon::parse($event['date'])->format('Y-m-d')];
             }
 
-            return collect($dates)->flatMap(function ($date) use ($event) {
-                return [
-                    $date => [
-                        'modifier' => $event['css'],
-                        'html' => '<div><strong>' . $event['label'] . '</strong></div><div>' . ($event['description'] ?? null) . '</div>',
-                    ],
-                ];
-            });
+            foreach ($dates as $date) {
+                if (!isset($result[$date])) {
+                    $result[$date] = [
+                        'modifier' => $event['css'], // CSS class pertama untuk tanggal ini
+                        'html' => '<div><strong>' . $event['label'] . '</strong></div>' .
+                                  '<div>' . ($event['description'] ?? '') . '</div>',
+                    ];
+                } else {
+                    $result[$date]['html'] .= '<hr><div><strong>' . $event['label'] . '</strong></div>' .
+                                              '<div>' . ($event['description'] ?? '') . '</div>';
+                    $result[$date]['modifier'] .= ' ' . $event['css'];
+                }
+            }
         });
+
+        return $result;
     }
 
     public function render(): View|Closure|string
