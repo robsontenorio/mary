@@ -101,6 +101,7 @@ class Choices extends Component
                             isDisabled: {{ json_encode($isDisabled()) }},
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
+                            searching: false,
 
                             init() {
                                 // Fix weird issue when navigating back
@@ -280,9 +281,16 @@ class Choices extends Component
                                 class="outline-none mt-0.5 bg-transparent w-20"
 
                                 @if($searchable)
-                                    @keydown.debounce.{{ $debounce }}="search($el.value)"
+                                    @keydown.debounce.{{ $debounce }}="searching = !!$el.value; search($el.value)"
                                 @endif
                              />
+
+                            <!-- PLACEHOLDER -->
+                            @if (!$compact && $attributes->has('placeholder'))
+                                <span @class(["absolute inset-0 mt-2.5 mr-8 truncate text-base text-gray-400 pointer-events-none", $icon ? "ml-10" : "ml-4"]) x-show="isSelectionEmpty && !searching">
+                                    {{ $attributes->get('placeholder') }}
+                                </span>
+                            @endif
                         </div>
 
                         <!-- APPEND -->
