@@ -101,7 +101,7 @@ class Choices extends Component
                             isDisabled: {{ json_encode($isDisabled()) }},
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
-                            nosearch: false,
+                            preventsearch: false,
 
                             init() {
                                 // Fix weird issue when navigating back
@@ -184,7 +184,7 @@ class Choices extends Component
                                     return
                                 }
 
-                                if(!this.nosearch) {
+                                if(!this.preventSearch) {
                                     // Call search function from parent component
                                     // `search(value)` or `search(value, extra1, extra2 ...)`
                                     @this.{{ str_contains($searchFunction, '(')
@@ -192,7 +192,7 @@ class Choices extends Component
                                           : $searchFunction . '(value)'
                                         }}
                                 }
-                                this.nosearch = false;
+                                this.preventSearch = false;
                             },
                             dispatchChangeEvent(detail) {
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
@@ -228,6 +228,7 @@ class Choices extends Component
                         <div
                             @click="focus()"
                             x-ref="container"
+                            @keyup.enter="focus()"
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
@@ -284,13 +285,13 @@ class Choices extends Component
                                 class="outline-none mt-0.5 bg-transparent w-20"
 
                                 @if($searchable)
-                                    @keydown.enter.stop.prevent="nosearch = true"
+                                    @keydown.enter.stop.prevent="preventSearch = true"
                                     @keydown.enter.stop.prevent="$focus.next()"
-                                    @keydown.up="nosearch = true"
-                                    @keydown.down="nosearch = true"
-                                    @keydown.left="nosearch = true"
-                                    @keydown.right="nosearch = true"
-                                    @keydown.tab="nosearch = true"
+                                    @keydown.up="preventSearch = true"
+                                    @keydown.down="preventSearch = true"
+                                    @keydown.left="preventSearch = true"
+                                    @keydown.right="preventSearch = true"
+                                    @keydown.tab="preventSearch = true"
                                     @keydown.debounce.{{ $debounce }}="search($el.value)"
                                 @endif
                              />
