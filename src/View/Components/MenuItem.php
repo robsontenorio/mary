@@ -15,6 +15,8 @@ class MenuItem extends Component
     public function __construct(
         public ?string $title = null,
         public ?string $icon = null,
+        public ?string $iconRight = null,
+        public ?string $spinner = null,
         public ?string $link = null,
         public ?string $route = null,
         public ?bool $external = false,
@@ -27,6 +29,15 @@ class MenuItem extends Component
         public ?bool $exact = false
     ) {
         $this->uuid = "mary" . md5(serialize($this));
+    }
+
+    public function spinnerTarget(): ?string
+    {
+        if ($this->spinner == 1) {
+            return $this->attributes->whereStartsWith('wire:click')->first();
+        }
+
+        return $this->spinner;
     }
 
     public function routeMatches(): bool
@@ -78,9 +89,21 @@ class MenuItem extends Component
                                 wire:navigate
                             @endif
                         @endif
+                        
+                        @if($spinner)
+                            wire:target="{{ $spinnerTarget() }}"
+                            wire:loading.attr="disabled"
+                        @endif
                     >
+                        <!-- SPINNER LEFT -->
+                        @if($spinner && !$iconRight)
+                            <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
+                        @endif
+
                         @if($icon)
-                            <x-mary-icon :name="$icon" />
+                            <span class="block" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
+                                <x-mary-icon :name="$icon" />
+                            </span>
                         @endif
 
                         @if($title || $slot->isNotEmpty())
@@ -95,6 +118,17 @@ class MenuItem extends Component
                                 {{ $slot }}
                             @endif
                         </span>
+                        @endif
+                        
+                        <!-- ICON RIGHT -->
+                        @if($iconRight)
+                            <span class="block" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
+                                <x-mary-icon :name="$iconRight" />
+                            </span>
+                        @endif
+                        <!-- SPINNER RIGHT -->
+                        @if($spinner && $iconRight)
+                            <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
                         @endif
                     </a>
                 </li>
