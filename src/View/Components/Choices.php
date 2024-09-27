@@ -101,6 +101,7 @@ class Choices extends Component
                             isDisabled: {{ json_encode($isDisabled()) }},
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
+                            nosearch: false,
 
                             init() {
                                 // Fix weird issue when navigating back
@@ -183,12 +184,15 @@ class Choices extends Component
                                     return
                                 }
 
-                                // Call search function from parent component
-                                // `search(value)` or `search(value, extra1, extra2 ...)`
-                                @this.{{ str_contains($searchFunction, '(')
+                                if(!this.nosearch) {
+                                    // Call search function from parent component
+                                    // `search(value)` or `search(value, extra1, extra2 ...)`
+                                    @this.{{ str_contains($searchFunction, '(')
                                           ? preg_replace('/\((.*?)\)/', '(value, $1)', $searchFunction)
                                           : $searchFunction . '(value)'
                                         }}
+                                }
+                                this.nosearch = false;
                             },
                             dispatchChangeEvent(detail) {
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
@@ -280,6 +284,13 @@ class Choices extends Component
                                 class="outline-none mt-0.5 bg-transparent w-20"
 
                                 @if($searchable)
+                                    @keydown.enter.stop.prevent="nosearch = true"
+                                    @keydown.enter.stop.prevent="$focus.next()"
+                                    @keydown.up="nosearch = true"
+                                    @keydown.down="nosearch = true"
+                                    @keydown.left="nosearch = true"
+                                    @keydown.right="nosearch = true"
+                                    @keydown.tab="nosearch = true"
                                     @keydown.debounce.{{ $debounce }}="search($el.value)"
                                 @endif
                              />
@@ -324,12 +335,18 @@ class Choices extends Component
                                     {{ $noResultText }}
                                 </div>
 
+                                <div
+                                    @keydown.down="$focus.wrap().next()"
+                                    @keydown.up="$focus.wrap().previous()"
+                                >
                                 @foreach($options as $option)
                                     <div
                                         wire:key="option-{{ data_get($option, $optionValue) }}"
                                         @click="toggle({{ $getOptionValue($option) }})"
                                         :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-primary'"
                                         class="border-s-4"
+                                        tabindex="0"
+                                        @keyup.enter="toggle({{ $getOptionValue($option) }})"
                                     >
                                         <!-- ITEM SLOT -->
                                         @if($item)
@@ -346,6 +363,7 @@ class Choices extends Component
                                         @endif
                                     </div>
                                 @endforeach
+                                </div>
                             </div>
                         </div>
 
