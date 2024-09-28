@@ -75,7 +75,7 @@ class MenuItem extends Component
                             @endif
 
                             @if(!$external && !$noWireNavigate)
-                                wire:navigate
+                                {{ $attributes->wire('navigate') }}
                             @endif
                         @endif
                     >
