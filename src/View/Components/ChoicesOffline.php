@@ -276,7 +276,7 @@ class ChoicesOffline extends Component
 
                             <!-- PLACEHOLDER -->
                             @if (!$compact && $attributes->has('placeholder'))
-                                <span @class(["absolute inset-0 mt-2.5 mr-8 truncate text-base text-gray-400 pointer-events-none", $icon ? "ml-10" : "ml-4"]) x-show="isSelectionEmpty && !search">
+                                <span @class(["absolute inset-0 mt-2.5 me-8 truncate text-base text-gray-400 pointer-events-none", $icon ? "ms-10" : "ms-4"]) x-show="!focused && isSelectionEmpty">
                                     {{ $attributes->get('placeholder') }}
                                 </span>
                             @endif
