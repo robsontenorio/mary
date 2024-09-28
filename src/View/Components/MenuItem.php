@@ -4,7 +4,6 @@ namespace Mary\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
@@ -15,7 +14,6 @@ class MenuItem extends Component
     public function __construct(
         public ?string $title = null,
         public ?string $icon = null,
-        public ?string $iconRight = null,
         public ?string $spinner = null,
         public ?string $link = null,
         public ?string $route = null,
@@ -57,7 +55,7 @@ class MenuItem extends Component
             return true;
         }
 
-        return !$this->exact && $this->link != '/' && Str::startsWith($route, $link);
+        return ! $this->exact && $this->link != '/' && Str::startsWith($route, $link);
     }
 
     public function render(): View|Closure|string
@@ -89,19 +87,19 @@ class MenuItem extends Component
                                 wire:navigate
                             @endif
                         @endif
-                        
+
                         @if($spinner)
                             wire:target="{{ $spinnerTarget() }}"
                             wire:loading.attr="disabled"
                         @endif
                     >
-                        <!-- SPINNER LEFT -->
-                        @if($spinner && !$iconRight)
+                        <!-- SPINNER -->
+                        @if($spinner)
                             <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
                         @endif
 
                         @if($icon)
-                            <span class="block" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
+                            <span class="block -mt-0.5" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
                                 <x-mary-icon :name="$icon" />
                             </span>
                         @endif
@@ -118,17 +116,6 @@ class MenuItem extends Component
                                 {{ $slot }}
                             @endif
                         </span>
-                        @endif
-                        
-                        <!-- ICON RIGHT -->
-                        @if($iconRight)
-                            <span class="block" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
-                                <x-mary-icon :name="$iconRight" />
-                            </span>
-                        @endif
-                        <!-- SPINNER RIGHT -->
-                        @if($spinner && $iconRight)
-                            <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
                         @endif
                     </a>
                 </li>
