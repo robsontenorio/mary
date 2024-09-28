@@ -101,8 +101,8 @@ class Choices extends Component
                             isDisabled: {{ json_encode($isDisabled()) }},
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
-                            preventsearch: false,
-
+                            preventSearch: false,
+                            
                             init() {
                                 // Fix weird issue when navigating back
                                 document.addEventListener('livewire:navigating', () => {
@@ -188,9 +188,9 @@ class Choices extends Component
                                     // Call search function from parent component
                                     // `search(value)` or `search(value, extra1, extra2 ...)`
                                     @this.{{ str_contains($searchFunction, '(')
-                                          ? preg_replace('/\((.*?)\)/', '(value, $1)', $searchFunction)
-                                          : $searchFunction . '(value)'
-                                        }}
+                                            ? preg_replace('/\((.*?)\)/', '(value, $1)', $searchFunction)
+                                            : $searchFunction . '(value)'
+                                            }}
                                 }
                                 this.preventSearch = false;
                             },
@@ -295,6 +295,13 @@ class Choices extends Component
                                     @keydown.debounce.{{ $debounce }}="search($el.value)"
                                 @endif
                              />
+
+                            <!-- PLACEHOLDER -->
+                            @if (!$compact && $attributes->has('placeholder'))
+                                <span @class(["absolute inset-0 mt-2.5 me-8 truncate text-base text-gray-400 pointer-events-none", $icon ? "ms-10" : "ms-4"]) x-show="isSelectionEmpty && !focused">
+                                    {{ $attributes->get('placeholder') }}
+                                </span>
+                            @endif
                         </div>
 
                         <!-- APPEND -->
