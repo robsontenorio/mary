@@ -273,6 +273,13 @@ class ChoicesOffline extends Component
                                 :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-1'"
                                 class="outline-none mt-0.5 bg-transparent w-20"
                              />
+
+                            <!-- PLACEHOLDER -->
+                            @if (!$compact && $attributes->has('placeholder'))
+                                <span @class(["absolute inset-0 mt-2.5 me-8 truncate text-base text-gray-400 pointer-events-none", $icon ? "ms-10" : "ms-4"]) x-show="!focused && isSelectionEmpty">
+                                    {{ $attributes->get('placeholder') }}
+                                </span>
+                            @endif
                         </div>
 
 
