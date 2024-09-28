@@ -39,7 +39,7 @@ class Calendar extends Component
                 'selection' => [
                     'day' => false,
                 ],
-                'iso8601' => !$this->sundayStart,
+                'iso8601' => ! $this->sundayStart,
             ],
             'CSSClasses' => 'y',
             'actions' => 'x',
@@ -58,13 +58,14 @@ class Calendar extends Component
 
     public function popups()
     {
-        $result = [];
+        $buffer = [];
 
-        collect($this->events)->each(function ($event) use (&$result) {
-            $dates = [];
-
+        return collect($this->events)->flatMap(function ($event) use (&$buffer) {
             if ($range = $event['range'] ?? []) {
+                $dates = [];
+
                 $period = CarbonPeriod::create($range[0], $range[1]);
+
                 foreach ($period as $date) {
                     $dates[] = Carbon::parse($date)->format('Y-m-d');
                 }
@@ -74,22 +75,19 @@ class Calendar extends Component
                 $dates = [Carbon::parse($event['date'])->format('Y-m-d')];
             }
 
-            foreach ($dates as $date) {
-                if (!isset($result[$date])) {
-                    $result[$date] = [
-                        'modifier' => $event['css'], // CSS class pertama untuk tanggal ini
-                        'html' => '<div><strong>' . $event['label'] . '</strong></div>' .
-                                  '<div>' . ($event['description'] ?? '') . '</div>',
-                    ];
-                } else {
-                    $result[$date]['html'] .= '<hr><div><strong>' . $event['label'] . '</strong></div>' .
-                                              '<div>' . ($event['description'] ?? '') . '</div>';
-                    $result[$date]['modifier'] .= ' ' . $event['css'];
-                }
-            }
-        });
+            return collect($dates)->flatMap(function ($date) use ($event, &$buffer) {
+                $html = '<div><strong>' . $event['label'] . '</strong></div><div>' . ($event['description'] ?? null) . '</div><hr class="my-3 last:hidden" />';
 
-        return $result;
+                $buffer[$date] = ($buffer[$date] ?? '') . $html;
+
+                return [
+                    $date => [
+                        'modifier' => $event['css'],
+                        'html' => $buffer[$date]
+                    ],
+                ];
+            });
+        });
     }
 
     public function render(): View|Closure|string
