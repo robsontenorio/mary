@@ -57,14 +57,14 @@ class Input extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
             <div>
                 @php
                     // Wee need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
                     $uuid = $uuid . $modelName()
                 @endphp
 
-                <!-- STANDARD LABEL -->
+                {{-- STANDARD LABEL --}}
                 @if($label && !$inline)
                     <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
                         <span>
@@ -77,12 +77,12 @@ class Input extends Component
                     </label>
                 @endif
 
-                <!-- PREFIX/SUFFIX/PREPEND/APPEND CONTAINER -->
+                {{-- PREFIX/SUFFIX/PREPEND/APPEND CONTAINER --}}
                 @if($prefix || $suffix || $prepend || $append)
                     <div class="flex">
                 @endif
 
-                <!-- PREFIX / PREPEND -->
+                {{-- PREFIX / PREPEND --}}
                 @if($prefix || $prepend)
                     <div
                         @class([
@@ -98,7 +98,7 @@ class Input extends Component
                 @endif
 
                 <div class="flex-1 relative">
-                    <!-- MONEY SETUP -->
+                    {{-- MONEY SETUP --}}
                     @if($money)
                         <div
                             wire:key="money-{{ rand() }}"
@@ -106,7 +106,7 @@ class Input extends Component
                         >
                     @endif
 
-                    <!-- INPUT -->
+                    {{-- INPUT --}}
                     <input
                         id="{{ $uuid }}"
                         placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
@@ -114,7 +114,7 @@ class Input extends Component
                         @if($money)
                             x-ref="myInput"
                             :value="amount"
-                            @input="$nextTick(() => $wire.set('{{ $modelName() }}', Currency.getUnmasked(), false))"
+                            x-on:input="$nextTick(() => $wire.set('{{ $modelName() }}', Currency.getUnmasked(), false))"
                             inputmode="numeric"
                         @endif
 
@@ -135,36 +135,36 @@ class Input extends Component
                         }}
                     />
 
-                    <!-- ICON  -->
+                    {{-- ICON  --}}
                     @if($icon)
                         <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-gray-400 pointer-events-none" />
                     @endif
 
-                    <!-- CLEAR ICON  -->
+                    {{-- CLEAR ICON  --}}
                     @if($clearable)
-                        <x-mary-icon @click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="absolute top-1/2 end-3 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                        <x-mary-icon x-on:click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="absolute top-1/2 end-3 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
                     @endif
 
-                    <!-- RIGHT ICON  -->
+                    {{-- RIGHT ICON  --}}
                     @if($iconRight)
                         <x-mary-icon :name="$iconRight" @class(["absolute top-1/2 end-3 -translate-y-1/2 text-gray-400 pointer-events-none", "!end-10" => $clearable]) />
                     @endif
 
-                    <!-- INLINE LABEL -->
+                    {{-- INLINE LABEL --}}
                     @if($label && $inline)
                         <label for="{{ $uuid }}" class="absolute text-gray-400 duration-300 transform -translate-y-1 scale-75 top-2 origin-left rtl:origin-right rounded px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) start-9 @else start-3 @endif">
                             {{ $label }}
                         </label>
                     @endif
 
-                    <!-- HIDDEN MONEY INPUT + END MONEY SETUP -->
+                    {{-- HIDDEN MONEY INPUT + END MONEY SETUP --}}
                     @if($money)
                             <input type="hidden" {{ $attributes->only('wire:model') }} />
                         </div>
                     @endif
                 </div>
 
-                <!-- SUFFIX/APPEND -->
+                {{-- SUFFIX/APPEND --}}
                 @if($suffix || $append)
                      <div
                         @class([
@@ -179,12 +179,12 @@ class Input extends Component
                     </div>
                 @endif
 
-                <!-- END: PREFIX/SUFFIX/APPEND/PREPEND CONTAINER  -->
+                {{-- END: PREFIX/SUFFIX/APPEND/PREPEND CONTAINER  --}}
                 @if($prefix || $suffix || $prepend || $append)
                     </div>
                 @endif
 
-                <!-- ERROR -->
+                {{-- ERROR --}}
                 @if(!$omitError && $errors->has($errorFieldName()))
                     @foreach($errors->get($errorFieldName()) as $message)
                         @foreach(Arr::wrap($message) as $line)
@@ -195,11 +195,11 @@ class Input extends Component
                     @endforeach
                 @endif
 
-                <!-- HINT -->
+                {{-- HINT --}}
                 @if($hint)
                     <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
                 @endif
             </div>
-            HTML;
+            BLADE;
     }
 }
