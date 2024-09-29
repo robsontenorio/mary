@@ -18,6 +18,7 @@ class DatePicker extends Component
         public ?string $hint = null,
         public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
         public ?bool $inline = false,
+        public ?bool $live = false,
         public ?array $config = [],
         // Validations
         public ?string $errorField = null,
@@ -60,7 +61,6 @@ class DatePicker extends Component
 
         // Sets default date as current bound model
         $config = str_replace('"#model#"', '$wire.get("' . $this->modelName() . '")', $config);
-
         return $config;
     }
 
@@ -85,6 +85,9 @@ class DatePicker extends Component
                         <div
                             x-data="{instance: undefined}"
                             x-init="instance = flatpickr($refs.input, {{ $setup() }});"
+                            @if($live && $config["mode"] == "range")
+                                x-on:change="const value = $event.target.value; if(value.split('to').length == 2) {$wire.set('{{ $modelName() }}', value)};"
+                            @endif
                             x-on:livewire:navigating.window="instance.destroy();"
                         >
                             <input
