@@ -11,6 +11,7 @@ class Checkbox extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
@@ -23,7 +24,7 @@ class Checkbox extends Component
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function modelName(): ?string
@@ -43,7 +44,7 @@ class Checkbox extends Component
                     <label for="{{ $uuid }}" class="flex gap-3 items-center cursor-pointer">
                         @if($right)
                             <span @class(["flex-1" => !$tight])>
-                                {{ $label}}
+                                {{ $label }}
 
                                 @if($attributes->get('required'))
                                     <span class="text-error">*</span>
@@ -52,12 +53,12 @@ class Checkbox extends Component
                         @endif
 
                         <input
+                            id="{{ $uuid }}"
                             type="checkbox"
-                            {{ $attributes->whereDoesntStartWith('class') }}
-                            {{ $attributes->merge(["id" => $uuid])->class(['checkbox checkbox-primary']) }}  />
+                            {{ $attributes->whereDoesntStartWith('id')->merge(['class' => 'checkbox checkbox-primary']) }}  />
 
                         @if(!$right)
-                            {{ $label}}
+                            {{ $label }}
 
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
