@@ -10,7 +10,6 @@ use Illuminate\View\Component;
 class DatePicker extends Component
 {
     public string $uuid;
-
     public function __construct(
         public ?string $label = null,
         public ?string $icon = null,
@@ -18,7 +17,6 @@ class DatePicker extends Component
         public ?string $hint = null,
         public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
         public ?bool $inline = false,
-        public ?bool $live = false,
         public ?array $config = [],
         // Validations
         public ?string $errorField = null,
@@ -41,6 +39,11 @@ class DatePicker extends Component
 
     public function setup(): string
     {
+        if ($this->config["mode"] == "range" && $this->attributes->has('wire:model.live')) {
+            $this->attributes->setAttributes(['wire:model' =>  $this->attributes->get('wire:model.live'),'live' => true]);
+            unset($this->attributes['wire:model.live']);
+        }
+
         $config = json_encode(array_merge([
             'dateFormat' => 'Y-m-d H:i',
             'altInput' => true,
@@ -85,7 +88,7 @@ class DatePicker extends Component
                         <div
                             x-data="{instance: undefined}"
                             x-init="instance = flatpickr($refs.input, {{ $setup() }});"
-                            @if($live && $config["mode"] == "range")
+                            @if($config["mode"] == "range" && $attributes->get('live'))
                                 x-on:change="const value = $event.target.value; if(value.split('to').length == 2) {$wire.set('{{ $modelName() }}', value)};"
                             @endif
                             x-on:livewire:navigating.window="instance.destroy();"
