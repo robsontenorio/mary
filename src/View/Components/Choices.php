@@ -101,7 +101,8 @@ class Choices extends Component
                             isDisabled: {{ json_encode($isDisabled()) }},
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
-                            
+                            preventSearch: false,
+
                             init() {
                                 // Fix weird issue when navigating back
                                 document.addEventListener('livewire:navigating', () => {
@@ -183,12 +184,15 @@ class Choices extends Component
                                     return
                                 }
 
-                                // Call search function from parent component
-                                // `search(value)` or `search(value, extra1, extra2 ...)`
-                                @this.{{ str_contains($searchFunction, '(')
-                                          ? preg_replace('/\((.*?)\)/', '(value, $1)', $searchFunction)
-                                          : $searchFunction . '(value)'
-                                        }}
+                                if(!this.preventSearch) {
+                                    // Call search function from parent component
+                                    // `search(value)` or `search(value, extra1, extra2 ...)`
+                                    @this.{{ str_contains($searchFunction, '(')
+                                            ? preg_replace('/\((.*?)\)/', '(value, $1)', $searchFunction)
+                                            : $searchFunction . '(value)'
+                                            }}
+                                }
+                                this.preventSearch = false;
                             },
                             dispatchChangeEvent(detail) {
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
@@ -224,6 +228,8 @@ class Choices extends Component
                         <div
                             @click="focus()"
                             x-ref="container"
+                            @keydown.up="focus()"
+                            @keydown.down="focus()"
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
@@ -280,6 +286,13 @@ class Choices extends Component
                                 class="outline-none mt-0.5 bg-transparent w-20"
 
                                 @if($searchable)
+                                    @keydown.enter.stop.prevent="preventSearch = true"
+                                    @keydown.enter.stop.prevent="$focus.next()"
+                                    @keydown.up="preventSearch = true"
+                                    @keydown.down="$focus.within($refs.optionWrap{{ $uuid }}).first(); preventSearch = true"
+                                    @keydown.left="preventSearch = true"
+                                    @keydown.right="preventSearch = true"
+                                    @keydown.tab="preventSearch = true"
                                     @keydown.debounce.{{ $debounce }}="search($el.value)"
                                 @endif
                              />
@@ -331,12 +344,19 @@ class Choices extends Component
                                     {{ $noResultText }}
                                 </div>
 
+                                <div
+                                    x-ref="optionWrap{{ $uuid }}"
+                                    @keydown.down="$focus.wrap().next()"
+                                    @keydown.up="$focus.wrap().previous()"
+                                >
                                 @foreach($options as $option)
                                     <div
                                         wire:key="option-{{ data_get($option, $optionValue) }}"
                                         @click="toggle({{ $getOptionValue($option) }})"
                                         :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-primary'"
                                         class="border-s-4"
+                                        tabindex="0"
+                                        @keyup.enter="toggle({{ $getOptionValue($option) }})"
                                     >
                                         <!-- ITEM SLOT -->
                                         @if($item)
@@ -353,6 +373,7 @@ class Choices extends Component
                                         @endif
                                     </div>
                                 @endforeach
+                                </div>
                             </div>
                         </div>
 
