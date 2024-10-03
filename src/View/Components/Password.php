@@ -143,10 +143,10 @@ class Password extends Component
                     @if($icon)
                         <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-gray-400 pointer-events-none" />
                     @elseif($placeToggleLeft())
-                        <x-button x-on:click="hidden = !hidden" class="btn-ghost btn-sm btn-circle p-0 absolute top-1/2 -translate-y-1/2 start-1.5 text-gray-400 no-animation active:focus:-translate-y-1/2">
-                            <x-icon name="{{ $passwordIcon }}" x-show="hidden" /> 
-                            <x-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="text-primary" /> 
-                        </x-button>
+                        <x-mary-button x-on:click="hidden = !hidden" class="btn-ghost btn-sm btn-circle p-0 absolute top-1/2 -translate-y-1/2 start-1.5 text-gray-400 no-animation active:focus:-translate-y-1/2">
+                            <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" /> 
+                            <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="text-primary" /> 
+                        </x-mary-button>
                     @endif
 
                     <!-- CLEAR ICON -->
@@ -158,10 +158,10 @@ class Password extends Component
                     @if($iconRight)
                         <x-mary-icon :name="$iconRight" @class(["absolute top-1/2 end-3 -translate-y-1/2 text-gray-400 pointer-events-none", "!end-10" => $clearable]) />
                     @elseif($placeToggleRight())
-                        <x-button x-on:click="hidden = !hidden" @class(["btn-ghost btn-sm btn-circle p-0 absolute top-1/2 -translate-y-1/2 end-1.5 text-gray-400 no-animation active:focus:-translate-y-1/2", "!end-9" => $clearable])>
-                            <x-icon name="{{ $passwordIcon }}" x-show="hidden" /> 
-                            <x-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="text-primary" /> 
-                        </x-button>
+                        <x-mary-button x-on:click="hidden = !hidden" @class(["btn-ghost btn-sm btn-circle p-0 absolute top-1/2 -translate-y-1/2 end-1.5 text-gray-400 no-animation active:focus:-translate-y-1/2", "!end-9" => $clearable])>
+                            <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" /> 
+                            <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="text-primary" /> 
+                        </x-mary-button>
                     @endif
 
                     <!-- INLINE LABEL -->
