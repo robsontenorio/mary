@@ -102,7 +102,7 @@ class Choices extends Component
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
                             preventSearch: false,
-                            
+
                             init() {
                                 // Fix weird issue when navigating back
                                 document.addEventListener('livewire:navigating', () => {
@@ -228,7 +228,8 @@ class Choices extends Component
                         <div
                             @click="focus()"
                             x-ref="container"
-                            @keyup.enter="focus()"
+                            @keydown.up="focus()"
+                            @keydown.down="focus()"
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
@@ -288,7 +289,7 @@ class Choices extends Component
                                     @keydown.enter.stop.prevent="preventSearch = true"
                                     @keydown.enter.stop.prevent="$focus.next()"
                                     @keydown.up="preventSearch = true"
-                                    @keydown.down="preventSearch = true"
+                                    @keydown.down="$focus.within($refs.optionWrap{{ $uuid }}).first(); preventSearch = true"
                                     @keydown.left="preventSearch = true"
                                     @keydown.right="preventSearch = true"
                                     @keydown.tab="preventSearch = true"
@@ -344,6 +345,7 @@ class Choices extends Component
                                 </div>
 
                                 <div
+                                    x-ref="optionWrap{{ $uuid }}"
                                     @keydown.down="$focus.wrap().next()"
                                     @keydown.up="$focus.wrap().previous()"
                                 >
