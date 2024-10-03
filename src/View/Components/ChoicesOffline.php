@@ -170,16 +170,18 @@ class ChoicesOffline extends Component
                                 this.$refs.searchInput.focus()
                             },
                             lookup() {
-                                Array.from(this.$refs.choicesOptions.children).forEach(child => {
+                                Array.from(this.$refs.choicesOptions{{ $uuid }}.children).forEach(child => {
                                     if (!child.getAttribute('search-value').match(new RegExp(this.search, 'i'))){
                                         child.classList.add('hidden')
+                                        child.removeAttribute('tabindex')
                                     } else {
                                         child.classList.remove('hidden')
+                                        child.setAttribute('tabindex', 0)
                                     }
                                 })
 
-                                this.noResults = Array.from(this.$refs.choicesOptions.querySelectorAll('div > .hidden')).length ==
-                                                 Array.from(this.$refs.choicesOptions.querySelectorAll('[search-value]')).length
+                                this.noResults = Array.from(this.$refs.choicesOptions{{ $uuid }}.querySelectorAll('div > .hidden')).length ==
+                                                 Array.from(this.$refs.choicesOptions{{ $uuid }}.querySelectorAll('[search-value]')).length
                             },
                             dispatchChangeEvent(detail) {
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
@@ -214,6 +216,7 @@ class ChoicesOffline extends Component
                         <!-- SELECTED OPTIONS + SEARCH INPUT -->
                         <div
                             @click="focus();"
+                            @keydown.down="focus();"
                             x-ref="container"
 
                             {{
@@ -268,6 +271,7 @@ class ChoicesOffline extends Component
                                 x-model="search"
                                 @keyup="lookup()"
                                 @input="focus()"
+                                @keydown.down="$focus.within($refs.choicesOptions{{ $uuid }}).first()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || isDisabled || ! isSearchable"
                                 :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-1'"
@@ -319,7 +323,7 @@ class ChoicesOffline extends Component
                                     {{ $noResultText }}
                                 </div>
 
-                                <div x-ref="choicesOptions">
+                                <div x-ref="choicesOptions{{ $uuid }}" @keydown.down="$focus.wrap().next()" @keydown.up="$focus.wrap().previous()">
                                     @foreach($options as $option)
                                         <div
                                             id="option-{{ $uuid }}-{{ data_get($option, $optionValue) }}"
@@ -328,6 +332,8 @@ class ChoicesOffline extends Component
                                             :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-primary'"
                                             search-value="{{ data_get($option, $optionLabel) }}"
                                             class="border-s-4"
+                                            tabindex="0"
+                                            @keyup.enter="toggle({{ $getOptionValue($option) }})"
                                         >
                                             <!-- ITEM SLOT -->
                                             @if($item)
