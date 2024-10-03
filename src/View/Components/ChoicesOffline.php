@@ -170,6 +170,7 @@ class ChoicesOffline extends Component
                                 this.$refs.searchInput.focus()
                             },
                             lookup() {
+                                this.search = this.search.replace(String.fromCharCode(92),String.fromCharCode(92,92));
                                 Array.from(this.$refs.choicesOptions{{ $uuid }}.children).forEach(child => {
                                     if (!child.getAttribute('search-value').match(new RegExp(this.search, 'i'))){
                                         child.classList.add('hidden')
