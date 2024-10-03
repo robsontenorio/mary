@@ -40,6 +40,14 @@ class DatePicker extends Component
 
     public function setup(): string
     {
+        // Handle `wire:model.live` for `range` dates
+        if (isset($this->config["mode"]) && $this->config["mode"] == "range" && $this->attributes->wire('model')->hasModifier('live')) {
+            $this->attributes->setAttributes([
+                'wire:model' => $this->modelName(),
+                'live' => true
+            ]);
+        }
+
         $config = json_encode(array_merge([
             'dateFormat' => 'Y-m-d H:i',
             'altInput' => true,
@@ -85,6 +93,9 @@ class DatePicker extends Component
                         <div
                             x-data="{instance: undefined}"
                             x-init="instance = flatpickr($refs.input, {{ $setup() }});"
+                            @if(isset($config["mode"]) && $config["mode"] == "range" && $attributes->get('live'))
+                                @change="const value = $event.target.value; if(value.split('to').length == 2) { $wire.set('{{ $modelName() }}', value) };"
+                            @endif
                             x-on:livewire:navigating.window="instance.destroy();"
                         >
                             <input
