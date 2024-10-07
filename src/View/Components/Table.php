@@ -198,7 +198,7 @@ class Table extends Component
                                     return this.selection.includes(key)
                                 },
                                 isPageFullSelected() {
-                                    return [...this.selection]
+                                    return this.pageIds.length && [...this.selection]
                                                 .sort((a, b) => b - a)
                                                 .toString()
                                                 .includes([...this.pageIds].sort((a, b) => b - a).toString())
@@ -254,6 +254,7 @@ class Table extends Component
                                             type="checkbox"
                                             class="checkbox checkbox-sm"
                                             x-ref="mainCheckbox"
+                                            x-bind:disabled="pageIds.length === 0"
                                             @click="toggleCheckAll($el.checked)" />
                                     </th>
                                 @endif
