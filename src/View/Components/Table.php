@@ -198,7 +198,7 @@ class Table extends Component
                                     return this.selection.includes(key)
                                 },
                                 isPageFullSelected() {
-                                    return this.pageIds.length && && [...this.selection]
+                                    return this.pageIds.length && [...this.selection]
                                                 .sort((a, b) => b - a)
                                                 .toString()
                                                 .includes([...this.pageIds].sort((a, b) => b - a).toString())
