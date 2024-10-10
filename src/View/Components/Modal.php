@@ -40,6 +40,15 @@ class Modal extends Component
                     @endif
                 >
                     <div class="modal-box {{ $boxClass }}">
+                        @if(!$persistent)
+                            <form method="dialog">
+                                @if ($id)
+                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" type="submit">✕</button>
+                                @else
+                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="$wire.{{ $attributes->wire('model')->value() }} = false" type="button">✕</button>
+                                @endif
+                            </form>
+                        @endif
                         @if($title)
                             <x-mary-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" class="mb-5" />
                         @endif
