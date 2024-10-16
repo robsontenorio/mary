@@ -101,7 +101,7 @@ class Choices extends Component
                             isDisabled: {{ json_encode($isDisabled()) }},
                             isRequired: {{ json_encode($isRequired()) }},
                             minChars: {{ $minChars }},
-                            
+
                             init() {
                                 // Fix weird issue when navigating back
                                 document.addEventListener('livewire:navigating', () => {
@@ -159,7 +159,7 @@ class Choices extends Component
                                     ? this.selection == id
                                     : this.selection.includes(id)
                             },
-                            toggle(id) {
+                            toggle(id, keepOpen = false) {
                                 if (this.isReadonly || this.isDisabled) {
                                     return
                                 }
@@ -176,11 +176,20 @@ class Choices extends Component
                                 this.dispatchChangeEvent({ value: this.selection })
 
                                 this.$refs.searchInput.value = ''
-                                this.$refs.searchInput.focus()
+
+                                if (!keepOpen) {
+                                    this.$refs.searchInput.focus()
+                                }
+
                             },
-                            search(value) {
+                            search(value, event) {
                                 if (value.length < this.minChars) {
                                     return
+                                }
+
+                                // Prevent search for this keys
+                                if (event && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Shift', 'CapsLock', 'Tab'].includes(event.key)) {
+                                    return;
                                 }
 
                                 // Call search function from parent component
@@ -194,6 +203,9 @@ class Choices extends Component
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
                             }
                         }"
+
+                        @keydown.up="$focus.previous()"
+                        @keydown.down="$focus.next()"
                     >
                         <!-- STANDARD LABEL -->
                         @if($label)
@@ -274,13 +286,14 @@ class Choices extends Component
                             <input
                                 x-ref="searchInput"
                                 @input="focus()"
+                                @keydown.arrow-down.prevent="focus()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || isDisabled || ! isSearchable"
                                 :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-1'"
                                 class="outline-none mt-0.5 bg-transparent w-20"
 
                                 @if($searchable)
-                                    @keydown.debounce.{{ $debounce }}="search($el.value)"
+                                    @keydown.debounce.{{ $debounce }}="search($el.value, $event)"
                                 @endif
                              />
 
@@ -334,9 +347,11 @@ class Choices extends Component
                                 @foreach($options as $option)
                                     <div
                                         wire:key="option-{{ data_get($option, $optionValue) }}"
-                                        @click="toggle({{ $getOptionValue($option) }})"
+                                        @click="toggle({{ $getOptionValue($option) }}, true)"
+                                        @keydown.enter="toggle({{ $getOptionValue($option) }}, true)"
                                         :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-primary'"
-                                        class="border-s-4"
+                                        class="border-s-4 focus:bg-base-200 focus:outline-none"
+                                        tabindex="0"
                                     >
                                         <!-- ITEM SLOT -->
                                         @if($item)

@@ -151,7 +151,7 @@ class ChoicesOffline extends Component
                                     ? this.selection == id
                                     : this.selection.includes(id)
                             },
-                            toggle(id) {
+                            toggle(id, keepOpen = false) {
                                 if (this.isReadonly || this.isDisabled) {
                                     return
                                 }
@@ -167,7 +167,10 @@ class ChoicesOffline extends Component
                                 }
 
                                 this.dispatchChangeEvent({ value: this.selection })
-                                this.$refs.searchInput.focus()
+
+                                if (!keepOpen) {
+                                    this.$refs.searchInput.focus()
+                                }
                             },
                             lookup() {
                                 Array.from(this.$refs.choicesOptions.children).forEach(child => {
@@ -185,6 +188,9 @@ class ChoicesOffline extends Component
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
                             }
                         }"
+
+                        @keydown.up="$focus.previous()"
+                        @keydown.down="$focus.next()"
                     >
                         <!-- STANDARD LABEL -->
                         @if($label)
@@ -268,6 +274,7 @@ class ChoicesOffline extends Component
                                 x-model="search"
                                 @keyup="lookup()"
                                 @input="focus()"
+                                @keydown.arrow-down.prevent="focus()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || isDisabled || ! isSearchable"
                                 :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-1'"
@@ -324,10 +331,12 @@ class ChoicesOffline extends Component
                                         <div
                                             id="option-{{ $uuid }}-{{ data_get($option, $optionValue) }}"
                                             wire:key="option-{{ data_get($option, $optionValue) }}"
-                                            @click="toggle({{ $getOptionValue($option) }})"
+                                            @click="toggle({{ $getOptionValue($option) }}, true)"
+                                            @keydown.enter="toggle({{ $getOptionValue($option) }}, true)"
                                             :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-primary'"
                                             search-value="{{ data_get($option, $optionLabel) }}"
-                                            class="border-s-4"
+                                            class="border-s-4 focus:bg-base-200 focus:outline-none"
+                                            tabindex="0"
                                         >
                                             <!-- ITEM SLOT -->
                                             @if($item)
