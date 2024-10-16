@@ -151,7 +151,7 @@ class ChoicesOffline extends Component
                                     ? this.selection == id
                                     : this.selection.includes(id)
                             },
-                            toggle(id) {
+                            toggle(id, keepOpen = false) {
                                 if (this.isReadonly || this.isDisabled) {
                                     return
                                 }
@@ -167,27 +167,30 @@ class ChoicesOffline extends Component
                                 }
 
                                 this.dispatchChangeEvent({ value: this.selection })
-                                this.$refs.searchInput.focus()
+
+                                if (!keepOpen) {
+                                    this.$refs.searchInput.focus()
+                                }
                             },
                             lookup() {
-                                this.search = this.search.replace(String.fromCharCode(92),String.fromCharCode(92,92));
-                                Array.from(this.$refs.choicesOptions{{ $uuid }}.children).forEach(child => {
+                                Array.from(this.$refs.choicesOptions.children).forEach(child => {
                                     if (!child.getAttribute('search-value').match(new RegExp(this.search, 'i'))){
                                         child.classList.add('hidden')
-                                        child.removeAttribute('tabindex')
                                     } else {
                                         child.classList.remove('hidden')
-                                        child.setAttribute('tabindex', 0)
                                     }
                                 })
 
-                                this.noResults = Array.from(this.$refs.choicesOptions{{ $uuid }}.querySelectorAll('div > .hidden')).length ==
-                                                 Array.from(this.$refs.choicesOptions{{ $uuid }}.querySelectorAll('[search-value]')).length
+                                this.noResults = Array.from(this.$refs.choicesOptions.querySelectorAll('div > .hidden')).length ==
+                                                 Array.from(this.$refs.choicesOptions.querySelectorAll('[search-value]')).length
                             },
                             dispatchChangeEvent(detail) {
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
                             }
                         }"
+
+                        @keydown.up="$focus.previous()"
+                        @keydown.down="$focus.next()"
                     >
                         <!-- STANDARD LABEL -->
                         @if($label)
@@ -217,7 +220,6 @@ class ChoicesOffline extends Component
                         <!-- SELECTED OPTIONS + SEARCH INPUT -->
                         <div
                             @click="focus();"
-                            @keydown.down="focus();"
                             x-ref="container"
 
                             {{
@@ -272,7 +274,7 @@ class ChoicesOffline extends Component
                                 x-model="search"
                                 @keyup="lookup()"
                                 @input="focus()"
-                                @keydown.down="$focus.within($refs.choicesOptions{{ $uuid }}).first()"
+                                @keydown.arrow-down.prevent="focus()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || isDisabled || ! isSearchable"
                                 :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-1'"
@@ -324,17 +326,17 @@ class ChoicesOffline extends Component
                                     {{ $noResultText }}
                                 </div>
 
-                                <div x-ref="choicesOptions{{ $uuid }}" @keydown.down="$focus.wrap().next()" @keydown.up="$focus.wrap().previous()">
+                                <div x-ref="choicesOptions">
                                     @foreach($options as $option)
                                         <div
                                             id="option-{{ $uuid }}-{{ data_get($option, $optionValue) }}"
                                             wire:key="option-{{ data_get($option, $optionValue) }}"
-                                            @click="toggle({{ $getOptionValue($option) }})"
+                                            @click="toggle({{ $getOptionValue($option) }}, true)"
+                                            @keydown.enter="toggle({{ $getOptionValue($option) }}, true)"
                                             :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-primary'"
                                             search-value="{{ data_get($option, $optionLabel) }}"
-                                            class="border-s-4"
+                                            class="border-s-4 focus:bg-base-200 focus:outline-none"
                                             tabindex="0"
-                                            @keyup.enter="toggle({{ $getOptionValue($option) }})"
                                         >
                                             <!-- ITEM SLOT -->
                                             @if($item)
