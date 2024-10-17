@@ -10,6 +10,13 @@ class Avatar extends Component
 {
     public string $uuid;
 
+    /**
+     * @param  ?string  $image  The URL of the avatar image.
+     * @param  ?string  $title  The title text displayed beside the avatar.
+     * @slot  ?string  $title  The title text displayed beside the avatar.
+     * @param  ?string  $subtitle  The subtitle text displayed beside the avatar.
+     * @slot  ?string  $subtitle The subtitle text displayed beside the avatar.
+     */
     public function __construct(
         public ?string $image = '',
 
