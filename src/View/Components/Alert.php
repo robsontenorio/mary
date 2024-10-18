@@ -10,6 +10,14 @@ class Alert extends Component
 {
     public string $uuid;
 
+    /**
+     * @param ?string  $title  The title of the alert, displayed in bold.
+     * @param ?string  $icon  The icon displayed at the beginning of the alert.
+     * @param ?string  $description  A short description under the title.
+     * @param ?bool  $shadow  Whether to apply a shadow effect to the alert.
+     * @param ?bool  $dismissible  Whether the alert can be dismissed by the user.
+     * @slot  mixed  $actions  Slots for actionable elements like buttons or links.
+     */
     public function __construct(
         public ?string $title = null,
         public ?string $icon = null,

@@ -39,7 +39,7 @@ class Calendar extends Component
                 'selection' => [
                     'day' => false,
                 ],
-                'iso8601' => !$this->sundayStart,
+                'iso8601' => ! $this->sundayStart,
             ],
             'CSSClasses' => 'y',
             'actions' => 'x',
@@ -58,7 +58,9 @@ class Calendar extends Component
 
     public function popups()
     {
-        return collect($this->events)->flatMap(function ($event) {
+        $buffer = [];
+
+        return collect($this->events)->flatMap(function ($event) use (&$buffer) {
             if ($range = $event['range'] ?? []) {
                 $dates = [];
 
@@ -73,11 +75,15 @@ class Calendar extends Component
                 $dates = [Carbon::parse($event['date'])->format('Y-m-d')];
             }
 
-            return collect($dates)->flatMap(function ($date) use ($event) {
+            return collect($dates)->flatMap(function ($date) use ($event, &$buffer) {
+                $html = '<div><strong>' . $event['label'] . '</strong></div><div>' . ($event['description'] ?? null) . '</div><hr class="my-3 last:hidden" />';
+
+                $buffer[$date] = ($buffer[$date] ?? '') . $html;
+
                 return [
                     $date => [
                         'modifier' => $event['css'],
-                        'html' => '<div><strong>' . $event['label'] . '</strong></div><div>' . ($event['description'] ?? null) . '</div>',
+                        'html' => $buffer[$date]
                     ],
                 ];
             });

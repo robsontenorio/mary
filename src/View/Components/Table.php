@@ -36,6 +36,7 @@ class Table extends Component
         public ?bool $showEmptyText = false,
         public mixed $emptyText = 'No records found.',
         public string $containerClass = 'overflow-x-auto',
+        public ?bool $noHover = false,
 
         // Slots
         public mixed $actions = null,
@@ -197,7 +198,7 @@ class Table extends Component
                                     return this.selection.includes(key)
                                 },
                                 isPageFullSelected() {
-                                    return [...this.selection]
+                                    return this.pageIds.length && [...this.selection]
                                                 .sort((a, b) => b - a)
                                                 .toString()
                                                 .includes([...this.pageIds].sort((a, b) => b - a).toString())
@@ -253,6 +254,7 @@ class Table extends Component
                                             type="checkbox"
                                             class="checkbox checkbox-sm"
                                             x-ref="mainCheckbox"
+                                            x-bind:disabled="pageIds.length === 0"
                                             @click="toggleCheckAll($el.checked)" />
                                     </th>
                                 @endif
@@ -299,7 +301,7 @@ class Table extends Component
                             @foreach($rows as $k => $row)
                                 <tr
                                     wire:key="{{ $uuid }}-{{ $k }}"
-                                    class="hover:bg-base-200/50 {{ $rowClasses($row) }}"
+                                    @class([$rowClasses($row), "hover:bg-base-200/50" => !$noHover])
                                     @if($attributes->has('@row-click'))
                                         @click="$dispatch('row-click', {{ json_encode($row) }});"
                                     @endif
