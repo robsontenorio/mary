@@ -14,13 +14,13 @@ class Checkbox extends Component
         public ?string $id = null,
         public ?string $label = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
+        public ?string $hintClass = 'label-text-alt text-base-content/50 py-1 pb-0',
 
         public ?bool $right = false,
         public ?bool $tight = false,
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?string $errorClass = 'text-error label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
@@ -55,7 +55,7 @@ class Checkbox extends Component
                         <input
                             id="{{ $uuid }}"
                             type="checkbox"
-                            {{ $attributes->whereDoesntStartWith('id')->merge(['class' => 'checkbox checkbox-primary']) }}  />
+                            {{ $attributes->whereDoesntStartWith('id')->merge(['class' => 'checkbox']) }}  />
 
                         @if(!$right)
                             {{ $label }}
@@ -70,7 +70,7 @@ class Checkbox extends Component
                     @if(!$omitError && $errors->has($errorFieldName()))
                         @foreach($errors->get($errorFieldName()) as $message)
                             @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                                <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
                                 @break($firstErrorOnly)
                             @endforeach
                             @break($firstErrorOnly)
@@ -79,7 +79,7 @@ class Checkbox extends Component
 
                     <!-- HINT -->
                     @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
+                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
                     @endif
                 </div>
         HTML;
