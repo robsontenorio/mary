@@ -27,7 +27,9 @@ class MenuItem extends Component
         public ?bool $exact = false,
 
         // Slot
-        public mixed $slot = null,
+        public mixed $content = null,
+        public mixed $actions = null,
+
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -107,8 +109,9 @@ class MenuItem extends Component
                             </span>
                         @endif
 
-                        @if($title || $slot->isNotEmpty())
-                        <span class="mary-hideable whitespace-nowrap truncate">
+                        @if($title || $content->isNotEmpty() || $actions->isNotEmpty() )
+
+                        <span class="flex items-center mary-hideable whitespace-nowrap truncate gap-3">
                             @if($title)
                                 {{ $title }}
 
@@ -116,9 +119,16 @@ class MenuItem extends Component
                                     <span class="badge badge-ghost badge-sm {{ $badgeClasses }}">{{ $badge }}</span>
                                 @endif
                             @else
-                                {{ $slot }}
+                                {{ $content }}
+
+                                @if($actions)
+                                    <div {{ $actions->attributes->class(["flex items-center gap-3 mary-hideable"]) }}>
+                                            {{ $actions }}
+                                    </div>                    
+                                @endif
                             @endif
                         </span>
+
                         @endif
                     </a>
                 </li>
