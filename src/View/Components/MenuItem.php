@@ -20,6 +20,7 @@ class MenuItem extends Component
         public ?bool $external = false,
         public ?bool $noWireNavigate = false,
         public ?string $badge = null,
+        public ?array $badges = null,
         public ?string $badgeClasses = null,
         public ?bool $active = false,
         public ?bool $separator = false,
