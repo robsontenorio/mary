@@ -4,7 +4,6 @@ namespace Mary\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
@@ -15,11 +14,11 @@ class MenuItem extends Component
     public function __construct(
         public ?string $title = null,
         public ?string $icon = null,
+        public ?string $spinner = null,
         public ?string $link = null,
         public ?string $route = null,
         public ?bool $external = false,
         public ?bool $noWireNavigate = false,
-        public ?array $badges = null,
         public ?string $badge = null,
         public ?string $badgeClasses = null,
         public ?bool $active = false,
@@ -28,6 +27,15 @@ class MenuItem extends Component
         public ?bool $exact = false
     ) {
         $this->uuid = "mary" . md5(serialize($this));
+    }
+
+    public function spinnerTarget(): ?string
+    {
+        if ($this->spinner == 1) {
+            return $this->attributes->whereStartsWith('wire:click')->first();
+        }
+
+        return $this->spinner;
     }
 
     public function routeMatches(): bool
@@ -47,7 +55,7 @@ class MenuItem extends Component
             return true;
         }
 
-        return !$this->exact && $this->link != '/' && Str::startsWith($route, $link);
+        return ! $this->exact && $this->link != '/' && Str::startsWith($route, $link);
     }
 
     public function render(): View|Closure|string
@@ -76,18 +84,31 @@ class MenuItem extends Component
                             @endif
 
                             @if(!$external && !$noWireNavigate)
-                                wire:navigate
+                                {{ $attributes->wire('navigate')->value() ? $attributes->wire('navigate') : 'wire:navigate' }}
                             @endif
                         @endif
+
+                        @if($spinner)
+                            wire:target="{{ $spinnerTarget() }}"
+                            wire:loading.attr="disabled"
+                        @endif
                     >
+                        <!-- SPINNER -->
+                        @if($spinner)
+                            <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
+                        @endif
+
                         @if($icon)
-                            <x-mary-icon :name="$icon" />
+                            <span class="block -mt-0.5" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
+                                <x-mary-icon :name="$icon" />
+                            </span>
                         @endif
 
                         @if($title || $slot->isNotEmpty())
                         <span class="mary-hideable whitespace-nowrap truncate">
                             @if($title)
                                 {{ $title }}
+
                                 @if(isset($badges) && is_array($badges))
                                     @foreach($badges as $badgeItem)
                                         <span class="badge badge-ghost badge-sm {{ $badgeItem['classes'] ?? 'badge-default' }} {{ isset($badgeItem['icon']) ? 'translate-y-[2px]' : '' }} ">
@@ -102,7 +123,6 @@ class MenuItem extends Component
                                         <span class="badge badge-ghost badge-sm {{ $badgeClasses ?? 'badge-default' }}">
                                             {{ $badge }}
                                         </span>
-                                @endif
                             @else
                                 {{ $slot }}
                             @endif
