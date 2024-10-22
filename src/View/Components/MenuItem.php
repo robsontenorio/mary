@@ -122,9 +122,18 @@ class MenuItem extends Component
                                 {{ $content }}
 
                                 @if($actions)
-                                    <div {{ $actions->attributes->class(["flex items-center gap-3 mary-hideable"]) }}>
-                                            {{ $actions }}
-                                    </div>                    
+                                    @if($link && !Str::of($actions)->contains([':click', '@click' , 'href']))
+                                        <a href="{{ $link }}" wire:navigate>
+                                    @endif
+                                    
+                                        <div {{ $actions->attributes->class(["flex items-center gap-3 mary-hideable"]) }}>
+                                                {{ $actions }}
+                                        </div>
+
+                                    @if($link && !Str::of($actions)->contains([':click', '@click' , 'href']))
+                                        </a>
+                                    @endif
+                    
                                 @endif
                             @endif
                         </span>
