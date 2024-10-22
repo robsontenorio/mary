@@ -24,7 +24,10 @@ class MenuItem extends Component
         public ?bool $active = false,
         public ?bool $separator = false,
         public ?bool $enabled = true,
-        public ?bool $exact = false
+        public ?bool $exact = false,
+
+        // Slot
+        public mixed $slot = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
