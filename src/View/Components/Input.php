@@ -20,6 +20,7 @@ class Input extends Component
         public ?string $suffix = null,
         public ?bool $inline = false,
         public ?bool $clearable = false,
+        public ?bool $autofocus = false,
         public ?bool $money = false,
         public ?string $locale = 'en-US',
 
@@ -110,7 +111,11 @@ class Input extends Component
                     <input
                         id="{{ $uuid }}"
                         placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
-
+        
+                        @if($autofocus)
+                            autofocus
+                        @endif
+                                
                         @if($money)
                             x-ref="myInput"
                             :value="amount"
