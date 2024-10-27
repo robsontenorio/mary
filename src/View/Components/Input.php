@@ -21,6 +21,7 @@ class Input extends Component
         public ?bool $inline = false,
         public ?bool $clearable = false,
         public ?bool $money = false,
+        public ?bool $modalAutofocus = false,
         public ?string $locale = 'en-US',
 
         // Slots
@@ -59,6 +60,8 @@ class Input extends Component
     {
         return <<<'BLADE'
             <div>
+                
+                
                 @php
                     // Wee need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
                     $uuid = $uuid . $modelName()
@@ -108,9 +111,14 @@ class Input extends Component
 
                     {{-- INPUT --}}
                     <input
+                        @if($modalAutofocus)
+                            x-ref="myInput"
+                            @focus-me.window="$refs.myInput.focus();"
+                        @endif
                         id="{{ $uuid }}"
                         placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
-
+                                
+                                
                         @if($money)
                             x-ref="myInput"
                             :value="amount"

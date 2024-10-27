@@ -15,6 +15,7 @@ class Modal extends Component
         public ?string $boxClass = null,
         public ?bool $separator = false,
         public ?bool $persistent = false,
+        public ?bool $focusEvent = false,
 
         // Slots
         public ?string $actions = null
@@ -27,7 +28,11 @@ class Modal extends Component
         return <<<'HTML'
                 <dialog
                     {{ $attributes->except('wire:model')->class(["modal"]) }}
-
+                    
+                    @if($focusEvent)
+                        x-init="$watch('open', (value) => {  $dispatch('focus-me'); })" 
+                    @endif
+                    
                     @if($id)
                         id="{{ $id }}"
                     @else
