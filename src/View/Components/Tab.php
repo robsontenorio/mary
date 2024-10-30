@@ -29,7 +29,7 @@ class Tab extends Component
                 <x-mary-icon name='" . $this->icon . "' @class([
                 'me-2',
                 'whitespace-nowrap',
-                'text-gray-600 border-b-gray-600 dark: text-base-300 border-b-base-300 cursor-not-allowed' => '$this->disabled'
+                'text-base-content/30 cursor-not-allowed' => '$this->disabled'
                 ])>
                     <x-slot:label>
                         {$fromLabel}
@@ -41,7 +41,7 @@ class Tab extends Component
         return Blade::render("
             <div @class([
                 'whitespace-nowrap',
-                'text-gray-600 border-b-gray-600 dark: text-base-300 border-b-base-300 cursor-not-allowed' => '$this->disabled'
+                'text-base-content/30 cursor-not-allowed' => '$this->disabled'
                 ])>
                 {$fromLabel}
             </div>
