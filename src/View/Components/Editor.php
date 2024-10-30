@@ -98,8 +98,8 @@ class Editor extends Component
                                 target: $refs.tinymce,
                                 images_upload_url: uploadUrl,
                                 readonly: {{ json_encode($attributes->get('readonly') || $attributes->get('disabled')) }},
-                                skin: document.documentElement.getAttribute('data-theme') != 'light' ? 'oxide-dark' : 'oxide',
-                                content_css: document.documentElement.getAttribute('data-theme')!= 'light' ? 'dark' : 'default',
+                                skin: document.documentElement.getAttribute('data-theme') != 'dark' ? 'oxide' : 'oxide-dark',
+                                content_css: document.documentElement.getAttribute('data-theme')!= 'dark' ? 'default' : 'dark',
 
                                 @if($attributes->get('disabled'))
                                     content_style: 'body { opacity: 50% }',
