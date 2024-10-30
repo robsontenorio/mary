@@ -77,7 +77,7 @@ class ListItem extends Component
                                 {{ is_string($value) ? data_get($item, $value) : $value }}
                             </div>
 
-                            <div @if(!is_string($subValue))  {{ $subValue->attributes->class(["text-gray-400 text-sm truncate"]) }} @else class="text-gray-400 text-sm truncate" @endif>
+                            <div @if(!is_string($subValue))  {{ $subValue->attributes->class(["text-base-content/50 text-sm truncate"]) }} @else class="text-base-content/50 text-sm truncate" @endif>
                                 {{ is_string($subValue) ? data_get($item, $subValue) : $subValue }}
                             </div>
                         </div>

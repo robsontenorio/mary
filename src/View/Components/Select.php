@@ -16,7 +16,7 @@ class Select extends Component
         public ?string $icon = null,
         public ?string $iconRight = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-gray-400 ps-1 mt-2',
+        public ?string $hintClass = 'label-text-alt text-base-content/50 ps-1 mt-2',
         public ?string $placeholder = null,
         public ?string $placeholderValue = null,
         public ?bool $inline = false,
@@ -29,7 +29,7 @@ class Select extends Component
         public mixed $append = null,
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?string $errorClass = 'text-error label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
@@ -44,6 +44,11 @@ class Select extends Component
     public function errorFieldName(): ?string
     {
         return $this->errorField ?? $this->modelName();
+    }
+
+    public function getInputClasses(): ?string
+    {
+        return str($this->attributes->get('class'))->matchAll('/input-\w+/')->prepend("input")->join(" ");
     }
 
     public function render(): View|Closure|string
@@ -85,7 +90,7 @@ class Select extends Component
                         id="{{ $uuid }}"
                         {{ $attributes->whereDoesntStartWith('class') }}
                         {{ $attributes->class([
-                                    'select select-primary w-full font-normal',
+                                    'select select-bordered w-full font-normal',
                                     'ps-10' => ($icon),
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
@@ -108,12 +113,12 @@ class Select extends Component
 
                     <!-- ICON -->
                     @if($icon)
-                        <x-mary-icon :name="$icon" class="absolute pointer-events-none top-1/2 -translate-y-1/2 start-3 text-gray-400" />
+                        <x-mary-icon :name="$icon" class="absolute pointer-events-none top-1/2 -translate-y-1/2 start-3 text-base-content/50" />
                     @endif
 
                     <!-- RIGHT ICON  -->
                     @if($iconRight)
-                        <x-mary-icon :name="$iconRight" class="absolute pointer-events-none top-1/2 end-8 -translate-y-1/2 text-gray-400 " />
+                        <x-mary-icon :name="$iconRight" class="absolute pointer-events-none top-1/2 end-8 -translate-y-1/2 text-base-content/50 " />
                     @endif
 
                     <!-- INLINE LABEL -->
@@ -140,7 +145,7 @@ class Select extends Component
                 @if(!$omitError && $errors->has($errorFieldName()))
                     @foreach($errors->get($errorFieldName()) as $message)
                         @foreach(Arr::wrap($message) as $line)
-                            <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                            <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
                             @break($firstErrorOnly)
                         @endforeach
                         @break($firstErrorOnly)
@@ -149,7 +154,7 @@ class Select extends Component
 
                 <!-- HINT -->
                 @if($hint)
-                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 ps-1 mt-2">{{ $hint }}</div>
+                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 ps-1 mt-2">{{ $hint }}</div>
                 @endif
             </div>
         HTML;

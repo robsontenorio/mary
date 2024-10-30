@@ -159,7 +159,7 @@ class ImageLibrary extends Component
 
                                         <!-- VALIDATION -->
                                          @error($modelName().'.'.$key)
-                                            <div class="text-red-500 label-text-alt p-1">{{ $validationMessage($message) }}</div>
+                                            <div class="text-error label-text-alt p-1">{{ $validationMessage($message) }}</div>
                                          @enderror
 
                                         <!-- HIDDEN FILE INPUT -->
@@ -230,13 +230,13 @@ class ImageLibrary extends Component
                     <!-- ERROR -->
                     @if (! $hideErrors)
                         @error($libraryName())
-                            <div class="text-red-500 label-text-alt p-1 pt-2">{{ $message }}</div>
+                            <div class="text-error label-text-alt p-1 pt-2">{{ $message }}</div>
                         @enderror
                     @endif
 
                     <!-- HINT -->
                     @if($hint)
-                        <div class="label-text-alt text-gray-400 p-1 pb-0">{{ $hint }}</div>
+                        <div class="label-text-alt text-base-content/50 p-1 pb-0">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;

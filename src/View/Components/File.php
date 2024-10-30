@@ -13,7 +13,7 @@ class File extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
+        public ?string $hintClass = 'label-text-alt text-base-content/50 py-1 pb-0',
         public ?bool $hideProgress = false,
         public ?bool $cropAfterChange = false,
         public ?string $changeText = "Change",
@@ -23,7 +23,7 @@ class File extends Component
         public ?array $cropConfig = [],
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?string $errorClass = 'text-error label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
 
@@ -167,7 +167,7 @@ class File extends Component
 
                         {{
                             $attributes->whereDoesntStartWith('class')->class([
-                                "file-input file-input-bordered file-input-primary",
+                                "file-input file-input-bordered",
                                 "hidden" => $slot->isNotEmpty()
                             ])
                         }}
@@ -211,7 +211,7 @@ class File extends Component
                     @if(!$omitError && $errors->has($errorFieldName()))
                         @foreach($errors->get($errorFieldName()) as $message)
                             @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                                <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
                                 @break($firstErrorOnly)
                             @endforeach
                             @break($firstErrorOnly)
@@ -220,12 +220,12 @@ class File extends Component
 
                     <!-- MULTIPLE -->
                     @error($modelName().'.*')
-                        <div class="text-red-500 label-text-alt p-1 pt-2">{{ $message }}</div>
+                        <div class="text-error label-text-alt p-1 pt-2">{{ $message }}</div>
                     @enderror
 
                     <!-- HINT -->
                     @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
+                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;

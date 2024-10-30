@@ -91,8 +91,7 @@ class Input extends Component
                 @if($prefix || $prepend)
                     <div
                         @class([
-                                "input input-bordered h-auto rounded-s-lg flex items-center !bg-base-200",
-                                "$getInputClasses rounded-e-none border-e-0 px-4" => $prefix,
+                                "$getInputClasses input input-bordered h-auto rounded-s-lg flex items-center !bg-base-200 rounded-e-none border-e-0 px-4" => $prefix,
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                 "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
@@ -174,8 +173,7 @@ class Input extends Component
                 @if($suffix || $append)
                      <div
                         @class([
-                                "input input-bordered h-auto rounded-e-lg flex items-center !bg-base-200",
-                                "$getInputClasses border-s-0 rounded-s-none px-4" => $suffix,
+                                "$getInputClasses input input-bordered h-auto rounded-e-lg flex items-center !bg-base-200 border-s-0 rounded-s-none px-4" => $suffix,
                                 "border-0 !bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                 "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError

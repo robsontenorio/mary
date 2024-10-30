@@ -13,11 +13,11 @@ class Tags extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt p-1 pb-0 text-gray-400',
+        public ?string $hintClass = 'label-text-alt p-1 pb-0 text-base-content/50',
         public ?string $icon = null,
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?string $errorClass = 'text-error label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
@@ -137,12 +137,12 @@ class Tags extends Component
                 >
                     <!-- ICON  -->
                     @if($icon)
-                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-gray-400 pointer-events-none" />
+                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-base-content/50 pointer-events-none" />
                     @endif
 
                     <!-- CLEAR ICON  -->
                     @if(! $isReadonly())
-                        <x-mary-icon @click="clearAll()" x-show="tags.length"  name="o-x-mark" class="absolute top-1/2 end-4 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                        <x-mary-icon @click="clearAll()" x-show="tags.length"  name="o-x-mark" class="absolute top-1/2 end-4 -translate-y-1/2 cursor-pointer text-base-content/50 hover:text-base-content/80" />
                     @endif
 
                     <!--  TAGS  -->
@@ -150,7 +150,7 @@ class Tags extends Component
                         <template :key="index" x-for="(tag, index) in tags">
                             <div class="mary-tags-element bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 mt-0.5 mb-1.5 last:me-0 inline-block rounded cursor-pointer">
                                 <span x-text="tag"></span>
-                                <x-mary-icon @click="remove(index)" x-show="!isReadonly" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
+                                <x-mary-icon @click="remove(index)" x-show="!isReadonly" name="o-x-mark" class="text-gray-500 hover:text-error" />
                             </div>
                         </template>
                     </span>
@@ -180,7 +180,7 @@ class Tags extends Component
                 @if(!$omitError && $errors->has($errorFieldName()))
                     @foreach($errors->get($errorFieldName()) as $message)
                         @foreach(Arr::wrap($message) as $line)
-                            <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                            <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
                             @break($firstErrorOnly)
                         @endforeach
                         @break($firstErrorOnly)
@@ -189,12 +189,12 @@ class Tags extends Component
 
                 <!-- MULTIPLE ERROR -->
                 @error($modelName().'.*')
-                    <div class="label-text-alt p-1 text-red-500">{{ $message }}</div>
+                    <div class="label-text-alt p-1 text-error">{{ $message }}</div>
                 @enderror
 
                 @if ($hint)
                     <!-- HINT -->
-                    <div class="{{ $hintClass }}" x-classes="label-text-alt p-1 pb-0 text-gray-400">{{ $hint }}</div>
+                    <div class="{{ $hintClass }}" x-classes="label-text-alt p-1 pb-0 text-base-content/50">{{ $hint }}</div>
                 @endif
             </div>
         HTML;

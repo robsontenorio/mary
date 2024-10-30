@@ -15,7 +15,7 @@ class Stat extends Component
     public function __construct(
         public ?string $value = null,
         public ?string $icon = null,
-        public ?string $color = 'text-primary',
+        public ?string $color = '',
         public ?string $title = null,
         public ?string $description = null,
         public ?string $tooltip = null,

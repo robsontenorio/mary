@@ -16,7 +16,7 @@ class ChoicesOffline extends Component
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
+        public ?string $hintClass = 'label-text-alt text-base-content/50 py-1 pb-0',
         public ?bool $searchable = false,
         public ?bool $single = false,
         public ?bool $compact = false,
@@ -35,7 +35,7 @@ class ChoicesOffline extends Component
         public ?string $noResultText = 'No results found.',
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?string $errorClass = 'text-error label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
         // slots
@@ -235,12 +235,12 @@ class ChoicesOffline extends Component
                         >
                             <!-- ICON  -->
                             @if($icon)
-                                <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-gray-400 pointer-events-none" />
+                                <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-base-content/50 pointer-events-none" />
                             @endif
 
                             <!-- CLEAR ICON  -->
                             @if(! $isReadonly() && ! $isDisabled())
-                                <x-mary-icon @click="reset()"  name="o-x-mark" x-show="!isSelectionEmpty" class="absolute top-1/2 end-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                                <x-mary-icon @click="reset()"  name="o-x-mark" x-show="!isSelectionEmpty" class="absolute top-1/2 end-8 -translate-y-1/2 cursor-pointer text-base-content/50 hover:text-base-content/80" />
                             @endif
 
                             <!-- SELECTED OPTIONS -->
@@ -259,7 +259,7 @@ class ChoicesOffline extends Component
                                                 <span x-text="option.{{ $optionLabel }}"></span>
                                              @endif
 
-                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
+                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-error" />
                                         </div>
                                     </template>
                                 @endif
@@ -283,7 +283,7 @@ class ChoicesOffline extends Component
 
                             <!-- PLACEHOLDER -->
                             @if (!$compact && $attributes->has('placeholder'))
-                                <span @class(["absolute inset-0 mt-2.5 me-8 truncate text-base text-gray-400 pointer-events-none", $icon ? "ms-10" : "ms-4"]) x-show="!focused && isSelectionEmpty">
+                                <span @class(["absolute inset-0 mt-2.5 me-8 truncate text-base text-base-content/50 pointer-events-none", $icon ? "ms-10" : "ms-4"]) x-show="!focused && isSelectionEmpty">
                                     {{ $attributes->get('placeholder') }}
                                 </span>
                             @endif
@@ -361,7 +361,7 @@ class ChoicesOffline extends Component
                         @if(!$omitError && $errors->has($errorFieldName()))
                             @foreach($errors->get($errorFieldName()) as $message)
                                 @foreach(Arr::wrap($message) as $line)
-                                    <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                                    <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
                                     @break($firstErrorOnly)
                                 @endforeach
                                 @break($firstErrorOnly)
@@ -370,7 +370,7 @@ class ChoicesOffline extends Component
 
                         <!-- HINT -->
                         @if($hint)
-                            <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
+                            <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
                         @endif
                     </div>
                 </div>

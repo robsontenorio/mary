@@ -312,7 +312,7 @@ class Table extends Component
                                             <input
                                                 id="checkbox-{{ $uuid }}-{{ $k }}"
                                                 type="checkbox"
-                                                class="checkbox checkbox-sm checkbox-primary"
+                                                class="checkbox checkbox-sm"
                                                 value="{{ data_get($row, $selectableKey) }}"
                                                 x-model{{ $selectableModifier() }}="selection"
                                                 @click="toggleCheck($el.checked, {{ json_encode($row) }})" />
@@ -391,12 +391,12 @@ class Table extends Component
 
                     @if(count($rows) === 0)
                         @if($showEmptyText)
-                            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+                            <div class="text-center py-4 text-gray-500 dark:text-base-content/50">
                                 {{ $emptyText }}
                             </div>
                         @endif
                         @if($empty)
-                            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+                            <div class="text-center py-4 text-gray-500 dark:text-base-content/50">
                                 {{ $empty }}
                             </div>
                         @endif
