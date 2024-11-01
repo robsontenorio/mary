@@ -93,27 +93,27 @@ class Table extends Component
     }
 
     // Format header
-    public function format(mixed $value, mixed $header): mixed
+    public function format(mixed $row, mixed $field, mixed $header): mixed
     {
         $format = $header['format'] ?? null;
 
         if (!$format){
-            return $value;
+            return $field;
         }
 
         if (is_callable($format)){
-            return $format($value);
+            return $format($row, $field);
         }
 
         if ($format[0] == 'currency') {
-            return ($format[2] ?? '').number_format($value, ...str_split($format[1]));
+            return ($format[2] ?? '').number_format($field, ...str_split($format[1]));
         }
 
-        if ($format[0] == 'date' && $value) {
-            return Carbon::parse($value)->format($format[1]);
+        if ($format[0] == 'date' && $field) {
+            return Carbon::parse($field)->format($format[1]);
         }
 
-        return $value;
+        return $field;
     }
 
     // Check if link should be shown in cell
@@ -390,7 +390,7 @@ class Table extends Component
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
                                                 @endif
 
-                                                {{ $format(data_get($row, $header['key']), $header) }}
+                                                {{ $format($row, data_get($row, $header['key']), $header) }}
 
                                                 @if($hasLink($header))
                                                     </a>
