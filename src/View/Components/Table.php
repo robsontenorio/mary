@@ -102,7 +102,7 @@ class Table extends Component
             return ($format[2] ?? '').number_format($value, ...str_split($format[1]));
         }
 
-        if ($format[0] == 'date') {
+        if ($format[0] == 'date' && $value) {
             return Carbon::parse($value)->format($format[1]);
         }
 
