@@ -51,13 +51,15 @@ class Table extends Component
             throw new Exception("You can not combine `expandable` with `selectable`.");
         }
 
-        // Temp decoration
+        // Temp
         $rowDecoration = $this->rowDecoration;
         $cellDecoration = $this->cellDecoration;
+        $headers = $this->headers;
 
-        // Remove decoration from serialization, because they are closures.
+        // Remove them from serialization, because they are closures.
         unset($this->rowDecoration);
         unset($this->cellDecoration);
+        unset($this->headers);
 
         // Serialize
         $this->uuid = "mary" . md5(serialize($this));
@@ -65,6 +67,7 @@ class Table extends Component
         // Put them back
         $this->rowDecoration = $rowDecoration;
         $this->cellDecoration = $cellDecoration;
+        $this->headers = $headers;
     }
 
     // Get all ids for selectable and expandable features
@@ -96,6 +99,10 @@ class Table extends Component
 
         if (!$format){
             return $value;
+        }
+
+        if (is_callable($format)){
+            return $format($value);
         }
 
         if ($format[0] == 'currency') {
