@@ -7,6 +7,7 @@ use Closure;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
@@ -86,6 +87,26 @@ class Table extends Component
     public function isHidden(mixed $header): bool
     {
         return $header['hidden'] ?? false;
+    }
+
+    // Format header
+    public function format(mixed $value, mixed $header): mixed
+    {
+        $format = $header['format'] ?? null;
+
+        if (!$format){
+            return $value;
+        }
+
+        if ($format[0] == 'currency') {
+            return ($format[2] ?? '').number_format($value, ...str_split($format[1]));
+        }
+
+        if ($format[0] == 'date') {
+            return Carbon::parse($value)->format($format[1]);
+        }
+
+        return $value;
     }
 
     // Check if link should be shown in cell
@@ -362,7 +383,7 @@ class Table extends Component
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
                                                 @endif
 
-                                                {{ data_get($row, $header['key']) }}
+                                                {{ $format(data_get($row, $header['key']), $header) }}
 
                                                 @if($hasLink($header))
                                                     </a>
