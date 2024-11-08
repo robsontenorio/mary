@@ -11,7 +11,6 @@ class Main extends Component
     public string $url;
 
     public function __construct(
-
         // Slots
         public mixed $sidebar = null,
         public mixed $content = null,
@@ -44,11 +43,10 @@ class Main extends Component
                         @if($sidebar)
                             <div
                                 x-data="{
-                                    collapsed: {{ session('mary-sidebar-collapsed', 'false') }},
+                                    collapsed: $persist('{{ session('mary-sidebar-collapsed', 'false') }}' === 'true'),
                                     collapseText: '{{ $collapseText }}',
                                     toggle() {
                                         this.collapsed = !this.collapsed;
-                                        fetch('{{ $url }}?collapsed=' + this.collapsed);
                                         this.$dispatch('sidebar-toggled', this.collapsed);
                                     }
                                 }"
