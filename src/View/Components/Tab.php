@@ -14,7 +14,8 @@ class Tab extends Component
     public function __construct(
         public ?string $name = null,
         public ?string $label = null,
-        public ?string $icon = null
+        public ?string $icon = null,
+        public bool $disabled = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -25,7 +26,11 @@ class Tab extends Component
 
         if ($this->icon) {
             return Blade::render("
-                <x-mary-icon name='" . $this->icon . "' class='me-2 whitespace-nowrap'>
+                <x-mary-icon name='" . $this->icon . "' @class([
+                'me-2',
+                'whitespace-nowrap',
+                'text-base-content/30 cursor-not-allowed' => '$this->disabled'
+                ])>
                     <x-slot:label>
                         {$fromLabel}
                     </x-slot:label>
@@ -34,7 +39,10 @@ class Tab extends Component
         }
 
         return Blade::render("
-            <div class='whitespace-nowrap'>
+            <div @class([
+                'whitespace-nowrap',
+                'text-base-content/30 cursor-not-allowed' => '$this->disabled'
+                ])>
                 {$fromLabel}
             </div>
         ");
@@ -48,7 +56,7 @@ class Tab extends Component
                         :class="{ 'tab-active': selected === '{{ $name }}' }"
                         data-name="{{ $name }}"
                         x-init="
-                                const newItem = { name: '{{ $name }}', label: {{ json_encode($tabLabel($label)) }} };
+                                const newItem = { name: '{{ $name }}', label: {{ json_encode($tabLabel($label)) }}, disabled: {{ $disabled ? 'true' : 'false' }} };
                                 const index = tabs.findIndex(item => item.name === '{{ $name }}');
                                 index !== -1 ? tabs[index] = newItem : tabs.push(newItem);
 

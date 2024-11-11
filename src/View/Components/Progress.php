@@ -11,8 +11,8 @@ class Progress extends Component
     public string $uuid;
 
     public function __construct(
-        public ?int $value = 0,
-        public ?int $max = 100,
+        public ?float $value = 0,
+        public ?float $max = 100,
         public ?bool $indeterminate = false,
 
     ) {

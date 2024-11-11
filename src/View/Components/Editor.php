@@ -18,6 +18,7 @@ class Editor extends Component
         public ?string $hintClass = 'label-text-alt text-gray-400 ps-1 mt-2',
         public ?string $disk = 'public',
         public ?string $folder = 'editor',
+        public ?bool $gplLicense = false,
         public ?array $config = [],
         // Validations
         public ?string $errorField = null,
@@ -89,9 +90,16 @@ class Editor extends Component
                         x-init="
                             tinymce.init({
                                 {{ $setup() }},
+
+                                @if($gplLicense)
+                                    license_key: 'gpl',
+                                @endif
+            
                                 target: $refs.tinymce,
                                 images_upload_url: uploadUrl,
                                 readonly: {{ json_encode($attributes->get('readonly') || $attributes->get('disabled')) }},
+                                skin: document.documentElement.getAttribute('data-theme') != 'dark' ? 'oxide' : 'oxide-dark',
+                                content_css: document.documentElement.getAttribute('data-theme')!= 'dark' ? 'default' : 'dark',
 
                                 @if($attributes->get('disabled'))
                                     content_style: 'body { opacity: 50% }',

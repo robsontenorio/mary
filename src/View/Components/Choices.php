@@ -32,6 +32,7 @@ class Choices extends Component
         public ?string $optionLabel = 'name',
         public ?string $optionSubLabel = '',
         public ?string $optionAvatar = 'avatar',
+        public ?bool $valuesAsString = false,
         public ?string $height = 'max-h-64',
         public Collection|array $options = new Collection(),
         public ?string $noResultText = 'No results found.',
@@ -81,6 +82,10 @@ class Choices extends Component
     public function getOptionValue($option): mixed
     {
         $value = data_get($option, $this->optionValue);
+
+        if ($this->valuesAsString) {
+            return "'$value'";
+        }
 
         return is_numeric($value) && ! str($value)->startsWith('0') ? $value : "'$value'";
     }
