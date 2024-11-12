@@ -115,6 +115,10 @@ class Input extends Component
                         id="{{ $uuid }}"
                         placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
 
+                        @if($attributes->has('autofocus') && $attributes->get('autofocus') == true)
+                            autofocus
+                        @endif
+
                         @if($money)
                             x-ref="myInput"
                             :value="amount"
