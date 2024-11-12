@@ -127,7 +127,7 @@ class Password extends Component
                             $attributes
                                 ->except('type')->merge()
                                 ->class([
-                                    'input input-primary w-full peer',
+                                    'input input-primary max-w-none peer',
                                     'ps-10' => $icon || $placeToggleLeft(),
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
