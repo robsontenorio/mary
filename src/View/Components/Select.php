@@ -90,7 +90,7 @@ class Select extends Component
                         id="{{ $uuid }}"
                         {{ $attributes->whereDoesntStartWith('class') }}
                         {{ $attributes->class([
-                                    'select select-bordered w-full font-normal',
+                                    'select select-border w-full font-normal',
                                     'ps-10' => ($icon),
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),

@@ -229,7 +229,7 @@ class ChoicesOffline extends Component
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
-                                    "select select-bordered select-primary w-full h-fit pe-16 pb-1 pt-1.5 inline-block cursor-pointer relative",
+                                    "select select-border select-primary w-full h-fit pe-16 pb-1 pt-1.5 inline-block cursor-pointer relative",
                                     'border border-dashed' => $isReadonly(),
                                     'select-error' => $errors->has($errorFieldName()),
                                     'rounded-s-none' => $prepend,

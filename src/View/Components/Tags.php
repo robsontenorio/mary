@@ -128,7 +128,7 @@ class Tags extends Component
 
                     {{
                         $attributes->except(['wire:model', 'wire:model.live'])->class([
-                            "input input-bordered input-primary w-full h-fit pe-16 pt-1.5 pb-1 min-h-[47px] inline-block cursor-pointer relative",
+                            "input input-border input-primary w-full h-fit pe-16 pt-1.5 pb-1 min-h-[47px] inline-block cursor-pointer relative",
                             'border border-dashed' => $isReadonly(),
                             'input-error' => $errors->has($errorFieldName()) || $errors->has($errorFieldName().'*'),
                             'ps-10' => $icon,

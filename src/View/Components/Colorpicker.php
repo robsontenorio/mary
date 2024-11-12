@@ -69,7 +69,7 @@ class Colorpicker extends Component
                 <div class="flex" x-data>
                     <div
                         @class([
-                                "input input-bordered h-auto rounded-s-lg flex items-center !bg-base-200",
+                                "input input-border h-auto rounded-s-lg flex items-center !bg-base-200",
                                 "$getInputClasses rounded-e-none border-e-0 px-4",
                                 "focus-within:outline focus-within:outline-2 focus-within:outline-offset-2",
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
@@ -107,7 +107,7 @@ class Colorpicker extends Component
                                 $attributes
                                     ->merge(['type' => 'text'])
                                     ->class([
-                                        'input input-bordered w-full peer',
+                                        'input input-border w-full peer',
                                         'ps-10' => ($icon),
                                         'h-14' => ($inline),
                                         'pt-3' => ($inline && $label),

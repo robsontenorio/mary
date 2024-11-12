@@ -79,7 +79,7 @@ class Pin extends Component
                                 <input
                                     id="{{ $uuid }}-pin-{{ $i }}"
                                     type="text"
-                                    class="input input-bordered !w-14 font-black text-2xl text-center"
+                                    class="input input-border !w-14 font-black text-2xl text-center"
                                     maxlength="1"
                                     x-model="inputs[{{ $i }}]"
                                     @keydown.space.prevent

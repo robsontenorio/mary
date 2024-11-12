@@ -221,7 +221,7 @@ class ImageLibrary extends Component
                         id="{{ $uuid }}"
                         type="file"
                         x-ref="files"
-                        class="file-input file-input-bordered file-input-primary hidden"
+                        class="file-input file-input-border file-input-primary hidden"
                         wire:model="{{ $modelName() }}.*"
                         accept="{{ $attributes->get('accept') ?? $mimes }}"
                         @change="progress = 1"

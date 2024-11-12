@@ -167,7 +167,7 @@ class File extends Component
 
                         {{
                             $attributes->whereDoesntStartWith('class')->class([
-                                "file-input file-input-bordered",
+                                "file-input file-input-border",
                                 "hidden" => $slot->isNotEmpty()
                             ])
                         }}

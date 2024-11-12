@@ -64,8 +64,8 @@ class Radio extends Component
                                 {{ $attributes->whereStartsWith('wire:model') }}
                                 {{
                                     $attributes->class([
-                                        "join-item capitalize btn input-bordered input bg-base-200",
-                                        "border !input-bordered" => data_get($option, 'disabled')
+                                        "join-item capitalize btn input-border input bg-base-200",
+                                        "border !input-border" => data_get($option, 'disabled')
                                     ])
                                 }}
                                 />
