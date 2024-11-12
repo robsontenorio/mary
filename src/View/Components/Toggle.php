@@ -11,6 +11,7 @@ class Toggle extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
         public ?string $hint = null,
         public ?bool $right = false,
@@ -22,7 +23,7 @@ class Toggle extends Component
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function modelName(): ?string
@@ -44,7 +45,7 @@ class Toggle extends Component
                         @if($right)
                             <span @class(["flex-1" => !$tight])>
                                 {{ $label}}
-                                
+
                                 @if($attributes->get('required'))
                                     <span class="text-error">*</span>
                                 @endif
@@ -55,7 +56,7 @@ class Toggle extends Component
 
                         @if(!$right)
                             {{ $label}}
-                            
+
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
                             @endif
