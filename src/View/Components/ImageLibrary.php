@@ -196,7 +196,7 @@ class ImageLibrary extends Component
 
                     <!-- PROGRESS BAR  -->
                     @if(! $hideProgress && $slot->isEmpty())
-                        <div class="h-1 -mt-2 mb-2">
+                        <div>
                             <progress
                                 x-cloak
                                 :class="!processing && 'hidden'"
@@ -212,7 +212,7 @@ class ImageLibrary extends Component
                     @endif
 
                     <!-- ADD FILES -->
-                    <div @click="$refs.files.click()" class="btn btn-block mt-2" :class="(processing || indeterminate) && 'opacity-50 pointer-events-none'">
+                    <div @click="$refs.files.click()" class="btn btn-block" :class="(processing || indeterminate) && 'opacity-50 pointer-events-none'">
                         <x-mary-icon name="o-plus-circle" label="{{ $addFilesText }}" />
                     </div>
 
