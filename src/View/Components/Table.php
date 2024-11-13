@@ -59,7 +59,7 @@ class Table extends Component
         unset($this->cellDecoration);
 
         // Serialize
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(json_encode($this->headers));
 
         // Put them back
         $this->rowDecoration = $rowDecoration;
@@ -187,12 +187,28 @@ class Table extends Component
                                 pageIds: {{ json_encode($getAllIds()) }},
                                 isSelectable: {{ json_encode($selectable) }},
                                 colspanSize: 0,
+                                headerUuid: '{{ $uuid }}',
+                                columns: {},
                                 init() {
                                     this.colspanSize = $refs.headers.childElementCount
-
+                                    this.loadSettings();
                                     if (this.isSelectable) {
                                         this.handleCheckAll()
                                     }
+                                },
+                                loadSettings() {
+                                     const savedSettings = localStorage.getItem(this.headerUuid);
+                                     if (savedSettings) {
+                                         this.columns = JSON.parse(savedSettings);
+                                     } else {
+                                         // Initialize with all columns visible if no settings found
+                                         @foreach($headers as $header)
+                                             this.columns['{{ $header['key'] }}'] = true;
+                                         @endforeach
+                                     }
+                                },
+                                isColumnVisible(key) {
+                                    return this.columns[key] !== false;
                                 },
                                 isExpanded(key) {
                                     return this.selection.includes(key)
@@ -227,8 +243,13 @@ class Table extends Component
                                                 ? this.$refs.mainCheckbox.checked = true
                                                 : this.$refs.mainCheckbox.checked = false
                                         })
+                                },
+                                updateColumnVisibility(key, visible) {
+                                    this.columns[key] = visible;
+                                    localStorage.setItem(this.headerUuid, JSON.stringify(this.columns));
                                 }
                              }"
+                             @column-visibility-changed.window="updateColumnVisibility($event.detail.key, $event.detail.visible)"
                 >
                 <div class="{{ $containerClass }}" x-classes="overflow-x-auto">
                 <table
@@ -273,20 +294,18 @@ class Table extends Component
                                         # So we use current `$header` key  to find that slot on context.
                                         $temp_key = str_replace('.', '___', $header['key'])
                                     @endphp
-
-                                    <th
-                                        class="@if($isSortable($header)) cursor-pointer hover:bg-base-200 @endif {{ $header['class'] ?? ' ' }}"
-
-                                        @if($sortBy && $isSortable($header))
-                                            @click="$wire.set('sortBy', {column: '{{ $getSort($header)['column'] }}', direction: '{{ $getSort($header)['direction'] }}' })"
-                                        @endif
-                                    >
-                                        {{ isset(${"header_".$temp_key}) ? ${"header_".$temp_key}($header) : $header['label'] }}
-
-                                        @if($isSortable($header) && $isSortedBy($header))
-                                            <x-mary-icon :name="$getSort($header)['direction'] == 'asc' ? 'o-arrow-small-down' : 'o-arrow-small-up'"  class="w-4 h-4 mb-1" />
-                                        @endif
-                                    </th>
+                                     <template x-if="isColumnVisible('{{ $header['key'] }}')">
+                                        <th class="@if($isSortable($header)) cursor-pointer hover:bg-base-200 @endif {{ $header['class'] ?? '' }}"
+                                            @if($sortBy && $isSortable($header))
+                                                @click="$wire.set('sortBy', {column: '{{ $getSort($header)['column'] }}', direction: '{{ $getSort($header)['direction'] }}' })"
+                                            @endif
+                                        >
+                                            {{ isset(${"header_".$temp_key}) ? ${"header_".$temp_key}($header) : $header['label'] }}
+                                             @if($isSortable($header) && $isSortedBy($header))
+                                                 <x-mary-icon :name="$getSort($header)['direction'] == 'asc' ? 'o-arrow-small-down' : 'o-arrow-small-up'"  class="w-4 h-4 mb-1" />
+                                             @endif
+                                        </th>
+                                    </template>                   
                                 @endforeach
 
                                 <!-- ACTIONS (Just a empty column) -->
@@ -357,6 +376,7 @@ class Table extends Component
                                                  @endif
                                             </td>
                                         @else
+                                            <template x-if="isColumnVisible('{{ $header['key'] }}')">
                                             <td @class([$cellClasses($row, $header), "p-0" => $hasLink($header)])>
                                                 @if($hasLink($header))
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
@@ -368,6 +388,7 @@ class Table extends Component
                                                     </a>
                                                 @endif
                                             </td>
+                                            </template>
                                         @endif
                                     @endforeach
 
