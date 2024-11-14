@@ -43,7 +43,7 @@ class Checkbox extends Component
                 <div>
                     <label for="{{ $uuid }}" class="flex gap-3 items-center cursor-pointer">
                         @if($right)
-                            <span @class(["flex-1" => !$tight])>
+                            <span @class(["font-medium", "flex-1" => !$tight])>
                                 {{ $label }}
 
                                 @if($attributes->get('required'))
@@ -51,22 +51,37 @@ class Checkbox extends Component
                                 @endif
                             </span>
                         @endif
+                        <div class="flex gap-2">
+                            <input
+                                id="{{ $uuid }}"
+                                type="checkbox"
+                                {{ $attributes->whereDoesntStartWith('id')->merge(['class' => 'checkbox checkbox-sm rounded-sm']) }}  />
 
-                        <input
-                            id="{{ $uuid }}"
-                            type="checkbox"
-                            {{ $attributes->whereDoesntStartWith('id')->merge(['class' => 'checkbox']) }}  />
+                            @if(!$right)
+                                <div>
+                                    <div class="-mt-0.5 font-medium">
+                                        {{ $label }}
 
-                        @if(!$right)
-                            {{ $label }}
+                                        @if($attributes->get('required'))
+                                            <span class="text-error">*</span>
+                                        @endif
+                                    </div>
 
-                            @if($attributes->get('required'))
-                                <span class="text-error">*</span>
+                                    {{-- HINT --}}
+                                    @if($hint)
+                                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
+                                    @endif
+                                </div>
                             @endif
-                        @endif
+                        </div>
                     </label>
 
-                    <!-- ERROR -->
+                    {{-- HINT --}}
+                    @if($hint && $right)
+                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
+                    @endif
+
+                    {{-- ERROR --}}
                     @if(!$omitError && $errors->has($errorFieldName()))
                         @foreach($errors->get($errorFieldName()) as $message)
                             @foreach(Arr::wrap($message) as $line)
@@ -75,11 +90,6 @@ class Checkbox extends Component
                             @endforeach
                             @break($firstErrorOnly)
                         @endforeach
-                    @endif
-
-                    <!-- HINT -->
-                    @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
                     @endif
                 </div>
         HTML;

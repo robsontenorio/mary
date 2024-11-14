@@ -7,20 +7,17 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
-class Radio extends Component
+class Group extends Component
 {
     public string $uuid;
 
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-base-content/50',
+        public ?string $hintClass = 'label-text-alt text-base-content/50 ps-1 mt-2',
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
-        public ?string $optionHint = 'hint',
         public Collection|array $options = new Collection(),
-        public ?bool $inline = false,
-
         // Validations
         public ?string $errorField = null,
         public ?string $errorClass = 'text-error label-text-alt p-1',
@@ -56,35 +53,25 @@ class Radio extends Component
                         </div>
                     @endif
 
-                    <div @class(["gap-4 grid", "!flex" => $inline])>
+                    <div class="join">
                         @foreach ($options as $option)
-                            <label>
-                                <div class="flex gap-2">
-                                    <input
-                                        type="radio"
-                                        name="{{ $modelName() }}"
-                                        value="{{ data_get($option, $optionValue) }}"
-                                        @if(data_get($option, 'disabled')) disabled @endif
-                                        {{ $attributes->whereStartsWith('wire:model') }}
-                                        {{
-                                            $attributes->class([
-                                                "radio radio-sm",
-                                            ])
-                                        }}
-                                    />
-                                    <div>
-                                        <div class="-mt-0.5 cursor-pointer font-medium">
-                                            {{ data_get($option, $optionLabel) }}
-                                        </div>
-                                         <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50">
-                                            {{ data_get($option, $optionHint) }}
-                                         </div>
-                                    </div>
-                                </div>
-                            </label>
+                            <input
+                                type="radio"
+                                name="{{ $modelName() }}"
+                                value="{{ data_get($option, $optionValue) }}"
+                                aria-label="{{ data_get($option, $optionLabel) }}"
+                                @if(data_get($option, 'disabled')) disabled @endif
+                                {{ $attributes->whereStartsWith('wire:model') }}
+                                {{
+                                    $attributes->class([
+                                        "join-item capitalize btn input-border input bg-base-200 [&:checked]:!bg-neutral [&:checked]:!border-inherit",
+                                        "border border-error" => data_get($option, 'disabled')
+                                    ])
+                                }}
+                            />
                         @endforeach
                     </div>
-                    {{-- ERROR --}}
+                    <!-- ERROR -->
                     @if(!$omitError && $errors->has($errorFieldName()))
                         @foreach($errors->get($errorFieldName()) as $message)
                             @foreach(Arr::wrap($message) as $line)
@@ -93,6 +80,10 @@ class Radio extends Component
                             @endforeach
                             @break($firstErrorOnly)
                         @endforeach
+                    @endif
+
+                    @if($hint)
+                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 ps-1 mt-2">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;

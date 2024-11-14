@@ -30,6 +30,7 @@ use Mary\View\Components\Editor;
 use Mary\View\Components\Errors;
 use Mary\View\Components\File;
 use Mary\View\Components\Form;
+use Mary\View\Components\Group;
 use Mary\View\Components\Header;
 use Mary\View\Components\Hr;
 use Mary\View\Components\Icon;
@@ -163,6 +164,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'progress', Progress::class);
         Blade::component($prefix . 'progress-radial', ProgressRadial::class);
         Blade::component($prefix . 'radio', Radio::class);
+        Blade::component($prefix . 'group', Group::class);
         Blade::component($prefix . 'range', Range::class);
         Blade::component($prefix . 'rating', Rating::class);
         Blade::component($prefix . 'select', Select::class);
