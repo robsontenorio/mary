@@ -244,7 +244,7 @@ class Choices extends Component
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
-                                    "select select-border select-primary w-full h-fit pe-16 pb-1 pt-1.5 inline-block cursor-pointer relative flex-1",
+                                    "select select-border max-w-none h-fit pe-16 pb-1 pt-1.5 inline-block cursor-pointer relative flex-1",
                                     'border border-dashed' => $isReadonly(),
                                     'select-error' => $errors->has($errorFieldName()),
                                     'rounded-s-none' => $prepend,
@@ -295,7 +295,7 @@ class Choices extends Component
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || isDisabled || ! isSearchable"
                                 :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-1'"
-                                class="outline-none mt-0.5 bg-transparent w-20"
+                                class="border-none outline-none mt-0.5 bg-transparent w-20"
 
                                 @if($searchable)
                                     @keydown.debounce.{{ $debounce }}="search($el.value, $event)"
@@ -333,7 +333,7 @@ class Choices extends Component
                                @if($allowAll)
                                    <div
                                         wire:key="allow-all-{{ rand() }}"
-                                        class="font-bold   border border-s-4 border-b-base-200 hover:bg-base-200"
+                                        class="font-bold   border border-s-4 border-s-base-300 border-b-base-200 hover:bg-base-200"
                                    >
                                         <div x-show="!isAllSelected" @click="selectAll()" class="p-3 underline decoration-wavy decoration-info">{{ $allowAllText }}</div>
                                         <div x-show="isAllSelected" @click="reset()" class="p-3 underline decoration-wavy decoration-error">{{ $removeAllText }}</div>
@@ -355,7 +355,7 @@ class Choices extends Component
                                         @click="toggle({{ $getOptionValue($option) }}, true)"
                                         @keydown.enter="toggle({{ $getOptionValue($option) }}, true)"
                                         :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-primary'"
-                                        class="border-s-4 focus:bg-base-200 focus:outline-none"
+                                        class="border-s-4 border-base-300 focus:bg-base-200 focus:outline-none"
                                         tabindex="0"
                                     >
                                         <!-- ITEM SLOT -->

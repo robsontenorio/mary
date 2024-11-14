@@ -69,7 +69,7 @@ class Colorpicker extends Component
                 <div class="flex" x-data>
                     <div
                         @class([
-                                "input input-border w-fit h-auto rounded-s-lg flex items-center !bg-base-200",
+                                "input input-border w-12 h-auto rounded-s-lg flex items-center bg-base-200",
                                 "$getInputClasses rounded-e-none border-e-0 px-4",
                                 "focus-within:outline focus-within:outline-2 focus-within:outline-offset-2",
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
@@ -136,7 +136,7 @@ class Colorpicker extends Component
 
                         <!-- INLINE LABEL -->
                         @if($label && $inline)
-                            <label for="{{ $uuid }}" class="absolute text-base-content/50 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) start-9 @else start-3 @endif">
+                            <label for="{{ $uuid }}" class="absolute text-base-content/50 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded px-2 peer-focus:px-2 peer-focus:text-base-content peer-focus:text-base-content peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) start-9 @else start-3 @endif">
                                 {{ $label }}
                             </label>
                         @endif

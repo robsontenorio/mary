@@ -46,11 +46,6 @@ class Select extends Component
         return $this->errorField ?? $this->modelName();
     }
 
-    public function getInputClasses(): ?string
-    {
-        return str($this->attributes->get('class'))->matchAll('/input-\w+/')->prepend("input")->join(" ");
-    }
-
     public function render(): View|Closure|string
     {
         return <<<'HTML'

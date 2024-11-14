@@ -82,7 +82,7 @@ class Password extends Component
                     $uuid = $uuid . $modelName()
                 @endphp
 
-                <!-- STANDARD LABEL -->
+                {{-- STANDARD LABEL --}}
                 @if($label && !$inline)
                     <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
                         <span>
@@ -95,17 +95,16 @@ class Password extends Component
                     </label>
                 @endif
 
-                <!-- PREFIX/SUFFIX/PREPEND/APPEND CONTAINER -->
+                {{-- PREFIX/SUFFIX/PREPEND/APPEND CONTAINER --}}
                 @if($prefix || $suffix || $prepend || $append)
                     <div class="flex">
                 @endif
 
-                <!-- PREFIX / PREPEND -->
+                {{-- PREFIX / PREPEND --}}
                 @if($prefix || $prepend)
                     <div
                         @class([
-                                "rounded-s-lg flex items-center bg-base-200",
-                                "border border-primary border-e-0 px-4" => $prefix,
+                                "$getInputClasses input input-border w-fit h-auto rounded-s-lg flex items-center !bg-base-200 rounded-e-none border-e-0 px-4" => $prefix,
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                 "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
@@ -117,7 +116,7 @@ class Password extends Component
 
                 <div class="flex-1 relative" x-data="{ hidden: true }">
 
-                    <!-- INPUT -->
+                    {{-- INPUT --}}
                     <input
                         id="{{ $uuid }}"
                         placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }}"
@@ -127,19 +126,20 @@ class Password extends Component
                             $attributes
                                 ->except('type')->merge()
                                 ->class([
-                                    'input input-primary max-w-none peer',
+                                    'input input-border max-w-none peer',
                                     'ps-10' => $icon || $placeToggleLeft(),
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
                                     'rounded-s-none' => $prefix || $prepend,
                                     'rounded-e-none' => $suffix || $append,
                                     'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
+                                    '!border-base-300' => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                     'input-error' => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                             ])
                         }}
                     />
 
-                    <!-- ICON / TOGGLE INPUT TYPE -->
+                    {{-- ICON / TOGGLE INPUT TYPE --}}
                     @if($icon)
                         <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-base-content/50 pointer-events-none" />
                     @elseif($placeToggleLeft())
@@ -149,12 +149,12 @@ class Password extends Component
                         </x-mary-button>
                     @endif
 
-                    <!-- CLEAR ICON -->
+                    {{-- CLEAR ICON --}}
                     @if($clearable)
                         <x-mary-icon @click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})" name="o-x-mark" class="absolute top-1/2 end-3 -translate-y-1/2 cursor-pointer text-base-content/50 hover:text-base-content/80" />
                     @endif
 
-                    <!-- RIGHT ICON / TOGGLE INPUT TYPE -->
+                    {{-- RIGHT ICON / TOGGLE INPUT TYPE --}}
                     @if($iconRight)
                         <x-mary-icon :name="$iconRight" @class(["absolute top-1/2 end-3 -translate-y-1/2 text-base-content/50 pointer-events-none", "!end-10" => $clearable]) />
                     @elseif($placeToggleRight())
@@ -164,7 +164,7 @@ class Password extends Component
                         </x-mary-button>
                     @endif
 
-                    <!-- INLINE LABEL -->
+                    {{-- INLINE LABEL --}}
                     @if($label && $inline)
                         <label for="{{ $uuid }}" class="absolute text-base-content/50 duration-300 transform -translate-y-1 scale-75 top-2 origin-left rtl:origin-right rounded px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && ($icon || $placeToggleLeft())) start-9 @else start-3 @endif">
                             {{ $label }}
@@ -173,12 +173,11 @@ class Password extends Component
 
                 </div>
 
-                <!-- SUFFIX/APPEND -->
+                {{-- SUFFIX/APPEND --}}
                 @if($suffix || $append)
                      <div
                         @class([
-                                "rounded-e-lg flex items-center bg-base-200",
-                                "border border-primary border-s-0 px-4" => $suffix,
+                                "$getInputClasses input input-border w-fit h-auto rounded-e-lg flex items-center !bg-base-200 border-s-0 rounded-s-none px-4" => $suffix,
                                 "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
                                 "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
                                 "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
@@ -188,12 +187,12 @@ class Password extends Component
                     </div>
                 @endif
 
-                <!-- END: PREFIX/SUFFIX/APPEND/PREPEND CONTAINER -->
+                {{-- END: PREFIX/SUFFIX/APPEND/PREPEND CONTAINER --}}
                 @if($prefix || $suffix || $prepend || $append)
                     </div>
                 @endif
 
-                <!-- ERROR -->
+                {{-- ERROR --}}
                 @if(!$omitError && $errors->has($errorFieldName()))
                     @foreach($errors->get($errorFieldName()) as $message)
                         @foreach(Arr::wrap($message) as $line)
@@ -204,7 +203,7 @@ class Password extends Component
                     @endforeach
                 @endif
 
-                <!-- HINT -->
+                {{-- HINT --}}
                 @if($hint)
                     <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
                 @endif

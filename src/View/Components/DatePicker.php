@@ -104,7 +104,7 @@ class DatePicker extends Component
                                     $attributes
                                         ->merge(['type' => 'date'])
                                         ->class([
-                                            "input input-primary w-full peer appearance-none",
+                                            "input input-border max-w-none peer appearance-none",
                                             'ps-10' => ($icon),
                                             'h-14' => ($inline),
                                             'pt-3' => ($inline && $label),
@@ -127,7 +127,7 @@ class DatePicker extends Component
 
                     <!-- INLINE LABEL -->
                     @if($label && $inline)
-                        <div class="absolute text-base-content/50 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) start-9 @else start-3 @endif">
+                        <div class="absolute text-base-content/50 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded px-2 @if($inline && $icon) start-9 @else start-3 @endif">
                             {{ $label }}
                         </div>
                     @endif

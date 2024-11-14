@@ -229,7 +229,7 @@ class ChoicesOffline extends Component
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
-                                    "select select-border select-primary w-full h-fit pe-16 pb-1 pt-1.5 inline-block cursor-pointer relative",
+                                    "select select-border  max-w-none h-fit pe-16 pb-1 pt-1.5 inline-block cursor-pointer relative",
                                     'border border-dashed' => $isReadonly(),
                                     'select-error' => $errors->has($errorFieldName()),
                                     'rounded-s-none' => $prepend,
@@ -283,7 +283,7 @@ class ChoicesOffline extends Component
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || isDisabled || ! isSearchable"
                                 :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-1'"
-                                class="outline-none mt-0.5 bg-transparent w-20"
+                                class="border-none outline-none mt-0.5 bg-transparent w-20"
                              />
 
                             <!-- PLACEHOLDER -->
@@ -340,7 +340,7 @@ class ChoicesOffline extends Component
                                             @keydown.enter="toggle({{ $getOptionValue($option) }}, true)"
                                             :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-primary'"
                                             search-value="{{ data_get($option, $optionLabel) }}"
-                                            class="border-s-4 focus:bg-base-200 focus:outline-none"
+                                            class="border-s-4 border-base-300 focus:bg-base-200 focus:outline-none"
                                             tabindex="0"
                                         >
                                             <!-- ITEM SLOT -->

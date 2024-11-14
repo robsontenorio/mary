@@ -61,7 +61,7 @@ class DateTime extends Component
                         {{ $attributes
                                 ->merge(['type' => 'date'])
                                 ->class([
-                                    "input input-primary w-full peer appearance-none",
+                                    "input input-border max-w-none peer appearance-none",
                                     'ps-10' => ($icon),
                                     'h-14' => ($inline),
                                     'pt-3' => ($inline && $label),
