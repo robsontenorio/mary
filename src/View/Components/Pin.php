@@ -26,7 +26,7 @@ class Pin extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div {{ $attributes->except('wire:model') }}>
+                <div>
                     <div
                         x-data="{
                                 value: @entangle($attributes->wire('model')),
@@ -79,7 +79,6 @@ class Pin extends Component
                                 <input
                                     id="{{ $uuid }}-pin-{{ $i }}"
                                     type="text"
-                                    class="input input-border !w-14 font-black text-2xl text-center"
                                     maxlength="1"
                                     x-model="inputs[{{ $i }}]"
                                     @keydown.space.prevent
@@ -88,7 +87,10 @@ class Pin extends Component
                                     @if($numeric)
                                         inputmode="numeric"
                                         x-mask="9"
-                                    @endif />
+                                    @endif
+
+                                    {{ $attributes->whereDoesntStartWith('wire')->class(['input input-border !w-14 font-black text-2xl text-center']) }}
+                                />
                             @endforeach
                         </div>
                     </div>

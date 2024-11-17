@@ -83,7 +83,7 @@ class Signature extends Component
                                 $attributes
                                     ->except("wire:model")
                                     ->class([
-                                        "border border-primary rounded-lg relative bg-white select-none touch-none block",
+                                        "border border-base-300 rounded-lg relative bg-white select-none touch-none block",
                                         "!border-error" => $errors->has($modelName())
                                     ])
                             }}
