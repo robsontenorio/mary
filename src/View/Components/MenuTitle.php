@@ -13,6 +13,7 @@ class MenuTitle extends Component
     public function __construct(
         public ?string $title = null,
         public ?string $icon = null,
+        public ?string $iconClasses = null,
     ) {
         $this->uuid = 'mary'.md5(serialize($this));
     }
@@ -24,7 +25,7 @@ class MenuTitle extends Component
                     <div class="flex items-center gap-2">
 
                         @if($icon)
-                            <x-mary-icon :name="$icon"  />
+                            <x-mary-icon :name="$icon" class="{{$iconClasses}}"/>
                         @endif
 
                         {{ $title }}
