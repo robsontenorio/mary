@@ -13,6 +13,8 @@ class Pin extends Component
     public function __construct(
         public int $size,
         public ?bool $numeric = false,
+        public ?bool $hide = false,
+        public ?string $hideType = "disc",
 
     ) {
         $this->uuid = "mary" . md5(serialize($this));
@@ -77,6 +79,12 @@ class Pin extends Component
                         <div class="flex gap-3" id="pin{{ $uuid }}">
                             @foreach(range(0, $size - 1) as $i)
                                 <input
+                                    @style([
+                                        $hide ? "text-security: $hideType;
+                                                -webkit-text-security: $hideType;
+                                                -moz-text-security $hideType;
+                                                " : "",
+                                    ])
                                     id="{{ $uuid }}-pin-{{ $i }}"
                                     type="text"
                                     class="input input-primary !w-14 font-black text-2xl text-center"
