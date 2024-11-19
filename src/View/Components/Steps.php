@@ -34,7 +34,7 @@ class Steps extends Component
                         }"
                     >
                         <!-- STEP LABELS -->
-                        <ul class="steps">
+                        <ul class="steps" :class="{'steps-vertical': {{ $vertical }}}">
                             <template x-for="(step, index) in steps" :key="index">
                                 <li x-html="step.text" :data-content="step.dataContent || (index + 1)" class="step" :class="(index + 1 <= current) && '{{ $stepsColor }} ' + step.classes"></li>
                             </template>
