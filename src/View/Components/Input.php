@@ -12,6 +12,7 @@ class Input extends Component
 
     public function __construct(
         public ?string $label = null,
+        public ?string $labelClass = null,
         public ?string $icon = null,
         public ?string $iconRight = null,
         public ?string $hint = null,
@@ -66,7 +67,7 @@ class Input extends Component
 
                 {{-- STANDARD LABEL --}}
                 @if($label && !$inline)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
+                    <label for="{{ $uuid }}" @class(['pt-0 label label-text font-semibold', $labelClass])>
                         <span>
                             {{ $label }}
 
@@ -156,8 +157,13 @@ class Input extends Component
 
                     {{-- INLINE LABEL --}}
                     @if($label && $inline)
-                        <label for="{{ $uuid }}" class="absolute text-gray-400 duration-300 transform -translate-y-1 scale-75 top-2 origin-left rtl:origin-right rounded px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) start-9 @else start-3 @endif">
-                            {{ $label }}
+                        <label for="{{ $uuid }}"
+                            @class([
+                                'absolute text-gray-400 duration-300 transform -translate-y-1 scale-75 top-2 origin-left rtl:origin-right rounded px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1',
+                                ($inline && $icon) ? 'start-9' : 'start-3',
+                                $labelClass
+                            ])>
+                                {{ $label }}
                         </label>
                     @endif
 
