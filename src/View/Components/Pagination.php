@@ -46,7 +46,7 @@ class Pagination extends Component
                     </div>
                     @endif
                     <div class="w-full">
-                    @if($rows instanceof LengthAwarePaginator)
+                    @if($rows instanceof Illuminate\Contracts\Pagination\LengthAwarePaginator)
                         {{ $rows->onEachSide(1)->links(data: ['scrollTo' => false]) }}
                     @else
                         {{ $rows->links(data: ['scrollTo' => false]) }}
