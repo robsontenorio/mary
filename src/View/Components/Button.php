@@ -53,7 +53,7 @@ class Button extends Component
 
                     wire:key="{{ $uuid }}"
                     {{ $attributes->whereDoesntStartWith('class')->merge(['type' => 'button']) }}
-                    {{ $attributes->class(['btn normal-case', "!inline-flex lg:tooltip $tooltipPosition" => $tooltip]) }}
+                    {{ $attributes->class(['btn', "!inline-flex lg:tooltip $tooltipPosition" => $tooltip]) }}
 
                     @if($link && $external)
                         target="_blank"
@@ -91,7 +91,7 @@ class Button extends Component
                             {{ $label }}
                         </span>
                         @if(strlen($badge ?? '') > 0)
-                            <span class="badge badge-primary {{ $badgeClasses }}">{{ $badge }}</span>
+                            <span class="badge {{ $badgeClasses }}">{{ $badge }}</span>
                         @endif
                     @else
                         {{ $slot }}
