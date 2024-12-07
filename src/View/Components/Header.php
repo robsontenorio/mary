@@ -10,6 +10,7 @@ use Illuminate\View\Component;
 class Header extends Component
 {
     public string $anchor = '';
+    public string $headingTag = 'h2';
 
     public function __construct(
         public ?string $title = null,
@@ -18,12 +19,21 @@ class Header extends Component
         public ?string $progressIndicator = null,
         public ?bool $withAnchor = false,
         public ?string $size = 'text-4xl',
+        public ?int $headingLevel = 2,
 
         // Slots
         public mixed $middle = null,
         public mixed $actions = null,
     ) {
         $this->anchor = Str::slug($title);
+        $this->setHeadingTag();
+    }
+
+    protected function setHeadingTag(): void
+    {
+        if ($this->headingLevel >= 1 && $this->headingLevel <= 5) {
+            $this->headingTag = "h{$this->headingLevel}";
+        }
     }
 
     public function progressTarget(): ?string
@@ -37,53 +47,53 @@ class Header extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
-                <div id="{{ $anchor }}" {{ $attributes->class(["mb-10", "mary-header-anchor" => $withAnchor]) }}>
+        return <<<HTML
+                <div id="{{ \$anchor }}" {{ \$attributes->class(["mb-10", "mary-header-anchor" => \$withAnchor]) }}>
                     <div class="flex flex-wrap gap-5 justify-between items-center">
                         <div>
-                            <div @class(["$size font-extrabold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
-                                @if($withAnchor)
-                                    <a href="#{{ $anchor }}">
+                            <{!! \$headingTag !!} @class(["\$size font-extrabold", is_string(\$title) ? '' : \$title?->attributes->get('class') ]) >
+                                @if(\$withAnchor)
+                                    <a href="#{{ \$anchor }}">
                                 @endif
 
-                                {{ $title }}
+                                {{ \$title }}
 
-                                @if($withAnchor)
+                                @if(\$withAnchor)
                                     </a>
                                 @endif
-                            </div>
+                            </{!! \$headingTag !!}>
 
-                            @if($subtitle)
-                                <div @class(["text-gray-500 text-sm mt-1", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
-                                    {{ $subtitle }}
+                            @if(\$subtitle)
+                                <div @class(["text-gray-500 text-sm mt-1", is_string(\$subtitle) ? '' : \$subtitle?->attributes->get('class') ]) >
+                                    {{ \$subtitle }}
                                 </div>
                             @endif
                         </div>
 
-                        @if($middle)
-                            <div @class(["flex items-center justify-center gap-3 grow order-last sm:order-none", is_string($middle) ? '' : $middle?->attributes->get('class')])>
+                        @if(\$middle)
+                            <div @class(["flex items-center justify-center gap-3 grow order-last sm:order-none", is_string(\$middle) ? '' : \$middle?->attributes->get('class')])>
                                 <div class="w-full lg:w-auto">
-                                    {{ $middle }}
+                                    {{ \$middle }}
                                 </div>
                             </div>
                         @endif
                         
-                        <div @class(["flex items-center gap-3", is_string($actions) ? '' : $actions?->attributes->get('class') ]) >
-                            {{ $actions}}
+                        <div @class(["flex items-center gap-3", is_string(\$actions) ? '' : \$actions?->attributes->get('class') ]) >
+                            {{ \$actions}}
                         </div>
                     </div>
 
-                    @if($separator)
+                    @if(\$separator)
                         <hr class="my-5" />
 
-                        @if($progressIndicator)
+                        @if(\$progressIndicator)
                             <div class="h-0.5 -mt-9 mb-9">
                                 <progress
                                     class="progress progress-primary w-full h-0.5 dark:h-1"
                                     wire:loading
 
-                                    @if($progressTarget())
-                                        wire:target="{{ $progressTarget() }}"
+                                    @if(\$progressTarget())
+                                        wire:target="{{ \$progressTarget() }}"
                                      @endif></progress>
                             </div>
                         @endif
