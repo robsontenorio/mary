@@ -229,7 +229,7 @@ class ChoicesOffline extends Component
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
-                                    "select select-border  max-w-none h-fit pe-16 pb-1 pt-1.5 inline-block cursor-pointer relative",
+                                    "select select-border  max-w-none h-fit ps-2.5 pe-16 py-1 inline-block cursor-pointer relative min-h-[40px] whitespace-normal",
                                     'border border-dashed' => $isReadonly(),
                                     'select-error' => $errors->has($errorFieldName()),
                                     'rounded-s-none' => $prepend,
@@ -251,12 +251,12 @@ class ChoicesOffline extends Component
                             <!-- SELECTED OPTIONS -->
                             <span wire:key="selected-options-{{ $uuid }}">
                                 @if($compact)
-                                    <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 mt-0.5 mb-1.5 last:me-0 rounded inline-block cursor-pointer">
+                                    <div class="bg-primary/5 text-primary text-sm hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 py-1 mt-0.5 last:me-0 rounded inline-block cursor-pointer">
                                         <span class="font-black" x-text="selectedOptions.length"></span> {{ $compactText }}
                                     </div>
                                 @else
                                     <template x-for="(option, index) in selectedOptions" :key="index">
-                                        <div class="mary-choices-element bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 mt-0.5 mb-1.5 last:me-0 inline-block rounded cursor-pointer">
+                                        <div class="mary-choices-element bg-primary/5 text-primary text-sm hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 py-1 mt-0.5 last:me-0 inline-block rounded cursor-pointer">
                                             <!-- SELECTION SLOT -->
                                              @if($selection)
                                                 <span x-html="document.getElementById('selection-{{ $uuid . '-\' + option.'. $optionValue }}).innerHTML"></span>
@@ -264,13 +264,11 @@ class ChoicesOffline extends Component
                                                 <span x-text="option.{{ $optionLabel }}"></span>
                                              @endif
 
-                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-error" />
+                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-error h-4 w-4" />
                                         </div>
                                     </template>
                                 @endif
                             </span>
-
-                            &nbsp;
 
                             <!-- INPUT SEARCH -->
                             <input
@@ -282,13 +280,13 @@ class ChoicesOffline extends Component
                                 @keydown.arrow-down.prevent="focus()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || isDisabled || ! isSearchable"
-                                :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-1'"
-                                class="border-none outline-none mt-0.5 bg-transparent w-20"
+                                :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-0.5 absolute top-0'"
+                                class="max-w-20 border-none outline-none ms-2"
                              />
 
                             <!-- PLACEHOLDER -->
                             @if (!$compact && $attributes->has('placeholder'))
-                                <span @class(["absolute inset-0 mt-2.5 me-8 truncate text-base text-base-content/50 pointer-events-none", $icon ? "ms-10" : "ms-4"]) x-show="!focused && isSelectionEmpty">
+                                <span @class(["absolute inset-0 mt-1.5 me-8 truncate text-base-content/50 pointer-events-none", $icon ? "ms-10" : "ms-4"]) x-show="!focused && isSelectionEmpty">
                                     {{ $attributes->get('placeholder') }}
                                 </span>
                             @endif

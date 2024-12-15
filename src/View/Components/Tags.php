@@ -128,7 +128,7 @@ class Tags extends Component
 
                     {{
                         $attributes->except(['wire:model', 'wire:model.live'])->class([
-                            "input input-border input-primary w-full h-fit pe-16 pt-1.5 pb-1 min-h-[47px] inline-block cursor-pointer relative",
+                            "input input-border max-w-none h-fit ps-2.5 pe-16 py-1 inline-block cursor-pointer relative min-h-[40px]",
                             'border border-dashed' => $isReadonly(),
                             'input-error' => $errors->has($errorFieldName()) || $errors->has($errorFieldName().'*'),
                             'ps-10' => $icon,
@@ -148,24 +148,22 @@ class Tags extends Component
                     <!--  TAGS  -->
                     <span wire:key="tags-{{ $uuid }}">
                         <template :key="index" x-for="(tag, index) in tags">
-                            <div class="mary-tags-element bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 mt-0.5 mb-1.5 last:me-0 inline-block rounded cursor-pointer">
+                            <div class="mary-tags-element bg-primary/5 text-primary text-sm hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 py-1 mt-0.5 last:me-0 inline-block rounded cursor-pointer">
                                 <span x-text="tag"></span>
-                                <x-mary-icon @click="remove(index)" x-show="!isReadonly" name="o-x-mark" class="text-gray-500 hover:text-error" />
+                                <x-mary-icon @click="remove(index)" x-show="!isReadonly" name="o-x-mark" class="text-gray-500 hover:text-error w-4 h-4" />
                             </div>
                         </template>
                     </span>
 
-                    &nbsp;
-
                     <!-- INPUT -->
                     <input
                         id="{{ $uuid }}"
-                        class="outline-none mt-1 bg-transparent"
+                        class="max-w-20 border-none outline-none inline-block ms-2"
                         placeholder="{{ $attributes->whereStartsWith('placeholder')->first() }}"
                         type="text"
                         enterkeyhint="done"
                         x-ref="searchInput"
-                        :class="(isReadonly || !focused) && 'w-1'"
+                        :class="(isReadonly || !focused) && '!w-0.5'"
                         :required="isRequired"
                         :readonly="isReadonly"
                         x-model="tag"
