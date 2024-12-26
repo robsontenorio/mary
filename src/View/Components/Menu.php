@@ -13,6 +13,7 @@ class Menu extends Component
     public function __construct(
         public ?string $title = null,
         public ?string $icon = null,
+        public ?string $iconClass = null,
         public ?bool $separator = false,
         public ?bool $activateByRoute = false,
         public ?string $activeBgColor = 'bg-base-300',
@@ -29,7 +30,7 @@ class Menu extends Component
                             <div class="flex items-center gap-2">
 
                                 @if($icon)
-                                    <x-mary-icon :name="$icon" class="w-4 h-4 inline-flex"  />
+                                    <x-mary-icon :name="$icon" class="w-4 h-4 inline-flex {{ $iconClass }}"  />
                                 @endif
 
                                 {{ $title }}
