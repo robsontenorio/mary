@@ -308,7 +308,7 @@ class ChoicesOffline extends Component
                         @endif
 
                         <!-- OPTIONS LIST -->
-                        <div x-show="focused" x-cloak class="relative" wire:key="options-list-main-{{ $uuid }}" >
+                        <div x-cloak x-show="focused" x-cloak class="relative" wire:key="options-list-main-{{ $uuid }}" >
                             <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto" x-anchor.bottom-start="$refs.container">
 
                                <!-- SELECT ALL -->
