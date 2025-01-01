@@ -43,9 +43,9 @@ class Modal extends Component
                         @if(!$persistent)
                             <form method="dialog">
                                 @if ($id)
-                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 font-bold text-xl" type="submit">✕</button>
+                                    <button class="btn btn-sm btn-circle btn-ghost absolute end-2 top-2 font-bold text-xl" type="submit">✕</button>
                                 @else
-                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 font-bold text-xl" @click="$wire.{{ $attributes->wire('model')->value() }} = false" type="button">✕</button>
+                                    <button class="btn btn-sm btn-circle btn-ghost absolute end-2 top-2 font-bold text-xl" @click="$wire.{{ $attributes->wire('model')->value() }} = false" type="button">✕</button>
                                 @endif
                             </form>
                         @endif
