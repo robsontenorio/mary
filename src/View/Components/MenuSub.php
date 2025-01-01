@@ -13,6 +13,7 @@ class MenuSub extends Component
     public function __construct(
         public ?string $title = null,
         public ?string $icon = null,
+        public ?string $iconClasses = null,
         public bool $open = false,
         public ?bool $enabled = true,
     ) {
@@ -51,7 +52,7 @@ class MenuSub extends Component
                     <details :open="show" @if($submenuActive) open @endif @click.stop>
                         <summary @click.prevent="toggle()" @class(["hover:text-inherit text-inherit", $activeBgColor => $submenuActive])>
                             @if($icon)
-                                <x-mary-icon :name="$icon" class="inline-flex"  />
+                                <x-mary-icon :name="$icon" class="inline-flex" class="{{$iconClasses}}"/>
                             @endif
                             <span class="mary-hideable">{{ $title }}</span>
                         </summary>
