@@ -13,6 +13,7 @@ class Radio extends Component
 
     public function __construct(
         public ?string $label = null,
+        public ?string $labelHtml = null,
         public ?string $hint = null,
         public ?string $hintClass = 'label-text-alt text-gray-400 ps-1 mt-2',
         public ?string $optionValue = 'id',
@@ -41,6 +42,11 @@ class Radio extends Component
     {
         return <<<'HTML'
                 <div>
+                    @if($labelHtml)
+                        <div class="pt-0 pb-2 label-text font-semibold">
+                            {!! \Illuminate\Support\Facades\Blade::render($labelHtml) !!}
+                        </div>
+                    @endif
                     @if($label)
                         <div class="pt-0 label label-text font-semibold">
                             <span>
