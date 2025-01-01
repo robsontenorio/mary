@@ -13,6 +13,7 @@ class Editor extends Component
     public string $uploadUrl;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $hintClass = 'label-text-alt text-gray-400 ps-1 mt-2',
@@ -94,7 +95,7 @@ class Editor extends Component
                                 @if($gplLicense)
                                     license_key: 'gpl',
                                 @endif
-            
+
                                 target: $refs.tinymce,
                                 images_upload_url: uploadUrl,
                                 readonly: {{ json_encode($attributes->get('readonly') || $attributes->get('disabled')) }},
@@ -144,7 +145,7 @@ class Editor extends Component
                         x-on:livewire:navigating.window="tinymce.activeEditor.destroy();"
                         wire:ignore
                     >
-                        <input id="{{ $uuid }}" x-ref="tinymce" type="textarea" {{ $attributes->whereDoesntStartWith('wire:model') }} />
+                        <input id="{{ $id ?? $uuid }}" x-ref="tinymce" type="textarea" {{ $attributes->whereDoesntStartWith('wire:model') }} />
                     </div>
 
                     <!-- ERROR -->
