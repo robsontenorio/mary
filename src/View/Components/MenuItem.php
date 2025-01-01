@@ -93,7 +93,7 @@ class MenuItem extends Component
                             wire:loading.attr="disabled"
                         @endif
                     >
-                        <!-- SPINNER -->
+                        {{-- SPINNER --}}
                         @if($spinner)
                             <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
                         @endif
@@ -110,7 +110,7 @@ class MenuItem extends Component
                                 {{ $title }}
 
                                 @if($badge)
-                                    <span class="badge badge-ghost badge-sm {{ $badgeClasses }}">{{ $badge }}</span>
+                                    <span class="badge badge-sm {{ $badgeClasses }}">{{ $badge }}</span>
                                 @endif
                             @else
                                 {{ $slot }}

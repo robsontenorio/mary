@@ -16,7 +16,7 @@ class ChoicesOffline extends Component
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
+        public ?string $hintClass = 'label-text-alt text-base-content/50 py-1 pb-0',
         public ?bool $searchable = false,
         public ?bool $single = false,
         public ?bool $compact = false,
@@ -36,7 +36,7 @@ class ChoicesOffline extends Component
         public ?string $noResultText = 'No results found.',
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?string $errorClass = 'text-error label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
         // slots
@@ -229,7 +229,7 @@ class ChoicesOffline extends Component
 
                             {{
                                 $attributes->except(['wire:model', 'wire:model.live'])->class([
-                                    "select select-bordered select-primary w-full h-fit pe-16 pb-1 pt-1.5 inline-block cursor-pointer relative",
+                                    "select select-border  max-w-none h-fit ps-2.5 pe-16 py-1 inline-block cursor-pointer relative min-h-[40px] whitespace-normal",
                                     'border border-dashed' => $isReadonly(),
                                     'select-error' => $errors->has($errorFieldName()),
                                     'rounded-s-none' => $prepend,
@@ -240,23 +240,23 @@ class ChoicesOffline extends Component
                         >
                             <!-- ICON  -->
                             @if($icon)
-                                <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-gray-400 pointer-events-none" />
+                                <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-base-content/50 pointer-events-none" />
                             @endif
 
                             <!-- CLEAR ICON  -->
                             @if(! $isReadonly() && ! $isDisabled())
-                                <x-mary-icon @click="reset()"  name="o-x-mark" x-show="!isSelectionEmpty" class="absolute top-1/2 end-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600" />
+                                <x-mary-icon @click="reset()"  name="o-x-mark" x-show="!isSelectionEmpty" class="absolute top-1/2 end-8 -translate-y-1/2 cursor-pointer text-base-content/50 hover:text-base-content/80" />
                             @endif
 
                             <!-- SELECTED OPTIONS -->
                             <span wire:key="selected-options-{{ $uuid }}">
                                 @if($compact)
-                                    <div class="bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 mt-0.5 mb-1.5 last:me-0 rounded inline-block cursor-pointer">
+                                    <div class="bg-primary/5 text-primary text-sm hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 py-1 mt-0.5 last:me-0 rounded inline-block cursor-pointer">
                                         <span class="font-black" x-text="selectedOptions.length"></span> {{ $compactText }}
                                     </div>
                                 @else
                                     <template x-for="(option, index) in selectedOptions" :key="index">
-                                        <div class="mary-choices-element bg-primary/5 text-primary hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 mt-0.5 mb-1.5 last:me-0 inline-block rounded cursor-pointer">
+                                        <div class="mary-choices-element bg-primary/5 text-primary text-sm hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 py-1 mt-0.5 last:me-0 inline-block rounded cursor-pointer">
                                             <!-- SELECTION SLOT -->
                                              @if($selection)
                                                 <span x-html="document.getElementById('selection-{{ $uuid . '-\' + option.'. $optionValue }}).innerHTML"></span>
@@ -264,13 +264,11 @@ class ChoicesOffline extends Component
                                                 <span x-text="option.{{ $optionLabel }}"></span>
                                              @endif
 
-                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-red-500" />
+                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-error h-4 w-4" />
                                         </div>
                                     </template>
                                 @endif
                             </span>
-
-                            &nbsp;
 
                             <!-- INPUT SEARCH -->
                             <input
@@ -282,13 +280,13 @@ class ChoicesOffline extends Component
                                 @keydown.arrow-down.prevent="focus()"
                                 :required="isRequired && isSelectionEmpty"
                                 :readonly="isReadonly || isDisabled || ! isSearchable"
-                                :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-1'"
-                                class="outline-none mt-0.5 bg-transparent w-20"
+                                :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-0.5 absolute top-0'"
+                                class="max-w-20 border-none outline-none ms-2"
                              />
 
                             <!-- PLACEHOLDER -->
                             @if (!$compact && $attributes->has('placeholder'))
-                                <span @class(["absolute inset-0 mt-2.5 me-8 truncate text-base text-gray-400 pointer-events-none", $icon ? "ms-10" : "ms-4"]) x-show="!focused && isSelectionEmpty">
+                                <span @class(["absolute inset-0 mt-1.5 me-8 truncate text-base-content/50 pointer-events-none", $icon ? "ms-10" : "ms-4"]) x-show="!focused && isSelectionEmpty">
                                     {{ $attributes->get('placeholder') }}
                                 </span>
                             @endif
@@ -340,7 +338,7 @@ class ChoicesOffline extends Component
                                             @keydown.enter="toggle({{ $getOptionValue($option) }}, true)"
                                             :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-primary'"
                                             search-value="{{ data_get($option, $optionLabel) }}"
-                                            class="border-s-4 focus:bg-base-200 focus:outline-none"
+                                            class="border-s-4 border-base-300 focus:bg-base-200 focus:outline-none"
                                             tabindex="0"
                                         >
                                             <!-- ITEM SLOT -->
@@ -366,7 +364,7 @@ class ChoicesOffline extends Component
                         @if(!$omitError && $errors->has($errorFieldName()))
                             @foreach($errors->get($errorFieldName()) as $message)
                                 @foreach(Arr::wrap($message) as $line)
-                                    <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                                    <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
                                     @break($firstErrorOnly)
                                 @endforeach
                                 @break($firstErrorOnly)
@@ -375,7 +373,7 @@ class ChoicesOffline extends Component
 
                         <!-- HINT -->
                         @if($hint)
-                            <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
+                            <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
                         @endif
                     </div>
                 </div>

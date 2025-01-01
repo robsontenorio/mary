@@ -43,7 +43,7 @@ class Dropdown extends Component
                     </summary>
                 @else
                     <!-- DEFAULT TRIGGER -->
-                    <summary x-ref="button" @click.prevent="open = !open" {{ $attributes->class(["btn normal-case"]) }}>
+                    <summary x-ref="button" @click.prevent="open = !open" {{ $attributes->class(["btn"]) }}>
                         {{ $label }}
                         <x-mary-icon :name="$icon" />
                     </summary>
