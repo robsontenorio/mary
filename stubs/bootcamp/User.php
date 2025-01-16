@@ -14,9 +14,9 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
-     * @var array<int, string>
+     * @var array<string>|bool
      */
     protected $guarded = ['id'];
 
