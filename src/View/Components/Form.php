@@ -32,7 +32,7 @@ class Form extends Component
                             <hr class="my-3" />
                         @endif
 
-                        <div class="flex justify-end gap-3">
+                        <div {{ $actions->attributes->class(["flex justify-end gap-3"]) }}>
                             {{ $actions}}
                         </div>
                     @endif
