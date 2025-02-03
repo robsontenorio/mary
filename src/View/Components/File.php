@@ -21,6 +21,7 @@ class File extends Component
         public ?string $cropCancelText = "Cancel",
         public ?string $cropSaveText = "Crop",
         public ?array $cropConfig = [],
+        public ?string $cropMimeType = "image/png",
         // Validations
         public ?string $errorField = null,
         public ?string $errorClass = 'text-red-500 label-text-alt p-1',
@@ -125,7 +126,7 @@ class File extends Component
                                     (error) => {  },
                                     (event) => { this.progress = event.detail.progress }
                                 )
-                            })
+                            }, '{{ $cropMimeType }}')
                         }
                      }"
 
