@@ -16,13 +16,13 @@ class Signature extends Component
         public ?string $hint = null,
         public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
         public ?array $config = [],
+        public ?string $clearBtnStyle = null,
 
         // Validations
         public ?string $errorClass = 'text-red-500 label-text-alt p-1',
         public ?string $errorField = null,
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
-
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -92,7 +92,7 @@ class Signature extends Component
 
                             <!-- CLEAR BUTTON -->
                             <div class="absolute end-2 top-1/2 -translate-y-1/2 ">
-                                <x-mary-button icon="o-backspace" :label="$clearText" @click="clear" class="btn-sm btn-ghost text-neutral" />
+                                <x-mary-button icon="o-backspace" :label="$clearText" @click="clear" class="{{$clearBtnStyle ?? 'btn-sm btn-ghost text-neutral'}}" />
                             </div>
                         </div>
                     </div>

@@ -69,7 +69,7 @@ class MaryInstallCommand extends Command
          */
         $this->info("\nInstalling daisyUI + Tailwind...\n");
 
-        Process::run("$packageManagerCommand tailwindcss daisyui@latest postcss autoprefixer", function (string $type, string $output) {
+        Process::run("$packageManagerCommand tailwindcss@^3 daisyui@^4 postcss autoprefixer", function (string $type, string $output) {
             echo $output;
         })->throw();
 
@@ -172,6 +172,7 @@ class MaryInstallCommand extends Command
             $this->warn('---------------------------------------------');
             $this->warn('🚨 Starter kit detected. Skipping demo components. 🚨');
             $this->warn('---------------------------------------------');
+
             return;
         }
 

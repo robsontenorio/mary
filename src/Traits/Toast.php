@@ -21,12 +21,12 @@ trait Toast
             'title' => $title,
             'description' => $description,
             'position' => $position,
-            'icon' => Blade::render("<x-mary-icon class='w-7 h-7' name='" . $icon . "' />"),
+            'icon' => Blade::render("<x-mary-icon class='w-7 h-7' name='".$icon."' />"),
             'css' => $css,
             'timeout' => $timeout,
         ];
 
-        $this->js('toast(' . json_encode(['toast' => $toast]) . ')');
+        $this->js('toast('.json_encode(['toast' => $toast]).')');
 
         session()->flash('mary.toast.title', $title);
         session()->flash('mary.toast.description', $description);

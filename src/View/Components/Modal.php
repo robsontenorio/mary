@@ -15,6 +15,7 @@ class Modal extends Component
         public ?string $boxClass = null,
         public ?bool $separator = false,
         public ?bool $persistent = false,
+        public ?bool $withoutTrapFocus = false,
 
         // Slots
         public ?string $actions = null
@@ -38,14 +39,18 @@ class Modal extends Component
                             @keydown.escape.window = "$wire.{{ $attributes->wire('model')->value() }} = false"
                         @endif
                     @endif
+
+                    @if(!$withoutTrapFocus)
+                        x-trap="open" x-bind:inert="!open"
+                    @endif
                 >
                     <div class="modal-box {{ $boxClass }}">
                         @if(!$persistent)
                             <form method="dialog">
                                 @if ($id)
-                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 font-bold text-xl" type="submit">✕</button>
+                                    <button class="btn btn-sm btn-circle border-0 shadow-none absolute end-2 top-2 font-bold text-xl z-[999] bg-base-100" type="submit">✕</button>
                                 @else
-                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 font-bold text-xl" @click="$wire.{{ $attributes->wire('model')->value() }} = false" type="button">✕</button>
+                                    <button class="btn btn-sm btn-circle border-0 shadow-none absolute end-2 top-2 font-bold text-xl z-[999] bg-base-100" @click="$wire.{{ $attributes->wire('model')->value() }} = false" type="button">✕</button>
                                 @endif
                             </form>
                         @endif
