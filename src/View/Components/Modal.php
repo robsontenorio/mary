@@ -15,6 +15,7 @@ class Modal extends Component
         public ?string $boxClass = null,
         public ?bool $separator = false,
         public ?bool $persistent = false,
+        public ?bool $withoutTrapFocus = false,
 
         // Slots
         public ?string $actions = null
@@ -37,6 +38,10 @@ class Modal extends Component
                         @if(!$persistent)
                             @keydown.escape.window = "$wire.{{ $attributes->wire('model')->value() }} = false"
                         @endif
+                    @endif
+
+                    @if(!$withoutTrapFocus)
+                        x-trap="open" x-bind:inert="!open"
                     @endif
                 >
                     <div class="modal-box {{ $boxClass }}">
