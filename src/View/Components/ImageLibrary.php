@@ -185,7 +185,7 @@ class ImageLibrary extends Component
 
                     <!-- CROP MODAL -->
                     <div @click.prevent="" x-ref="crop" wire:ignore>
-                        <x-mary-modal id="maryCropModal{{ $uuid }}" x-ref="maryCropModal" :title="$cropTitleText" separator class="backdrop-blur-sm" persistent @keydown.window.esc.prevent="">
+                        <x-mary-modal id="maryCropModal{{ $uuid }}" x-ref="maryCropModal" :title="$cropTitleText" separator class="backdrop-blur-sm" persistent @keydown.window.esc.prevent="" without-trap-focus>
                             <img src="#" crossOrigin="Anonymous" />
                             <x-slot:actions>
                                 <x-mary-button :label="$cropCancelText" @click="close()" />
