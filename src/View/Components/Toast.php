@@ -29,7 +29,7 @@ class Toast extends Component
                                     "
                 >
                     <div
-                        class="toast rounded-md fixed cursor-pointer z-50"
+                        class="toast rounded-md fixed cursor-pointer z-[999]"
                         :class="toast.position || '{{ $position }}'"
                         x-show="show"
                         x-classes="alert alert-success alert-warning alert-error alert-info top-10 end-10 toast toast-top toast-bottom toast-center toast-end toast-middle toast-start"
