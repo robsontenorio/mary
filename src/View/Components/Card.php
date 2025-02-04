@@ -12,7 +12,9 @@ class Card extends Component
 
     public function __construct(
         public ?string $title = null,
+        public ?string $titleSEO = null,
         public ?string $subtitle = null,
+        public ?string $subtitleSEO = null,
         public ?bool $separator = false,
         public ?bool $shadow = false,
         public ?string $progressIndicator = null,
@@ -56,12 +58,54 @@ class Card extends Component
                                 <div>
                                     @if($title)
                                         <div @class(["text-2xl font-bold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
-                                            {{ $title }}
+                                            @switch($titleSEO)
+                                                @case("h1")
+                                                    <h1>{{ $title }}</h1>
+                                                    @break
+                                                @case("h2")
+                                                    <h2>{{ $title }}</h2>
+                                                    @break
+                                                @case("h3")
+                                                    <h3>{{ $title }}</h3>
+                                                    @break
+                                                @case("h4")
+                                                    <h4>{{ $title }}</h4>
+                                                    @break
+                                                @case("h5")
+                                                    <h5>{{ $title }}</h5>
+                                                    @break
+                                                @case("h6")
+                                                    <h6>{{ $title }}</h6>
+                                                    @break                                            
+                                                @default
+                                                    {{ $title }}
+                                            @endswitch
                                         </div>
                                     @endif
                                     @if($subtitle)
                                     <div @class(["text-gray-500 text-sm mt-1", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
-                                            {{ $subtitle }}
+                                            @switch($subtitleSEO)
+                                                @case("h1")
+                                                    <h1>{{ $subtitle }}</h1>
+                                                    @break
+                                                @case("h2")
+                                                    <h2>{{ $subtitle }}</h2>
+                                                    @break
+                                                @case("h3")
+                                                    <h3>{{ $subtitle }}</h3>
+                                                    @break
+                                                @case("h4")
+                                                    <h4>{{ $subtitle }}</h4>
+                                                    @break
+                                                @case("h5")
+                                                    <h5>{{ $subtitle }}</h5>
+                                                    @break
+                                                @case("h6")
+                                                    <h6>{{ $subtitle }}</h6>
+                                                    @break                                            
+                                                @default
+                                                    {{ $subtitle }}
+                                            @endswitch
                                         </div>
                                     @endif
                                 </div>
