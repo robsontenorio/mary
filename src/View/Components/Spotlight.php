@@ -153,7 +153,7 @@ class Spotlight extends Component
 
                             <!-- NO RESULTS -->
                             <template x-if="searchedWithNoResults">
-                                <div class="text-gray-400 p-3 mary-spotlight-element">{{ $noResultsText }}</div>
+                                <div class="text-base-content/50 p-3 mary-spotlight-element">{{ $noResultsText }}</div>
                             </template>
 
                             <!-- RESULTS  -->
@@ -179,7 +179,7 @@ class Spotlight extends Component
 
                                                     <!-- DESCRIPTION -->
                                                     <template x-if="item.description">
-                                                        <div x-text="item.description" class="text-gray-400 text-sm truncate"></div>
+                                                        <div x-text="item.description" class="text-base-content/50 text-sm truncate"></div>
                                                     </template>
                                                 </div>
                                             </div>
