@@ -13,6 +13,7 @@ class Dropdown extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $icon = 'o-chevron-down',
+        public ?string $iconClasses = null,
         public ?bool $right = false,
         public ?bool $top = false,
         public ?bool $noXAnchor = false,
@@ -45,7 +46,7 @@ class Dropdown extends Component
                     <!-- DEFAULT TRIGGER -->
                     <summary x-ref="button" @click.prevent="open = !open" {{ $attributes->class(["btn normal-case"]) }}>
                         {{ $label }}
-                        <x-mary-icon :name="$icon" />
+                        <x-mary-icon :name="$icon" class="{{$iconClasses}}"/>
                     </summary>
                 @endif
 
