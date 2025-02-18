@@ -273,7 +273,7 @@ class Table extends Component
                         }}
                     >
                         <!-- HEADERS -->
-                        <thead @class(["text-black dark:text-gray-200", "hidden" => $noHeaders])>
+                        <thead @class(["hidden" => $noHeaders])>
                             <tr x-ref="headers">
                                 <!-- CHECKALL -->
                                 @if($selectable)
