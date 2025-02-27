@@ -34,7 +34,7 @@ class Avatar extends Component
     {
         return <<<'HTML'
             <div class="flex items-center gap-2">
-                <div class="avatar @if(empty($image)) placeholder @endif">
+                <div class="avatar @if(empty($image)) avatar-placeholder @endif">
                     <div {{ $attributes->class(["w-7 rounded-full", "bg-neutral text-neutral-content" => empty($image)]) }}>
                         @if(empty($image))
                             <span class="text-xs">{{ $placeholder }}</span>

@@ -89,7 +89,7 @@ class Pin extends Component
                                         x-mask="9"
                                     @endif
 
-                                    {{ $attributes->whereDoesntStartWith('wire')->class(['input input-border !w-14 font-black text-2xl text-center']) }}
+                                    {{ $attributes->whereDoesntStartWith('wire')->class(['input input-border !w-12 font-black text-xl text-center']) }}
                                 />
                             @endforeach
                         </div>

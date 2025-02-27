@@ -55,7 +55,7 @@ class Card extends Component
                             <div class="flex justify-between items-center">
                                 <div>
                                     @if($title)
-                                        <div @class(["text-2xl font-bold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
+                                        <div @class(["text-xl font-bold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
                                             {{ $title }}
                                         </div>
                                     @endif
@@ -72,7 +72,7 @@ class Card extends Component
                             </div>
 
                             @if($separator)
-                                <hr class="mt-3" />
+                                <hr class="mt-3 border-base-300" />
 
                                 @if($progressIndicator)
                                     <div class="h-0.5 -mt-4 mb-4">

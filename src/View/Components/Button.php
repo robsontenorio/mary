@@ -91,7 +91,7 @@ class Button extends Component
                             {{ $label }}
                         </span>
                         @if(strlen($badge ?? '') > 0)
-                            <span class="badge {{ $badgeClasses }}">{{ $badge }}</span>
+                            <span class="badge badge-sm {{ $badgeClasses }}">{{ $badge }}</span>
                         @endif
                     @else
                         {{ $slot }}

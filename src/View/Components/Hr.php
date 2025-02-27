@@ -28,7 +28,7 @@ class Hr extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div class="h-[2px] border border-t-base-100 my-5">
+                <div class="h-[2px] border-t border-t-base-300 my-5">
                     <progress
                         class="progress progress-primary hidden h-[1px]"
                         wire:loading.class="!h-[2px] !block"

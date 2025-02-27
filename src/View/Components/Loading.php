@@ -18,7 +18,7 @@ class Loading extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <span {{ $attributes->class("loading loading-spinner") }}></span>
+                <span {{ $attributes->class("loading") }}></span>
             HTML;
     }
 }
