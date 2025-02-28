@@ -22,6 +22,7 @@ class MaryInstallCommand extends Command
     {
         $this->info("❤️  maryUI installer");
 
+        // Laravel 12+
         $this->checkForLaravelVersion();
 
         // Install Volt ?
@@ -220,7 +221,7 @@ class MaryInstallCommand extends Command
     public function checkForLaravelVersion(): void
     {
         if (version_compare(app()->version(), '12.0', '<')) {
-            $this->error("❌ Laravel 12 or above required. Please, upgrade it.");
+            $this->error("❌ Laravel 12 or above required.");
 
             exit;
         }

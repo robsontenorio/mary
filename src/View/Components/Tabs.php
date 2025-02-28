@@ -50,7 +50,7 @@ class Tabs extends Component
                                     role="tab"
                                     x-html="tab.label"
                                      @click="tab.disabled ? null: selected = tab.name"
-                                    :class="(selected === tab.name) && '{{ $activeClass }}'"
+                                    :class="(selected === tab.name) && '{{ $activeClass }} tab-active'"
                                     class="tab {{ $labelClass }}"></a>
                             </template>
                         </div>

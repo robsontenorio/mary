@@ -95,7 +95,7 @@ class Card extends Component
 
                     @if($actions)
                         @if($separator)
-                            <hr class="mt-5" />
+                            <hr class="mt-5 border-base-300" />
                         @endif
 
                         <div class="flex justify-end gap-3 p-3">
