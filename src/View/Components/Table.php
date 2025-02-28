@@ -236,6 +236,7 @@ class Table extends Component
                                     this.handleCheckAll()
                                 },
                                 toggleCheckAll(checked) {
+                                    this.$dispatch('row-selection-all', { selected: checked });
                                     checked ? this.pushIds() : this.removeIds()
                                 },
                                 toggleExpand(key) {

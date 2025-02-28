@@ -193,7 +193,8 @@ class Choices extends Component
                                 }
 
                                 // Prevent search for this keys
-                                if (event && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Shift', 'CapsLock', 'Tab'].includes(event.key)) {
+                                if (event && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Shift', 'CapsLock', 'Tab',
+                                              'Control', 'Alt', 'Home', 'End', 'PageUp', 'PageDown'].includes(event.key)) {
                                     return;
                                 }
 
@@ -321,7 +322,7 @@ class Choices extends Component
                         @endif
 
                         <!-- OPTIONS LIST -->
-                        <div x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}">
+                        <div x-cloak x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}">
                             <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto" x-anchor.bottom-start="$refs.container">
 
                                 <!-- PROGRESS -->

@@ -40,7 +40,7 @@ class Toggle extends Component
     {
         return <<<'HTML'
                 <div>
-                    <label for="{{ $uuid }}" class="flex items-center gap-3 cursor-pointer">
+                    <label for="{{ $uuid }}" class="flex items-center gap-3 cursor-pointer font-semibold">
 
                         @if($right)
                             <span @class(["flex-1" => !$tight])>
