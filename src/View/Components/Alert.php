@@ -46,7 +46,7 @@ class Alert extends Component
 
                     @if($title)
                         <div>
-                            <div class="font-bold">{{ $title }}</div>
+                            <div @class(["font-bold" => $description])>{{ $title }}</div>
                             <div class="text-xs">{{ $description }}</div>
                         </div>
                     @else

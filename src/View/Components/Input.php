@@ -15,7 +15,7 @@ class Input extends Component
         public ?string $icon = null,
         public ?string $iconRight = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-base-content/50 py-1 pb-0',
+        public ?string $hintClass = 'fieldset-label',
         public ?string $prefix = null,
         public ?string $suffix = null,
         public ?bool $inline = false,
@@ -28,7 +28,7 @@ class Input extends Component
         public mixed $append = null,
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-error label-text-alt p-1',
+        public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
@@ -55,11 +55,6 @@ class Input extends Component
         ]);
     }
 
-    public function getInputClasses(): ?string
-    {
-        return str($this->attributes->get('class'))->matchAll('/input-\w+/')->prepend("input")->join(" ");
-    }
-
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
@@ -69,144 +64,126 @@ class Input extends Component
                     $uuid = $uuid . $modelName()
                 @endphp
 
-                {{-- STANDARD LABEL --}}
-                @if($label && !$inline)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
-                        <span>
+                <fieldset class="fieldset">
+                    {{-- STANDARD LABEL --}}
+                    @if($label && !$inline)
+                        <legend class="fieldset-legend">
                             {{ $label }}
 
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
                             @endif
-                        </span>
-                    </label>
-                @endif
-
-                {{-- PREFIX/SUFFIX/PREPEND/APPEND CONTAINER --}}
-                @if($prefix || $suffix || $prepend || $append)
-                    <div class="flex">
-                @endif
-
-                {{-- PREFIX / PREPEND --}}
-                @if($prefix || $prepend)
-                    <div
-                        @class([
-                                "$getInputClasses input input-border w-fit h-auto rounded-s-lg flex items-center !bg-base-200 rounded-e-none border-e-0 px-4" => $prefix,
-                                "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
-                                "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
-                            ])
-                    >
-                        {{ $prepend ?? $prefix }}
-                    </div>
-                @endif
-
-                <div class="flex-1 relative">
-                    {{-- MONEY SETUP --}}
-                    @if($money)
-                        <div
-                            wire:key="money-{{ rand() }}"
-                            x-data="{ amount: $wire.get('{{ $modelName() }}') }" x-init="$nextTick(() => new Currency($refs.myInput, {{ $moneySettings() }}))"
-                        >
+                        </legend>
                     @endif
-
-                    {{-- INPUT --}}
-                    <input
-                        id="{{ $uuid }}"
-                        placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
-
-                        @if($attributes->has('autofocus') && $attributes->get('autofocus') == true)
-                            autofocus
+                    <label @class(["floating-label" => $label && $inline])>
+                        {{-- FLOATING LABEL--}}
+                        @if ($label && $inline)
+                            <span class="!text-lg">{{ $label }}</span>
                         @endif
 
-                        @if($money)
-                            x-ref="myInput"
-                            :value="amount"
-                            x-on:input="$nextTick(() => $wire.set('{{ $modelName() }}', Currency.getUnmasked(), false))"
-                            inputmode="numeric"
-                        @endif
+                        <div @class(["w-full", "join" => $prepend || $append])>
+                            {{-- PREPEND --}}
+                            @if($prepend)
+                                {{ $prepend }}
+                            @endif
 
-                        {{
-                            $attributes
-                                ->merge(['type' => 'text'])
-                                ->except($money ? 'wire:model' : '')
-                                ->class([
-                                    'input input-border max-w-none peer',
-                                    'ps-10' => ($icon),
-                                    'h-14' => ($inline),
-                                    'pt-3' => ($inline && $label),
-                                    'rounded-s-none' => $prefix || $prepend,
-                                    'rounded-e-none' => $suffix || $append,
-                                    'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                    '!border-base-300' => $attributes->has('disabled') && $attributes->get('disabled') == true,
-                                    'input-error' => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
-                            ])
-                        }}
-                    />
+                            {{-- THE LABEL THAT HOLDS THE INPUT --}}
+                            <label
+                                {{
+                                    $attributes->whereStartsWith('class')->class([
+                                        "input w-full",
+                                        "join-item" => $prepend || $append,
+                                        "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
+                                        "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
+                                    ])
+                                }}
+                             >
+                                {{-- PREFIX --}}
+                                @if($prefix)
+                                    <span class="label">{{ $prefix }}</span>
+                                @endif
 
-                    {{-- ICON  --}}
-                    @if($icon)
-                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-base-content/50 pointer-events-none" />
-                    @endif
+                                {{-- ICON LEFT --}}
+                                @if($icon)
+                                    <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 text-base-content/50" />
+                                @endif
 
-                    {{-- CLEAR ICON  --}}
-                    @if($clearable)
-                        <x-mary-icon @click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="absolute top-1/2 end-3 -translate-y-1/2 cursor-pointer text-base-content/50 hover:text-base-content/80" />
-                    @endif
+                                {{-- MONEY SETUP --}}
+                                @if($money)
+                                    <div
+                                        class="w-full"
+                                        wire:key="money-{{ rand() }}"
+                                        x-data="{ amount: $wire.get('{{ $modelName() }}') }" x-init="$nextTick(() => new Currency($refs.myInput, {{ $moneySettings() }}))"
+                                    >
+                                @endif
 
-                    {{-- RIGHT ICON  --}}
-                    @if($iconRight)
-                        <x-mary-icon :name="$iconRight" @class(["absolute top-1/2 end-3 -translate-y-1/2 text-base-content/50 pointer-events-none", "!end-10" => $clearable]) />
-                    @endif
+                                    {{-- INPUT --}}
+                                    <input
+                                        id="{{ $uuid }}"
+                                        placeholder="{{ $attributes->get('placeholder') ?? $label }} "
 
-                    {{-- INLINE LABEL --}}
-                    @if($label && $inline)
-                        <label for="{{ $uuid }}" class="absolute text-base-content/50 duration-300 transform -translate-y-1 scale-75 top-2 origin-left rtl:origin-right rounded px-2 peer-focus:px-2 peer-focus:text-base-content peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) start-9 @else start-3 @endif">
-                            {{ $label }}
-                        </label>
-                    @endif
+                                        @if($attributes->has('autofocus') && $attributes->get('autofocus') == true)
+                                            autofocus
+                                        @endif
 
-                    {{-- HIDDEN MONEY INPUT + END MONEY SETUP --}}
-                    @if($money)
-                            <input type="hidden" {{ $attributes->only('wire:model') }} />
+                                        @if($money)
+                                            x-ref="myInput"
+                                            :value="amount"
+                                            x-on:input="$nextTick(() => $wire.set('{{ $modelName() }}', Currency.getUnmasked(), false))"
+                                            inputmode="numeric"
+                                        @endif
+
+                                        {{
+                                            $attributes
+                                                ->merge(['type' => 'text'])
+                                                ->except($money ? 'wire:model' : '')
+                                        }}
+                                    />
+
+                                {{-- HIDDEN MONEY INPUT + END MONEY SETUP --}}
+                                @if($money)
+                                        <input type="hidden" {{ $attributes->only('wire:model') }} />
+                                    </div>
+                                @endif
+
+                                {{-- CLEAR ICON  --}}
+                                @if($clearable)
+                                    <x-mary-icon x-on:click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="cursor-pointer w-4 h-4 text-base-content/50"/>
+                                @endif
+
+                                {{-- ICON RIGHT --}}
+                                @if($iconRight)
+                                    <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 text-base-content/50" />
+                                @endif
+
+                                {{-- SUFFIX --}}
+                                @if($suffix)
+                                    <span class="label">{{ $suffix }}</span>
+                                @endif
+                            </label>
+
+                            {{-- APPEND --}}
+                            @if($append)
+                                {{ $append }}
+                            @endif
                         </div>
+                    </label>
+                    {{-- HINT --}}
+                    @if($hint)
+                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
                     @endif
-                </div>
 
-                {{-- SUFFIX/APPEND --}}
-                @if($suffix || $append)
-                     <div
-                        @class([
-                                "$getInputClasses input input-border w-fit h-auto rounded-e-lg flex items-center !bg-base-200 border-s-0 rounded-s-none px-4" => $suffix,
-                                "border-0 !bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
-                                "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
-                            ])
-                    >
-                        {{ $append ?? $suffix }}
-                    </div>
-                @endif
-
-                {{-- END: PREFIX/SUFFIX/APPEND/PREPEND CONTAINER  --}}
-                @if($prefix || $suffix || $prepend || $append)
-                    </div>
-                @endif
-
-                {{-- ERROR --}}
-                @if(!$omitError && $errors->has($errorFieldName()))
-                    @foreach($errors->get($errorFieldName()) as $message)
-                        @foreach(Arr::wrap($message) as $line)
-                            <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
+                    {{-- ERROR --}}
+                    @if(!$omitError && $errors->has($errorFieldName()))
+                        @foreach($errors->get($errorFieldName()) as $message)
+                            @foreach(Arr::wrap($message) as $line)
+                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
+                                @break($firstErrorOnly)
+                            @endforeach
                             @break($firstErrorOnly)
                         @endforeach
-                        @break($firstErrorOnly)
-                    @endforeach
-                @endif
-
-                {{-- HINT --}}
-                @if($hint)
-                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
-                @endif
+                    @endif
+                </fieldset>
             </div>
             BLADE;
     }
