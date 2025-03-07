@@ -26,6 +26,7 @@ class Input extends Component
         // Slots
         public mixed $prepend = null,
         public mixed $append = null,
+
         // Validations
         public ?string $errorField = null,
         public ?string $errorClass = 'text-error',
@@ -60,7 +61,7 @@ class Input extends Component
         return <<<'BLADE'
             <div>
                 @php
-                    // Wee need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
+                    // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
                     $uuid = $uuid . $modelName()
                 @endphp
 
@@ -75,6 +76,7 @@ class Input extends Component
                             @endif
                         </legend>
                     @endif
+
                     <label @class(["floating-label" => $label && $inline])>
                         {{-- FLOATING LABEL--}}
                         @if ($label && $inline)
@@ -105,7 +107,7 @@ class Input extends Component
 
                                 {{-- ICON LEFT --}}
                                 @if($icon)
-                                    <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 text-base-content/50" />
+                                    <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
                                 @endif
 
                                 {{-- MONEY SETUP --}}
@@ -148,12 +150,12 @@ class Input extends Component
 
                                 {{-- CLEAR ICON  --}}
                                 @if($clearable)
-                                    <x-mary-icon x-on:click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="cursor-pointer w-4 h-4 text-base-content/50"/>
+                                    <x-mary-icon x-on:click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="cursor-pointer w-4 h-4 opacity-40"/>
                                 @endif
 
                                 {{-- ICON RIGHT --}}
                                 @if($iconRight)
-                                    <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 text-base-content/50" />
+                                    <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 opacity-40" />
                                 @endif
 
                                 {{-- SUFFIX --}}
@@ -168,6 +170,7 @@ class Input extends Component
                             @endif
                         </div>
                     </label>
+
                     {{-- HINT --}}
                     @if($hint)
                         <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>

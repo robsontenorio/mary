@@ -7,10 +7,6 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-/**
- * This component is a copy of Input::class modified with a
- * input type toggle between 'password' and 'text'.
- */
 class Password extends Component
 {
     public string $uuid;
@@ -20,11 +16,12 @@ class Password extends Component
         public ?string $icon = null,
         public ?string $iconRight = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-base-content/50 py-1 pb-0',
+        public ?string $hintClass = 'fieldset-label',
         public ?string $prefix = null,
         public ?string $suffix = null,
         public ?bool $inline = false,
         public ?bool $clearable = false,
+
         // Password
         public ?string $passwordIcon = 'o-eye-slash',
         public ?string $passwordVisibleIcon = 'o-eye',
@@ -34,9 +31,10 @@ class Password extends Component
         // Slots
         public mixed $prepend = null,
         public mixed $append = null,
+
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-error label-text-alt p-1',
+        public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
@@ -75,139 +73,123 @@ class Password extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
             <div>
                 @php
-                    // Wee need this extra step to support models arrays. Ex: wire:model="emails.0" , wire:model="emails.1"
+                    // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
                     $uuid = $uuid . $modelName()
                 @endphp
 
-                {{-- STANDARD LABEL --}}
-                @if($label && !$inline)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
-                        <span>
+                <fieldset class="fieldset">
+                    {{-- STANDARD LABEL --}}
+                    @if($label && !$inline)
+                        <legend class="fieldset-legend">
                             {{ $label }}
 
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
                             @endif
-                        </span>
+                        </legend>
+                    @endif
+
+                    <label @class(["floating-label" => $label && $inline])>
+                        {{-- FLOATING LABEL--}}
+                        @if ($label && $inline)
+                            <span class="!text-lg">{{ $label }}</span>
+                        @endif
+
+                        <div @class(["w-full", "join" => $prepend || $append])>
+                            {{-- PREPEND --}}
+                            @if($prepend)
+                                {{ $prepend }}
+                            @endif
+
+                            {{-- THE LABEL THAT HOLDS THE INPUT --}}
+                            <label
+                                x-data="{ hidden: true }"
+
+                                {{
+                                    $attributes->whereStartsWith('class')->class([
+                                        "input w-full",
+                                        "join-item" => $prepend || $append,
+                                        "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
+                                        "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
+                                    ])
+                                }}
+                             >
+                                {{-- PREFIX --}}
+                                @if($prefix)
+                                    <span class="label">{{ $prefix }}</span>
+                                @endif
+
+                                {{-- ICON LEFT / TOGGLE INPUT TYPE --}}
+                                @if($icon)
+                                    <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
+                                @elseif($placeToggleLeft())
+                                    <x-mary-button x-on:click="hidden = !hidden" class="btn-ghost btn-xs btn-circle">
+                                        <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
+                                        <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
+                                    </x-mary-button>
+                                @endif
+
+                                {{-- INPUT --}}
+                                <input
+                                    id="{{ $uuid }}"
+                                    placeholder="{{ $attributes->get('placeholder') ?? $label }} "
+                                    @if ($onlyPassword) type="password" @else x-bind:type="hidden ? 'password' : 'text'" @endif
+
+                                    @if($attributes->has('autofocus') && $attributes->get('autofocus') == true)
+                                        autofocus
+                                    @endif
+
+                                    {{ $attributes->except('type')->merge() }}
+                                />
+
+                                {{-- CLEAR ICON  --}}
+                                @if($clearable)
+                                    <x-mary-icon x-on:click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="cursor-pointer w-4 h-4 opacity-40"/>
+                                @endif
+
+                                {{-- ICON RIGHT / TOGGLE INPUT TYPE --}}
+                                @if($iconRight)
+                                    <x-mary-icon :name="$iconRight" @class(["pointer-events-none w-4 h-4 opacity-40", "!end-10" => $clearable]) />
+                                @elseif($placeToggleRight())
+                                    <x-mary-button x-on:click="hidden = !hidden" @class(["btn-ghost btn-xs btn-circle", "!end-9" => $clearable])>
+                                        <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
+                                        <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
+                                    </x-mary-button>
+                                @endif
+
+                                {{-- SUFFIX --}}
+                                @if($suffix)
+                                    <span class="label">{{ $suffix }}</span>
+                                @endif
+                            </label>
+
+                            {{-- APPEND --}}
+                            @if($append)
+                                {{ $append }}
+                            @endif
+                        </div>
                     </label>
-                @endif
 
-                {{-- PREFIX/SUFFIX/PREPEND/APPEND CONTAINER --}}
-                @if($prefix || $suffix || $prepend || $append)
-                    <div class="flex">
-                @endif
-
-                {{-- PREFIX / PREPEND --}}
-                @if($prefix || $prepend)
-                    <div
-                        @class([
-                                "$getInputClasses input input-border w-fit h-auto rounded-s-lg flex items-center !bg-base-200 rounded-e-none border-e-0 px-4" => $prefix,
-                                "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
-                                "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
-                            ])
-                    >
-                        {{ $prepend ?? $prefix }}
-                    </div>
-                @endif
-
-                <div class="flex-1 relative" x-data="{ hidden: true }">
-
-                    {{-- INPUT --}}
-                    <input
-                        id="{{ $uuid }}"
-                        placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }}"
-                        @if ($onlyPassword) type="password" @else x-bind:type="hidden ? 'password' : 'text'" @endif
-
-                        {{
-                            $attributes
-                                ->except('type')->merge()
-                                ->class([
-                                    'input input-border max-w-none peer',
-                                    'ps-10' => $icon || $placeToggleLeft(),
-                                    'h-14' => ($inline),
-                                    'pt-3' => ($inline && $label),
-                                    'rounded-s-none' => $prefix || $prepend,
-                                    'rounded-e-none' => $suffix || $append,
-                                    'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                    '!border-base-300' => $attributes->has('disabled') && $attributes->get('disabled') == true,
-                                    'input-error' => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
-                            ])
-                        }}
-                    />
-
-                    {{-- ICON / TOGGLE INPUT TYPE --}}
-                    @if($icon)
-                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-base-content/50 pointer-events-none" />
-                    @elseif($placeToggleLeft())
-                        <x-mary-button x-on:click="hidden = !hidden" class="btn-ghost btn-sm btn-circle p-0 absolute top-1/2 -translate-y-1/2 start-1.5 text-base-content/50 no-animation active:focus:-translate-y-1/2">
-                            <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" />
-                            <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="text-primary" />
-                        </x-mary-button>
+                    {{-- HINT --}}
+                    @if($hint)
+                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
                     @endif
 
-                    {{-- CLEAR ICON --}}
-                    @if($clearable)
-                        <x-mary-icon @click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})" name="o-x-mark" class="absolute top-1/2 end-3 -translate-y-1/2 cursor-pointer text-base-content/50 hover:text-base-content/80" />
-                    @endif
-
-                    {{-- RIGHT ICON / TOGGLE INPUT TYPE --}}
-                    @if($iconRight)
-                        <x-mary-icon :name="$iconRight" @class(["absolute top-1/2 end-3 -translate-y-1/2 text-base-content/50 pointer-events-none", "!end-10" => $clearable]) />
-                    @elseif($placeToggleRight())
-                        <x-mary-button x-on:click="hidden = !hidden" @class(["btn-ghost btn-sm btn-circle p-0 absolute top-1/2 -translate-y-1/2 end-1.5 text-base-content/50 no-animation active:focus:-translate-y-1/2", "!end-9" => $clearable])>
-                            <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" />
-                            <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="text-primary" />
-                        </x-mary-button>
-                    @endif
-
-                    {{-- INLINE LABEL --}}
-                    @if($label && $inline)
-                        <label for="{{ $uuid }}" class="absolute text-base-content/50 duration-300 transform -translate-y-1 scale-75 top-2 origin-left rtl:origin-right rounded px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && ($icon || $placeToggleLeft())) start-9 @else start-3 @endif">
-                            {{ $label }}
-                        </label>
-                    @endif
-
-                </div>
-
-                {{-- SUFFIX/APPEND --}}
-                @if($suffix || $append)
-                     <div
-                        @class([
-                                "$getInputClasses input input-border w-fit h-auto rounded-e-lg flex items-center !bg-base-200 border-s-0 rounded-s-none px-4" => $suffix,
-                                "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
-                                "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
-                            ])
-                    >
-                        {{ $append ?? $suffix }}
-                    </div>
-                @endif
-
-                {{-- END: PREFIX/SUFFIX/APPEND/PREPEND CONTAINER --}}
-                @if($prefix || $suffix || $prepend || $append)
-                    </div>
-                @endif
-
-                {{-- ERROR --}}
-                @if(!$omitError && $errors->has($errorFieldName()))
-                    @foreach($errors->get($errorFieldName()) as $message)
-                        @foreach(Arr::wrap($message) as $line)
-                            <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
+                    {{-- ERROR --}}
+                    @if(!$omitError && $errors->has($errorFieldName()))
+                        @foreach($errors->get($errorFieldName()) as $message)
+                            @foreach(Arr::wrap($message) as $line)
+                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
+                                @break($firstErrorOnly)
+                            @endforeach
                             @break($firstErrorOnly)
                         @endforeach
-                        @break($firstErrorOnly)
-                    @endforeach
-                @endif
-
-                {{-- HINT --}}
-                @if($hint)
-                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
-                @endif
+                    @endif
+                </fieldset>
             </div>
-            HTML;
+            BLADE;
     }
 }
