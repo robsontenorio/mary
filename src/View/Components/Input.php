@@ -65,10 +65,10 @@ class Input extends Component
                     $uuid = $uuid . $modelName()
                 @endphp
 
-                <fieldset class="fieldset">
+                <fieldset class="fieldset py-0">
                     {{-- STANDARD LABEL --}}
                     @if($label && !$inline)
-                        <legend class="fieldset-legend">
+                        <legend class="fieldset-legend mb-0.5">
                             {{ $label }}
 
                             @if($attributes->get('required'))
@@ -80,7 +80,7 @@ class Input extends Component
                     <label @class(["floating-label" => $label && $inline])>
                         {{-- FLOATING LABEL--}}
                         @if ($label && $inline)
-                            <span class="!text-lg">{{ $label }}</span>
+                            <span class="text-[1.3em] font-semibold">{{ $label }}</span>
                         @endif
 
                         <div @class(["w-full", "join" => $prepend || $append])>
