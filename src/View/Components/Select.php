@@ -98,7 +98,7 @@ class Select extends Component
                                 @endif
 
                                 {{-- SELECT --}}
-                                <select id="{{ $uuid }}">
+                                <select id="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }}>
                                     @if($placeholder)
                                         <option value="{{ $placeholderValue }}">{{ $placeholder }}</option>
                                     @endif
