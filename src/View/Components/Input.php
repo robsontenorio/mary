@@ -171,11 +171,6 @@ class Input extends Component
                         </div>
                     </label>
 
-                    {{-- HINT --}}
-                    @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
-                    @endif
-
                     {{-- ERROR --}}
                     @if(!$omitError && $errors->has($errorFieldName()))
                         @foreach($errors->get($errorFieldName()) as $message)
@@ -185,6 +180,11 @@ class Input extends Component
                             @endforeach
                             @break($firstErrorOnly)
                         @endforeach
+                    @endif
+
+                    {{-- HINT --}}
+                    @if($hint)
+                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
                     @endif
                 </fieldset>
             </div>

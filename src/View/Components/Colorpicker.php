@@ -15,13 +15,13 @@ class Colorpicker extends Component
         public ?string $icon = '',
         public ?string $iconRight = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-base-content/50 py-1 pb-0',
+        public ?string $hintClass = 'fieldset-label',
         public ?bool $inline = false,
         public ?bool $clearable = false,
 
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-error label-text-alt p-1',
+        public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
 
@@ -39,126 +39,97 @@ class Colorpicker extends Component
         return $this->errorField ?? $this->modelName();
     }
 
-    public function getInputClasses(): ?string
-    {
-        return str($this->attributes->get('class'))->matchAll('/input-\w+/')->prepend("input")->join(" ");
-    }
-
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
             <div>
                 @php
-                    // Wee need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
+                    // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
                     $uuid = $uuid . $modelName()
                 @endphp
 
-                <!-- STANDARD LABEL -->
-                @if($label && !$inline)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
-                        <span>
+                <fieldset class="fieldset py-0">
+                    {{-- STANDARD LABEL --}}
+                    @if($label && !$inline)
+                        <legend class="fieldset-legend mb-0.5">
                             {{ $label }}
 
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
                             @endif
-                        </span>
-                    </label>
-                @endif
+                        </legend>
+                    @endif
 
-                <div class="flex" x-data>
-                    <div
-                        @class([
-                                "input input-border w-12 h-auto rounded-s-lg flex items-center bg-base-200",
-                                "$getInputClasses rounded-e-none border-e-0 px-4",
-                                "focus-within:outline focus-within:outline-2 focus-within:outline-offset-2",
-                                "border-0 bg-base-300" => $attributes->has('disabled') && $attributes->get('disabled') == true,
-                                "border-dashed" => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                "!border-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
-                            ])
-
-                            x-on:click="$refs.colorpicker.click()"
-                            :style="{ backgroundColor: $wire.{{ $modelName() }} }"
-                    >
-                        <input
-                            type="color"
-                            class="cursor-pointer opacity-0 w-4"
-                            x-ref="colorpicker"
-                            x-on:click.stop=""
-
-                            @if($attributes->has('disabled') && $attributes->get('disabled') == true)
-                                disabled
-                            @endif
-
-                            @if($attributes->has('readonly') && $attributes->get('readonly') == true)
-                                disabled
-                            @endif
-
-                            {{ $attributes->wire('model') }}
-                            :style="{ backgroundColor: $wire.{{ $modelName() }} }"  />
-                    </div>
-
-                    <div class="flex-1 relative">
-                        <!-- INPUT -->
-                        <input
-                            id="{{ $uuid }}"
-                            placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
-                            {{
-                                $attributes
-                                    ->merge(['type' => 'text'])
-                                    ->class([
-                                        'input input-border max-w-none peer',
-                                        'ps-10' => ($icon),
-                                        'h-14' => ($inline),
-                                        'pt-3' => ($inline && $label),
-                                        'rounded-s-none',
-                                        'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                        '!border-base-300' => $attributes->has('disabled') && $attributes->get('disabled') == true,
-                                        'input-error' => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
-                                ])
-                            }}
-                        />
-
-                        <!-- ICON  -->
-                        @if($icon)
-                            <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-base-content/50 cursor-pointer" x-on:click="$refs.colorpicker.click()" />
+                    <label @class(["floating-label" => $label && $inline])>
+                        {{-- FLOATING LABEL--}}
+                        @if ($label && $inline)
+                            <span class="text-[1.3em] font-semibold ml-10">{{ $label }}</span>
                         @endif
 
-                        <!-- CLEAR ICON  -->
-                        @if($clearable)
-                            <x-mary-icon @click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="absolute top-1/2 end-3 -translate-y-1/2 cursor-pointer text-base-content/50 hover:text-base-content/80" />
-                        @endif
-
-                        <!-- RIGHT ICON  -->
-                        @if($iconRight)
-                            <x-mary-icon :name="$iconRight" @class(["absolute top-1/2 end-3 -translate-y-1/2 text-base-content/50 cursor-pointer", "!end-10" => $clearable]) x-on:click="$refs.colorpicker.click()" />
-                        @endif
-
-                        <!-- INLINE LABEL -->
-                        @if($label && $inline)
-                            <label for="{{ $uuid }}" class="absolute text-base-content/50 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] rounded px-2 peer-focus:px-2 peer-focus:text-base-content peer-focus:text-base-content peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) start-9 @else start-3 @endif">
-                                {{ $label }}
+                        <div class="w-full join">
+                             {{-- COLOR PICKER --}}
+                             <label
+                                class="input join-item w-12 p-0"
+                                x-on:click="$refs.colorpicker.click()"
+                                :style="{ backgroundColor: $wire.{{ $modelName() }} }"
+                             >
+                                <input
+                                    type="color"
+                                    class="cursor-pointer opacity-0 join-item"
+                                    x-ref="colorpicker"
+                                    x-on:click.stop=""
+                                    {{ $attributes->wire('model') }}
+                                    :style="{ backgroundColor: $wire.{{ $modelName() }} }"
+                                />
                             </label>
-                        @endif
-                    </div>
-                </div>
 
-                <!-- ERROR -->
-                @if(!$omitError && $errors->has($errorFieldName()))
-                    @foreach($errors->get($errorFieldName()) as $message)
-                        @foreach(Arr::wrap($message) as $line)
-                            <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
+                            {{-- THE LABEL THAT HOLDS THE INPUT --}}
+                            <label
+                                {{
+                                    $attributes->whereStartsWith('class')->class([
+                                        "input join-item w-full",
+                                        "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
+                                        "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
+                                    ])
+                                }}
+                             >
+                                {{-- ICON LEFT --}}
+                                @if($icon)
+                                    <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 -ml-1 opacity-40" />
+                                @endif
+
+                                {{-- INPUT --}}
+                                <input
+                                    id="{{ $uuid }}"
+                                    placeholder="{{ $attributes->get('placeholder') ?? $label }} "
+                                    {{ $attributes->merge(['type' => 'text']) }}
+                                />
+
+                                {{-- ICON RIGHT --}}
+                                @if($iconRight)
+                                    <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 opacity-40" />
+                                @endif
+                            </label>
+                        </div>
+                    </label>
+
+                    {{-- ERROR --}}
+                    @if(!$omitError && $errors->has($errorFieldName()))
+                        @foreach($errors->get($errorFieldName()) as $message)
+                            @foreach(Arr::wrap($message) as $line)
+                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
+                                @break($firstErrorOnly)
+                            @endforeach
                             @break($firstErrorOnly)
                         @endforeach
-                        @break($firstErrorOnly)
-                    @endforeach
-                @endif
+                    @endif
 
-                <!-- HINT -->
-                @if($hint)
-                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
-                @endif
+                    {{-- HINT --}}
+                    @if($hint)
+                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
+                    @endif
+                </fieldset>
             </div>
-            HTML;
+            BLADE;
     }
 }

@@ -78,11 +78,6 @@ class Checkbox extends Component
                         </label>
                     </div>
 
-                    {{-- HINT --}}
-                    @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
-                    @endif
-
                     {{-- ERROR --}}
                     @if(!$omitError && $errors->has($errorFieldName()))
                         @foreach($errors->get($errorFieldName()) as $message)
@@ -92,6 +87,11 @@ class Checkbox extends Component
                             @endforeach
                             @break($firstErrorOnly)
                         @endforeach
+                    @endif
+
+                    {{-- HINT --}}
+                    @if($hint)
+                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
                     @endif
                 </fieldset>
             </div>
