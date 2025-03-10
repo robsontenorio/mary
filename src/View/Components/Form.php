@@ -19,7 +19,7 @@ class Form extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
                 <form
                     {{ $attributes->whereDoesntStartWith('class') }}
                     {{ $attributes->class(['grid grid-flow-row auto-rows-min gap-3']) }}
@@ -29,7 +29,7 @@ class Form extends Component
 
                     @if ($actions)
                         @if(!$noSeparator)
-                            <hr class="my-3" />
+                            <hr class="border-base-300 my-3" />
                         @endif
 
                         <div {{ $actions->attributes->class(["flex justify-end gap-3"]) }}>
@@ -37,6 +37,6 @@ class Form extends Component
                         </div>
                     @endif
                 </form>
-                HTML;
+                BLADE;
     }
 }
