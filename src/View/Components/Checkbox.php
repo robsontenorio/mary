@@ -59,7 +59,6 @@ class Checkbox extends Component
                             {{-- CHECKBOX --}}
                             <input
                                 id="{{ $uuid }}"
-                                placeholder="{{ $attributes->get('placeholder') ?? $label }} "
                                 type="checkbox"
                                 {{ $attributes->whereDoesntStartWith('id')->merge(['class' => 'checkbox']) }}
                             />

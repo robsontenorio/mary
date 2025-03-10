@@ -44,7 +44,7 @@ class Button extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
                 @if($link)
                     <a href="{!! $link !!}"
                 @else
@@ -114,6 +114,6 @@ class Button extends Component
                 @else
                     </a>
                 @endif
-            HTML;
+            BLADE;
     }
 }

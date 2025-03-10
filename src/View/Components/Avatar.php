@@ -32,7 +32,7 @@ class Avatar extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
             <div class="flex items-center gap-2">
                 <div class="avatar @if(empty($image)) avatar-placeholder @endif">
                     <div {{ $attributes->class(["w-7 rounded-full", "bg-neutral text-neutral-content" => empty($image)]) }}>
@@ -58,6 +58,6 @@ class Avatar extends Component
                 </div>
                 @endif
             </div>
-            HTML;
+            BLADE;
     }
 }

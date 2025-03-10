@@ -95,7 +95,7 @@ class DateTime extends Component
                                 {{-- INPUT --}}
                                 <input
                                     id="{{ $uuid }}"
-                                    class="grid"
+                                    class="!grid"
                                     {{ $attributes->whereDoesntStartWith('class')->merge(['type' => 'date']) }}
                                 />
 

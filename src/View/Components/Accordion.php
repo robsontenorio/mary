@@ -18,7 +18,7 @@ class Accordion extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
                 <div
                     x-data="{ model: @entangle($attributes->wire('model')) }"
                     {{ $attributes->whereDoesntStartWith('wire:model')->merge(['class' => ($noJoin ? '' : 'join join-vertical w-full')]) }}
@@ -26,6 +26,6 @@ class Accordion extends Component
                 >
                         {{ $slot }}
                 </div>
-            HTML;
+            BLADE;
     }
 }

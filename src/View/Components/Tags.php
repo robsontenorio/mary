@@ -13,11 +13,21 @@ class Tags extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt p-1 pb-0 text-base-content/50',
+        public ?string $hintClass = 'fieldset-label',
         public ?string $icon = null,
+        public ?string $iconRight = null,
+        public ?bool $inline = false,
+        public ?bool $clearable = false,
+        public ?string $prefix = null,
+        public ?string $suffix = null,
+
+        // Slots
+        public mixed $prepend = null,
+        public mixed $append = null,
+
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-error label-text-alt p-1',
+        public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
@@ -39,6 +49,11 @@ class Tags extends Component
         return $this->attributes->has('readonly') && $this->attributes->get('readonly') == true;
     }
 
+    public function isDisabled(): bool
+    {
+        return $this->attributes->has('disabled') && $this->attributes->get('disabled') == true;
+    }
+
     public function isRequired(): bool
     {
         return $this->attributes->has('required') && $this->attributes->get('required') == true;
@@ -46,13 +61,14 @@ class Tags extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
             <div x-data="{
                     tags: @entangle($attributes->wire('model')),
                     tag: null,
                     focused: false,
                     isReadonly: {{ json_encode($isReadonly()) }},
                     isRequired: {{ json_encode($isRequired()) }},
+                    isDisabled: {{ json_encode($isDisabled()) }},
 
                     init() {
                         if (this.tags == null || !Array.isArray(this.tags)) {
@@ -99,7 +115,7 @@ class Tags extends Component
                     },
 
                     focus() {
-                        if (this.isReadonly) {
+                        if (this.isReadonly || this.isDisabled) {
                             return
                         }
 
@@ -109,92 +125,131 @@ class Tags extends Component
                 }"
                 @keydown.escape="clear()"
             >
-                <!-- STANDARD LABEL -->
-                @if ($label)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
-                        <span>
+                <fieldset class="fieldset py-0">
+                    {{-- STANDARD LABEL --}}
+                    @if($label && !$inline)
+                        <legend class="fieldset-legend mb-0.5">
                             {{ $label }}
 
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
                             @endif
-                        </span>
+                        </legend>
+                    @endif
+
+                    <label @class(["floating-label" => $label && $inline])>
+                        {{-- FLOATING LABEL--}}
+                        @if ($label && $inline)
+                            <span class="text-[1.3em] font-semibold">{{ $label }}</span>
+                        @endif
+
+                        <div @class(["w-full", "join" => $prepend || $append])>
+                            {{-- PREPEND --}}
+                            @if($prepend)
+                                {{ $prepend }}
+                            @endif
+
+                            {{-- THE LABEL THAT HOLDS THE INPUT --}}
+                            <label
+                                @click="focus()"
+
+                                @if($isDisabled())
+                                    disabled
+                                @endif
+
+                                {{
+                                    $attributes->whereStartsWith('class')->class([
+                                        "input w-full h-fit",
+                                        "join-item" => $prepend || $append,
+                                        "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
+                                        "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
+                                    ])
+                                }}
+                             >
+                                {{-- PREFIX --}}
+                                @if($prefix)
+                                    <span class="label">{{ $prefix }}</span>
+                                @endif
+
+                                {{-- ICON LEFT --}}
+                                @if($icon)
+                                    <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
+                                @endif
+
+                                <div wire:key="tags-{{ $uuid }}"  class="w-full flex flex-wrap items-center gap-2 py-1.5 min-h-9.5">
+
+                                    {{-- TAGS --}}
+                                    <template :key="index" x-for="(tag, index) in tags">
+                                        <span class="mary-tags-element cursor-pointer badge badge-sm badge-soft">
+                                            <span x-text="tag"></span>
+                                            <x-mary-icon @click="remove(index)" x-show="!isReadonly && !isDisabled" name="o-x-mark" class="w-4 h-4 text-gray-500 hover:text-error" />
+                                        </span>
+                                    </template>
+
+                                    <span :class="(focused || tags.length) && 'hidden'" class="text-base-content/40">
+                                        {{ $attributes->get('placeholder') }}
+                                    </span>
+
+                                    {{-- INPUT --}}
+                                    <input
+                                        id="{{ $uuid }}"
+                                        type="text"
+                                        enterkeyhint="done"
+                                        class="w-auto py-1"
+                                        x-ref="searchInput"
+                                        :required="isRequired"
+                                        :readonly="isReadonly"
+                                        :disabled="isDisabled"
+                                        :class="(isReadonly || isDisabled || !focused) && '!w-1'"
+                                        x-model="tag"
+                                        @input="focus()"
+                                        @focus="focus()"
+                                        @click.outside="clear()"
+                                        @keydown.enter.prevent="push()"
+                                        @keyup.prevent="if (event.key === ',') { push() }"
+                                    />
+                                </div>
+
+                                {{-- CLEAR ICON  --}}
+                                @if($clearable && !$isReadonly() && !$isDisabled)
+                                    <x-mary-icon @click="clearAll()" x-show="tags.length" name="o-x-mark" class="cursor-pointer w-4 h-4 opacity-40"/>
+                                @endif
+
+                                {{-- ICON RIGHT --}}
+                                @if($iconRight)
+                                    <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 opacity-40" />
+                                @endif
+
+                                {{-- SUFFIX --}}
+                                @if($suffix)
+                                    <span class="label">{{ $suffix }}</span>
+                                @endif
+                            </label>
+
+                            {{-- APPEND --}}
+                            @if($append)
+                                {{ $append }}
+                            @endif
+                        </div>
                     </label>
-                @endif
 
-                <!-- TAGS + SEARCH INPUT -->
-                <div
-                    @click="focus()"
-
-                    {{
-                        $attributes->except(['wire:model', 'wire:model.live'])->class([
-                            "input input-border max-w-none h-fit ps-2.5 pe-16 py-1 inline-block cursor-pointer relative min-h-[40px]",
-                            'border border-dashed' => $isReadonly(),
-                            'input-error' => $errors->has($errorFieldName()) || $errors->has($errorFieldName().'*'),
-                            'ps-10' => $icon,
-                        ])
-                    }}
-                >
-                    <!-- ICON  -->
-                    @if($icon)
-                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-base-content/50 pointer-events-none" />
-                    @endif
-
-                    <!-- CLEAR ICON  -->
-                    @if(! $isReadonly())
-                        <x-mary-icon @click="clearAll()" x-show="tags.length"  name="o-x-mark" class="absolute top-1/2 end-4 -translate-y-1/2 cursor-pointer text-base-content/50 hover:text-base-content/80" />
-                    @endif
-
-                    <!--  TAGS  -->
-                    <span wire:key="tags-{{ $uuid }}">
-                        <template :key="index" x-for="(tag, index) in tags">
-                            <div class="mary-tags-element bg-primary/5 text-primary text-sm hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 py-1 mt-0.5 last:me-0 inline-block rounded cursor-pointer">
-                                <span x-text="tag"></span>
-                                <x-mary-icon @click="remove(index)" x-show="!isReadonly" name="o-x-mark" class="text-gray-500 hover:text-error w-4 h-4" />
-                            </div>
-                        </template>
-                    </span>
-
-                    <!-- INPUT -->
-                    <input
-                        id="{{ $uuid }}"
-                        class="max-w-20 border-none outline-none inline-block ms-2"
-                        placeholder="{{ $attributes->whereStartsWith('placeholder')->first() }}"
-                        type="text"
-                        enterkeyhint="done"
-                        x-ref="searchInput"
-                        :class="(isReadonly || !focused) && '!w-0.5'"
-                        :required="isRequired"
-                        :readonly="isReadonly"
-                        x-model="tag"
-                        @input="focus()"
-                        @click.outside="clear()"
-                        @keydown.enter.prevent="push()"
-                        @keyup.prevent="if (event.key === ',') { push() }"
-                    />
-                </div>
-
-                <!-- ERROR -->
-                @if(!$omitError && $errors->has($errorFieldName()))
-                    @foreach($errors->get($errorFieldName()) as $message)
-                        @foreach(Arr::wrap($message) as $line)
-                            <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
+                    {{-- ERROR --}}
+                    @if(!$omitError && $errors->has($errorFieldName()))
+                        @foreach($errors->get($errorFieldName()) as $message)
+                            @foreach(Arr::wrap($message) as $line)
+                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
+                                @break($firstErrorOnly)
+                            @endforeach
                             @break($firstErrorOnly)
                         @endforeach
-                        @break($firstErrorOnly)
-                    @endforeach
-                @endif
+                    @endif
 
-                <!-- MULTIPLE ERROR -->
-                @error($modelName().'.*')
-                    <div class="label-text-alt p-1 text-error">{{ $message }}</div>
-                @enderror
-
-                @if ($hint)
-                    <!-- HINT -->
-                    <div class="{{ $hintClass }}" x-classes="label-text-alt p-1 pb-0 text-base-content/50">{{ $hint }}</div>
-                @endif
+                    {{-- HINT --}}
+                    @if($hint)
+                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
+                    @endif
+                </fieldset>
             </div>
-        HTML;
+        BLADE;
     }
 }

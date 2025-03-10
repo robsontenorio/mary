@@ -101,7 +101,7 @@ class Colorpicker extends Component
                                 {{-- INPUT --}}
                                 <input
                                     id="{{ $uuid }}"
-                                    placeholder="{{ $attributes->get('placeholder') ?? $label }} "
+                                    placeholder="{{ $attributes->get('placeholder') }} "
                                     {{ $attributes->merge(['type' => 'text']) }}
                                 />
 

@@ -122,7 +122,7 @@ class Input extends Component
                                     {{-- INPUT --}}
                                     <input
                                         id="{{ $uuid }}"
-                                        placeholder="{{ $attributes->get('placeholder') ?? $label }} "
+                                        placeholder="{{ $attributes->get('placeholder') }} "
 
                                         @if($attributes->has('autofocus') && $attributes->get('autofocus') == true)
                                             autofocus

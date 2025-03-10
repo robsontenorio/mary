@@ -135,7 +135,7 @@ class Password extends Component
                                 {{-- INPUT --}}
                                 <input
                                     id="{{ $uuid }}"
-                                    placeholder="{{ $attributes->get('placeholder') ?? $label }} "
+                                    placeholder="{{ $attributes->get('placeholder') }} "
                                     @if ($onlyPassword) type="password" @else x-bind:type="hidden ? 'password' : 'text'" @endif
 
                                     @if($attributes->has('autofocus') && $attributes->get('autofocus') == true)

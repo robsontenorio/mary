@@ -58,7 +58,6 @@ class Toggle extends Component
                             {{-- TOGGLE --}}
                             <input
                                 id="{{ $uuid }}"
-                                placeholder="{{ $attributes->get('placeholder') ?? $label }} "
                                 type="checkbox"
                                 {{ $attributes->whereDoesntStartWith('id')->merge(['class' => 'toggle']) }}
                             />

@@ -13,11 +13,12 @@ class Textarea extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-base-content/50 py-1 pb-0',
+        public ?string $hintClass = 'fieldset-label',
         public ?bool $inline = false,
+
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-error label-text-alt p-1',
+        public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
@@ -36,69 +37,65 @@ class Textarea extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
             <div>
                 @php
-                    // Wee need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
+                    // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
                     $uuid = $uuid . $modelName()
                 @endphp
 
-                <!-- STANDARD LABEL -->
-                @if($label && !$inline)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
-                        <span>
+                <fieldset class="fieldset py-0">
+                    {{-- STANDARD LABEL --}}
+                    @if($label && !$inline)
+                        <legend class="fieldset-legend mb-0.5">
                             {{ $label }}
 
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
                             @endif
-                        </span>
-                    </label>
-                @endif
-
-                <div class="flex-1 relative">
-                    <!-- INPUT -->
-                    <textarea
-                        placeholder = "{{ $attributes->whereStartsWith('placeholder')->first() }} "
-
-                        {{
-                            $attributes
-                            ->merge([
-                                'id' => $uuid
-                            ])
-                            ->class([
-                                'textarea textarea-border max-w-none peer',
-                                'pt-5' => ($inline && $label),
-                                'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                'textarea-error' => $errors->has($errorFieldName())
-                            ])
-                        }}
-                    >{{ $slot }}</textarea>
-
-                    <!-- INLINE LABEL -->
-                    @if($label && $inline)
-                        <label for="{{ $uuid }}" class="absolute text-base-content/50 duration-300 transform -translate-y-4 scale-75 top-4 rounded px-2 peer-focus:px-2 peer-focus:text-base-content peer-focus:dark:text-base-content peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-focus:scale-75 peer-focus:-translate-y-3 start-2">
-                            {{ $label }}
-                        </label>
+                        </legend>
                     @endif
-                </div>
 
-                <!-- ERROR -->
-                @if(!$omitError && $errors->has($errorFieldName()))
-                    @foreach($errors->get($errorFieldName()) as $message)
-                        @foreach(Arr::wrap($message) as $line)
-                            <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
+                    <label @class(["floating-label" => $label && $inline])>
+                        {{-- FLOATING LABEL--}}
+                        @if ($label && $inline)
+                            <span class="text-[1.3em] font-semibold">{{ $label }}</span>
+                        @endif
+
+                        <div class="w-full">
+                            {{-- TEXTAREA --}}
+                            <textarea
+                                placeholder="{{ $attributes->get('placeholder') }} "
+
+                               {{
+                                    $attributes->merge(['id' => $uuid])
+                                    ->class([
+                                        "textarea w-full",
+                                        "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
+                                        "!textarea-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
+                                    ])
+                               }}
+                            >{{ $slot }}</textarea>
+                        </div>
+                    </label>
+
+                    {{-- ERROR --}}
+                    @if(!$omitError && $errors->has($errorFieldName()))
+                        @foreach($errors->get($errorFieldName()) as $message)
+                            @foreach(Arr::wrap($message) as $line)
+                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
+                                @break($firstErrorOnly)
+                            @endforeach
                             @break($firstErrorOnly)
                         @endforeach
-                        @break($firstErrorOnly)
-                    @endforeach
-                @endif
+                    @endif
 
-                <!-- HINT -->
-                @if($hint)
-                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
-                @endif
+                    {{-- HINT --}}
+                    @if($hint)
+                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
+                    @endif
+                </fieldset>
             </div>
-            HTML;
+            BLADE;
     }
 }
