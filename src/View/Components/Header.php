@@ -74,7 +74,7 @@ class Header extends Component
                     </div>
 
                     @if($separator)
-                        <hr class="my-5 border-base-300" />
+                        <hr class="border-base-300 mt-3" />
 
                         @if($progressIndicator)
                             <div class="h-0.5 -mt-9 mb-9">

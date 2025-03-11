@@ -54,16 +54,17 @@ class Modal extends Component
                                 @endif
                             </form>
                         @endif
+
                         @if($title)
-                            <x-mary-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" class="mb-5" />
+                            <x-mary-header :title="$title" :subtitle="$subtitle" size="text-xl" :separator="$separator" class="!mb-5" />
                         @endif
 
-                        <p class="">
+                        <div>
                             {{ $slot }}
-                        </p>
+                        </div>
 
-                        @if($separator)
-                            <hr class="mt-5" />
+                        @if($separator && $actions)
+                            <hr class="border-base-300 mt-5" />
                         @endif
 
                         @if($actions)
