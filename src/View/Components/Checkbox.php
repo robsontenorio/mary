@@ -13,11 +13,9 @@ class Checkbox extends Component
     public function __construct(
         public ?string $id = null,
         public ?string $label = null,
+        public ?bool $right = false,
         public ?string $hint = null,
         public ?string $hintClass = 'fieldset-label',
-
-        public ?bool $right = false,
-        public ?bool $tight = false,
 
         // Validations
         public ?string $errorField = null,
@@ -44,36 +42,34 @@ class Checkbox extends Component
             <div>
                 <fieldset class="fieldset">
                     <div class="w-full">
-                        <label class="flex gap-2 items-center cursor-pointer">
-                            {{-- LABEL RIGHT --}}
-                             @if($right)
-                                <span @class(["text-[1.15em]", "flex-1" => !$tight])>
-                                    {{ $label }}
-
-                                    @if($attributes->get('required'))
-                                        <span class="text-error">*</span>
-                                    @endif
-                                </span>
-                            @endif
+                        <label @class(["flex gap-3 items-center cursor-pointer", "justify-between" => $right, "!items-start" => $hint])>
 
                             {{-- CHECKBOX --}}
                             <input
                                 id="{{ $uuid }}"
                                 type="checkbox"
-                                {{ $attributes->whereDoesntStartWith('id')->merge(['class' => 'checkbox']) }}
+                                {{
+                                    $attributes->whereDoesntStartWith("id")
+                                        ->class(["order-2" => $right])
+                                        ->merge(["class" => "checkbox"])
+                                 }}
                             />
 
                             {{-- LABEL --}}
-                            @if(!$right)
-                                <span class="text-[1.15em]">
+                             <div @class(["order-1" => $right])>
+                                <div class="text-sm font-medium">
                                     {{ $label }}
 
                                     @if($attributes->get('required'))
                                         <span class="text-error">*</span>
                                     @endif
-                                </span>
-                            @endif
+                                </div>
 
+                                {{-- HINT --}}
+                                @if($hint)
+                                    <div class="{{ $hintClass }} font-normal text-right text-xs pt-1" x-classes="fieldset-label">{{ $hint }}</div>
+                                @endif
+                            </div>
                         </label>
                     </div>
 
@@ -86,11 +82,6 @@ class Checkbox extends Component
                             @endforeach
                             @break($firstErrorOnly)
                         @endforeach
-                    @endif
-
-                    {{-- HINT --}}
-                    @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
                     @endif
                 </fieldset>
             </div>

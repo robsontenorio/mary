@@ -14,13 +14,14 @@ class Group extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-base-content/50 ps-1 mt-2',
+        public ?string $hintClass = 'fieldset-label',
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
+
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-error label-text-alt p-1',
+        public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
@@ -39,53 +40,57 @@ class Group extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
                 <div>
-                    @if($label)
-                        <div class="pt-0 label label-text font-semibold">
-                            <span>
+                    <fieldset class="fieldset py-0">
+                        {{-- STANDARD LABEL --}}
+                        @if($label)
+                            <legend class="fieldset-legend mb-0.5">
                                 {{ $label }}
 
                                 @if($attributes->get('required'))
                                     <span class="text-error">*</span>
                                 @endif
-                            </span>
-                        </div>
-                    @endif
+                            </legend>
+                        @endif
 
-                    <div class="join">
-                        @foreach ($options as $option)
-                            <input
-                                type="radio"
-                                name="{{ $modelName() }}"
-                                value="{{ data_get($option, $optionValue) }}"
-                                aria-label="{{ data_get($option, $optionLabel) }}"
-                                @if(data_get($option, 'disabled')) disabled @endif
-                                {{ $attributes->whereStartsWith('wire:model') }}
-                                {{
-                                    $attributes->class([
-                                        "join-item capitalize btn input-border input bg-base-200 [&:checked]:!bg-neutral [&:checked]:!border-inherit",
-                                        "border border-error" => data_get($option, 'disabled')
-                                    ])
-                                }}
-                            />
-                        @endforeach
-                    </div>
-                    <!-- ERROR -->
-                    @if(!$omitError && $errors->has($errorFieldName()))
-                        @foreach($errors->get($errorFieldName()) as $message)
-                            @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
+                        <div class="join">
+                            @foreach ($options as $option)
+                                <input
+                                    type="radio"
+                                    name="{{ $modelName() }}"
+                                    value="{{ data_get($option, $optionValue) }}"
+                                    aria-label="{{ data_get($option, $optionLabel) }}"
+                                    @if(data_get($option, 'disabled')) disabled @endif
+
+                                    {{ $attributes->whereStartsWith('wire:model') }}
+                                    {{
+                                        $attributes->class([
+                                            "join-item btn",
+                                            "!border-l-base-100" => data_get($option, 'disabled')
+                                        ])
+                                    }}
+                                />
+                            @endforeach
+                        </div>
+
+                        {{-- ERROR --}}
+                        @if(!$omitError && $errors->has($errorFieldName()))
+                            @foreach($errors->get($errorFieldName()) as $message)
+                                @foreach(Arr::wrap($message) as $line)
+                                    <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
+                                    @break($firstErrorOnly)
+                                @endforeach
                                 @break($firstErrorOnly)
                             @endforeach
-                            @break($firstErrorOnly)
-                        @endforeach
-                    @endif
+                        @endif
 
-                    @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 ps-1 mt-2">{{ $hint }}</div>
-                    @endif
+                        {{-- HINT --}}
+                        @if($hint)
+                            <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
+                        @endif
+                    </fieldset>
                 </div>
-            HTML;
+            BLADE;
     }
 }
