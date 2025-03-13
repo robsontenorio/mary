@@ -22,32 +22,34 @@ class Errors extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
-                    <div>
-                        @if ($errors->any())
-                            <div {{ $attributes->class(['alert alert-error rounded-md']) }} >
-                                <x-mary-icon :name="$icon" class="w-8 h-8" />
+        return <<<'BLADE'
+                <div>
+                    @if ($errors->any())
+                        <div {{ $attributes->class(["alert alert-error rounded rounded-sm"]) }} >
+                            <div class="grid gap-3">
+                                <div class="flex gap-2">
+                                    <x-mary-icon :name="$icon" class="w-6 h-6 mt-0.5" />
+                                    <div>
+                                        @if($title)
+                                            <div class="font-bold text-lg">{{ $title }}</div>
+                                        @endif
 
-                                <div>
-                                    @if($title)
-                                        <div class="font-bold text-lg">{{ $title }}</div>
-                                    @endif
-
-                                    @if($description)
-                                        <div class="text-sm">{{ $description }}</div>
-                                    @endif
-
-                                    <div @class(["mt-5" => $title || $description])>
-                                        <ul class="list-disc ms-5">
-                                           @foreach ($errors->all() as $error)
-                                               <li>{{ $error }}</li>
-                                           @endforeach
-                                        </ul>
+                                        @if($description)
+                                            <div>{{ $description }}</div>
+                                        @endif
                                     </div>
                                 </div>
+                                <div>
+                                    <ul class="list-disc ms-5 sm:ms-12">
+                                       @foreach ($errors->all() as $error)
+                                           <li>{{ $error }}</li>
+                                       @endforeach
+                                    </ul>
+                                </div>
                             </div>
-                        @endif
-                </div>
-            HTML;
+                        </div>
+                    @endif
+            </div>
+            BLADE;
     }
 }

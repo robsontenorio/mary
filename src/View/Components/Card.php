@@ -96,9 +96,11 @@ class Card extends Component
                     @if($actions)
                         @if($separator)
                             <hr class="mt-5 border-base-content/10" />
+                        @else
+                            <div></div>
                         @endif
 
-                        <div class="flex justify-end gap-3 p-3">
+                        <div class="flex justify-end gap-3 pt-5">
                             {{ $actions }}
                         </div>
                     @endif

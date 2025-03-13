@@ -28,7 +28,11 @@ class Form extends Component
                     {{ $slot }}
 
                     @if ($actions)
-                        <hr @class(["invisible", "border-base-content/10 !my-3 !visible" => !$noSeparator]) />
+                        @if(!$noSeparator)
+                            <hr class="border-base-content/10 my-3" />
+                        @else
+                            <div></div>
+                        @endif
 
                         <div {{ $actions->attributes->class(["flex justify-end gap-3"]) }}>
                             {{ $actions}}
