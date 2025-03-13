@@ -124,8 +124,7 @@ class Spotlight extends Component
                         id="marySpotlight"
                         x-ref="marySpotlightRef"
                         class="backdrop-blur-sm"
-                        box-class="absolute pb-0 top-0 lg:top-10 w-full lg:max-w-3xl rounded-none md:rounded-box"
-                        x-classes="absolute pb-0 top-0 lg:top-10 w-full lg:max-w-3xl rounded-none md:rounded-box"
+                        box-class="absolute py-0 top-0 lg:top-10 w-full lg:max-w-3xl rounded-none md:rounded-box"
                     >
                         <div  @click.outside="close()">
                             <!-- INPUT -->

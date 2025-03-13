@@ -66,7 +66,7 @@ class Group extends Component
                                     {{ $attributes->whereStartsWith('wire:model') }}
                                     {{
                                         $attributes->class([
-                                            "join-item btn",
+                                            "join-item btn [&:checked]:btn-neutral",
                                             "!border-l-base-100" => data_get($option, 'disabled')
                                         ])
                                     }}
