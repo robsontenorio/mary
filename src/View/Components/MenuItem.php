@@ -71,7 +71,7 @@ class MenuItem extends Component
                     <a
                         {{
                             $attributes->class([
-                                "my-0.5 hover:text-inherit whitespace-nowrap",
+                                "my-0.5 py-2 px-4 hover:text-inherit whitespace-nowrap",
                                 "mary-active-menu $activeBgColor" => ($active || ($activateByRoute && $routeMatches()))
                             ])
                         }}
