@@ -48,8 +48,6 @@ class Spotlight extends Component
 
                                 this.$watch('value', value => this.debounce(() => this.search(), this.maxDebounce))
 
-                                $refs.marySpotlightRef.querySelector('.modal-box').classList.add('absolute', 'top-0', 'lg:top-10', 'w-full', 'lg:max-w-3xl')
-
                                 // Fix weird issue when navigating back
                                 document.addEventListener('livewire:navigating', () => {
                                     this.close()
@@ -65,8 +63,10 @@ class Spotlight extends Component
                                 $refs.marySpotlightRef.showModal();
                             },
                             focus() {
-                                $refs.spotSearch.focus();
-                                $refs.spotSearch.select();
+                                setTimeout(() => {
+                                    this.$refs.spotSearch.focus();
+                                    this.$refs.spotSearch.select();
+                                }, 100)
                             },
                             updateQuery(query){
                                 this.query = query
@@ -120,20 +120,28 @@ class Spotlight extends Component
                     @mary-search.window="updateQuery(event.detail)"
                     @mary-search-open.window="show(); focus();"
                 >
-                    <x-mary-modal id="marySpotlight" x-ref="marySpotlightRef" class="backdrop-blur-sm">
-                        <div class="-mx-5 -mt-5 -mb-10" @click.outside="close()" @keydown.enter="close()">
+                    <x-mary-modal
+                        id="marySpotlight"
+                        x-ref="marySpotlightRef"
+                        class="backdrop-blur-sm"
+                        box-class="absolute pb-0 top-0 lg:top-10 w-full lg:max-w-3xl rounded-none md:rounded-box"
+                    >
+                        <div  @click.outside="close()">
                             <!-- INPUT -->
                             <div class="flex">
                                 <div class="flex-1">
-                                    <x-mary-input
-                                        x-model="value"
-                                        x-ref="spotSearch"
-                                        placeholder=" {{ $searchText }}"
-                                        icon="o-magnifying-glass"
-                                        class="border-none focus:outline-0"
-                                        tabindex="0"
-                                        @focus="$el.focus()"
-                                    />
+                                    <div class="flex items-center"
+                                        <x-mary-icon name="o-magnifying-glass" />
+                                        <input
+                                            x-model="value"
+                                            x-ref="spotSearch"
+                                            placeholder=" {{ $searchText }}"
+                                            class="w-full input input-lg border-none focus:shadow-none focus:outline-none focus:border-transparent"
+                                            @focus="$el.focus()"
+                                            autofocus
+                                            tabindex="1"
+                                        />
+                                    </div>
                                 </div>
 
                                 @if($append)
@@ -142,7 +150,7 @@ class Spotlight extends Component
                             </div>
 
                             <!-- PROGRESS  -->
-                            <div class="h-[2px] border-t-[1px] border-t-base-200 dark:border-t-base-300">
+                            <div class="h-[1px]">
                                 <progress class="progress hidden h-[1px]" :class="elapsed > elapsedMax && '!h-[2px] !block'"></progress>
                             </div>
 
@@ -152,16 +160,16 @@ class Spotlight extends Component
                             @endif
 
                             <!-- NO RESULTS -->
-                            <template x-if="searchedWithNoResults">
-                                <div class="text-base-content/50 p-3 mary-spotlight-element">{{ $noResultsText }}</div>
+                            <template x-if="searchedWithNoResults && value != ''">
+                                <div class="text-base-content/50 p-3 border-t border-t-base-300 mary-spotlight-element">{{ $noResultsText }}</div>
                             </template>
 
                             <!-- RESULTS  -->
-                            <div class="-mx-1 mt-1.5 mb-10" @click="close()">
+                            <div class="-mx-1 mt-1" @click="close()" @keydown.enter="close()">
                                 <template x-for="(item, index) in results" :key="index">
                                     <!-- ITEM -->
                                     <a x-bind:href="item.link" class="mary-spotlight-element" wire:navigate tabindex="0">
-                                        <div class="p-3 hover:bg-base-200 border border-t-0 border-base-200 dark:border-base-300" >
+                                        <div class="p-3 hover:bg-base-200 border-t border-t-base-300" >
                                             <div class="flex gap-3 items-center">
                                                 <!-- AVATAR -->
                                                 <template x-if="item.icon">
@@ -186,6 +194,7 @@ class Spotlight extends Component
                                         </div>
                                     </a>
                                 </template>
+                                <div x-show="results.length" class="mb-3"></div>
                             </div>
                         </div>
                     </x-modal>
