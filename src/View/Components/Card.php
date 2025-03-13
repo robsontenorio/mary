@@ -72,12 +72,12 @@ class Card extends Component
                             </div>
 
                             @if($separator)
-                                <hr class="mt-3 border-base-300" />
+                                <hr class="mt-3 border-base-content/10" />
 
                                 @if($progressIndicator)
                                     <div class="h-0.5 -mt-4 mb-4">
                                         <progress
-                                            class="progress progress-primary w-full h-0.5 dark:h-1"
+                                            class="progress progress-primary w-full h-0.5"
                                             wire:loading
 
                                             @if($progressTarget())
@@ -95,7 +95,7 @@ class Card extends Component
 
                     @if($actions)
                         @if($separator)
-                            <hr class="mt-5 border-base-300" />
+                            <hr class="mt-5 border-base-content/10" />
                         @endif
 
                         <div class="flex justify-end gap-3 p-3">

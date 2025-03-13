@@ -64,7 +64,7 @@ class Modal extends Component
                         </div>
 
                         @if($separator && $actions)
-                            <hr class="border-base-300 mt-5" />
+                            <hr class="border-base-content/10 mt-5" />
                         @endif
 
                         @if($actions)

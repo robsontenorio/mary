@@ -33,7 +33,7 @@ class Pagination extends Component
     {
         return <<<'HTML'
             <div class="mary-table-pagination">
-                <div {{ $attributes->class(["border border-t-0 mb-2 border-b-base-200"]) }}></div>
+                <div {{ $attributes->class(["mb-2 border-t border-t-base-content/10"]) }}></div>
                 <div class="justify-between md:flex md:flex-row w-auto md:w-full items-center overflow-y-auto pl-2 pr-2 relative">
                     @if($isShowable())
                     <div class="flex flex-row justify-center md:justify-start mb-2 md:mb-0">

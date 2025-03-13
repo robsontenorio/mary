@@ -31,7 +31,7 @@ class Collapse extends Component
                 <div
                     {{
                         $attributes->class([
-                            'collapse border border-base-300',
+                            'collapse border border-base-content/10',
                             'join-item' => !$noJoin,
                             'collapse-arrow' => !$collapsePlusMinus && !$noIcon,
                             'collapse-plus' => $collapsePlusMinus && !$noIcon
@@ -59,7 +59,7 @@ class Collapse extends Component
                         </div>
                         <div {{ $content->attributes->merge(["class" => "collapse-content text-sm"]) }} wire:key="content-{{ $uuid }}">
                             @if($separator)
-                                <hr class="mb-3 border-base-300" />
+                                <hr class="mb-3 border-base-content/10" />
                             @endif
 
                             {{ $content }}

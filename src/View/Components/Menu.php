@@ -38,7 +38,7 @@ class Menu extends Component
                     @endif
 
                     @if($separator)
-                        <hr class="mb-3 border-base-300"/>
+                        <hr class="mb-3 border-base-content/10" />
                     @endif
 
                     {{ $slot }}
