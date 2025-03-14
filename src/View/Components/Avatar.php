@@ -46,7 +46,7 @@ class Avatar extends Component
                 @if($title || $subtitle)
                 <div>
                     @if($title)
-                        <div @class(["font-medium font-lg", is_string($title) ? '' : $title?->attributes->get('class') ]) >
+                        <div @class(["font-semibold font-lg", is_string($title) ? '' : $title?->attributes->get('class') ]) >
                             {{ $title }}
                         </div>
                     @endif

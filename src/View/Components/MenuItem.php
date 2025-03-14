@@ -64,14 +64,14 @@ class MenuItem extends Component
             return '';
         }
 
-        return <<<'HTML'
+        return <<<'BLADE'
                 @aware(['activateByRoute' => false, 'activeBgColor' => 'bg-base-300'])
 
                 <li>
                     <a
                         {{
                             $attributes->class([
-                                "my-0.5 py-2 px-4 hover:text-inherit whitespace-nowrap",
+                                "my-0.5 py-1.5 px-4 hover:text-inherit whitespace-nowrap",
                                 "mary-active-menu $activeBgColor" => ($active || ($activateByRoute && $routeMatches()))
                             ])
                         }}
@@ -99,7 +99,7 @@ class MenuItem extends Component
                         @endif
 
                         @if($icon)
-                            <span class="block -mt-0.5" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
+                            <span class="block py-0.5" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
                                 <x-mary-icon :name="$icon" />
                             </span>
                         @endif
@@ -119,6 +119,6 @@ class MenuItem extends Component
                         @endif
                     </a>
                 </li>
-            HTML;
+            BLADE;
     }
 }

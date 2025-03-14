@@ -73,7 +73,7 @@ class ListItem extends Component
                         @endif
 
                         <div class="py-3">
-                            <div @if(!is_string($value)) {{ $value->attributes->class(["font-medium truncate"]) }} @else class="font-medium truncate" @endif>
+                            <div @if(!is_string($value)) {{ $value->attributes->class(["font-semibold truncate"]) }} @else class="font-semibold truncate" @endif>
                                 {{ is_string($value) ? data_get($item, $value) : $value }}
                             </div>
 

@@ -136,7 +136,7 @@ class Spotlight extends Component
                                             x-model="value"
                                             x-ref="spotSearch"
                                             placeholder=" {{ $searchText }}"
-                                            class="w-full input input-lg border-none outline-none shadow-none border-transparent  focus:shadow-none focus:outline-none focus:border-transparent"
+                                            class="w-full input my-2 border-none outline-none shadow-none border-transparent  focus:shadow-none focus:outline-none focus:border-transparent"
                                             @focus="$el.focus()"
                                             autofocus
                                             tabindex="1"
