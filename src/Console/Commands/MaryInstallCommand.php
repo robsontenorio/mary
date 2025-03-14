@@ -82,10 +82,38 @@ class MaryInstallCommand extends Command
         $cssPath = base_path() . "{$this->ds}resources{$this->ds}css{$this->ds}app.css";
         $css = File::get($cssPath);
 
-        $css = str($css)
-            ->after('@import "tailwindcss";')->prepend("\n@plugin \"daisyui\";\n")
-            ->before("@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';")
-            ->prepend("@source \"../../app/**/**/*.php\";\n@source \"../../vendor/robsontenorio/mary/src/View/Components/**/*.php\";\n");
+        $mary = <<<EOT
+            \n\n
+            /**
+                The lines above are intact.
+                The lines below were added by maryUI installer.
+            */
+
+            /** daisyUI */
+            @plugin "daisyui" {
+                themes: light --default, dark --prefersdark, retro, aqua;
+            }
+
+            /* maryUI */
+            @source "../../vendor/robsontenorio/mary/src/View/Components/**/*.php";
+
+            /* Theme toggle */
+            @custom-variant dark (&:where(.dark, .dark *));
+
+            /**
+            * Mary Table paginator
+            */
+
+            .mary-table-pagination span[aria-current="page"] > span {
+                @apply bg-primary text-base-100
+            }
+
+            .mary-table-pagination button {
+                @apply cursor-pointer
+            }
+            EOT;
+
+        $css = str($css)->append($mary);
 
         File::put($cssPath, $css);
     }
