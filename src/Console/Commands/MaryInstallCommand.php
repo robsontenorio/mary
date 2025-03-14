@@ -25,6 +25,9 @@ class MaryInstallCommand extends Command
         // Laravel 12+
         $this->checkForLaravelVersion();
 
+        // Check it is already installed
+        $this->checkPreviousInstall();
+
         // Install Volt ?
         $shouldInstallVolt = $this->askForVolt();
 
@@ -47,9 +50,8 @@ class MaryInstallCommand extends Command
         Artisan::call('view:clear');
 
         $this->info("\n");
-        $this->info("✅  Done! Run `yarn dev` or `npm run dev` or `bun run dev` or `pnpm dev`");
-        $this->info("🌟  Give it a star: https://github.com/robsontenorio/mary");
-        $this->info("❤️  Sponsor this project: https://github.com/sponsors/robsontenorio\n");
+        $this->info("✅  Done!`");
+        $this->info("❤️  Sponsor: https://github.com/sponsors/robsontenorio\n");
     }
 
     public function installLivewire(string $shouldInstallVolt)
@@ -249,7 +251,26 @@ class MaryInstallCommand extends Command
     public function checkForLaravelVersion(): void
     {
         if (version_compare(app()->version(), '12.0', '<')) {
-            $this->error("❌ Laravel 12 or above required.");
+            $this->error("❌  Laravel 12 or above required.");
+
+            exit;
+        }
+    }
+
+    // Check it is already installed
+    public function checkPreviousInstall(): void
+    {
+        // Look for the package in composer.json
+        $composerJson = File::get(base_path() . "/composer.json");
+        $hasManyComposer = str($composerJson)->contains('robsontenorio/mary');
+
+        // Look for mary in app.css
+        $cssPath = base_path() . "{$this->ds}resources{$this->ds}css{$this->ds}app.css";
+        $css = File::get($cssPath);
+        $hasMaryCss = str($css)->contains('robsontenorio/mary');
+
+        if ($hasManyComposer || $hasMaryCss) {
+            $this->error("❌  maryUI is already installed.");
 
             exit;
         }

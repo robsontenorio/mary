@@ -66,7 +66,7 @@ Require the package again for local symlink.
 composer require robsontenorio/mary
 ```
 
-Start dev
+Start the dev server.
 
 ```bash
 yarn dev
