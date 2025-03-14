@@ -1,6 +1,6 @@
 {
     "name": "robsontenorio/mary",
-    "description": "Gorgeous Livewire UI components styled with daisyUI + Tailwind",
+    "description": "Gorgeous UI components for Livewire powered by daisyUI and Tailwind",
     "license": "MIT",
     "authors": [
         {

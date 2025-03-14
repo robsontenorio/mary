@@ -14,7 +14,7 @@
 
 ## Introduction
 
-The maryUI package is a set of gorgeous Livewire UI components styled with daisyUI + Tailwind.
+The maryUI package is a set of Gorgeous UI components for Livewire powered by daisyUI and Tailwind.
 
 ## Official Documentation
 
