@@ -26,7 +26,7 @@ class MaryInstallCommand extends Command
         $this->checkForLaravelVersion();
 
         // Check it is already installed
-        $this->checkPreviousInstall();
+        //$this->checkPreviousInstall();
 
         // Install Volt ?
         $shouldInstallVolt = $this->askForVolt();
