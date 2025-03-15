@@ -25,9 +25,6 @@ class MaryInstallCommand extends Command
         // Laravel 12+
         $this->checkForLaravelVersion();
 
-        // Check it is already installed
-        //$this->checkPreviousInstall();
-
         // Install Volt ?
         $shouldInstallVolt = $this->askForVolt();
 
@@ -252,25 +249,6 @@ class MaryInstallCommand extends Command
     {
         if (version_compare(app()->version(), '12.0', '<')) {
             $this->error("❌  Laravel 12 or above required.");
-
-            exit;
-        }
-    }
-
-    // Check it is already installed
-    public function checkPreviousInstall(): void
-    {
-        // Look for the package in composer.json
-        $composerJson = File::get(base_path() . "/composer.json");
-        $hasManyComposer = str($composerJson)->contains('robsontenorio/mary');
-
-        // Look for mary in app.css
-        $cssPath = base_path() . "{$this->ds}resources{$this->ds}css{$this->ds}app.css";
-        $css = File::get($cssPath);
-        $hasMaryCss = str($css)->contains('robsontenorio/mary');
-
-        if ($hasManyComposer || $hasMaryCss) {
-            $this->error("❌  maryUI is already installed.");
 
             exit;
         }
