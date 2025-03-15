@@ -56,7 +56,7 @@ class Tabs extends Component
                         </div>
 
                         <!-- TAB CONTENT -->
-                        <div role="tablist" {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["tabs tabs-border block"]) }}>
+                        <div role="tablist" {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["block"]) }}>
                             {{ $slot }}
                         </div>
                     </div>
