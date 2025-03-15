@@ -21,7 +21,7 @@ trait Dialog
     public function dialog(
         ?string $title = null,
         ?string $description = null,
-        ?string $position = null,
+        ?string $position = 'center',
         ?array $confirmOptions = null,
         ?array $cancelOptions = null,
         ?string $icon = 'o-information-circle',
