@@ -29,13 +29,13 @@ class Toast extends Component
                                     "
                 >
                     <div
-                        class="toast rounded-md fixed cursor-pointer z-[999]"
+                        class="toast fixed cursor-pointer z-[999]"
                         :class="toast.position || '{{ $position }}'"
                         x-show="show"
                         x-classes="alert alert-success alert-warning alert-error alert-info top-10 end-10 toast toast-top toast-bottom toast-center toast-end toast-middle toast-start"
                         @click="show = false"
                     >
-                        <div class="alert gap-2" :class="toast.css">
+                        <div class="alert rounded-md gap-2" :class="toast.css">
                             <div x-html="toast.icon"></div>
                             <div class="grid">
                                 <div x-html="toast.title" class="font-bold"></div>
