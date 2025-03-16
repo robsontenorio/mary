@@ -17,6 +17,8 @@ class Select extends Component
         public ?string $iconRight = null,
         public ?string $hint = null,
         public ?string $hintClass = 'fieldset-label',
+        public ?string $prefix = null,
+        public ?string $suffix = null,
         public ?string $placeholder = null,
         public ?string $placeholderValue = null,
         public ?bool $inline = false,
@@ -92,6 +94,11 @@ class Select extends Component
                                 }}
                              >
 
+                                {{-- PREFIX --}}
+                                @if($prefix)
+                                    <span class="label">{{ $prefix }}</span>
+                                @endif
+
                                 {{-- ICON LEFT --}}
                                 @if($icon)
                                     <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 -ml-1 opacity-40" />
@@ -111,6 +118,11 @@ class Select extends Component
                                 {{-- ICON RIGHT --}}
                                 @if($iconRight)
                                     <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 opacity-40" />
+                                @endif
+
+                                {{-- SUFFIX --}}
+                                @if($suffix)
+                                    <span class="label">{{ $suffix }}</span>
                                 @endif
                             </label>
 

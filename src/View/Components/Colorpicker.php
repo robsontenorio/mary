@@ -16,6 +16,8 @@ class Colorpicker extends Component
         public ?string $iconRight = null,
         public ?string $hint = null,
         public ?string $hintClass = 'fieldset-label',
+        public ?string $prefix = null,
+        public ?string $suffix = null,
         public ?bool $inline = false,
         public ?bool $clearable = false,
 
@@ -71,6 +73,7 @@ class Colorpicker extends Component
                              <label
                                 class="input join-item w-12 p-0"
                                 x-on:click="$refs.colorpicker.click()"
+                                :class="!$wire.{{ $modelName() }} && 'bg-[repeating-linear-gradient(45deg,_#ddd_0px,_#ddd_1px,_transparent_1px,_transparent_5px)]'"
                                 :style="{ backgroundColor: $wire.{{ $modelName() }} }"
                              >
                                 <input
@@ -93,6 +96,11 @@ class Colorpicker extends Component
                                     ])
                                 }}
                              >
+                                {{-- PREFIX --}}
+                                @if($prefix)
+                                    <span class="label">{{ $prefix }}</span>
+                                @endif
+
                                 {{-- ICON LEFT --}}
                                 @if($icon)
                                     <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 -ml-1 opacity-40" />
@@ -108,6 +116,11 @@ class Colorpicker extends Component
                                 {{-- ICON RIGHT --}}
                                 @if($iconRight)
                                     <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 opacity-40" />
+                                @endif
+
+                                {{-- SUFFIX --}}
+                                @if($suffix)
+                                    <span class="label">{{ $suffix }}</span>
                                 @endif
                             </label>
                         </div>
