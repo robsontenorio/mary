@@ -68,7 +68,7 @@ class Toggle extends Component
 
                                 {{-- HINT --}}
                                 @if($hint)
-                                    <div class="{{ $hintClass }} font-normal text-right text-xs pt-1" x-classes="fieldset-label">{{ $hint }}</div>
+                                    <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
                                 @endif
                             </div>
                         </label>
