@@ -100,7 +100,8 @@ class MaryInstallCommand extends Command
             @custom-variant dark (&:where(.dark, .dark *));
 
             /**
-            * Mary Table paginator
+            * Mary Table paginator.
+            * Because Laravel defaults does not match well the design of daisyUI.
             */
 
             .mary-table-pagination span[aria-current="page"] > span {
