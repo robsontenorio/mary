@@ -89,7 +89,6 @@ class Select extends Component
                                         "w-full",
                                         "join-item" => $prepend || $append,
                                         "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
-                                        "!select-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                                     ])
                                 }}
                              >
@@ -105,7 +104,14 @@ class Select extends Component
                                 @endif
 
                                 {{-- SELECT --}}
-                                <select id="{{ $uuid }}" class="select" {{ $attributes->whereDoesntStartWith('class') }}>
+                                <select id="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }} 
+                                {{
+                                    $attributes->whereStartsWith('class')->class([
+                                        "select",
+                                        "!select-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
+                                    ])
+                                }}
+                                >
                                     @if($placeholder)
                                         <option value="{{ $placeholderValue }}">{{ $placeholder }}</option>
                                     @endif
