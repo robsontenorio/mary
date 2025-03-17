@@ -47,7 +47,7 @@ class MaryInstallCommand extends Command
         Artisan::call('view:clear');
 
         $this->info("\n");
-        $this->info("✅  Done!`");
+        $this->info("✅  Done!");
         $this->info("❤️  Sponsor: https://github.com/sponsors/robsontenorio\n");
     }
 

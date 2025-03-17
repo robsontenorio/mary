@@ -130,8 +130,8 @@ class Spotlight extends Component
                             <!-- INPUT -->
                             <div class="flex">
                                 <div class="flex-1">
-                                    <div class="flex items-center"
-                                        <x-mary-icon name="o-magnifying-glass" />
+                                    <div class="flex items-center">
+                                        <x-mary-icon name="o-magnifying-glass"  class="opacity-40" />
                                         <input
                                             x-model="value"
                                             x-ref="spotSearch"

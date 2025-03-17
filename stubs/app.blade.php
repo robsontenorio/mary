@@ -23,7 +23,7 @@
     </x-nav>
 
     {{-- MAIN --}}
-    <x-main full-width>
+    <x-main>
         {{-- SIDEBAR --}}
         <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit">
 
@@ -47,6 +47,7 @@
                 @endif
 
                 <x-menu-item title="Hello" icon="o-sparkles" link="/" />
+                
                 <x-menu-sub title="Settings" icon="o-cog-6-tooth">
                     <x-menu-item title="Wifi" icon="o-wifi" link="####" />
                     <x-menu-item title="Archives" icon="o-archive-box" link="####" />
