@@ -58,7 +58,7 @@ class TimelineItem extends Component
 
                         <!-- SUBTITLE -->
                         @if($subtitle)
-                            <div class="text-xs text-gray-500/50 font-bold">{{ $subtitle }}</div>
+                            <div class="text-xs text-base-content/30 font-bold">{{ $subtitle }}</div>
                         @endif
 
                         <!-- DESCRIPTION -->

@@ -330,7 +330,7 @@ class Table extends Component
                             @foreach($rows as $k => $row)
                                 <tr
                                     wire:key="{{ $uuid }}-{{ $k }}"
-                                    @class([$rowClasses($row), "hover:bg-base-200/50" => !$noHover])
+                                    @class([$rowClasses($row), "hover:bg-base-200" => !$noHover])
                                     @if($attributes->has('@row-click'))
                                         @click="$dispatch('row-click', {{ json_encode($row) }});"
                                     @endif

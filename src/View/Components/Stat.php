@@ -48,7 +48,7 @@ class Stat extends Component
 
                         <div class="text-left rtl:text-right">
                             @if($title)
-                                <div class="text-xs text-gray-500 whitespace-nowrap">{{ $title }}</div>
+                                <div class="text-xs text-base-content/50 whitespace-nowrap">{{ $title }}</div>
                             @endif
 
                             <div class="font-black text-xl">{{ $value ?? $slot }}</div>

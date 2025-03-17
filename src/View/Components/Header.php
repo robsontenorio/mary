@@ -54,7 +54,7 @@ class Header extends Component
                             </div>
 
                             @if($subtitle)
-                                <div @class(["text-gray-500 text-sm mt-1", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
+                                <div @class(["text-base-content/50 text-sm mt-1", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
                                     {{ $subtitle }}
                                 </div>
                             @endif

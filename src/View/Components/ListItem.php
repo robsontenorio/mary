@@ -32,7 +32,7 @@ class ListItem extends Component
                 <div
                     {{ $attributes->class([
                             "flex justify-start items-center gap-4 px-3",
-                            "hover:bg-base-200/50" => !$noHover,
+                            "hover:bg-base-200" => !$noHover,
                             "cursor-pointer" => $link
                         ])
                     }}

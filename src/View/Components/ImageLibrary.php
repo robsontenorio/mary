@@ -155,7 +155,7 @@ class ImageLibrary extends Component
                             class="border border-base-content/10 border-dotted rounded-lg"
                         >
                             @foreach($preview as $key => $image)
-                                <div class="relative border-b-base-content/10 border-b border-dotted last:border-none cursor-move hover:bg-base-200/50" data-id="{{ $image['uuid'] }}">
+                                <div class="relative border-b-base-content/10 border-b border-dotted last:border-none cursor-move hover:bg-base-200" data-id="{{ $image['uuid'] }}">
                                     <div wire:key="preview-{{ $image['uuid'] }}" class="py-2 ps-16 pe-10 tooltip" data-tip="{{ $changeText }}">
                                         {{-- IMAGE --}}
                                         <img

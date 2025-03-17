@@ -182,7 +182,7 @@ class Tags extends Component
                                     <template :key="index" x-for="(tag, index) in tags">
                                         <span class="mary-tags-element cursor-pointer badge badge-sm badge-soft">
                                             <span x-text="tag"></span>
-                                            <x-mary-icon @click="remove(index)" x-show="!isReadonly && !isDisabled" name="o-x-mark" class="w-4 h-4 text-gray-500 hover:text-error" />
+                                            <x-mary-icon @click="remove(index)" x-show="!isReadonly && !isDisabled" name="o-x-mark" class="w-4 h-4 hover:text-error" />
                                         </span>
                                     </template>
 
@@ -211,7 +211,7 @@ class Tags extends Component
                                 </div>
 
                                 {{-- CLEAR ICON  --}}
-                                @if($clearable && !$isReadonly() && !$isDisabled)
+                                @if($clearable && !$isReadonly() && !$isDisabled())
                                     <x-mary-icon @click="clearAll()" x-show="tags.length" name="o-x-mark" class="cursor-pointer w-4 h-4 opacity-40"/>
                                 @endif
 
