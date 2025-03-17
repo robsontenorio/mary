@@ -102,7 +102,7 @@ class DatePicker extends Component
                     <label @class(["floating-label" => $label && $inline])>
                         {{-- FLOATING LABEL--}}
                         @if ($label && $inline)
-                            <span class="text-[1.3em] font-semibold">{{ $label }}</span>
+                            <span class="font-semibold">{{ $label }}</span>
                         @endif
 
                         <div class="w-full">
