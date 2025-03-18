@@ -121,6 +121,10 @@ class Tags extends Component
 
                         this.focused = true
                         $refs.searchInput.focus()
+                    },
+
+                    resize() {
+                        $refs.searchInput.style.width = ($refs.searchInput.value.length + 1) * 0.55 + 'rem'
                     }
                 }"
                 @keydown.escape="clear()"
@@ -159,7 +163,7 @@ class Tags extends Component
 
                                 {{
                                     $attributes->whereStartsWith('class')->class([
-                                        "input w-full h-fit",
+                                        "input w-full h-fit pl-2.5",
                                         "join-item" => $prepend || $append,
                                         "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
                                         "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
@@ -176,16 +180,18 @@ class Tags extends Component
                                     <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
                                 @endif
 
-                                <div wire:key="tags-{{ $uuid }}"  class="w-full flex flex-wrap items-center gap-2 py-1.5 min-h-9.5">
-
+                                <div class="w-full py-1.5 min-h-9.5 text-wrap">
                                     {{-- TAGS --}}
-                                    <template :key="index" x-for="(tag, index) in tags">
-                                        <span class="mary-tags-element cursor-pointer badge badge-sm badge-soft">
-                                            <span x-text="tag"></span>
-                                            <x-mary-icon @click="remove(index)" x-show="!isReadonly && !isDisabled" name="o-x-mark" class="w-4 h-4 hover:text-error" />
-                                        </span>
-                                    </template>
+                                    <span wire:key="tags-{{ $uuid }}">
+                                        <template :key="index" x-for="(tag, index) in tags">
+                                            <span class="mary-tags-element cursor-pointer badge badge-soft mx-0.5 inline-block">
+                                                <span x-text="tag"></span>
+                                                <x-mary-icon @click="remove(index)" x-show="!isReadonly && !isDisabled" name="o-x-mark" class="w-4 h-4 mb-0.5 hover:text-error" />
+                                            </span>
+                                        </template>
+                                    </span>
 
+                                    {{-- PLACEHOLDER --}}
                                     <span :class="(focused || tags.length) && 'hidden'" class="text-base-content/40">
                                         {{ $attributes->get('placeholder') }}
                                     </span>
@@ -195,14 +201,13 @@ class Tags extends Component
                                         id="{{ $uuid }}"
                                         type="text"
                                         enterkeyhint="done"
-                                        class="w-auto py-1"
+                                        class="w-1 py-1 !inline-block"
                                         x-ref="searchInput"
                                         :required="isRequired"
                                         :readonly="isReadonly"
                                         :disabled="isDisabled"
-                                        :class="(isReadonly || isDisabled || !focused) && '!w-1'"
                                         x-model="tag"
-                                        @input="focus()"
+                                        @input="focus(); resize();"
                                         @focus="focus()"
                                         @click.outside="clear()"
                                         @keydown.enter.prevent="push()"
