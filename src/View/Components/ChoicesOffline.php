@@ -14,9 +14,15 @@ class ChoicesOffline extends Component
 
     public function __construct(
         public ?string $label = null,
-        public ?string $icon = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-base-content/50 py-1 pb-0',
+        public ?string $hintClass = 'fieldset-label',
+        public ?string $icon = null,
+        public ?string $iconRight = null,
+        public ?bool $inline = false,
+        public ?bool $clearable = false,
+        public ?string $prefix = null,
+        public ?string $suffix = null,
+
         public ?bool $searchable = false,
         public ?bool $single = false,
         public ?bool $compact = false,
@@ -34,12 +40,14 @@ class ChoicesOffline extends Component
         public ?string $height = 'max-h-64',
         public Collection|array $options = new Collection(),
         public ?string $noResultText = 'No results found.',
+
         // Validations
         public ?string $errorField = null,
         public ?string $errorClass = 'text-error label-text-alt p-1',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
-        // slots
+
+        // Slots
         public mixed $item = null,
         public mixed $selection = null,
         public mixed $prepend = null,
@@ -151,6 +159,9 @@ class ChoicesOffline extends Component
                                 this.focused = true
                                 this.$refs.searchInput.focus()
                             },
+                            resize() {
+                                $refs.searchInput.style.width = ($refs.searchInput.value.length + 1) * 0.55 + 'rem'
+                            },
                             isActive(id) {
                                 return this.isSingle
                                     ? this.selection == id
@@ -197,184 +208,193 @@ class ChoicesOffline extends Component
                         @keydown.up="$focus.previous()"
                         @keydown.down="$focus.next()"
                     >
-                        <!-- STANDARD LABEL -->
-                        @if($label)
-                            <label :for="id" class="pt-0 label label-text font-semibold">
-                                <span>
+                        <fieldset class="fieldset py-0">
+                            {{-- STANDARD LABEL --}}
+                            @if($label && !$inline)
+                                <legend class="fieldset-legend mb-0.5">
                                     {{ $label }}
 
                                     @if($attributes->get('required'))
                                         <span class="text-error">*</span>
                                     @endif
-                                </span>
-                            </label>
-                        @endif
-
-                        <!-- PREPEND/APPEND CONTAINER -->
-                        @if($prepend || $append)
-                            <div class="flex">
-                        @endif
-
-                        <!-- PREPEND -->
-                        @if($prepend)
-                            <div class="rounded-s-lg flex items-center bg-base-200">
-                                {{ $prepend }}
-                            </div>
-                        @endif
-
-                        <!-- SELECTED OPTIONS + SEARCH INPUT -->
-                        <div
-                            @click="focus();"
-                            x-ref="container"
-
-                            {{
-                                $attributes->except(['wire:model', 'wire:model.live'])->class([
-                                    "select select-border  max-w-none h-fit ps-2.5 pe-16 py-1 inline-block cursor-pointer relative min-h-[40px] whitespace-normal",
-                                    'border border-dashed' => $isReadonly(),
-                                    'select-error' => $errors->has($errorFieldName()),
-                                    'rounded-s-none' => $prepend,
-                                    'rounded-e-none' => $append,
-                                    'ps-10' => $icon,
-                                ])
-                            }}
-                        >
-                            <!-- ICON  -->
-                            @if($icon)
-                                <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-base-content/50 pointer-events-none" />
+                                </legend>
                             @endif
 
-                            <!-- CLEAR ICON  -->
-                            @if(! $isReadonly() && ! $isDisabled())
-                                <x-mary-icon @click="reset()"  name="o-x-mark" x-show="!isSelectionEmpty" class="absolute top-1/2 end-8 -translate-y-1/2 cursor-pointer text-base-content/50 hover:text-base-content/80" />
-                            @endif
-
-                            <!-- SELECTED OPTIONS -->
-                            <span wire:key="selected-options-{{ $uuid }}">
-                                @if($compact)
-                                    <div class="bg-primary/5 text-primary text-sm hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 py-1 mt-0.5 last:me-0 rounded inline-block cursor-pointer">
-                                        <span class="font-black" x-text="selectedOptions.length"></span> {{ $compactText }}
-                                    </div>
-                                @else
-                                    <template x-for="(option, index) in selectedOptions" :key="index">
-                                        <div class="mary-choices-element bg-primary/5 text-primary text-sm hover:bg-primary/10 dark:bg-primary/20 dark:hover:bg-primary/40 dark:text-inherit px-2 me-2 py-1 mt-0.5 last:me-0 inline-block rounded cursor-pointer">
-                                            <!-- SELECTION SLOT -->
-                                             @if($selection)
-                                                <span x-html="document.getElementById('selection-{{ $uuid . '-\' + option.'. $optionValue }}).innerHTML"></span>
-                                             @else
-                                                <span x-text="option.{{ $optionLabel }}"></span>
-                                             @endif
-
-                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="text-gray-500 hover:text-error h-4 w-4" />
-                                        </div>
-                                    </template>
+                            <label @class(["floating-label" => $label && $inline])>
+                                {{-- FLOATING LABEL--}}
+                                @if ($label && $inline)
+                                    <span class="font-semibold">{{ $label }}</span>
                                 @endif
-                            </span>
 
-                            <!-- INPUT SEARCH -->
-                            <input
-                                :id="id"
-                                x-ref="searchInput"
-                                x-model="search"
-                                @keyup="lookup()"
-                                @input="focus()"
-                                @keydown.arrow-down.prevent="focus()"
-                                :required="isRequired && isSelectionEmpty"
-                                :readonly="isReadonly || isDisabled || ! isSearchable"
-                                :class="(isReadonly || isDisabled || !isSearchable || !focused) && '!w-0.5 absolute top-0'"
-                                class="max-w-20 border-none outline-none ms-2"
-                             />
+                                <div @class(["w-full", "join" => $prepend || $append])>
+                                    {{-- PREPEND --}}
+                                    @if($prepend)
+                                        {{ $prepend }}
+                                    @endif
 
-                            <!-- PLACEHOLDER -->
-                            @if (!$compact && $attributes->has('placeholder'))
-                                <span @class(["absolute inset-0 mt-1.5 me-8 truncate text-base-content/50 pointer-events-none", $icon ? "ms-10" : "ms-4"]) x-show="!focused && isSelectionEmpty">
-                                    {{ $attributes->get('placeholder') }}
-                                </span>
-                            @endif
-                        </div>
+                                    {{-- THE LABEL THAT HOLDS THE INPUT --}}
+                                    <label
+                                        @click="focus()"
+                                        x-ref="container"
 
+                                        {{
+                                            $attributes->whereStartsWith('class')->class([
+                                                "select w-full h-fit pl-2.5",
+                                                "join-item" => $prepend || $append,
+                                                "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
+                                                "!select-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
+                                            ])
+                                        }}
+                                    >
+                                        {{-- PREFIX --}}
+                                        @if($prefix)
+                                            <span class="label">{{ $prefix }}</span>
+                                        @endif
 
-                        <!-- APPEND -->
-                        @if($append)
-                            <div class="rounded-e-lg flex items-center bg-base-200">
-                                {{ $append }}
-                            </div>
-                        @endif
+                                        {{-- ICON LEFT --}}
+                                        @if($icon)
+                                            <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
+                                        @endif
 
-                        <!-- END: APPEND/PREPEND CONTAINER  -->
-                        @if($prepend || $append)
-                            </div>
-                        @endif
+                                        <div class="w-full py-1 min-h-9.5 text-wrap">
 
-                        <!-- OPTIONS LIST -->
-                        <div x-cloak x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}" >
-                            <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto" x-anchor.bottom-start="$refs.container">
+                                            {{-- SELECTED OPTIONS --}}
+                                            <span wire:key="selected-options-{{ $uuid }}">
+                                                @if($compact)
+                                                    <div class="badge badge-soft">
+                                                        <span class="font-black" x-text="selectedOptions.length"></span> {{ $compactText }}
+                                                    </div>
+                                                @else
+                                                    <template x-for="(option, index) in selectedOptions" :key="index">
+                                                        <span class="mary-choices-element cursor-pointer badge badge-soft mx-0.5 inline-block">
+                                                            {{-- SELECTION SLOT --}}
+                                                            @if($selection)
+                                                                <span x-html="document.getElementById('selection-{{ $uuid . '-\' + option.'. $optionValue }}).innerHTML"></span>
+                                                            @else
+                                                                <span x-text="option?.{{ $optionLabel }}"></span>
+                                                            @endif
 
-                               <!-- SELECT ALL -->
-                               @if($allowAll)
-                                   <div
-                                        wire:key="allow-all-{{ rand() }}"
-                                        class="font-bold   border border-s-4 border-b-base-200 hover:bg-base-200"
-                                   >
-                                        <div x-show="!isAllSelected" @click="selectAll()" class="p-3 underline decoration-wavy decoration-info">{{ $allowAllText }}</div>
-                                        <div x-show="isAllSelected" @click="reset()" class="p-3 underline decoration-wavy decoration-error">{{ $removeAllText }}</div>
-                                   </div>
-                               @endif
+                                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="w-4 h-4 mb-1 hover:text-error" />
+                                                        </span>
+                                                    </template>
+                                                @endif
+                                            </span>
 
-                                <!-- NO RESULTS -->
-                                <div
-                                    x-show="noResults"
-                                    wire:key="no-results-{{ rand() }}"
-                                    class="p-3 decoration-wavy decoration-warning underline font-bold border border-s-4 border-s-warning border-b-base-200"
-                                >
-                                    {{ $noResultText }}
-                                </div>
+                                            {{-- PLACEHOLDER --}}
+                                            <span :class="(focused || !isSelectionEmpty) && 'hidden'" class="text-base-content/40">
+                                                {{ $attributes->get('placeholder') }}
+                                            </span>
 
-                                <div x-ref="choicesOptions">
-                                    @foreach($options as $option)
-                                        <div
-                                            id="option-{{ $uuid }}-{{ data_get($option, $optionValue) }}"
-                                            wire:key="option-{{ data_get($option, $optionValue) }}"
-                                            @click="toggle({{ $getOptionValue($option) }}, true)"
-                                            @keydown.enter="toggle({{ $getOptionValue($option) }}, true)"
-                                            :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-primary'"
-                                            search-value="{{ data_get($option, $optionLabel) }}"
-                                            class="border-s-4 border-base-300 focus:bg-base-200 focus:outline-none"
-                                            tabindex="0"
-                                        >
-                                            <!-- ITEM SLOT -->
-                                            @if($item)
-                                                {{ $item($option) }}
-                                            @else
-                                                <x-mary-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar" />
-                                            @endif
-
-                                            <!-- SELECTION SLOT -->
-                                            @if($selection)
-                                                <span id="selection-{{ $uuid }}-{{ data_get($option, $optionValue) }}" class="hidden">
-                                                    {{ $selection($option) }}
-                                                </span>
-                                            @endif
+                                            {{-- INPUT SEARCH --}}
+                                            <input
+                                                :id="id"
+                                                x-ref="searchInput"
+                                                x-model="search"
+                                                @keyup="lookup()"
+                                                @input="focus(); resize();"
+                                                @focus="focus()"
+                                                @keydown.arrow-down.prevent="focus()"
+                                                :required="isRequired && isSelectionEmpty"
+                                                :readonly="isReadonly || isDisabled || ! isSearchable"
+                                                class="w-1 py-1 !inline-block outline-hidden"
+                                             />
                                         </div>
+
+                                        {{-- CLEAR ICON  --}}
+                                        @if($clearable && !$isReadonly() && !$isDisabled())
+                                            <x-mary-icon @click="clearAll()" x-show="tags.length" name="o-x-mark" class="cursor-pointer w-4 h-4 opacity-40"/>
+                                        @endif
+
+                                        {{-- ICON RIGHT --}}
+                                        @if($iconRight)
+                                            <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 opacity-40" />
+                                        @endif
+
+                                        {{-- SUFFIX --}}
+                                        @if($suffix)
+                                            <span class="label">{{ $suffix }}</span>
+                                        @endif
+
+                                    </label>
+
+                                    {{-- APPEND --}}
+                                    @if($append)
+                                        {{ $append }}
+                                    @endif
+                                </div>
+                            </label>
+
+                                {{-- ERROR --}}
+                                @if(!$omitError && $errors->has($errorFieldName()))
+                                    @foreach($errors->get($errorFieldName()) as $message)
+                                        @foreach(Arr::wrap($message) as $line)
+                                            <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
+                                            @break($firstErrorOnly)
+                                        @endforeach
+                                        @break($firstErrorOnly)
                                     @endforeach
+                                @endif
+
+                                {{-- HINT --}}
+                                @if($hint)
+                                    <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
+                                @endif
+                        </fieldset>
+
+                        {{-- OPTIONS LIST --}}
+                        <div x-cloak x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}" >
+                                <div wire:key="options-list-{{ $uuid }}" class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-300 rounded-lg cursor-pointer overflow-y-auto" x-anchor.bottom-start="$refs.container">
+
+                                   {{-- SELECT ALL --}}
+                                   @if($allowAll)
+                                       <div
+                                            wire:key="allow-all-{{ rand() }}"
+                                            class="font-bold   border border-s-4 border-b-base-200 hover:bg-base-200"
+                                       >
+                                            <div x-show="!isAllSelected" @click="selectAll()" class="p-3 underline decoration-wavy decoration-info">{{ $allowAllText }}</div>
+                                            <div x-show="isAllSelected" @click="reset()" class="p-3 underline decoration-wavy decoration-error">{{ $removeAllText }}</div>
+                                       </div>
+                                   @endif
+
+                                    {{-- NO RESULTS --}}
+                                    <div
+                                        x-show="noResults"
+                                        wire:key="no-results-{{ rand() }}"
+                                        class="p-3 decoration-wavy decoration-warning underline font-bold border border-s-4 border-s-warning border-b-base-200"
+                                    >
+                                        {{ $noResultText }}
+                                    </div>
+
+                                    <div x-ref="choicesOptions">
+                                        @foreach($options as $option)
+                                            <div
+                                                id="option-{{ $uuid }}-{{ data_get($option, $optionValue) }}"
+                                                wire:key="option-{{ data_get($option, $optionValue) }}"
+                                                @click="toggle({{ $getOptionValue($option) }}, true)"
+                                                @keydown.enter="toggle({{ $getOptionValue($option) }}, true)"
+                                                :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-neutral'"
+                                                search-value="{{ data_get($option, $optionLabel) }}"
+                                                class="border-s-4 border-base-300 focus:bg-base-200 focus:outline-none"
+                                                tabindex="0"
+                                            >
+                                                {{-- ITEM SLOT --}}
+                                                @if($item)
+                                                    {{ $item($option) }}
+                                                @else
+                                                    <x-mary-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar" />
+                                                @endif
+
+                                                {{-- SELECTION SLOT --}}
+                                                @if($selection)
+                                                    <span id="selection-{{ $uuid }}-{{ data_get($option, $optionValue) }}" class="hidden">
+                                                        {{ $selection($option) }}
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- ERROR -->
-                        @if(!$omitError && $errors->has($errorFieldName()))
-                            @foreach($errors->get($errorFieldName()) as $message)
-                                @foreach(Arr::wrap($message) as $line)
-                                    <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
-                                    @break($firstErrorOnly)
-                                @endforeach
-                                @break($firstErrorOnly)
-                            @endforeach
-                        @endif
-
-                        <!-- HINT -->
-                        @if($hint)
-                            <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
-                        @endif
                     </div>
                 </div>
             HTML;

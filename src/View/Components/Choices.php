@@ -308,7 +308,7 @@ class Choices extends Component
                                                 @keydown.arrow-down.prevent="focus()"
                                                 :required="isRequired && isSelectionEmpty"
                                                 :readonly="isReadonly || isDisabled || ! isSearchable"
-                                                class="w-10 py-1 !inline-block outline-hidden"
+                                                class="w-1 py-1 !inline-block outline-hidden"
 
                                                 @if($searchable)
                                                     @keydown.debounce.{{ $debounce }}="search($el.value, $event)"
@@ -332,7 +332,7 @@ class Choices extends Component
                                         @endif
                                     </label>
 
-                                     {{-- APPEND --}}
+                                    {{-- APPEND --}}
                                     @if($append)
                                         {{ $append }}
                                     @endif
