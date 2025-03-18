@@ -180,11 +180,11 @@ class Tags extends Component
                                     <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
                                 @endif
 
-                                <div class="w-full py-1.5 min-h-9.5 text-wrap">
+                                <div class="w-full py-1 min-h-9.5 content-center text-wrap">
                                     {{-- TAGS --}}
                                     <span wire:key="tags-{{ $uuid }}">
                                         <template :key="index" x-for="(tag, index) in tags">
-                                            <span class="mary-tags-element cursor-pointer badge badge-soft mx-0.5 inline-block">
+                                            <span class="mary-tags-element cursor-pointer badge badge-soft m-0.5 !inline-block">
                                                 <span x-text="tag"></span>
                                                 <x-mary-icon @click="remove(index)" x-show="!isReadonly && !isDisabled" name="o-x-mark" class="w-4 h-4 mb-0.5 hover:text-error" />
                                             </span>
@@ -201,7 +201,7 @@ class Tags extends Component
                                         id="{{ $uuid }}"
                                         type="text"
                                         enterkeyhint="done"
-                                        class="w-1 py-1 !inline-block"
+                                        class="w-1 !inline-block"
                                         x-ref="searchInput"
                                         :required="isRequired"
                                         :readonly="isReadonly"

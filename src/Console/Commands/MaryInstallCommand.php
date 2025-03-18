@@ -90,7 +90,7 @@ class MaryInstallCommand extends Command
 
             /** daisyUI */
             @plugin "daisyui" {
-                themes: light --default, dark --prefersdark, retro, aqua;
+                themes: light --default, dark --prefersdark;
             }
 
             /* maryUI */
@@ -100,7 +100,7 @@ class MaryInstallCommand extends Command
             @custom-variant dark (&:where(.dark, .dark *));
 
             /**
-            * Mary Table paginator.
+            * Paginator - Traditional style
             * Because Laravel defaults does not match well the design of daisyUI.
             */
 
@@ -126,7 +126,7 @@ class MaryInstallCommand extends Command
     {
         $composerJson = File::get(base_path() . "/composer.json");
 
-        collect(['jetstream', 'breeze'])->each(function (string $target) use ($composerJson) {
+        collect(['jetstream', 'breeze', 'livewire/flux'])->each(function (string $target) use ($composerJson) {
             if (str($composerJson)->contains($target)) {
                 Artisan::call('vendor:publish --force --tag mary.config');
 
@@ -152,7 +152,7 @@ class MaryInstallCommand extends Command
     public function copyStubs(string $shouldInstallVolt): void
     {
         $composerJson = File::get(base_path() . "/composer.json");
-        $hasKit = str($composerJson)->contains('jetstream') || str($composerJson)->contains('breeze');
+        $hasKit = str($composerJson)->contains('jetstream') || str($composerJson)->contains('breeze') || str($composerJson)->contains('livewire/flux');
 
         if ($hasKit) {
             $this->warn('---------------------------------------------');
