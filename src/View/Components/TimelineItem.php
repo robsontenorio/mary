@@ -64,7 +64,7 @@ class TimelineItem extends Component
                         <!-- DESCRIPTION -->
                         @if($description)
                             <div class="text-sm mt-3">
-                                {{ $description }}
+                                {!! $description !!}
                             </div>
                         @endif
                     </div>
