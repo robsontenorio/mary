@@ -100,7 +100,7 @@ class MenuItem extends Component
 
                         @if($icon)
                             <span class="block py-0.5" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
-                                <x-mary-icon :name="$icon" />
+                                <x-mary-icon :name="$icon" class="mb-0.5" />
                             </span>
                         @endif
 

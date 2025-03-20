@@ -252,6 +252,10 @@ class Choices extends Component
                                         @click="focus()"
                                         x-ref="container"
 
+                                        @if($isDisabled())
+                                            disabled
+                                        @endif
+
                                         {{
                                             $attributes->whereStartsWith('class')->class([
                                                 "select w-full h-fit pl-2.5",
@@ -289,7 +293,7 @@ class Choices extends Component
                                                                 <span x-text="option?.{{ $optionLabel }}"></span>
                                                             @endif
 
-                                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="w-4 h-4 mb-1 hover:text-error" />
+                                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="w-4 h-4 hover:text-error" />
                                                         </span>
                                                     </template>
                                                 @endif
@@ -318,7 +322,7 @@ class Choices extends Component
 
                                         {{-- CLEAR ICON  --}}
                                         @if($clearable && !$isReadonly() && !$isDisabled())
-                                            <x-mary-icon @click="clearAll()" x-show="tags.length" name="o-x-mark" class="cursor-pointer w-4 h-4 opacity-40"/>
+                                            <x-mary-icon @click="reset()" x-show="!isSelectionEmpty" name="o-x-mark" class="cursor-pointer w-4 h-4 opacity-40"/>
                                         @endif
 
                                         {{-- ICON RIGHT --}}

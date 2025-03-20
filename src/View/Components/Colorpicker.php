@@ -41,6 +41,16 @@ class Colorpicker extends Component
         return $this->errorField ?? $this->modelName();
     }
 
+    public function isReadonly(): bool
+    {
+        return $this->attributes->has('readonly') && $this->attributes->get('readonly') == true;
+    }
+
+    public function isDisabled(): bool
+    {
+        return $this->attributes->has('disabled') && $this->attributes->get('disabled') == true;
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
@@ -71,18 +81,22 @@ class Colorpicker extends Component
                         <div class="w-full join">
                              {{-- COLOR PICKER --}}
                              <label
-                                class="input join-item w-12 p-0"
                                 x-on:click="$refs.colorpicker.click()"
                                 :class="!$wire.{{ $modelName() }} && 'bg-[repeating-linear-gradient(45deg,_#ddd_0px,_#ddd_1px,_transparent_1px,_transparent_5px)]'"
                                 :style="{ backgroundColor: $wire.{{ $modelName() }} }"
+                                @class(["input join-item w-12 p-0", "border border-dashed" => $isReadonly()])
                              >
                                 <input
                                     type="color"
                                     class="cursor-pointer opacity-0 join-item"
                                     x-ref="colorpicker"
                                     x-on:click.stop=""
-                                    {{ $attributes->wire('model') }}
                                     :style="{ backgroundColor: $wire.{{ $modelName() }} }"
+                                    @class(["border-dashed" => $isReadonly()])
+
+                                    @if($isDisabled() || $isReadonly())
+                                        disabled
+                                    @endif
                                 />
                             </label>
 
@@ -91,7 +105,7 @@ class Colorpicker extends Component
                                 {{
                                     $attributes->whereStartsWith('class')->class([
                                         "input join-item w-full",
-                                        "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
+                                        "border-dashed" => $isReadonly(),
                                         "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                                     ])
                                 }}

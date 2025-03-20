@@ -46,6 +46,16 @@ class Input extends Component
         return $this->errorField ?? $this->modelName();
     }
 
+    public function isReadonly(): bool
+    {
+        return $this->attributes->has('readonly') && $this->attributes->get('readonly') == true;
+    }
+
+    public function isDisabled(): bool
+    {
+        return $this->attributes->has('disabled') && $this->attributes->get('disabled') == true;
+    }
+
     public function moneySettings(): string
     {
         return json_encode([
@@ -91,11 +101,15 @@ class Input extends Component
 
                             {{-- THE LABEL THAT HOLDS THE INPUT --}}
                             <label
+                                @if($isDisabled())
+                                    disabled
+                                @endif
+
                                 {{
                                     $attributes->whereStartsWith('class')->class([
                                         "input w-full",
                                         "join-item" => $prepend || $append,
-                                        "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
+                                        "border-dashed" => $isReadonly(),
                                         "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                                     ])
                                 }}

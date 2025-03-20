@@ -133,6 +133,7 @@ class Spotlight extends Component
                                     <div class="flex items-center">
                                         <x-mary-icon name="o-magnifying-glass"  class="opacity-40" />
                                         <input
+                                            id="{{ $uuid }}"
                                             x-model="value"
                                             x-ref="spotSearch"
                                             placeholder=" {{ $searchText }}"

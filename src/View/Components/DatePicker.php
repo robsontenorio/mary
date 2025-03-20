@@ -43,6 +43,16 @@ class DatePicker extends Component
         return $this->errorField ?? $this->modelName();
     }
 
+    public function isReadonly(): bool
+    {
+        return $this->attributes->has('readonly') && $this->attributes->get('readonly') == true;
+    }
+
+    public function isDisabled(): bool
+    {
+        return $this->attributes->has('disabled') && $this->attributes->get('disabled') == true;
+    }
+
     public function setup(): string
     {
         // Handle `wire:model.live` for `range` dates
@@ -113,12 +123,15 @@ class DatePicker extends Component
 
                             {{-- THE LABEL THAT HOLDS THE INPUT --}}
                             <label
+                                @if($isDisabled())
+                                    disabled
+                                @endif
+
                                 {{
                                     $attributes->whereStartsWith('class')->class([
                                         "input w-full",
                                         "join-item" => $prepend || $append,
-                                        "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
-                                        "bg-base-300 opacity-40 border-0 shadow-none cursor-not-allowed" => $attributes->has("disabled") && $attributes->get("disabled") == true,
+                                        "border-dashed" => $isReadonly(),
                                         "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                                     ])
                                 }}
