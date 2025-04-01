@@ -16,6 +16,7 @@ class Tab extends Component
         public ?string $label = null,
         public ?string $icon = null,
         public bool $disabled = false,
+        public bool $hidden = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this));
     }
@@ -56,7 +57,7 @@ class Tab extends Component
                         :class="{ 'tab-active': selected === '{{ $name }}' }"
                         data-name="{{ $name }}"
                         x-init="
-                                const newItem = { name: '{{ $name }}', label: {{ json_encode($tabLabel($label)) }}, disabled: {{ $disabled ? 'true' : 'false' }} };
+                                const newItem = { name: '{{ $name }}', label: {{ json_encode($tabLabel($label)) }}, disabled: {{ $disabled ? 'true' : 'false' }}, hidden: {{ $hidden ? 'true' : 'false' }} };
                                 const index = tabs.findIndex(item => item.name === '{{ $name }}');
                                 index !== -1 ? tabs[index] = newItem : tabs.push(newItem);
 
