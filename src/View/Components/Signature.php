@@ -14,12 +14,12 @@ class Signature extends Component
         public ?string $height = '250',
         public ?string $clearText = 'Clear',
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
+        public ?string $hintClass = 'label-text-alt text-base-content/50 py-1 pb-0',
         public ?array $config = [],
         public ?string $clearBtnStyle = null,
 
         // Validations
-        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?string $errorClass = 'text-error label-text-alt p-1',
         public ?string $errorField = null,
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
@@ -83,7 +83,7 @@ class Signature extends Component
                                 $attributes
                                     ->except("wire:model")
                                     ->class([
-                                        "border border-primary rounded-lg relative bg-white select-none touch-none block",
+                                        "border border-base-300 rounded-lg relative bg-white select-none touch-none block",
                                         "!border-error" => $errors->has($modelName())
                                     ])
                             }}
@@ -92,7 +92,7 @@ class Signature extends Component
 
                             <!-- CLEAR BUTTON -->
                             <div class="absolute end-2 top-1/2 -translate-y-1/2 ">
-                                <x-mary-button icon="o-backspace" :label="$clearText" @click="clear" class="{{$clearBtnStyle ?? 'btn-sm btn-ghost text-neutral'}}" />
+                                <x-mary-button icon="o-backspace" :label="$clearText" @click="clear" class="{{$clearBtnStyle ?? 'btn-sm btn-ghost'}}" />
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@ class Signature extends Component
                     @if(!$omitError && $errors->has($errorFieldName()))
                         @foreach($errors->get($errorFieldName()) as $message)
                             @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                                <div class="{{ $errorClass }}" x-classes="text-error label-text-alt p-1">{{ $line }}</div>
                                 @break($firstErrorOnly)
                             @endforeach
                             @break($firstErrorOnly)
@@ -110,7 +110,7 @@ class Signature extends Component
 
                     <!-- HINT -->
                     @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
+                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-base-content/50 py-1 pb-0">{{ $hint }}</div>
                     @endif
                 </div>
             HTML;

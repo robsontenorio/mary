@@ -30,6 +30,7 @@ use Mary\View\Components\Editor;
 use Mary\View\Components\Errors;
 use Mary\View\Components\File;
 use Mary\View\Components\Form;
+use Mary\View\Components\Group;
 use Mary\View\Components\Header;
 use Mary\View\Components\Hr;
 use Mary\View\Components\Icon;
@@ -99,7 +100,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('BladeUI\Icons\Components\Icon', 'svg');
 
         // No matter if components has custom prefix or not,
-        // we also register bellow alias to avoid naming collision,
+        // we also register below alias to avoid naming collision,
         // because they are used inside some Mary's components itself.
         Blade::component('mary-button', Button::class);
         Blade::component('mary-card', Card::class);
@@ -163,6 +164,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'progress', Progress::class);
         Blade::component($prefix . 'progress-radial', ProgressRadial::class);
         Blade::component($prefix . 'radio', Radio::class);
+        Blade::component($prefix . 'group', Group::class);
         Blade::component($prefix . 'range', Range::class);
         Blade::component($prefix . 'rating', Rating::class);
         Blade::component($prefix . 'select', Select::class);

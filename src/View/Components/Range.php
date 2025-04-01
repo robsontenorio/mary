@@ -13,12 +13,13 @@ class Range extends Component
     public function __construct(
         public ?string $label = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
+        public ?string $hintClass = 'fieldset-label',
         public ?int $min = 0,
         public ?int $max = 100,
+
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
@@ -37,45 +38,45 @@ class Range extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
-                <div>
-                    <!-- Label -->
+        return <<<'BLADE'
+            <div>
+                <fieldset class="fieldset py-0">
+                    {{-- STANDARD LABEL --}}
                     @if($label)
-                        <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
-                            <span>
-                                {{ $label }}
+                        <legend class="fieldset-legend mb-0.5">
+                            {{ $label }}
 
-                                @if($attributes->get('required'))
-                                    <span class="text-error">*</span>
-                                @endif
-                            </span>
-                        </label>
+                            @if($attributes->get('required'))
+                                <span class="text-error">*</span>
+                            @endif
+                        </legend>
                     @endif
 
-                    <!-- Range -->
+                    {{-- RANGE --}}
                     <input
                         type="range"
                         min="{{ $min }}"
                         max="{{ $max }}"
-                        {{ $attributes->merge(["class" => "range", "id" => $uuid])->except('label', 'hint', 'min', 'max') }}
+                        {{ $attributes->merge(["class" => "range w-full", "id" => $uuid])->except('label', 'hint', 'min', 'max') }}
                     />
 
-                    <!-- ERROR -->
+                    {{-- ERROR --}}
                     @if(!$omitError && $errors->has($errorFieldName()))
                         @foreach($errors->get($errorFieldName()) as $message)
                             @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
                                 @break($firstErrorOnly)
                             @endforeach
                             @break($firstErrorOnly)
                         @endforeach
                     @endif
 
-                    <!-- HINT -->
+                    {{-- HINT --}}
                     @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
+                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
                     @endif
-                </div>
-            HTML;
+                </fieldset>
+            </div>
+            BLADE;
     }
 }

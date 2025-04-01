@@ -46,24 +46,25 @@ class Modal extends Component
                 >
                     <div class="modal-box {{ $boxClass }}">
                         @if(!$persistent)
-                            <form method="dialog">
+                            <form method="dialog" tabindex="-1">
                                 @if ($id)
-                                    <button class="btn btn-sm btn-circle border-0 shadow-none absolute end-2 top-2 font-bold text-xl z-[999] bg-base-100" type="submit">✕</button>
+                                    <x-mary-button class="btn-circle btn-sm btn-ghost absolute end-2 top-2 z-[999]" icon="o-x-mark" type="submit" tabindex="-1" />
                                 @else
-                                    <button class="btn btn-sm btn-circle border-0 shadow-none absolute end-2 top-2 font-bold text-xl z-[999] bg-base-100" @click="$wire.{{ $attributes->wire('model')->value() }} = false" type="button">✕</button>
+                                    <x-mary-button class="btn-circle btn-sm btn-ghost absolute end-2 top-2 z-[999]" icon="o-x-mark" @click="$wire.{{ $attributes->wire('model')->value() }} = false" tabindex="-1" />
                                 @endif
                             </form>
                         @endif
+
                         @if($title)
-                            <x-mary-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" class="mb-5" />
+                            <x-mary-header :title="$title" :subtitle="$subtitle" size="text-xl" :separator="$separator" class="!mb-5" />
                         @endif
 
-                        <p class="">
+                        <div>
                             {{ $slot }}
-                        </p>
+                        </div>
 
-                        @if($separator)
-                            <hr class="mt-5" />
+                        @if($separator && $actions)
+                            <hr class="border-base-content/10 mt-5" />
                         @endif
 
                         @if($actions)

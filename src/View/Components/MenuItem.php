@@ -64,14 +64,14 @@ class MenuItem extends Component
             return '';
         }
 
-        return <<<'HTML'
+        return <<<'BLADE'
                 @aware(['activateByRoute' => false, 'activeBgColor' => 'bg-base-300'])
 
                 <li>
                     <a
                         {{
                             $attributes->class([
-                                "my-0.5 hover:text-inherit rounded-md whitespace-nowrap ",
+                                "my-0.5 py-1.5 px-4 hover:text-inherit whitespace-nowrap",
                                 "mary-active-menu $activeBgColor" => ($active || ($activateByRoute && $routeMatches()))
                             ])
                         }}
@@ -93,14 +93,14 @@ class MenuItem extends Component
                             wire:loading.attr="disabled"
                         @endif
                     >
-                        <!-- SPINNER -->
+                        {{-- SPINNER --}}
                         @if($spinner)
                             <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
                         @endif
 
                         @if($icon)
-                            <span class="block -mt-0.5" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
-                                <x-mary-icon :name="$icon" />
+                            <span class="block py-0.5" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
+                                <x-mary-icon :name="$icon" class="mb-0.5" />
                             </span>
                         @endif
 
@@ -110,7 +110,7 @@ class MenuItem extends Component
                                 {{ $title }}
 
                                 @if($badge)
-                                    <span class="badge badge-ghost badge-sm {{ $badgeClasses }}">{{ $badge }}</span>
+                                    <span class="badge badge-sm {{ $badgeClasses }}">{{ $badge }}</span>
                                 @endif
                             @else
                                 {{ $slot }}
@@ -119,6 +119,6 @@ class MenuItem extends Component
                         @endif
                     </a>
                 </li>
-            HTML;
+            BLADE;
     }
 }

@@ -52,7 +52,7 @@ class Tab extends Component
     {
         return <<<'HTML'
                     <a
-                        class="hidden"
+                        class="hidden tab"
                         :class="{ 'tab-active': selected === '{{ $name }}' }"
                         data-name="{{ $name }}"
                         x-init="

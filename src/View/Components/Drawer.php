@@ -87,7 +87,7 @@ class Drawer extends Component
                         >
                             @if($withCloseButton)
                                 <x-slot:menu>
-                                    <x-mary-button icon="o-x-mark" class="btn-ghost btn-sm" @click="close()" />
+                                    <x-mary-button icon="o-x-mark" class="btn-ghost btn-sm btn-circle" @click="close()" />
                                 </x-slot:menu>
                             @endif
 

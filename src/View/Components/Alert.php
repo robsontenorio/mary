@@ -33,7 +33,7 @@ class Alert extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
                 <div
                     wire:key="{{ $uuid }}"
                     {{ $attributes->whereDoesntStartWith('class') }}
@@ -41,12 +41,12 @@ class Alert extends Component
                     x-data="{ show: true }" x-show="show"
                 >
                     @if($icon)
-                        <x-mary-icon :name="$icon" />
+                        <x-mary-icon :name="$icon" class="self-start mt-1" />
                     @endif
 
                     @if($title)
                         <div>
-                            <div class="font-bold">{{ $title }}</div>
+                            <div @class(["font-bold" => $description])>{{ $title }}</div>
                             <div class="text-xs">{{ $description }}</div>
                         </div>
                     @else
@@ -58,9 +58,9 @@ class Alert extends Component
                     </div>
 
                     @if($dismissible)
-                        <x-mary-button icon="o-x-mark" @click="show = false" class="btn-xs btn-ghost self-start justify-self-end p-0 absolute sm:static -order-1 sm:order-none" />
+                        <x-mary-button icon="o-x-mark" @click="show = false" class="btn-xs btn-circle btn-ghost static self-start end-0" />
                     @endif
                 </div>
-            HTML;
+            BLADE;
     }
 }

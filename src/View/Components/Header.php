@@ -17,7 +17,7 @@ class Header extends Component
         public ?bool $separator = false,
         public ?string $progressIndicator = null,
         public ?bool $withAnchor = false,
-        public ?string $size = 'text-4xl',
+        public ?string $size = 'text-2xl',
 
         // Slots
         public mixed $middle = null,
@@ -54,7 +54,7 @@ class Header extends Component
                             </div>
 
                             @if($subtitle)
-                                <div @class(["text-gray-500 text-sm mt-1", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
+                                <div @class(["text-base-content/50 text-sm mt-1", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
                                     {{ $subtitle }}
                                 </div>
                             @endif
@@ -67,19 +67,19 @@ class Header extends Component
                                 </div>
                             </div>
                         @endif
-                        
+
                         <div @class(["flex items-center gap-3", is_string($actions) ? '' : $actions?->attributes->get('class') ]) >
                             {{ $actions}}
                         </div>
                     </div>
 
                     @if($separator)
-                        <hr class="my-5" />
+                        <hr class="border-base-content/10 mt-3" />
 
                         @if($progressIndicator)
-                            <div class="h-0.5 -mt-9 mb-9">
+                            <div class="h-0.5 -mt-4 mb-4">
                                 <progress
-                                    class="progress progress-primary w-full h-0.5 dark:h-1"
+                                    class="progress progress-primary w-full h-0.5"
                                     wire:loading
 
                                     @if($progressTarget())
