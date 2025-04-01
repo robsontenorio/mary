@@ -12,6 +12,7 @@ class Avatar extends Component
 
     /**
      * @param  ?string  $image  The URL of the avatar image.
+     * @param  ?string  $alt  The HTML `alt` attribute
      * @param  ?string  $placeholder  The placeholder of the avatar.
      * @param  ?string  $title  The title text displayed beside the avatar.
      * @slot  ?string  $title  The title text displayed beside the avatar.
@@ -20,6 +21,7 @@ class Avatar extends Component
      */
     public function __construct(
         public ?string $image = '',
+        public ?string $alt = '',
         public ?string $placeholder = '',
 
         // Slots
@@ -37,9 +39,9 @@ class Avatar extends Component
                 <div class="avatar @if(empty($image)) avatar-placeholder @endif">
                     <div {{ $attributes->class(["w-7 rounded-full", "bg-neutral text-neutral-content" => empty($image)]) }}>
                         @if(empty($image))
-                            <span class="text-xs">{{ $placeholder }}</span>
+                            <span class="text-xs" alt="{{ $alt }}">{{ $placeholder }}</span>
                         @else
-                            <img src="{{ $image }}" />
+                            <img src="{{ $image }}" alt="{{ $alt }}" />
                         @endif
                     </div>
                 </div>
