@@ -91,7 +91,7 @@ class DatePicker extends Component
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
-            <div>
+            <div wire:key="datepicker-{{ rand() }}">
                 @php
                     // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
                     $uuid = $uuid . $modelName()
@@ -152,13 +152,7 @@ class DatePicker extends Component
                                     x-on:livewire:navigating.window="instance.destroy();"
                                     class="w-full"
                                 >
-                                    <input
-                                        x-ref="input"
-                                        {{
-                                            $attributes
-                                                ->merge(['type' => 'date'])
-                                        }}
-                                    />
+                                    <input x-ref="input" {{ $attributes->merge(['type' => 'date']) }} />
                                 </div>
 
 
