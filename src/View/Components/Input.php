@@ -128,7 +128,6 @@ class Input extends Component
                                 @if($money)
                                     <div
                                         class="w-full"
-                                        wire:key="money-{{ rand() }}"
                                         x-data="{ amount: $wire.get('{{ $modelName() }}') }" x-init="$nextTick(() => new Currency($refs.myInput, {{ $moneySettings() }}))"
                                     >
                                 @endif
@@ -145,20 +144,20 @@ class Input extends Component
                                         @if($money)
                                             x-ref="myInput"
                                             :value="amount"
-                                            x-on:input="$nextTick(() => $wire.set('{{ $modelName() }}', Currency.getUnmasked(), false))"
+                                            x-on:input="$nextTick(() => $wire.set('{{ $modelName() }}', Currency.getUnmasked(), {{ json_encode($attributes->wire('model')->hasModifier('live')) }}))"
                                             inputmode="numeric"
                                         @endif
 
                                         {{
                                             $attributes
                                                 ->merge(['type' => 'text'])
-                                                ->except($money ? 'wire:model' : '')
+                                                ->except($money ? ['wire:model', 'wire:model.live'] : '')
                                         }}
                                     />
 
                                 {{-- HIDDEN MONEY INPUT + END MONEY SETUP --}}
                                 @if($money)
-                                        <input type="hidden" {{ $attributes->only('wire:model') }} />
+                                        <input type="hidden" {{ $attributes->wire('model') }} />
                                     </div>
                                 @endif
 
