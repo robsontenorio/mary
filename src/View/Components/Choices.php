@@ -314,6 +314,8 @@ class Choices extends Component
                                                 :readonly="isReadonly || isDisabled || ! isSearchable"
                                                 class="w-1 !inline-block outline-hidden"
 
+                                                {{ $attributes->whereStartsWith('@') }}
+
                                                 @if($searchable)
                                                     @keydown.debounce.{{ $debounce }}="search($el.value, $event)"
                                                 @endif
