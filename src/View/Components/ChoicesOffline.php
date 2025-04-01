@@ -301,6 +301,8 @@ class ChoicesOffline extends Component
                                                 :required="isRequired && isSelectionEmpty"
                                                 :readonly="isReadonly || isDisabled || ! isSearchable"
                                                 class="w-1 !inline-block outline-hidden"
+
+                                                {{ $attributes->whereStartsWith('@') }}
                                              />
                                         </div>
 
