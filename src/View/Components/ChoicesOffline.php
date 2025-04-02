@@ -202,11 +202,33 @@ class ChoicesOffline extends Component
                             },
                             dispatchChangeEvent(detail) {
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
+                            },
+                            getFocusableElements() {
+                                return Array.from(this.$refs.choicesOptions.querySelectorAll('[tabindex]:not([disabled])'))
+                                    .filter(el => el.offsetParent !== null && getComputedStyle(el).visibility !== 'hidden')
+                            },
+                            focusNext() {
+                                let focusableElements = this.getFocusableElements()
+                                let index = focusableElements.indexOf(document.activeElement)
+                                let nextElement = focusableElements[index + 1]
+
+                                if (nextElement) {
+                                    nextElement.focus();
+                                }
+                            },
+                            focusPrevious() {
+                                let focusableElements = this.getFocusableElements()
+                                let index = focusableElements.indexOf(document.activeElement)
+                                let prevElement = focusableElements[index - 1]
+
+                                if (prevElement) {
+                                    prevElement.focus()
+                                }
                             }
                         }"
 
-                        @keydown.up="$focus.previous()"
-                        @keydown.down="$focus.next()"
+                        @keydown.up="focusPrevious()"
+                        @keydown.down="focusNext()"
                     >
                         <fieldset class="fieldset py-0">
                             {{-- STANDARD LABEL --}}
