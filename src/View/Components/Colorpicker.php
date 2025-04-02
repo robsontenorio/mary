@@ -11,6 +11,7 @@ class Colorpicker extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
         public ?string $icon = '',
         public ?string $iconRight = null,
@@ -28,7 +29,7 @@ class Colorpicker extends Component
         public ?bool $firstErrorOnly = false,
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function modelName(): ?string

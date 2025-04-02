@@ -11,6 +11,7 @@ class Spotlight extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $shortcut = "meta.g",
         public ?string $searchText = "Search ...",
         public ?string $noResultsText = "Nothing found.",
@@ -19,7 +20,7 @@ class Spotlight extends Component
         // Slots
         public mixed $append = null
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
         $this->url = $this->url ?? route('mary.spotlight', absolute: false);
     }
 

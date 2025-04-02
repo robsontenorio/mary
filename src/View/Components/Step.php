@@ -12,6 +12,7 @@ class Step extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public int $step,
         public string $text,
         public ?string $icon = null,
@@ -19,7 +20,7 @@ class Step extends Component
         public ?string $dataContent = null,
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function iconHTML(): ?string

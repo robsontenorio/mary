@@ -20,6 +20,7 @@ class Avatar extends Component
      * @slot  ?string  $subtitle The subtitle text displayed beside the avatar.
      */
     public function __construct(
+        public ?string $id = null,
         public ?string $image = '',
         public ?string $alt = '',
         public ?string $placeholder = '',
@@ -29,7 +30,7 @@ class Avatar extends Component
         public ?string $subtitle = null
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

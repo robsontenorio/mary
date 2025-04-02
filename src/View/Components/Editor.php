@@ -21,14 +21,14 @@ class Editor extends Component
         public ?string $folder = 'editor',
         public ?bool $gplLicense = false,
         public ?array $config = [],
-        
+
         // Validations
         public ?string $errorField = null,
         public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
         $this->uploadUrl = route('mary.upload', absolute: false);
     }
 

@@ -11,13 +11,14 @@ class Tabs extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $selected = null,
         public string $labelClass = 'font-semibold',
         public string $activeClass = 'border-b-2 border-b-base-content/50',
         public string $labelDivClass = 'border-b-2 border-b-base-content/10 flex overflow-x-auto',
         public string $tabsClass = 'relative w-full',
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

@@ -11,6 +11,7 @@ class Signature extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $height = '250',
         public ?string $clearText = 'Clear',
         public ?string $hint = null,
@@ -24,7 +25,7 @@ class Signature extends Component
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function modelName(): ?string
@@ -40,7 +41,7 @@ class Signature extends Component
     public function setup(): string
     {
         return json_encode(array_merge([
-
+            
         ], $this->config));
     }
 

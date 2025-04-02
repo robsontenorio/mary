@@ -10,9 +10,10 @@ class Loading extends Component
 {
     public string $uuid;
 
-    public function __construct()
-    {
-        $this->uuid = "mary" . md5(serialize($this));
+    public function __construct(
+        public ?string $id = null,
+    ) {
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string
