@@ -12,12 +12,13 @@ class Diff extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public string $old = '',
         public string $new = '',
         public string $fileName = 'payload.json',
         public ?array $config = []
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function setup(): string

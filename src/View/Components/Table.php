@@ -18,6 +18,7 @@ class Table extends Component
     public mixed $loop = null;
 
     public function __construct(
+        public ?string $id = null,
         public array $headers,
         public ArrayAccess|array $rows,
         public ?bool $striped = false,
@@ -62,7 +63,7 @@ class Table extends Component
         unset($this->headers);
 
         // Serialize
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
 
         // Put them back
         $this->rowDecoration = $rowDecoration;

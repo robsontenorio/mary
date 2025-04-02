@@ -11,6 +11,7 @@ class ListItem extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public object|array $item,
         public string $avatar = 'avatar',
         public string $value = 'name',
@@ -22,7 +23,7 @@ class ListItem extends Component
         // Slots
         public mixed $actions = null,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

@@ -19,6 +19,7 @@ class Alert extends Component
      * @slot  mixed  $actions  Slots for actionable elements like buttons or links.
      */
     public function __construct(
+        public ?string $id = null,
         public ?string $title = null,
         public ?string $icon = null,
         public ?string $description = null,
@@ -28,7 +29,7 @@ class Alert extends Component
         // Slots
         public mixed $actions = null
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

@@ -11,13 +11,13 @@ class Errors extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $title = null,
         public ?string $description = null,
         public ?string $icon = 'o-x-circle',
         public ?array $only = [],
-
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

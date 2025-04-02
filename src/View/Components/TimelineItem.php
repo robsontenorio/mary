@@ -11,6 +11,7 @@ class TimelineItem extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public string $title,
         public ?string $subtitle = null,
         public ?string $description = null,
@@ -20,7 +21,7 @@ class TimelineItem extends Component
         public ?bool $last = false,
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

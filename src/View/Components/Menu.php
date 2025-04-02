@@ -11,13 +11,14 @@ class Menu extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $title = null,
         public ?string $icon = null,
         public ?bool $separator = false,
         public ?bool $activateByRoute = false,
         public ?string $activeBgColor = 'bg-base-300',
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

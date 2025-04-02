@@ -11,6 +11,7 @@ class ThemeToggle extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $value = null,
         public ?string $light = "Light",
         public ?string $dark = "Dark",
@@ -21,7 +22,7 @@ class ThemeToggle extends Component
         public ?bool $withLabel = false,
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

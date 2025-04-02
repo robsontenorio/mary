@@ -12,6 +12,7 @@ class Password extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $iconRight = null,
@@ -38,7 +39,7 @@ class Password extends Component
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
 
         // Cannot use a left icon when password toggle should be shown on the left side.
         if (($this->icon && ! $this->right) && ! $this->onlyPassword) {

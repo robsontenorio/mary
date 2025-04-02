@@ -14,6 +14,7 @@ class ImageLibrary extends Component
     public string $mimes = 'image/png, image/jpeg';
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
         public ?string $hint = null,
         public ?bool $hideErrors = false,
@@ -29,7 +30,7 @@ class ImageLibrary extends Component
         public Collection $preview = new Collection(),
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function modelName(): ?string

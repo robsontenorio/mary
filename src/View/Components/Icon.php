@@ -13,10 +13,11 @@ class Icon extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public string $name,
         public ?string $label = null
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function icon(): string|Stringable
