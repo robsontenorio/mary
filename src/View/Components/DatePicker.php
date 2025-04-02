@@ -70,6 +70,7 @@ class DatePicker extends Component
             'clickOpens' => ! $this->attributes->has('readonly') || $this->attributes->get('readonly') == false,
             'defaultDate' => '#model#',
             'plugins' => ['#plugins#'],
+            'disable' => ['#disable#'],
         ], Arr::except($this->config, ["plugins"])));
 
         // Plugins
@@ -79,8 +80,16 @@ class DatePicker extends Component
             $plugins .= "new " . key($plugin) . "( " . json_encode(current($plugin)) . " ),";
         }
 
-        // Plugins
         $config = str_replace('"#plugins#"', $plugins, $config);
+
+        // Disables
+        $disables = '';
+
+        foreach (Arr::get($this->config, 'disable', []) as $disable) {
+            $disables .= $disable . ',';
+        }
+
+        $config = str_replace('"#disable#"', $disables, $config);
 
         // Sets default date as current bound model
         $config = str_replace('"#model#"', '$wire.get("' . $this->modelName() . '")', $config);
