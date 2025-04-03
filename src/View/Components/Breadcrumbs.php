@@ -37,9 +37,12 @@ class Breadcrumbs extends Component
 
     public function tooltipPosition(array $element): string
     {
-        return array_key_exists('tooltip-left', $element) ? 'lg:tooltip-left' :
-            (array_key_exists('tooltip-right', $element) ? 'lg:tooltip-right' :
-                (array_key_exists('tooltip-bottom', $element) ? 'lg:tooltip-bottom' : 'lg:tooltip-top'));
+        return match (true) {
+            isset($element['tooltip-left']) => 'lg:tooltip-left',
+            isset($element['tooltip-right']) => 'lg:tooltip-right',
+            isset($element['tooltip-bottom']) => 'lg:tooltip-bottom',
+            default => 'lg:tooltip-top',
+        };
     }
 
     public function render(): View|Closure|string
