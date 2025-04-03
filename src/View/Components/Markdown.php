@@ -13,6 +13,7 @@ class Markdown extends Component
     public string $uploadUrl;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $hintClass = 'fieldset-label',
@@ -26,7 +27,7 @@ class Markdown extends Component
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
         $this->uploadUrl = route('mary.upload', absolute: false);
     }
 
@@ -48,10 +49,23 @@ class Markdown extends Component
             'uploadImage' => true,
             'imageAccept' => 'image/png, image/jpeg, image/gif, image/avif',
             'toolbar' => [
-                'heading', 'bold', 'italic', 'strikethrough', '|',
-                'code', 'quote', 'unordered-list', 'ordered-list', 'horizontal-rule', '|',
-                'link', 'upload-image', 'table', '|',
-                'preview', 'side-by-side'
+                'heading',
+                'bold',
+                'italic',
+                'strikethrough',
+                '|',
+                'code',
+                'quote',
+                'unordered-list',
+                'ordered-list',
+                'horizontal-rule',
+                '|',
+                'link',
+                'upload-image',
+                'table',
+                '|',
+                'preview',
+                'side-by-side'
             ],
         ], $this->config);
 

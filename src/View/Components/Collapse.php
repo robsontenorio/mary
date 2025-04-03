@@ -11,6 +11,7 @@ class Collapse extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $name = null,
         public ?bool $collapsePlusMinus = false,
         public ?bool $separator = false,
@@ -20,7 +21,7 @@ class Collapse extends Component
         public mixed $heading = null,
         public mixed $content = null,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

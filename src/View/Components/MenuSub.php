@@ -11,12 +11,13 @@ class MenuSub extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $title = null,
         public ?string $icon = null,
         public bool $open = false,
         public ?bool $enabled = true,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

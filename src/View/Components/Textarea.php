@@ -11,6 +11,7 @@ class Textarea extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $hintClass = 'fieldset-label',
@@ -22,7 +23,7 @@ class Textarea extends Component
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function modelName(): ?string

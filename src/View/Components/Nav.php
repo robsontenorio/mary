@@ -35,4 +35,3 @@ class Nav extends Component
                 HTML;
     }
 }
-

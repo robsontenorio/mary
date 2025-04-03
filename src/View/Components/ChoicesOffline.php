@@ -13,6 +13,7 @@ class ChoicesOffline extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $hintClass = 'fieldset-label',
@@ -53,7 +54,7 @@ class ChoicesOffline extends Component
         public mixed $prepend = null,
         public mixed $append = null
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
 
         if (($this->allowAll || $this->compact) && ($this->single || $this->searchable)) {
             throw new Exception("`allow-all` and `compact` does not work combined with `single` or `searchable`.");

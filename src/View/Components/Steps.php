@@ -11,12 +11,13 @@ class Steps extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public bool $vertical = false,
         public ?string $stepsColor = 'step-neutral',
         public ?string $stepperClasses = null
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

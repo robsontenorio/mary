@@ -15,6 +15,7 @@ class Carousel extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public array $slides,
         public ?bool $withoutIndicators = false,
         public ?bool $withoutArrows = false,
@@ -22,7 +23,7 @@ class Carousel extends Component
         // Slots
         public mixed $content = null,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

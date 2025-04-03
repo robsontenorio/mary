@@ -13,10 +13,11 @@ class Pagination extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ArrayAccess|array $rows,
         public ?array $perPageValues = [10, 20, 50, 100],
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function modelName(): ?string
