@@ -55,7 +55,7 @@ class Breadcrumbs extends Component
 
                                 {{-- Icon --}}
                                 @if($element['icon'] ?? null)
-                                    <x-icon :name="$element['icon']" @class([$iconClass]) />
+                                    <x-mary-icon :name="$element['icon']" @class([$iconClass]) />
                                 @endif
 
                                 {{-- Text --}}
@@ -73,7 +73,7 @@ class Breadcrumbs extends Component
                         
                         {{-- Seperator --}}
                         @if (!$loop->last)
-                            <x-icon name="{{ $seperator }}" @class([$seperatorClass]) />
+                            <x-mary-icon name="{{ $seperator }}" @class([$seperatorClass]) />
                         @endif
 
                     @endforeach
