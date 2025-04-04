@@ -11,6 +11,7 @@ use Mary\View\Components\Accordion;
 use Mary\View\Components\Alert;
 use Mary\View\Components\Avatar;
 use Mary\View\Components\Badge;
+use Mary\View\Components\Breadcrumbs;
 use Mary\View\Components\Button;
 use Mary\View\Components\Calendar;
 use Mary\View\Components\Card;
@@ -120,6 +121,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'alert', Alert::class);
         Blade::component($prefix . 'avatar', Avatar::class);
         Blade::component($prefix . 'badge', Badge::class);
+        Blade::component($prefix . 'breadcrumbs', Breadcrumbs::class);
         Blade::component($prefix . 'button', Button::class);
         Blade::component($prefix . 'calendar', Calendar::class);
         Blade::component($prefix . 'card', Card::class);
