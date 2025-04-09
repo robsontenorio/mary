@@ -93,7 +93,7 @@ class Password extends Component
                         </legend>
                     @endif
 
-                    <label @class(["floating-label" => $label && $inline])>
+                    <div @class(["floating-label" => $label && $inline])>
                         {{-- FLOATING LABEL--}}
                         @if ($label && $inline)
                             <span class="font-semibold">{{ $label }}</span>
@@ -106,7 +106,7 @@ class Password extends Component
                             @endif
 
                             {{-- THE LABEL THAT HOLDS THE INPUT --}}
-                            <label
+                            <div
                                 x-data="{ hidden: true }"
 
                                 {{
@@ -127,7 +127,7 @@ class Password extends Component
                                 @if($icon)
                                     <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
                                 @elseif($placeToggleLeft())
-                                    <x-mary-button x-on:click="hidden = !hidden" class="btn-ghost btn-xs btn-circle">
+                                    <x-mary-button x-on:click="hidden = !hidden" class="btn-ghost btn-xs btn-circle -m-1">
                                         <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
                                         <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
                                     </x-mary-button>
@@ -155,7 +155,7 @@ class Password extends Component
                                 @if($iconRight)
                                     <x-mary-icon :name="$iconRight" @class(["pointer-events-none w-4 h-4 opacity-40", "!end-10" => $clearable]) />
                                 @elseif($placeToggleRight())
-                                    <x-mary-button x-on:click="hidden = !hidden" @class(["btn-ghost btn-xs btn-circle", "!end-9" => $clearable])>
+                                    <x-mary-button x-on:click="hidden = !hidden" @class(["btn-ghost btn-xs btn-circle -m-1", "!end-9" => $clearable])>
                                         <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
                                         <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
                                     </x-mary-button>
@@ -165,14 +165,14 @@ class Password extends Component
                                 @if($suffix)
                                     <span class="label">{{ $suffix }}</span>
                                 @endif
-                            </label>
+                            </div>
 
                             {{-- APPEND --}}
                             @if($append)
                                 {{ $append }}
                             @endif
                         </div>
-                    </label>
+                    </div>
 
                     {{-- HINT --}}
                     @if($hint)
