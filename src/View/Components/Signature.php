@@ -40,9 +40,7 @@ class Signature extends Component
 
     public function setup(): string
     {
-        return json_encode(array_merge([
-            
-        ], $this->config));
+        return json_encode(array_merge([], $this->config));
     }
 
     public function render(): View|Closure|string
@@ -84,7 +82,7 @@ class Signature extends Component
                                 $attributes
                                     ->except("wire:model")
                                     ->class([
-                                        "border border-base-300 rounded-lg relative bg-white select-none touch-none block",
+                                        "border-[length:var(--border)] border-base-300 rounded-lg relative bg-white select-none touch-none block",
                                         "!border-error" => $errors->has($modelName())
                                     ])
                             }}
