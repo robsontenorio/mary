@@ -15,6 +15,7 @@ class MenuItem extends Component
         public ?string $id = null,
         public ?string $title = null,
         public ?string $icon = null,
+        public ?string $iconClasses = null,
         public ?string $spinner = null,
         public ?string $link = null,
         public ?string $route = null,
@@ -101,7 +102,7 @@ class MenuItem extends Component
 
                         @if($icon)
                             <span class="block py-0.5" @if($spinner) wire:loading.class="hidden" wire:target="{{ $spinnerTarget() }}" @endif>
-                                <x-mary-icon :name="$icon" class="mb-0.5" />
+                                <x-mary-icon :name="$icon" @class(['mb-0.5', $iconClasses]) />
                             </span>
                         @endif
 

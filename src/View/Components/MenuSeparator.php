@@ -14,13 +14,14 @@ class MenuSeparator extends Component
         public ?string $id = null,
         public ?string $title = null,
         public ?string $icon = null,
+        public ?string $iconClasses = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
                 <hr class="my-3 border-base-content/10"/>
 
                 @if($title)
@@ -28,13 +29,13 @@ class MenuSeparator extends Component
                         <div class="flex items-center gap-2">
 
                             @if($icon)
-                                <x-mary-icon :name="$icon"  />
+                                <x-mary-icon :name="$icon" @class([$iconClasses]) />
                             @endif
 
                             {{ $title }}
                         </div>
                     </li>
                 @endif
-            HTML;
+            BLADE;
     }
 }
