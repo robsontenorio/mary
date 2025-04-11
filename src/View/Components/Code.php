@@ -92,7 +92,6 @@ class Code extends Component
                             }
                         }"
                         x-init="init()"
-                        x-on:theme-change-class.window="console.log('foi...')"
                     >
                         <div x-ref="editor" id="{{ $id }}" style="width: 100%; height: {{ $height }}"></div>
                     </div>
