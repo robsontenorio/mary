@@ -14,8 +14,8 @@ class Tabs extends Component
         public ?string $id = null,
         public ?string $selected = null,
         public string $labelClass = 'font-semibold',
-        public string $activeClass = 'border-b-2 border-b-base-content/50',
-        public string $labelDivClass = 'border-b-2 border-b-base-content/10 flex overflow-x-auto',
+        public string $activeClass = 'border-b-[length:var(--border)] border-b-base-content/50',
+        public string $labelDivClass = 'border-b-[length:var(--border)] border-b-base-content/10 flex overflow-x-auto',
         public string $tabsClass = 'relative w-full',
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
@@ -42,7 +42,7 @@ class Tabs extends Component
                                  }
                         }"
                         class="{{ $tabsClass }}"
-                        x-class="font-semibold border-b-2 border-b-base-content/50 border-b-base-content/10 flex overflow-x-auto scrollbar-hide relative w-full"
+                        x-class="font-semibold border-b-[length:var(--border)] border-b-base-content/50 border-b-base-content/10 flex overflow-x-auto scrollbar-hide relative w-full"
                     >
                         <!-- TAB LABELS -->
                         <div class="{{ $labelDivClass }}">

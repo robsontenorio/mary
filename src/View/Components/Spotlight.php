@@ -163,7 +163,7 @@ class Spotlight extends Component
 
                             <!-- NO RESULTS -->
                             <template x-if="searchedWithNoResults && value != ''">
-                                <div class="text-base-content/50 p-3 border-t border-t-base-content/10 mary-spotlight-element">{{ $noResultsText }}</div>
+                                <div class="text-base-content/50 p-3 border-t-[length:var(--border)] border-t-base-content/10 mary-spotlight-element">{{ $noResultsText }}</div>
                             </template>
 
                             <!-- RESULTS  -->
@@ -171,7 +171,7 @@ class Spotlight extends Component
                                 <template x-for="(item, index) in results" :key="index">
                                     <!-- ITEM -->
                                     <a x-bind:href="item.link" class="mary-spotlight-element" wire:navigate tabindex="0">
-                                        <div class="p-3 hover:bg-base-200 border-t border-t-base-content/10" >
+                                        <div class="p-3 hover:bg-base-200 border-t-[length:var(--border)] border-t-base-content/10" >
                                             <div class="flex gap-3 items-center">
                                                 <!-- AVATAR -->
                                                 <template x-if="item.icon">

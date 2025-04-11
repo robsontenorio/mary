@@ -21,7 +21,7 @@ class MenuSeparator extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <hr class="my-3 border-base-content/10"/>
+                <hr class="my-3 border-t-[length:var(--border)] border-base-content/10"/>
 
                 @if($title)
                     <li {{ $attributes->class(["menu-title text-inherit uppercase"]) }}>

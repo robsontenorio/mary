@@ -52,7 +52,7 @@ class Dropdown extends Component
 
                 <ul
                     @class([
-                        'p-2','shadow','menu','z-[1]','border','border-base-content/10','bg-base-100', 'rounded-box','w-auto','min-w-max',
+                        'p-2','shadow','menu','z-[1]','border-[length:var(--border)]','border-base-content/10','bg-base-100', 'rounded-box','w-auto','min-w-max',
                         'dropdown-content' => $noXAnchor,
                     ])
                     @click="open = false"

@@ -74,12 +74,12 @@ class Header extends Component
                     </div>
 
                     @if($separator)
-                        <hr class="border-base-content/10 mt-3" />
+                        <hr class="border-t-[length:var(--border)] border-base-content/10 mt-3" />
 
                         @if($progressIndicator)
                             <div class="h-0.5 -mt-4 mb-4">
                                 <progress
-                                    class="progress progress-primary w-full h-0.5"
+                                    class="progress progress-primary w-full h-[var(--border)]"
                                     wire:loading
 
                                     @if($progressTarget())

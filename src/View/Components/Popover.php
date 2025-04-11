@@ -8,24 +8,24 @@ use Illuminate\View\Component;
 
 class Popover extends Component
 {
-    public string $uuid;
+  public string $uuid;
 
-    public function __construct(
-        public ?string $id = null,
-        public ?string $position = "bottom",
-        public ?string $offset = "10",
+  public function __construct(
+    public ?string $id = null,
+    public ?string $position = "bottom",
+    public ?string $offset = "10",
 
-        // Slots
-        public mixed $trigger = null,
-        public mixed $content = null
+    // Slots
+    public mixed $trigger = null,
+    public mixed $content = null
 
-    ) {
-        $this->uuid = "mary" . md5(serialize($this)) . $id;
-    }
+  ) {
+    $this->uuid = "mary" . md5(serialize($this)) . $id;
+  }
 
-    public function render(): View|Closure|string
-    {
-        return <<<'HTML'
+  public function render(): View|Closure|string
+  {
+    return <<<'HTML'
                 <div
                     x-cloak
                     x-data="{
@@ -56,11 +56,11 @@ class Popover extends Component
                     x-anchor.{{ $position }}.offset.{{ $offset }}="$refs.myTrigger"
                     @mouseover="show()"
                     @mouseout="hide()"
-                    {{ $content->attributes->class(["z-[1] shadow-xl border border-base-content/10 w-fit p-3 rounded-md bg-base-100"]) }}
+                    {{ $content->attributes->class(["z-[1] shadow-xl border-[length:var(--border)] border-base-content/10 w-fit p-3 rounded-md bg-base-100"]) }}
                   >
                     {{ $content }}
                   </div>
                 </div>
             HTML;
-    }
+  }
 }
