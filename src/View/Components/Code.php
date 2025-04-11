@@ -15,9 +15,10 @@ class Code extends Component
         public ?string $label = null,
         public ?string $hint = '',
         public string $language = 'javascript',
-        public string $theme = 'github_dark',
         public ?string $lightTheme = 'github_light_default',
         public ?string $darkTheme = 'github_dark',
+        public ?string $lightClass = "light",
+        public ?string $darkClass = "dark",
         public string $height = '200px',
         public string $lineHeight = '2',
         public bool $printMargin = false,
@@ -44,16 +45,21 @@ class Code extends Component
                         x-data="{
                             editor: null,
                             modelValue: @entangle($attributes->wire('model')),
+                            class: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches ? '{{ $darkClass }}' : '{{ $lightClass }}').as('mary-class'),
                             init() {
                                 ace.require('ace/ext/language_tools');
                                 this.editor = ace.edit($refs.editor);
 
                                 // Basic Settings
-                                this.editor.setTheme('ace/theme/{{ $theme }}')
                                 this.editor.session.setMode('ace/mode/{{ $language }}');
                                 this.editor.setShowPrintMargin({{ json_encode($printMargin) }});
                                 this.editor.container.style.lineHeight = {{ $lineHeight }};
                                 this.editor.renderer.setScrollMargin(10, 10);
+
+                                // Initial theme
+                                (this.class == '{{ $darkClass }}')
+                                    ? this.editor.setTheme('ace/theme/{{ $darkTheme }}')
+                                    : this.editor.setTheme('ace/theme/{{ $lightTheme }}');
 
                                 // More settings
                                 this.editor.setOptions({
