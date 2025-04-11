@@ -94,6 +94,7 @@ class Colorpicker extends Component
                                     x-on:click.stop=""
                                     :style="{ backgroundColor: $wire.{{ $modelName() }} }"
                                     @class(["border-dashed" => $isReadonly()])
+                                    {{ $attributes->wire('model') }}
 
                                     @if($isDisabled() || $isReadonly())
                                         disabled

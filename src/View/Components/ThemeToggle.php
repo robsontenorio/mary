@@ -47,6 +47,7 @@ class ThemeToggle extends Component
                                 document.documentElement.setAttribute('data-theme', this.theme)
                                 document.documentElement.setAttribute('class', this.class)
                                 this.$dispatch('theme-changed', this.theme)
+                                this.$dispatch('theme-changed-class', this.class)
                             },
                             toggle() {
                                 this.theme = this.theme == '{{ $lightTheme }}' ? '{{ $darkTheme }}' : '{{ $lightTheme }}'
