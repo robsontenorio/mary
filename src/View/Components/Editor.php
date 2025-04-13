@@ -90,7 +90,7 @@ class Editor extends Component
                                     uploadUrl: '{{ $uploadUrl }}?disk={{ $disk }}&folder={{ $folder }}&_token={{ csrf_token() }}'
                                 }"
                             x-init="
-                                tinymce.init({
+                                let settings = {
                                     {{ $setup() }},
 
                                     @if($gplLicense)
@@ -114,13 +114,6 @@ class Editor extends Component
                                         editor.on('change', (e) => value = editor.getContent())
                                         editor.on('init', () =>  editor.setContent(value ?? ''))
                                         editor.on('OpenWindow', (e) => tinymce.activeEditor.topLevelWindow = e.dialog)
-
-                                        // Handles a case where people try to change contents on the fly from Livewire methods
-                                        $watch('value', function (newValue) {
-                                            if (newValue !== editor.getContent()) {
-                                                editor.resetContent(newValue || '');
-                                            }
-                                        })
                                     },
                                     file_picker_callback: function(cb, value, meta) {
                                         const formData = new FormData()
@@ -140,6 +133,26 @@ class Editor extends Component
                                                .catch((err) => console.error(err))
                                                .finally(() => tinymce.activeEditor.topLevelWindow.unblock());
                                         });
+                                    }
+                                }
+
+                                // Init the editor
+                                tinymce.init(settings)
+
+                                // Watch for theme changes
+                                window.addEventListener('theme-changed-class', async (e) => {
+                                    settings.skin = e.detail == 'dark' ? 'oxide-dark' : 'oxide'
+                                    settings.content_css = e.detail == 'dark' ? 'dark' : 'default'
+                                    tinymce.get('{{ $id ?? $uuid }}').destroy()
+                                    tinymce.init(settings)
+                                })
+
+                                // Handles a case where people try to change contents on the fly from Livewire methods
+                                $watch('value', function (newValue) {
+                                    const editor = tinymce.get('{{ $id ?? $uuid }}')
+
+                                    if (newValue !== editor.getContent()) {
+                                        editor.resetContent(newValue || '');
                                     }
                                 })
                             "
