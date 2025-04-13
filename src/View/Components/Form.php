@@ -29,7 +29,7 @@ class Form extends Component
 
                     @if ($actions)
                         @if(!$noSeparator)
-                            <hr class="border-base-content/10 my-3" />
+                            <hr class="border-t-[length:var(--border)] border-base-content/10 my-3" />
                         @else
                             <div></div>
                         @endif

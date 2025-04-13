@@ -73,7 +73,7 @@ class Card extends Component
                             </div>
 
                             @if($separator)
-                                <hr class="mt-3 border-base-content/10" />
+                                <hr class="mt-3 border-t-[length:var(--border)] border-base-content/10" />
 
                                 @if($progressIndicator)
                                     <div class="h-0.5 -mt-4 mb-4">
@@ -96,7 +96,7 @@ class Card extends Component
 
                     @if($actions)
                         @if($separator)
-                            <hr class="mt-5 border-base-content/10" />
+                            <hr class="mt-5 border-t-[length:var(--border)] border-base-content/10" />
                         @else
                             <div></div>
                         @endif
