@@ -11,8 +11,8 @@ class ListItem extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $id = null,
         public object|array $item,
+        public ?string $id = null,
         public string $avatar = 'avatar',
         public string $value = 'name',
         public ?string $subValue = '',

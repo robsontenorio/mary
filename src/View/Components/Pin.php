@@ -11,8 +11,8 @@ class Pin extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $id = null,
         public int $size,
+        public ?string $id = null,
         public ?bool $numeric = false,
         public ?bool $hide = false,
         public ?string $hideType = "disc",
