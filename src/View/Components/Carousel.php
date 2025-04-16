@@ -15,8 +15,8 @@ class Carousel extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $id = null,
         public array $slides,
+        public ?string $id = null,
         public ?bool $withoutIndicators = false,
         public ?bool $withoutArrows = false,
 

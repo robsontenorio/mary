@@ -18,9 +18,9 @@ class Table extends Component
     public mixed $loop = null;
 
     public function __construct(
-        public ?string $id = null,
         public array $headers,
         public ArrayAccess|array $rows,
+        public ?string $id = null,
         public ?bool $striped = false,
         public ?bool $noHeaders = false,
         public ?bool $selectable = false,

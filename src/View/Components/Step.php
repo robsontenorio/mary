@@ -12,9 +12,9 @@ class Step extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $id = null,
         public int $step,
         public string $text,
+        public ?string $id = null,
         public ?string $icon = null,
         public ?string $stepClasses = null,
         public ?string $dataContent = null,

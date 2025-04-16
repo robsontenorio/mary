@@ -11,8 +11,8 @@ class ImageGallery extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $id = null,
         public array $images,
+        public ?string $id = null,
         public ?bool $withArrows = false,
         public ?bool $withIndicators = false
 
