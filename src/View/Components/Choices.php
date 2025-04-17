@@ -243,7 +243,7 @@ class Choices extends Component
                                     <span class="font-semibold">{{ $label }}</span>
                                 @endif
 
-                                <div @class(["w-full", "join" => $prepend || $append])>
+                                <div @class(["w-full", "h-full", "join" => $prepend || $append])>
                                     {{-- PREPEND --}}
                                     @if($prepend)
                                         {{ $prepend }}
@@ -260,7 +260,7 @@ class Choices extends Component
 
                                         {{
                                             $attributes->whereStartsWith('class')->class([
-                                                "select w-full h-fit pl-2.5",
+                                                "select w-full min-h-fit max-h-full pl-2.5",
                                                 "join-item" => $prepend || $append,
                                                 "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
                                                 "!select-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
