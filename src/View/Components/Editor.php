@@ -100,8 +100,8 @@ class Editor extends Component
                                     target: $refs.tinymce,
                                     images_upload_url: uploadUrl,
                                     readonly: {{ json_encode($attributes->get('readonly') || $attributes->get('disabled')) }},
-                                    skin: document.documentElement.getAttribute('data-theme') != 'dark' ? 'oxide' : 'oxide-dark',
-                                    content_css: document.documentElement.getAttribute('data-theme')!= 'dark' ? 'default' : 'dark',
+                                    skin: document.documentElement.getAttribute('class') == 'dark' ? 'oxide-dark' : 'oxide',
+                                    content_css: document.documentElement.getAttribute('class') == 'dark' ? 'dark' : 'default',
 
                                     @if($attributes->get('disabled'))
                                         content_style: 'body { opacity: 50% }',
@@ -112,6 +112,8 @@ class Editor extends Component
                                     setup: function(editor) {
                                         editor.on('keyup', (e) => value = editor.getContent())
                                         editor.on('change', (e) => value = editor.getContent())
+                                        editor.on('undo', (e) => value = editor.getContent())
+                                        editor.on('redo', (e) => value = editor.getContent())
                                         editor.on('init', () =>  editor.setContent(value ?? ''))
                                         editor.on('OpenWindow', (e) => tinymce.activeEditor.topLevelWindow = e.dialog)
 
