@@ -18,10 +18,11 @@ class Header extends Component
         public ?string $progressIndicator = null,
         public ?bool $withAnchor = false,
         public ?string $size = 'text-2xl',
-
-        // Icon
         public ?string $icon = null,
         public ?string $iconClasses = null,
+        public ?bool $sidebarToggler = false,
+        public ?bool $sidebarTogglerIcon = false,
+        public ?bool $sidebarTogglerIconClasses = false,
 
         // Slots
         public mixed $middle = null,
@@ -49,7 +50,14 @@ class Header extends Component
                                 @if($withAnchor)
                                     <a href="#{{ $anchor }}">
                                 @endif
-                                
+
+                                @if($sidebarToggler)
+                                    <div class="hidden sm:inline-flex items-center">
+                                        <x-icon name="lucide.panel-left" class="hover:text-base-content/80 text-base-content/60 cursor-pointer" @click="$dispatch('mary-sidebar-toggle')" />
+                                        <div class="border-r border-r-2 border-r-base-content/10 h-4 ms-3 me-4">&nbsp;</div>
+                                    </div>
+                                @endif
+
                                 @if($icon)
                                     <x-icon name="{{ $icon }}" class="{{ $iconClasses }}" />
                                 @endif
