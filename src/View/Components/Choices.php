@@ -146,7 +146,7 @@ class Choices extends Component
                             },
                             selectAll() {
                                 this.selection = this.options.map(i => i.{{ $optionValue }})
-                                this.dispatchChangeEvent({ value: this.selection})
+                                this.dispatchChangeEvent({ value: this.selection })
                             },
                             clear() {
                                 this.focused = false;
