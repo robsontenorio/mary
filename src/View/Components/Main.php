@@ -53,6 +53,7 @@ class Main extends Component
                                     }
                                 }"
 
+                                @mary-sidebar-toggle.window="toggle()"
                                 @menu-sub-clicked="if(collapsed) { toggle() }"
                                 @class(["drawer-side z-20 lg:z-auto", "top-0 lg:top-[65px] lg:h-[calc(100vh-65px)]" => $withNav])
                             >
