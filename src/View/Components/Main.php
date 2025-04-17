@@ -14,6 +14,7 @@ class Main extends Component
 
         // Slots
         public mixed $sidebar = null,
+        public mixed $sidebarFooter = null,
         public mixed $content = null,
         public mixed $footer = null,
         public ?bool $fullWidth = false,
@@ -77,6 +78,13 @@ class Main extends Component
                                     <div class="flex-1">
                                         {{ $sidebar }}
                                     </div>
+
+                                    {{-- SIDEBAR FOOTER --}}
+                                    @if($sidebarFooter)
+                                        <div {{ $sidebar->attributes }}>
+                                            {{ $sidebarFooter }}
+                                        </div>
+                                    @endif
 
                                      {{-- SIDEBAR COLLAPSE  --}}
                                     @if($sidebar->attributes['collapsible'])
