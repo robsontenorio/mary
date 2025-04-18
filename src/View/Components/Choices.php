@@ -277,7 +277,7 @@ class Choices extends Component
                                             <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
                                         @endif
 
-                                        <div class="w-full py-0.5 min-h-6 content-center text-wrap">
+                                        <div class="w-full py-0.5 min-h-3 content-center text-wrap">
 
                                             {{-- SELECTED OPTIONS --}}
                                             <span wire:key="selected-options-{{ $uuid }}">
