@@ -19,6 +19,8 @@ class Carousel extends Component
         public ?string $id = null,
         public ?bool $withoutIndicators = false,
         public ?bool $withoutArrows = false,
+        public ?bool $autoplay = false,
+        public ?int $interval = 2000,
 
         // Slots
         public mixed $content = null,
@@ -32,6 +34,8 @@ class Carousel extends Component
             <div x-data="{
                 slides: @js($slides),
                 withoutIndicators: {{ json_encode($withoutIndicators) }},
+                autoplay: {{ json_encode($autoplay) }},
+                interval: {{ json_encode($interval) }},
                 currentSlideIndex: 1,
                 touchStartX: null,
                 touchEndX: null,
@@ -64,6 +68,10 @@ class Carousel extends Component
                         this.touchEndX = null
                     }
                 },
+                init() {
+                    if (this.autoplay)
+                        setInterval(() => { this.next(); }, this.interval);
+                }
             }" class="relative w-full overflow-hidden">
 
                 @if(!$withoutArrows)
