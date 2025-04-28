@@ -345,7 +345,7 @@ class Table extends Component
                                                 class="checkbox checkbox-sm"
                                                 value="{{ data_get($row, $selectableKey) }}"
                                                 x-model{{ $selectableModifier() }}="selection"
-                                                @click="toggleCheck($el.checked, {{ json_encode($row) }})" />
+                                                @click.stop="toggleCheck($el.checked, {{ json_encode($row) }})" />
                                         </td>
                                     @endif
 
