@@ -167,7 +167,7 @@ class File extends Component
 
                             {{
                                 $attributes->whereDoesntStartWith('class')->class([
-                                    "file-input",
+                                    "file-input w-full",
                                     "!file-input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError,
                                     "hidden" => $slot->isNotEmpty()
                                 ])
