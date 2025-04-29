@@ -294,7 +294,7 @@ class ChoicesOffline extends Component
                                                     </div>
                                                 @else
                                                     <template x-for="(option, index) in selectedOptions" :key="index">
-                                                        <span class="mary-choices-element cursor-pointer badge badge-soft m-0.5 !inline-block">
+                                                        <span class="mary-choices-element cursor-pointer badge badge-soft m-0.5 !inline-block !h-auto">
                                                             {{-- SELECTION SLOT --}}
                                                             @if($selection)
                                                                 <span x-html="document.getElementById('selection-{{ $uuid . '-\' + option.'. $optionValue }}).innerHTML"></span>
