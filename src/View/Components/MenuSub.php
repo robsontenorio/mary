@@ -16,14 +16,15 @@ class MenuSub extends Component
         public ?string $icon = null,
         public ?string $iconClasses = null,
         public bool $open = false,
-        public ?bool $enabled = true,
+        public ?bool $hidden = false,
+        public ?bool $disabled = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string
     {
-        if ($this->enabled === false) {
+        if ($this->hidden === true) {
             return '';
         }
 
@@ -35,6 +36,7 @@ class MenuSub extends Component
                 @endphp
 
                 <li
+                @class(['menu-disabled' => $disabled])
                     x-data="
                     {
                         show: @if($submenuActive || $open) true @else false @endif,
