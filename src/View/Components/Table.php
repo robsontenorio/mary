@@ -417,6 +417,12 @@ class Table extends Component
                                 @endif
                             @endforeach
                         </tbody>
+
+                        @isset ($footer)
+                        <tfoot {{ $footer->attributes ?? '' }}>
+                        {{ $footer }}
+                        </tfoot>
+                        @endif
                     </table>
 
                     @if(count($rows) === 0)
