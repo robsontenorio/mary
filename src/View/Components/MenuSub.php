@@ -35,6 +35,7 @@ class MenuSub extends Component
                     $submenuActive = Str::contains($slot, 'mary-active-menu');
                 @endphp
 
+                @if ($slot->isNotEmpty())
                 <li
                 @class(['menu-disabled' => $disabled])
                     x-data="
@@ -66,6 +67,7 @@ class MenuSub extends Component
                         </ul>
                     </details>
                 </li>
+                @endif
                 BLADE;
     }
 }
