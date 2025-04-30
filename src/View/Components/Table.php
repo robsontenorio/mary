@@ -418,11 +418,12 @@ class Table extends Component
                             @endforeach
                         </tbody>
 
+                        <!-- FOOTER SLOT -->
                         @isset ($footer)
                         <tfoot {{ $footer->attributes ?? '' }}>
                         {{ $footer }}
                         </tfoot>
-                        @endif
+                        @endisset
                     </table>
 
                     @if(count($rows) === 0)
