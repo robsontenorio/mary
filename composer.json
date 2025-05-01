@@ -1,6 +1,6 @@
 {
     "name": "robsontenorio/mary",
-    "description": "Laravel Blade UI Components for Livewire 3",
+    "description": "Gorgeous UI components for Livewire powered by daisyUI and Tailwind",
     "license": "MIT",
     "authors": [
         {
@@ -33,14 +33,14 @@
         "alpinejs"
     ],
     "require": {
-        "illuminate/support": "^10.0|^11.0",
+        "illuminate/support": "^10.0|^11.0|^12.0",
         "jfcherng/php-diff": "^6.15",
         "laravel/prompts": "^0|^1",
-        "blade-ui-kit/blade-heroicons": "^2.3"
+        "blade-ui-kit/blade-heroicons": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.5",
-        "orchestra/testbench": "^8.21"
+        "phpunit/phpunit": "^10|^11",
+        "orchestra/testbench": "^8|^9|^10"
     },
     "autoload": {
         "psr-4": {

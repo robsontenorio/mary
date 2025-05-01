@@ -20,6 +20,7 @@ class Table extends Component
     public function __construct(
         public array $headers,
         public ArrayAccess|array $rows,
+        public ?string $id = null,
         public ?bool $striped = false,
         public ?bool $noHeaders = false,
         public ?bool $selectable = false,
@@ -62,7 +63,7 @@ class Table extends Component
         unset($this->headers);
 
         // Serialize
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
 
         // Put them back
         $this->rowDecoration = $rowDecoration;
@@ -97,16 +98,16 @@ class Table extends Component
     {
         $format = $header['format'] ?? null;
 
-        if (!$format){
+        if (! $format) {
             return $field;
         }
 
-        if (is_callable($format)){
+        if (is_callable($format)) {
             return $format($row, $field);
         }
 
         if ($format[0] == 'currency') {
-            return ($format[2] ?? '').number_format($field, ...str_split($format[1]));
+            return ($format[2] ?? '') . number_format($field, ...str_split($format[1]));
         }
 
         if ($format[0] == 'date' && $field) {
@@ -273,7 +274,7 @@ class Table extends Component
                         }}
                     >
                         <!-- HEADERS -->
-                        <thead @class(["text-black dark:text-gray-200", "hidden" => $noHeaders])>
+                        <thead @class(["text-base-content", "hidden" => $noHeaders])>
                             <tr x-ref="headers">
                                 <!-- CHECKALL -->
                                 @if($selectable)
@@ -330,7 +331,7 @@ class Table extends Component
                             @foreach($rows as $k => $row)
                                 <tr
                                     wire:key="{{ $uuid }}-{{ $k }}"
-                                    @class([$rowClasses($row), "hover:bg-base-200/50" => !$noHover])
+                                    @class([$rowClasses($row), "hover:bg-base-200" => !$noHover])
                                     @if($attributes->has('@row-click'))
                                         @click="$dispatch('row-click', {{ json_encode($row) }});"
                                     @endif
@@ -341,10 +342,10 @@ class Table extends Component
                                             <input
                                                 id="checkbox-{{ $uuid }}-{{ $k }}"
                                                 type="checkbox"
-                                                class="checkbox checkbox-sm checkbox-primary"
+                                                class="checkbox checkbox-sm"
                                                 value="{{ data_get($row, $selectableKey) }}"
                                                 x-model{{ $selectableModifier() }}="selection"
-                                                @click="toggleCheck($el.checked, {{ json_encode($row) }})" />
+                                                @click.stop="toggleCheck($el.checked, {{ json_encode($row) }})" />
                                         </td>
                                     @endif
 
@@ -420,12 +421,12 @@ class Table extends Component
 
                     @if(count($rows) === 0)
                         @if($showEmptyText)
-                            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+                            <div class="text-center py-4 text-base-content/50">
                                 {{ $emptyText }}
                             </div>
                         @endif
                         @if($empty)
-                            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+                            <div class="text-center py-4 text-base-content/50">
                                 {{ $empty }}
                             </div>
                         @endif

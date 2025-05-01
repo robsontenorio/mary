@@ -13,6 +13,7 @@ class Button extends Component
     public string $tooltipPosition = 'lg:tooltip-top';
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $iconRight = null,
@@ -28,7 +29,7 @@ class Button extends Component
         public ?string $tooltipRight = null,
         public ?string $tooltipBottom = null,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
         $this->tooltip = $this->tooltip ?? $this->tooltipLeft ?? $this->tooltipRight ?? $this->tooltipBottom;
         $this->tooltipPosition = $this->tooltipLeft ? 'lg:tooltip-left' : ($this->tooltipRight ? 'lg:tooltip-right' : ($this->tooltipBottom ? 'lg:tooltip-bottom' : 'lg:tooltip-top'));
     }
@@ -44,7 +45,7 @@ class Button extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
+        return <<<'BLADE'
                 @if($link)
                     <a href="{!! $link !!}"
                 @else
@@ -53,7 +54,7 @@ class Button extends Component
 
                     wire:key="{{ $uuid }}"
                     {{ $attributes->whereDoesntStartWith('class')->merge(['type' => 'button']) }}
-                    {{ $attributes->class(['btn normal-case', "!inline-flex lg:tooltip $tooltipPosition" => $tooltip]) }}
+                    {{ $attributes->class(['btn', "!inline-flex lg:tooltip $tooltipPosition" => $tooltip]) }}
 
                     @if($link && $external)
                         target="_blank"
@@ -91,7 +92,7 @@ class Button extends Component
                             {{ $label }}
                         </span>
                         @if(strlen($badge ?? '') > 0)
-                            <span class="badge badge-primary {{ $badgeClasses }}">{{ $badge }}</span>
+                            <span class="badge badge-sm {{ $badgeClasses }}">{{ $badge }}</span>
                         @endif
                     @else
                         {{ $slot }}
@@ -114,6 +115,6 @@ class Button extends Component
                 @else
                     </a>
                 @endif
-            HTML;
+            BLADE;
     }
 }

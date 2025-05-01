@@ -11,6 +11,7 @@ use Mary\View\Components\Accordion;
 use Mary\View\Components\Alert;
 use Mary\View\Components\Avatar;
 use Mary\View\Components\Badge;
+use Mary\View\Components\Breadcrumbs;
 use Mary\View\Components\Button;
 use Mary\View\Components\Calendar;
 use Mary\View\Components\Card;
@@ -19,6 +20,7 @@ use Mary\View\Components\Chart;
 use Mary\View\Components\Checkbox;
 use Mary\View\Components\Choices;
 use Mary\View\Components\ChoicesOffline;
+use Mary\View\Components\Code;
 use Mary\View\Components\Collapse;
 use Mary\View\Components\Colorpicker;
 use Mary\View\Components\DatePicker;
@@ -30,6 +32,7 @@ use Mary\View\Components\Editor;
 use Mary\View\Components\Errors;
 use Mary\View\Components\File;
 use Mary\View\Components\Form;
+use Mary\View\Components\Group;
 use Mary\View\Components\Header;
 use Mary\View\Components\Hr;
 use Mary\View\Components\Icon;
@@ -100,7 +103,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('BladeUI\Icons\Components\Icon', 'svg');
 
         // No matter if components has custom prefix or not,
-        // we also register bellow alias to avoid naming collision,
+        // we also register below alias to avoid naming collision,
         // because they are used inside some Mary's components itself.
         Blade::component('mary-button', Button::class);
         Blade::component('mary-card', Card::class);
@@ -120,6 +123,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'alert', Alert::class);
         Blade::component($prefix . 'avatar', Avatar::class);
         Blade::component($prefix . 'badge', Badge::class);
+        Blade::component($prefix . 'breadcrumbs', Breadcrumbs::class);
         Blade::component($prefix . 'button', Button::class);
         Blade::component($prefix . 'calendar', Calendar::class);
         Blade::component($prefix . 'card', Card::class);
@@ -127,6 +131,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'checkbox', Checkbox::class);
         Blade::component($prefix . 'choices', Choices::class);
         Blade::component($prefix . 'choices-offline', ChoicesOffline::class);
+        Blade::component($prefix . 'code', Code::class);
         Blade::component($prefix . 'collapse', Collapse::class);
         Blade::component($prefix . 'colorpicker', Colorpicker::class);
         Blade::component($prefix . 'datepicker', DatePicker::class);
@@ -164,6 +169,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component($prefix . 'progress', Progress::class);
         Blade::component($prefix . 'progress-radial', ProgressRadial::class);
         Blade::component($prefix . 'radio', Radio::class);
+        Blade::component($prefix . 'group', Group::class);
         Blade::component($prefix . 'range', Range::class);
         Blade::component($prefix . 'rating', Rating::class);
         Blade::component($prefix . 'select', Select::class);

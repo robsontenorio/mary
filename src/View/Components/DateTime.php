@@ -8,24 +8,29 @@ use Illuminate\View\Component;
 
 class DateTime extends Component
 {
-
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $iconRight = null,
         public ?string $hint = null,
-        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
+        public ?string $hintClass = 'fieldset-label',
         public ?bool $inline = false,
+
+        // Slots
+        public mixed $prepend = null,
+        public mixed $append = null,
+
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function modelName(): ?string
@@ -40,74 +45,91 @@ class DateTime extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
-             <div>
-                <!-- STANDARD LABEL -->
-                @if($label && !$inline)
-                    <label for="{{ $uuid }}" class="pt-0 label label-text font-semibold">
-                        <span>
+        return <<<'BLADE'
+            <div>
+                @php
+                    // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
+                    $uuid = $uuid . $modelName()
+                @endphp
+
+                <fieldset class="fieldset py-0">
+                    {{-- STANDARD LABEL --}}
+                    @if($label && !$inline)
+                        <legend class="fieldset-legend mb-0.5">
                             {{ $label }}
 
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
                             @endif
-                        </span>
+                        </legend>
+                    @endif
+
+                    <label @class(["floating-label" => $label && $inline])>
+                        {{-- FLOATING LABEL--}}
+                        @if ($label && $inline)
+                            <span class="font-semibold">{{ $label }}</span>
+                        @endif
+
+                        <div class="w-full">
+                            {{-- PREPEND --}}
+                            @if($prepend)
+                                {{ $prepend }}
+                            @endif
+
+                            {{-- THE LABEL THAT HOLDS THE INPUT --}}
+                            <label
+                                {{
+                                    $attributes->whereStartsWith('class')->class([
+                                        "input w-full",
+                                        "join-item" => $prepend || $append,
+                                        "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
+                                        "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
+                                    ])
+                                }}
+                             >
+
+                                {{-- ICON LEFT --}}
+                                @if($icon)
+                                    <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 -ml-1 opacity-40" />
+                                @endif
+
+                                {{-- INPUT --}}
+                                <input
+                                    id="{{ $uuid }}"
+                                    class="!grid"
+                                    {{ $attributes->whereDoesntStartWith('class')->merge(['type' => 'date']) }}
+                                />
+
+                                {{-- ICON RIGHT --}}
+                                @if($iconRight)
+                                    <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 opacity-40" />
+                                @endif
+                            </label>
+
+                            {{-- APPEND --}}
+                            @if($append)
+                                {{ $append }}
+                            @endif
+                        </div>
                     </label>
-                @endif
 
-                <div class="flex-1 relative">
-                    <input
-                        id="{{ $uuid }}"
-
-                        {{ $attributes
-                                ->merge(['type' => 'date'])
-                                ->class([
-                                    "input input-primary w-full peer appearance-none",
-                                    'ps-10' => ($icon),
-                                    'h-14' => ($inline),
-                                    'pt-3' => ($inline && $label),
-                                    'border border-dashed' => $attributes->has('readonly') && $attributes->get('readonly') == true,
-                                    'input-error' => $errors->has($errorFieldName())
-                                ])
-                        }}
-                    />
-
-                    <!-- ICON  -->
-                    @if($icon)
-                        <x-mary-icon :name="$icon" class="absolute top-1/2 -translate-y-1/2 start-3 text-gray-400 pointer-events-none" />
-                    @endif
-
-                    <!-- RIGHT ICON  -->
-                    @if($iconRight)
-                        <x-mary-icon :name="$iconRight" class="absolute top-1/2 end-3 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                    @endif
-
-                    <!-- INLINE LABEL -->
-                    @if($label && $inline)
-                        <label for="{{ $uuid }}" class="absolute text-gray-400 duration-300 transform -translate-y-1 scale-75 top-2 origin-[0] bg-white rounded dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-1 @if($inline && $icon) start-9 @else start-3 @endif">
-                            {{ $label }}
-                        </label>
-                    @endif
-
-                </div>
-
-                <!-- ERROR -->
-                @if(!$omitError && $errors->has($errorFieldName()))
-                    @foreach($errors->get($errorFieldName()) as $message)
-                        @foreach(Arr::wrap($message) as $line)
-                            <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                    {{-- ERROR --}}
+                    @if(!$omitError && $errors->has($errorFieldName()))
+                        @foreach($errors->get($errorFieldName()) as $message)
+                            @foreach(Arr::wrap($message) as $line)
+                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
+                                @break($firstErrorOnly)
+                            @endforeach
                             @break($firstErrorOnly)
                         @endforeach
-                        @break($firstErrorOnly)
-                    @endforeach
-                @endif
+                    @endif
 
-                <!-- HINT -->
-                @if($hint)
-                    <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
-                @endif
-
+                    {{-- HINT --}}
+                    @if($hint)
+                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
+                    @endif
+                </fieldset>
             </div>
-            HTML;
+            BLADE;
     }
 }

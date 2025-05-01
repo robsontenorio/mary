@@ -22,6 +22,9 @@ class MaryInstallCommand extends Command
     {
         $this->info("❤️  maryUI installer");
 
+        // Laravel 12+
+        $this->checkForLaravelVersion();
+
         // Install Volt ?
         $shouldInstallVolt = $this->askForVolt();
 
@@ -44,9 +47,8 @@ class MaryInstallCommand extends Command
         Artisan::call('view:clear');
 
         $this->info("\n");
-        $this->info("✅  Done! Run `yarn dev` or `npm run dev` or `bun run dev` or `pnpm dev`");
-        $this->info("🌟  Give it a star: https://github.com/robsontenorio/mary");
-        $this->info("❤️  Sponsor this project: https://github.com/sponsors/robsontenorio\n");
+        $this->info("✅  Done!");
+        $this->info("❤️  Sponsor: https://github.com/sponsors/robsontenorio\n");
     }
 
     public function installLivewire(string $shouldInstallVolt)
@@ -69,67 +71,51 @@ class MaryInstallCommand extends Command
          */
         $this->info("\nInstalling daisyUI + Tailwind...\n");
 
-        Process::run("$packageManagerCommand tailwindcss@^3 daisyui@^4 postcss autoprefixer", function (string $type, string $output) {
+        Process::run("$packageManagerCommand daisyui tailwindcss @tailwindcss/vite", function (string $type, string $output) {
             echo $output;
         })->throw();
 
         /**
          * Setup app.css
          */
-
         $cssPath = base_path() . "{$this->ds}resources{$this->ds}css{$this->ds}app.css";
         $css = File::get($cssPath);
 
-        if (! str($css)->contains('@tailwind')) {
-            $stub = File::get(__DIR__ . "/../../../stubs/app.css");
-            File::put($cssPath, str($css)->prepend($stub));
-        }
+        $mary = <<<EOT
+            \n\n
+            /**
+                The lines above are intact.
+                The lines below were added by maryUI installer.
+            */
 
-        /**
-         * Setup tailwind.config.js
-         */
+            /** daisyUI */
+            @plugin "daisyui" {
+                themes: light --default, dark --prefersdark;
+            }
 
-        $tailwindJsPath = base_path() . "{$this->ds}tailwind.config.js";
+            /* maryUI */
+            @source "../../vendor/robsontenorio/mary/src/View/Components/**/*.php";
 
-        if (! File::exists($tailwindJsPath)) {
-            $this->copyFile(__DIR__ . "/../../../stubs/tailwind.config.js", "tailwind.config.js");
-            $this->copyFile(__DIR__ . "/../../../stubs/postcss.config.js", "postcss.config.js");
+            /* Theme toggle */
+            @custom-variant dark (&:where(.dark, .dark *));
 
-            return;
-        }
+            /**
+            * Paginator - Traditional style
+            * Because Laravel defaults does not match well the design of daisyUI.
+            */
 
-        /**
-         * Setup Tailwind plugins
-         */
+            .mary-table-pagination span[aria-current="page"] > span {
+                @apply bg-primary text-base-100
+            }
 
-        $tailwindJs = File::get($tailwindJsPath);
-        $pluginsBlock = str($tailwindJs)->match('/plugins:[\S\s]*\[[\S\s]*\]/');
+            .mary-table-pagination button {
+                @apply cursor-pointer
+            }
+            EOT;
 
-        if ($pluginsBlock->contains('daisyui')) {
-            return;
-        }
+        $css = str($css)->append($mary);
 
-        $plugins = $pluginsBlock->after('plugins')->after('[')->before(']')->squish()->trim()->remove(' ')->explode(',')->add('require("daisyui")')->filter()->implode(',');
-        $plugins = str($plugins)->prepend("\n\t\t")->replace(',', ",\n\t\t")->append("\r\n\t");
-        $plugins = str($tailwindJs)->replace($pluginsBlock, "plugins: [$plugins]");
-
-        File::put($tailwindJsPath, $plugins);
-
-        /**
-         * Setup Tailwind contents
-         */
-        $tailwindJs = File::get($tailwindJsPath);
-        $originalContents = str($tailwindJs)->after('contents')->after('[')->before(']');
-
-        if ($originalContents->contains('robsontenorio/mary')) {
-            return;
-        }
-
-        $contents = $originalContents->squish()->trim()->remove(' ')->explode(',')->add('"./vendor/robsontenorio/mary/src/View/Components/**/*.php"')->filter()->implode(', ');
-        $contents = str($contents)->prepend("\n\t\t")->replace(',', ",\n\t\t")->append("\r\n\t");
-        $contents = str($tailwindJs)->replace($originalContents, $contents);
-
-        File::put($tailwindJsPath, $contents);
+        File::put($cssPath, $css);
     }
 
     /**
@@ -140,7 +126,7 @@ class MaryInstallCommand extends Command
     {
         $composerJson = File::get(base_path() . "/composer.json");
 
-        collect(['jetstream', 'breeze'])->each(function (string $target) use ($composerJson) {
+        collect(['jetstream', 'breeze', 'livewire/flux'])->each(function (string $target) use ($composerJson) {
             if (str($composerJson)->contains($target)) {
                 Artisan::call('vendor:publish --force --tag mary.config');
 
@@ -166,7 +152,7 @@ class MaryInstallCommand extends Command
     public function copyStubs(string $shouldInstallVolt): void
     {
         $composerJson = File::get(base_path() . "/composer.json");
-        $hasKit = str($composerJson)->contains('jetstream') || str($composerJson)->contains('breeze');
+        $hasKit = str($composerJson)->contains('jetstream') || str($composerJson)->contains('breeze') || str($composerJson)->contains('livewire/flux');
 
         if ($hasKit) {
             $this->warn('---------------------------------------------');
@@ -258,6 +244,15 @@ class MaryInstallCommand extends Command
             ['Yes', 'No'],
             hint: 'No matter what is your choice, it always installs `livewire/livewire`'
         );
+    }
+
+    public function checkForLaravelVersion(): void
+    {
+        if (version_compare(app()->version(), '12.0', '<')) {
+            $this->error("❌  Laravel 12 or above required.");
+
+            exit;
+        }
     }
 
     private function createDirectoryIfNotExists(string $path): void

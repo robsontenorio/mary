@@ -11,6 +11,7 @@ class ThemeToggle extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $value = null,
         public ?string $light = "Light",
         public ?string $dark = "Dark",
@@ -21,7 +22,7 @@ class ThemeToggle extends Component
         public ?bool $withLabel = false,
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string
@@ -46,6 +47,7 @@ class ThemeToggle extends Component
                                 document.documentElement.setAttribute('data-theme', this.theme)
                                 document.documentElement.setAttribute('class', this.class)
                                 this.$dispatch('theme-changed', this.theme)
+                                this.$dispatch('theme-changed-class', this.class)
                             },
                             toggle() {
                                 this.theme = this.theme == '{{ $lightTheme }}' ? '{{ $darkTheme }}' : '{{ $lightTheme }}'

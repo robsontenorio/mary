@@ -12,6 +12,7 @@ class Avatar extends Component
 
     /**
      * @param  ?string  $image  The URL of the avatar image.
+     * @param  ?string  $alt  The HTML `alt` attribute
      * @param  ?string  $placeholder  The placeholder of the avatar.
      * @param  ?string  $title  The title text displayed beside the avatar.
      * @slot  ?string  $title  The title text displayed beside the avatar.
@@ -19,7 +20,9 @@ class Avatar extends Component
      * @slot  ?string  $subtitle The subtitle text displayed beside the avatar.
      */
     public function __construct(
+        public ?string $id = null,
         public ?string $image = '',
+        public ?string $alt = '',
         public ?string $placeholder = '',
 
         // Slots
@@ -27,19 +30,19 @@ class Avatar extends Component
         public ?string $subtitle = null
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
-            <div class="flex items-center gap-2">
-                <div class="avatar @if(empty($image)) placeholder @endif">
+        return <<<'BLADE'
+            <div class="flex items-center gap-3">
+                <div class="avatar @if(empty($image)) avatar-placeholder @endif">
                     <div {{ $attributes->class(["w-7 rounded-full", "bg-neutral text-neutral-content" => empty($image)]) }}>
                         @if(empty($image))
-                            <span class="text-xs">{{ $placeholder }}</span>
+                            <span class="text-xs" alt="{{ $alt }}">{{ $placeholder }}</span>
                         @else
-                            <img src="{{ $image }}" />
+                            <img src="{{ $image }}" alt="{{ $alt }}" />
                         @endif
                     </div>
                 </div>
@@ -51,13 +54,13 @@ class Avatar extends Component
                         </div>
                     @endif
                     @if($subtitle)
-                        <div @class(["text-sm text-gray-400", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
+                        <div @class(["text-sm text-base-content/50", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
                             {{ $subtitle }}
                         </div>
                     @endif
                 </div>
                 @endif
             </div>
-            HTML;
+            BLADE;
     }
 }

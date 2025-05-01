@@ -13,6 +13,7 @@ class Calendar extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?int $months = 1,
         public ?string $locale = 'en-EN',
         public ?bool $weekendHighlight = false,
@@ -20,7 +21,7 @@ class Calendar extends Component
         public ?array $config = [],
         public ?array $events = [],
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function setup(): string
