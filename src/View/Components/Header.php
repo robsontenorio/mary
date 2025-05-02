@@ -51,7 +51,7 @@ class Header extends Component
                                 @endif
 
                                 @if($icon)
-                                                                    <x-icon name="{{ $icon }}" class="{{ $iconClasses }}" />
+                                    <x-icon name="{{ $icon }}" class="{{ $iconClasses }}" />
                                 @endif
 
                                 <span @class(["ml-2" => $icon])>{{ $title }}</span>
