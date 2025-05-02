@@ -49,9 +49,9 @@ class Header extends Component
                                 @if($withAnchor)
                                     <a href="#{{ $anchor }}">
                                 @endif
-                                
+
                                 @if($icon)
-                                    <x-icon name="{{ $icon }}" class="{{ $iconClasses }}" />
+                                                                    <x-icon name="{{ $icon }}" class="{{ $iconClasses }}" />
                                 @endif
 
                                 <span @class(["ml-2" => $icon])>{{ $title }}</span>
@@ -87,7 +87,7 @@ class Header extends Component
                         @if($progressIndicator)
                             <div class="h-0.5 -mt-4 mb-4">
                                 <progress
-                                    class="progress progress-primary w-full h-[var(--border)]"
+                                    class="progress progress-primary w-full h-0.5"
                                     wire:loading
 
                                     @if($progressTarget())
