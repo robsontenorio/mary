@@ -46,6 +46,7 @@ class Table extends Component
         public mixed $cell = null,
         public mixed $expansion = null,
         public mixed $empty = null,
+        public mixed $footer = null,
 
     ) {
         if ($this->selectable && $this->expandable) {
@@ -420,9 +421,9 @@ class Table extends Component
 
                         <!-- FOOTER SLOT -->
                         @isset ($footer)
-                        <tfoot {{ $footer->attributes ?? '' }}>
-                        {{ $footer }}
-                        </tfoot>
+                            <tfoot {{ $footer->attributes ?? '' }}>
+                                {{ $footer }}
+                            </tfoot>
                         @endisset
                     </table>
 
