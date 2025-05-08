@@ -12,7 +12,7 @@ class ProgressRadial extends Component
 
     public function __construct(
         public ?string $id = null,
-        public ?int $value = 0,
+        public ?float $value = 0,
         public ?string $unit = '%'
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
