@@ -352,7 +352,7 @@ class Table extends Component
 
                                     <!-- EXPAND ICON -->
                                     @if($expandable)
-                                        <td class="w-1 pe-0">
+                                        <td class="w-1 pe-0 py-0">
                                             @if(data_get($row, $expandableCondition))
                                                 <x-mary-icon
                                                     name="o-chevron-down"
