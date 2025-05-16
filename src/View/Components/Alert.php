@@ -42,7 +42,7 @@ class Alert extends Component
                     x-data="{ show: true }" x-show="show"
                 >
                     @if($icon)
-                        <x-mary-icon :name="$icon" class="self-start mt-1" />
+                        <x-mary-icon :name="$icon" class="self-center" />
                     @endif
 
                     @if($title)
