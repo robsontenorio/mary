@@ -20,6 +20,7 @@ class Drawer extends Component
         public ?bool $withCloseButton = false,
         public ?bool $closeOnEscape = false,
         public ?bool $withoutTrapFocus = false,
+        public ?string $onClose = null,
 
         //Slots
         public ?string $actions = null
@@ -61,6 +62,10 @@ class Drawer extends Component
 
                     @if(!$withoutTrapFocus)
                         x-trap="open" x-bind:inert="!open"
+                    @endif
+
+                    @if($onClose)
+                        x-effect="if(!open){ $wire.{{ $onClose }} }"
                     @endif
 
                     @class(["drawer absolute z-50", "drawer-end" => $right])
