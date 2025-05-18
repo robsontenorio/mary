@@ -19,6 +19,10 @@ class Header extends Component
         public ?bool $withAnchor = false,
         public ?string $size = 'text-2xl',
 
+        // Icon
+        public ?string $icon = null,
+        public ?string $iconClasses = null,
+
         // Slots
         public mixed $middle = null,
         public mixed $actions = null,
@@ -41,12 +45,16 @@ class Header extends Component
                 <div id="{{ $anchor }}" {{ $attributes->class(["mb-10", "mary-header-anchor" => $withAnchor]) }}>
                     <div class="flex flex-wrap gap-5 justify-between items-center">
                         <div>
-                            <div @class(["$size font-extrabold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
+                            <div @class(["flex", "items-center", "$size font-extrabold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
                                 @if($withAnchor)
                                     <a href="#{{ $anchor }}">
                                 @endif
+                                
+                                @if($icon)
+                                    <x-mary-icon name="{{ $icon }}" class="{{ $iconClasses }}" />
+                                @endif
 
-                                {{ $title }}
+                                <span @class(["ml-2" => $icon])>{{ $title }}</span>
 
                                 @if($withAnchor)
                                     </a>

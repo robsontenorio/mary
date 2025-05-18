@@ -53,8 +53,8 @@ class Card extends Component
 
                     @if($title || $subtitle)
                         <div class="pb-5">
-                            <div class="flex justify-between items-center">
-                                <div>
+                            <div class="flex gap-3 justify-between items-center w-full">
+                                <div class="grow-1">
                                     @if($title)
                                         <div @class(["text-xl font-bold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
                                             {{ $title }}
@@ -90,7 +90,7 @@ class Card extends Component
                         </div>
                     @endif
 
-                    <div>
+                    <div class="grow-1">
                         {{ $slot }}
                     </div>
 
@@ -101,7 +101,7 @@ class Card extends Component
                             <div></div>
                         @endif
 
-                        <div class="flex justify-end gap-3 pt-5">
+                        <div @class(["flex w-full items-end justify-end gap-3 pt-5", is_string($actions) ? '' : $actions?->attributes->get('class') ])>
                             {{ $actions }}
                         </div>
                     @endif

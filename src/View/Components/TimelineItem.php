@@ -11,8 +11,8 @@ class TimelineItem extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $id = null,
         public string $title,
+        public ?string $id = null,
         public ?string $subtitle = null,
         public ?string $description = null,
         public ?string $icon = null,

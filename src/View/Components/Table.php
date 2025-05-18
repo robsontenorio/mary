@@ -18,9 +18,9 @@ class Table extends Component
     public mixed $loop = null;
 
     public function __construct(
-        public ?string $id = null,
         public array $headers,
         public ArrayAccess|array $rows,
+        public ?string $id = null,
         public ?bool $striped = false,
         public ?bool $noHeaders = false,
         public ?bool $selectable = false,
@@ -46,6 +46,7 @@ class Table extends Component
         public mixed $cell = null,
         public mixed $expansion = null,
         public mixed $empty = null,
+        public mixed $footer = null,
 
     ) {
         if ($this->selectable && $this->expandable) {
@@ -345,7 +346,7 @@ class Table extends Component
                                                 class="checkbox checkbox-sm"
                                                 value="{{ data_get($row, $selectableKey) }}"
                                                 x-model{{ $selectableModifier() }}="selection"
-                                                @click="toggleCheck($el.checked, {{ json_encode($row) }})" />
+                                                @click.stop="toggleCheck($el.checked, {{ json_encode($row) }})" />
                                         </td>
                                     @endif
 
@@ -417,6 +418,13 @@ class Table extends Component
                                 @endif
                             @endforeach
                         </tbody>
+
+                        <!-- FOOTER SLOT -->
+                        @isset ($footer)
+                            <tfoot {{ $footer->attributes ?? '' }}>
+                                {{ $footer }}
+                            </tfoot>
+                        @endisset
                     </table>
 
                     @if(count($rows) === 0)
