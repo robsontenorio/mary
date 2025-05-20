@@ -55,7 +55,7 @@ class Choices extends Component
         public mixed $prepend = null,
         public mixed $append = null
     ) {
-        $this->uuid = "mary" . md5(serialize($this)) . $id;
+        $this->uuid = "mary" . md5(serialize($this)) . now()->timestamp;
 
         if (($this->allowAll || $this->compact) && ($this->single || $this->searchable)) {
             throw new Exception("`allow-all` and `compact` does not work combined with `single` or `searchable`.");
@@ -101,7 +101,7 @@ class Choices extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div x-data="{ focused: false, selection: @entangle($attributes->wire('model')) }">
+                <div x-data="{ focused: false, selection: @entangle($attributes->wire('model')) }" wire:key="{{ $uuid }}">
                     <div
                         @click.outside = "clear()"
                         @keyup.esc = "clear()"
@@ -314,6 +314,7 @@ class Choices extends Component
                                                 @keydown.arrow-down.prevent="focus()"
                                                 :required="isRequired && isSelectionEmpty"
                                                 :readonly="isReadonly || isDisabled || ! isSearchable"
+                                                :disabled="isDisabled"
                                                 class="w-1 !inline-block outline-hidden"
 
                                                 {{ $attributes->whereStartsWith('@') }}
