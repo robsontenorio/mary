@@ -16,6 +16,7 @@ class Header extends Component
         public ?string $subtitle = null,
         public ?bool $separator = false,
         public ?string $progressIndicator = null,
+        public ?string $progressIndicatorColor = "progress-primary",
         public ?bool $withAnchor = false,
         public ?string $size = 'text-2xl',
 
@@ -49,7 +50,7 @@ class Header extends Component
                                 @if($withAnchor)
                                     <a href="#{{ $anchor }}">
                                 @endif
-                                
+
                                 @if($icon)
                                     <x-mary-icon name="{{ $icon }}" class="{{ $iconClasses }}" />
                                 @endif
@@ -87,7 +88,7 @@ class Header extends Component
                         @if($progressIndicator)
                             <div class="h-0.5 -mt-4 mb-4">
                                 <progress
-                                    class="progress progress-primary w-full h-[var(--border)]"
+                                    class="progress {{ $progressIndicatorColor }} w-full h-[var(--border)]"
                                     wire:loading
 
                                     @if($progressTarget())
