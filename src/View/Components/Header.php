@@ -16,7 +16,7 @@ class Header extends Component
         public ?string $subtitle = null,
         public ?bool $separator = false,
         public ?string $progressIndicator = null,
-        public ?string $progressIndicatorColor = "progress-primary",
+        public string $progressIndicatorColor = "progress-primary",
         public ?bool $withAnchor = false,
         public ?string $size = 'text-2xl',
 
