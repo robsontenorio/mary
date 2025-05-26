@@ -375,7 +375,7 @@ class ChoicesOffline extends Component
                         <div x-cloak x-show="focused" class="relative" wire:key="options-list-main-{{ $uuid }}" >
                                 <div
                                     wire:key="options-list-{{ $uuid }}"
-                                    class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-content/10 rounded-lg cursor-pointer overflow-y-auto @if(!$hint) !top-1 @else !-top-5 @endif"
+                                    class="{{ $height }} w-full absolute z-10 shadow-xl bg-base-100 border border-base-content/10 rounded-lg cursor-pointer overflow-y-auto"
                                     x-anchor.bottom-start="$refs.container"
                                 >
 
@@ -383,7 +383,7 @@ class ChoicesOffline extends Component
                                    @if($allowAll)
                                        <div
                                             wire:key="allow-all-{{ rand() }}"
-                                            class="font-bold   border border-s-4 border-b-base-200 hover:bg-base-200"
+                                            class="font-bold border border-s-4 border-b-base-200 hover:bg-base-200"
                                        >
                                             <div x-show="!isAllSelected" @click="selectAll()" class="p-3 underline decoration-wavy decoration-info">{{ $allowAllText }}</div>
                                             <div x-show="isAllSelected" @click="reset()" class="p-3 underline decoration-wavy decoration-error">{{ $removeAllText }}</div>
