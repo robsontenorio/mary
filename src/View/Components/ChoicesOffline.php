@@ -116,7 +116,9 @@ class ChoicesOffline extends Component
                                     : this.selection.map(i => this.options.filter(o => o.{{ $optionValue }} == i)[0])
                             },
                             get isAllSelected() {
-                                return this.options.length == this.selection.length
+                                const length = this.isSelectionEmpty ? 0 : this.selection.length;
+
+                                return this.options.length == length
                             },
                             get isSelectionEmpty() {
                                 return this.isSingle
