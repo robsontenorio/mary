@@ -16,13 +16,16 @@ class Carousel extends Component
 
     public function __construct(
         public array $slides,
+        public ?string $id = null,
         public ?bool $withoutIndicators = false,
         public ?bool $withoutArrows = false,
+        public ?bool $autoplay = false,
+        public ?int $interval = 2000,
 
         // Slots
         public mixed $content = null,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string
@@ -31,6 +34,8 @@ class Carousel extends Component
             <div x-data="{
                 slides: @js($slides),
                 withoutIndicators: {{ json_encode($withoutIndicators) }},
+                autoplay: {{ json_encode($autoplay) }},
+                interval: {{ json_encode($interval) }},
                 currentSlideIndex: 1,
                 touchStartX: null,
                 touchEndX: null,
@@ -63,6 +68,10 @@ class Carousel extends Component
                         this.touchEndX = null
                     }
                 },
+                init() {
+                    if (this.autoplay)
+                        setInterval(() => { this.next(); }, this.interval);
+                }
             }" class="relative w-full overflow-hidden">
 
                 @if(!$withoutArrows)
@@ -109,7 +118,7 @@ class Carousel extends Component
 
                                     <!-- Button-->
                                     @if(data_get($slide, 'urlText'))
-                                        <a href="{{ data_get($slide, 'url') }}" class="btn btn-sm btn-ghost my-3 border-white text-white hover:border-white hover:scale-105">{{ data_get($slide, 'urlText') }}</a>
+                                        <a href="{{ data_get($slide, 'url') }}" class="btn btn-sm btn-outline text-white border-white hover:bg-transparent my-3 hover:scale-105">{{ data_get($slide, 'urlText') }}</a>
                                     @endif
                                 </div>
                             @endif
@@ -121,9 +130,9 @@ class Carousel extends Component
                 </div>
                 <!-- indicators -->
                 @if(! $withoutIndicators)
-                    <div class="absolute rounded-xl bottom-3 md:bottom-5 left-1/2 z-[2] flex -translate-x-1/2 gap-4 md:gap-3 bg-white/75 px-1.5 py-1 md:px-2 dark:bg-slate-900/75" role="group" aria-label="slides" >
+                    <div class="absolute rounded-xl bottom-3 md:bottom-5 left-1/2 z-[2] flex -translate-x-1/2 gap-4 md:gap-3 bg-base-300 px-1.5 py-1 md:px-2" role="group" aria-label="slides" >
                         <template x-for="(slide, index) in slides">
-                            <button class="size-2.5 cursor-pointer rounded-full transition hover:scale-125 bg-slate-700 dark:bg-slate-300" @click="currentSlideIndex = index + 1" :class="[currentSlideIndex === index + 1 ? 'bg-slate-700 dark:bg-slate-300' : 'bg-slate-700/50 dark:bg-slate-300/50']"></button>
+                            <button class="size-2.5 cursor-pointer rounded-full transition hover:scale-125" @click="currentSlideIndex = index + 1" :class="[currentSlideIndex === index + 1 ? 'bg-base-content' : 'bg-base-content/30']"></button>
                         </template>
                     </div>
                 @endif

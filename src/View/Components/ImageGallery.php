@@ -12,11 +12,12 @@ class ImageGallery extends Component
 
     public function __construct(
         public array $images,
+        public ?string $id = null,
         public ?bool $withArrows = false,
         public ?bool $withIndicators = false
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string

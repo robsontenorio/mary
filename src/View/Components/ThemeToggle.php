@@ -11,15 +11,18 @@ class ThemeToggle extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $value = null,
         public ?string $light = "Light",
         public ?string $dark = "Dark",
         public ?string $lightTheme = "light",
         public ?string $darkTheme = "dark",
+        public ?string $lightClass = "light",
+        public ?string $darkClass = "dark",
         public ?bool $withLabel = false,
 
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function render(): View|Closure|string
@@ -30,6 +33,7 @@ class ThemeToggle extends Component
                         for="{{ $uuid }}"
                         x-data="{
                             theme: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches ? '{{ $darkTheme }}' : '{{ $lightTheme }}').as('mary-theme'),
+                            class: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches ? '{{ $darkClass }}' : '{{ $lightClass }}').as('mary-class'),
                             init() {
                                 if (this.theme == '{{ $darkTheme }}') {
                                     this.$refs.sun.classList.add('swap-off');
@@ -41,11 +45,13 @@ class ThemeToggle extends Component
                             },
                             setToggle() {
                                 document.documentElement.setAttribute('data-theme', this.theme)
-                                document.documentElement.setAttribute('class', this.theme)
+                                document.documentElement.setAttribute('class', this.class)
                                 this.$dispatch('theme-changed', this.theme)
+                                this.$dispatch('theme-changed-class', this.class)
                             },
                             toggle() {
                                 this.theme = this.theme == '{{ $lightTheme }}' ? '{{ $darkTheme }}' : '{{ $lightTheme }}'
+                                this.class = this.theme == '{{ $lightTheme }}' ? '{{ $lightClass }}' : '{{ $darkClass }}'
                                 this.setToggle()
                             }
                         }"
@@ -59,7 +65,7 @@ class ThemeToggle extends Component
                 </div>
                 <script>
                     document.documentElement.setAttribute("data-theme", localStorage.getItem("mary-theme")?.replaceAll("\"", ""))
-                    document.documentElement.setAttribute("class", localStorage.getItem("mary-theme")?.replaceAll("\"", ""))
+                    document.documentElement.setAttribute("class", localStorage.getItem("mary-class")?.replaceAll("\"", ""))
                 </script>
             HTML;
     }

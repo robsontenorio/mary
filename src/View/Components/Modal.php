@@ -15,6 +15,7 @@ class Modal extends Component
         public ?string $boxClass = null,
         public ?bool $separator = false,
         public ?bool $persistent = false,
+        public ?bool $withoutTrapFocus = false,
 
         // Slots
         public ?string $actions = null
@@ -38,27 +39,32 @@ class Modal extends Component
                             @keydown.escape.window = "$wire.{{ $attributes->wire('model')->value() }} = false"
                         @endif
                     @endif
+
+                    @if(!$withoutTrapFocus)
+                        x-trap="open" x-bind:inert="!open"
+                    @endif
                 >
                     <div class="modal-box {{ $boxClass }}">
                         @if(!$persistent)
-                            <form method="dialog">
+                            <form method="dialog" tabindex="-1">
                                 @if ($id)
-                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 font-bold text-xl" type="submit">✕</button>
+                                    <x-mary-button class="btn-circle btn-sm btn-ghost absolute end-2 top-2 z-[999]" icon="o-x-mark" type="submit" tabindex="-1" />
                                 @else
-                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 font-bold text-xl" @click="$wire.{{ $attributes->wire('model')->value() }} = false" type="button">✕</button>
+                                    <x-mary-button class="btn-circle btn-sm btn-ghost absolute end-2 top-2 z-[999]" icon="o-x-mark" @click="$wire.{{ $attributes->wire('model')->value() }} = false" tabindex="-1" />
                                 @endif
                             </form>
                         @endif
+
                         @if($title)
-                            <x-mary-header :title="$title" :subtitle="$subtitle" size="text-2xl" :separator="$separator" class="mb-5" />
+                            <x-mary-header :title="$title" :subtitle="$subtitle" size="text-xl" :separator="$separator" class="!mb-5" />
                         @endif
 
-                        <p class="">
+                        <div>
                             {{ $slot }}
-                        </p>
+                        </div>
 
-                        @if($separator)
-                            <hr class="mt-5" />
+                        @if($separator && $actions)
+                            <hr class="border-t-[length:var(--border)] border-base-content/10 mt-5" />
                         @endif
 
                         @if($actions)

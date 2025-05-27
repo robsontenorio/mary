@@ -7,6 +7,7 @@ use Closure;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
@@ -19,6 +20,7 @@ class Table extends Component
     public function __construct(
         public array $headers,
         public ArrayAccess|array $rows,
+        public ?string $id = null,
         public ?bool $striped = false,
         public ?bool $noHeaders = false,
         public ?bool $selectable = false,
@@ -44,26 +46,30 @@ class Table extends Component
         public mixed $cell = null,
         public mixed $expansion = null,
         public mixed $empty = null,
+        public mixed $footer = null,
 
     ) {
         if ($this->selectable && $this->expandable) {
             throw new Exception("You can not combine `expandable` with `selectable`.");
         }
 
-        // Temp decoration
+        // Temp
         $rowDecoration = $this->rowDecoration;
         $cellDecoration = $this->cellDecoration;
+        $headers = $this->headers;
 
-        // Remove decoration from serialization, because they are closures.
+        // Remove them from serialization, because they are closures.
         unset($this->rowDecoration);
         unset($this->cellDecoration);
+        unset($this->headers);
 
         // Serialize
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
 
         // Put them back
         $this->rowDecoration = $rowDecoration;
         $this->cellDecoration = $cellDecoration;
+        $this->headers = $headers;
     }
 
     // Get all ids for selectable and expandable features
@@ -86,6 +92,30 @@ class Table extends Component
     public function isHidden(mixed $header): bool
     {
         return $header['hidden'] ?? false;
+    }
+
+    // Format header
+    public function format(mixed $row, mixed $field, mixed $header): mixed
+    {
+        $format = $header['format'] ?? null;
+
+        if (! $format) {
+            return $field;
+        }
+
+        if (is_callable($format)) {
+            return $format($row, $field);
+        }
+
+        if ($format[0] == 'currency') {
+            return ($format[2] ?? '') . number_format($field, ...str_split($format[1]));
+        }
+
+        if ($format[0] == 'date' && $field) {
+            return Carbon::parse($field)->format($format[1]);
+        }
+
+        return $field;
     }
 
     // Check if link should be shown in cell
@@ -208,6 +238,7 @@ class Table extends Component
                                     this.handleCheckAll()
                                 },
                                 toggleCheckAll(checked) {
+                                    this.$dispatch('row-selection-all', { selected: checked });
                                     checked ? this.pushIds() : this.removeIds()
                                 },
                                 toggleExpand(key) {
@@ -244,7 +275,7 @@ class Table extends Component
                         }}
                     >
                         <!-- HEADERS -->
-                        <thead @class(["text-black dark:text-gray-200", "hidden" => $noHeaders])>
+                        <thead @class(["text-base-content", "hidden" => $noHeaders])>
                             <tr x-ref="headers">
                                 <!-- CHECKALL -->
                                 @if($selectable)
@@ -301,7 +332,7 @@ class Table extends Component
                             @foreach($rows as $k => $row)
                                 <tr
                                     wire:key="{{ $uuid }}-{{ $k }}"
-                                    @class([$rowClasses($row), "hover:bg-base-200/50" => !$noHover])
+                                    @class([$rowClasses($row), "hover:bg-base-200" => !$noHover])
                                     @if($attributes->has('@row-click'))
                                         @click="$dispatch('row-click', {{ json_encode($row) }});"
                                     @endif
@@ -312,10 +343,10 @@ class Table extends Component
                                             <input
                                                 id="checkbox-{{ $uuid }}-{{ $k }}"
                                                 type="checkbox"
-                                                class="checkbox checkbox-sm checkbox-primary"
+                                                class="checkbox checkbox-sm"
                                                 value="{{ data_get($row, $selectableKey) }}"
                                                 x-model{{ $selectableModifier() }}="selection"
-                                                @click="toggleCheck($el.checked, {{ json_encode($row) }})" />
+                                                @click.stop="toggleCheck($el.checked, {{ json_encode($row) }})" />
                                         </td>
                                     @endif
 
@@ -362,7 +393,7 @@ class Table extends Component
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
                                                 @endif
 
-                                                {{ data_get($row, $header['key']) }}
+                                                {{ $format($row, data_get($row, $header['key']), $header) }}
 
                                                 @if($hasLink($header))
                                                     </a>
@@ -387,16 +418,23 @@ class Table extends Component
                                 @endif
                             @endforeach
                         </tbody>
+
+                        <!-- FOOTER SLOT -->
+                        @isset ($footer)
+                            <tfoot {{ $footer->attributes ?? '' }}>
+                                {{ $footer }}
+                            </tfoot>
+                        @endisset
                     </table>
 
                     @if(count($rows) === 0)
                         @if($showEmptyText)
-                            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+                            <div class="text-center py-4 text-base-content/50">
                                 {{ $emptyText }}
                             </div>
                         @endif
                         @if($empty)
-                            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+                            <div class="text-center py-4 text-base-content/50">
                                 {{ $empty }}
                             </div>
                         @endif

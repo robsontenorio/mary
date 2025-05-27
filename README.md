@@ -14,7 +14,7 @@
 
 ## Introduction
 
-MaryUI is a set of gorgeous Laravel Blade UI Components made for Livewire 3 and styled around daisyUI + Tailwind.
+The maryUI package is a set of Gorgeous UI components for Livewire powered by daisyUI and Tailwind.
 
 ## Official Documentation
 
@@ -24,10 +24,9 @@ You can read the official documentation on the [maryUI website](https://mary-ui.
 
 Let's keep pushing it, [sponsor me](https://github.com/sponsors/robsontenorio) ❤️
 
-## Discord 
+## Discord
 
 Come to say hello on [maryUI Discord](https://discord.gg/c2Dv8T2X2s)
-
 
 ## Follow me
 
@@ -67,7 +66,7 @@ Require the package again for local symlink.
 composer require robsontenorio/mary
 ```
 
-Start dev
+Start the dev server.
 
 ```bash
 yarn dev

@@ -8,7 +8,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
+<body class="min-h-screen font-sans antialiased bg-base-200">
 
     {{-- NAVBAR mobile only --}}
     <x-nav sticky class="lg:hidden">
@@ -23,12 +23,12 @@
     </x-nav>
 
     {{-- MAIN --}}
-    <x-main full-width>
+    <x-main>
         {{-- SIDEBAR --}}
         <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit">
 
             {{-- BRAND --}}
-            <x-app-brand class="p-5 pt-3" />
+            <x-app-brand class="px-5 pt-4" />
 
             {{-- MENU --}}
             <x-menu activate-by-route>
@@ -47,6 +47,7 @@
                 @endif
 
                 <x-menu-item title="Hello" icon="o-sparkles" link="/" />
+                
                 <x-menu-sub title="Settings" icon="o-cog-6-tooth">
                     <x-menu-item title="Wifi" icon="o-wifi" link="####" />
                     <x-menu-item title="Archives" icon="o-archive-box" link="####" />

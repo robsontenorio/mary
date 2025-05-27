@@ -11,18 +11,19 @@ class Toggle extends Component
     public string $uuid;
 
     public function __construct(
+        public ?string $id = null,
         public ?string $label = null,
-        public ?string $hint = null,
         public ?bool $right = false,
-        public ?bool $tight = false,
-        public ?string $hintClass = 'label-text-alt text-gray-400 py-1 pb-0',
+        public ?string $hint = null,
+        public ?string $hintClass = 'fieldset-label',
+
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-red-500 label-text-alt p-1',
+        public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this));
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function modelName(): ?string
@@ -37,47 +38,54 @@ class Toggle extends Component
 
     public function render(): View|Closure|string
     {
-        return <<<'HTML'
-                <div>
-                    <label for="{{ $uuid }}" class="flex items-center gap-3 cursor-pointer">
+        return <<<'BLADE'
+            <div>
+                <fieldset class="fieldset">
+                    <div class="w-full">
+                        <label @class(["flex gap-3 items-center cursor-pointer", "justify-between" => $right, "!items-start" => $hint])>
 
-                        @if($right)
-                            <span @class(["flex-1" => !$tight])>
-                                {{ $label}}
-                                
-                                @if($attributes->get('required'))
-                                    <span class="text-error">*</span>
+                            {{-- TOGGLE --}}
+                            <input
+                                id="{{ $uuid }}"
+                                type="checkbox"
+
+                                {{
+                                    $attributes->whereDoesntStartWith('id')
+                                        ->class(["order-2" => $right])
+                                        ->merge(['class' => 'toggle'])
+                                }}
+                            />
+
+                            {{-- LABEL --}}
+                             <div @class(["order-1" => $right])>
+                                <div class="text-sm font-medium">
+                                    {{ $label }}
+
+                                    @if($attributes->get('required'))
+                                        <span class="text-error">*</span>
+                                    @endif
+                                </div>
+
+                                {{-- HINT --}}
+                                @if($hint)
+                                    <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
                                 @endif
-                            </span>
-                        @endif
+                            </div>
+                        </label>
+                    </div>
 
-                        <input id="{{ $uuid }}" type="checkbox" {{ $attributes->whereDoesntStartWith('class') }} {{ $attributes->class(['toggle toggle-primary']) }}  />
-
-                        @if(!$right)
-                            {{ $label}}
-                            
-                            @if($attributes->get('required'))
-                                <span class="text-error">*</span>
-                            @endif
-                        @endif
-                    </label>
-
-                    <!-- ERROR -->
+                    {{-- ERROR --}}
                     @if(!$omitError && $errors->has($errorFieldName()))
                         @foreach($errors->get($errorFieldName()) as $message)
                             @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-classes="text-red-500 label-text-alt p-1">{{ $line }}</div>
+                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
                                 @break($firstErrorOnly)
                             @endforeach
                             @break($firstErrorOnly)
                         @endforeach
                     @endif
-
-                    <!-- HINT -->
-                    @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="label-text-alt text-gray-400 py-1 pb-0">{{ $hint }}</div>
-                    @endif
-                </div>
-        HTML;
+                </fieldset>
+            </div>
+            BLADE;
     }
 }
