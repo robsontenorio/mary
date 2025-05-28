@@ -146,6 +146,7 @@ class Input extends Component
                                             x-ref="myInput"
                                             :value="amount"
                                             x-on:input="$nextTick(() => $wire.set('{{ $modelName() }}', Currency.getUnmasked(), {{ json_encode($attributes->wire('model')->hasModifier('live')) }}))"
+                                            x-on:blur="$nextTick(() => $wire.set('{{ $modelName() }}', Currency.getUnmasked(), {{ json_encode($attributes->wire('model')->hasModifier('blur')) }}))"
                                             inputmode="numeric"
                                         @endif
 
