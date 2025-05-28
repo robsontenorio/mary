@@ -258,11 +258,12 @@ class ChoicesOffline extends Component
 
                                     {{-- THE LABEL THAT HOLDS THE INPUT --}}
                                     <label
-                                        @click="focus()"
                                         x-ref="container"
 
                                         @if($isDisabled())
                                             disabled
+                                        @else
+                                            @click="focus()"
                                         @endif
 
                                         {{
@@ -302,7 +303,9 @@ class ChoicesOffline extends Component
                                                                 <span x-text="option?.{{ $optionLabel }}"></span>
                                                             @endif
 
-                                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="w-4 h-4 hover:text-error" />
+                                                            @if(!$isDisabled() && !$isReadonly())
+                                                                <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="w-4 h-4 hover:text-error" />
+                                                            @endif
                                                         </span>
                                                     </template>
                                                 @endif
