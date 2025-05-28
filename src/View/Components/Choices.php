@@ -55,7 +55,7 @@ class Choices extends Component
         public mixed $prepend = null,
         public mixed $append = null
     ) {
-        $this->uuid = "mary" . md5(serialize($this)) . now()->timestamp;
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
 
         if (($this->allowAll || $this->compact) && ($this->single || $this->searchable)) {
             throw new Exception("`allow-all` and `compact` does not work combined with `single` or `searchable`.");
@@ -101,7 +101,7 @@ class Choices extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                <div x-data="{ focused: false, selection: @entangle($attributes->wire('model')) }" wire:key="{{ $uuid }}">
+                <div x-data="{ focused: false, selection: @entangle($attributes->wire('model')) }">
                     <div
                         @click.outside = "clear()"
                         @keyup.esc = "clear()"
@@ -251,11 +251,12 @@ class Choices extends Component
 
                                     {{-- THE LABEL THAT HOLDS THE INPUT --}}
                                     <label
-                                        @click="focus()"
                                         x-ref="container"
 
                                         @if($isDisabled())
                                             disabled
+                                        @else
+                                            @click="focus()"
                                         @endif
 
                                         {{
@@ -295,7 +296,9 @@ class Choices extends Component
                                                                 <span x-text="option?.{{ $optionLabel }}"></span>
                                                             @endif
 
-                                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="w-4 h-4 hover:text-error" />
+                                                            @if(!$isDisabled() && !$isReadonly())
+                                                                <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="w-4 h-4 hover:text-error" />
+                                                            @endif
                                                         </span>
                                                     </template>
                                                 @endif
@@ -314,10 +317,13 @@ class Choices extends Component
                                                 @keydown.arrow-down.prevent="focus()"
                                                 :required="isRequired && isSelectionEmpty"
                                                 :readonly="isReadonly || isDisabled || ! isSearchable"
-                                                :disabled="isDisabled"
                                                 class="w-1 !inline-block outline-hidden"
 
                                                 {{ $attributes->whereStartsWith('@') }}
+
+                                                @if($isDisabled())
+                                                    disabled
+                                                 @endif
 
                                                 @if($searchable)
                                                     @keydown.debounce.{{ $debounce }}="search($el.value, $event)"
