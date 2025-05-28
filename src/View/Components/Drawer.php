@@ -20,7 +20,6 @@ class Drawer extends Component
         public ?bool $withCloseButton = false,
         public ?bool $closeOnEscape = false,
         public ?bool $withoutTrapFocus = false,
-        public ?string $onClose = null,
 
         //Slots
         public ?string $actions = null
@@ -56,6 +55,8 @@ class Drawer extends Component
                         }
                     }"
 
+                    x-init="$watch('open', value => { if (!value) $dispatch('close') })"
+
                     @if($closeOnEscape)
                         @keydown.window.escape="close()"
                     @endif
@@ -64,11 +65,9 @@ class Drawer extends Component
                         x-trap="open" x-bind:inert="!open"
                     @endif
 
-                    @if($onClose)
-                        x-effect="if(!open){ $wire.{{ $onClose }} }"
-                    @endif
-
                     @class(["drawer absolute z-50", "drawer-end" => $right])
+
+                    {{ $attributes->whereStartsWith('@') }}
                 >
                     <!-- Toggle visibility  -->
                     <input

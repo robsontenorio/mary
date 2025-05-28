@@ -16,7 +16,6 @@ class Modal extends Component
         public ?bool $separator = false,
         public ?bool $persistent = false,
         public ?bool $withoutTrapFocus = false,
-        public ?string $onClose = null,
 
         // Slots
         public ?string $actions = null
@@ -34,6 +33,7 @@ class Modal extends Component
                         id="{{ $id }}"
                     @else
                         x-data="{open: @entangle($attributes->wire('model')).live }"
+                        x-init="$watch('open', value => { if (!value) $dispatch('close') })"
                         :class="{'modal-open !animate-none': open}"
                         :open="open"
                         @if(!$persistent)
@@ -43,10 +43,6 @@ class Modal extends Component
 
                     @if(!$withoutTrapFocus)
                         x-trap="open" x-bind:inert="!open"
-                    @endif
-
-                    @if($onClose)
-                        x-effect="if(!open){ $wire.{{ $onClose }} }"
                     @endif
                 >
                     <div class="modal-box {{ $boxClass }}">
