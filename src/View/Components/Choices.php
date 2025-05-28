@@ -255,7 +255,9 @@ class Choices extends Component
 
                                         @if($isDisabled())
                                             disabled
-                                        @else
+                                        @endif
+
+                                        @if(!$isDisabled() && !$isReadonly())
                                             @click="focus()"
                                         @endif
 
@@ -313,13 +315,17 @@ class Choices extends Component
                                             <input
                                                 x-ref="searchInput"
                                                 @input="focus(); resize();"
-                                                @focus="focus()"
                                                 @keydown.arrow-down.prevent="focus()"
                                                 :required="isRequired && isSelectionEmpty"
-                                                :readonly="isReadonly || isDisabled || ! isSearchable"
                                                 class="w-1 !inline-block outline-hidden"
 
                                                 {{ $attributes->whereStartsWith('@') }}
+
+                                                @if($isReadonly() || $isDisabled() || ! $searchable)
+                                                    readonly
+                                                @else
+                                                    @focus="focus()"
+                                                @endif
 
                                                 @if($isDisabled())
                                                     disabled
