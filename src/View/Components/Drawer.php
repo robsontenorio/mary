@@ -55,6 +55,8 @@ class Drawer extends Component
                         }
                     }"
 
+                    x-init="$watch('open', value => { if (!value) $dispatch('close') })"
+
                     @if($closeOnEscape)
                         @keydown.window.escape="close()"
                     @endif
@@ -64,6 +66,8 @@ class Drawer extends Component
                     @endif
 
                     @class(["drawer absolute z-50", "drawer-end" => $right])
+
+                    {{ $attributes->whereStartsWith('@') }}
                 >
                     <!-- Toggle visibility  -->
                     <input
