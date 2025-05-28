@@ -152,7 +152,7 @@ class Input extends Component
                                         {{
                                             $attributes
                                                 ->merge(['type' => 'text'])
-                                                ->except($money ? ['wire:model', 'wire:model.live'] : '')
+                                                ->except($money ? ['wire:model', 'wire:model.live', 'wire:model.blur'] : '')
                                         }}
                                     />
 
