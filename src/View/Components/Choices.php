@@ -251,11 +251,14 @@ class Choices extends Component
 
                                     {{-- THE LABEL THAT HOLDS THE INPUT --}}
                                     <label
-                                        @click="focus()"
                                         x-ref="container"
 
                                         @if($isDisabled())
                                             disabled
+                                        @endif
+
+                                        @if(!$isDisabled() && !$isReadonly())
+                                            @click="focus()"
                                         @endif
 
                                         {{
@@ -295,7 +298,9 @@ class Choices extends Component
                                                                 <span x-text="option?.{{ $optionLabel }}"></span>
                                                             @endif
 
-                                                            <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="w-4 h-4 hover:text-error" />
+                                                            @if(!$isDisabled() && !$isReadonly())
+                                                                <x-mary-icon @click="toggle(option.{{ $optionValue }})" x-show="!isReadonly && !isDisabled && !isSingle" name="o-x-mark" class="w-4 h-4 hover:text-error" />
+                                                            @endif
                                                         </span>
                                                     </template>
                                                 @endif
@@ -310,13 +315,21 @@ class Choices extends Component
                                             <input
                                                 x-ref="searchInput"
                                                 @input="focus(); resize();"
-                                                @focus="focus()"
                                                 @keydown.arrow-down.prevent="focus()"
                                                 :required="isRequired && isSelectionEmpty"
-                                                :readonly="isReadonly || isDisabled || ! isSearchable"
                                                 class="w-1 !inline-block outline-hidden"
 
                                                 {{ $attributes->whereStartsWith('@') }}
+
+                                                @if($isReadonly() || $isDisabled() || ! $searchable)
+                                                    readonly
+                                                @else
+                                                    @focus="focus()"
+                                                @endif
+
+                                                @if($isDisabled())
+                                                    disabled
+                                                 @endif
 
                                                 @if($searchable)
                                                     @keydown.debounce.{{ $debounce }}="search($el.value, $event)"

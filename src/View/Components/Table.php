@@ -314,8 +314,8 @@ class Table extends Component
                                     >
                                         {{ isset(${"header_".$temp_key}) ? ${"header_".$temp_key}($header) : $header['label'] }}
 
-                                        @if($isSortable($header) && $isSortedBy($header))
-                                            <x-mary-icon :name="$getSort($header)['direction'] == 'asc' ? 'o-arrow-small-down' : 'o-arrow-small-up'"  class="w-4 h-4 mb-1" />
+                                        @if($isSortable($header))
+                                            <x-mary-icon :name="$isSortedBy($header) ? $getSort($header)['direction'] == 'asc' ? 'o-chevron-down' : 'o-chevron-up' : 'o-chevron-up-down'"  class="size-3! mb-1 ms-1" />
                                         @endif
                                     </th>
                                 @endforeach
@@ -352,7 +352,7 @@ class Table extends Component
 
                                     <!-- EXPAND ICON -->
                                     @if($expandable)
-                                        <td class="w-1 pe-0">
+                                        <td class="w-1 pe-0 py-0">
                                             @if(data_get($row, $expandableCondition))
                                                 <x-mary-icon
                                                     name="o-chevron-down"
