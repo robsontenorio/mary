@@ -48,7 +48,8 @@ class MaryInstallCommand extends Command
 
         $this->info("\n");
         $this->info("✅  Done!");
-        $this->info("❤️  Sponsor: https://github.com/sponsors/robsontenorio\n");
+        $this->info("❤️  Sponsor: https://github.com/sponsors/robsontenorio");
+        $this->info("\n");
     }
 
     public function installLivewire(string $shouldInstallVolt)
