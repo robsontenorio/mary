@@ -54,6 +54,7 @@ class Popover extends Component
                   <div
                     x-show="open"
                     x-anchor.{{ $position }}.offset.{{ $offset }}="$refs.myTrigger"
+                    x-transition
                     @mouseover="show()"
                     @mouseout="hide()"
                     {{ $content->attributes->class(["z-[1] shadow-xl border-[length:var(--border)] border-base-content/10 w-fit p-3 rounded-md bg-base-100"]) }}
