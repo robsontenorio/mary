@@ -33,7 +33,7 @@ class Modal extends Component
                         id="{{ $id }}"
                     @else
                         x-data="{open: @entangle($attributes->wire('model')).live }"
-                        x-init="$watch('open', value => { if (!value) $dispatch('close') })"
+                        x-init="$watch('open', value => { if (!value){ $dispatch('close') }else{ $dispatch('open') } })"
                         :class="{'modal-open !animate-none': open}"
                         :open="open"
                         @if(!$persistent)

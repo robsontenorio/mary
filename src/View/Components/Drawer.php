@@ -55,7 +55,7 @@ class Drawer extends Component
                         }
                     }"
 
-                    x-init="$watch('open', value => { if (!value) $dispatch('close') })"
+                    x-init="$watch('open', value => { if (!value){ $dispatch('close') }else{ $dispatch('open') } })"
 
                     @if($closeOnEscape)
                         @keydown.window.escape="close()"
