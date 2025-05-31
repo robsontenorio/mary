@@ -114,6 +114,9 @@ class Input extends Component
                                         "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                                     ])
                                 }}
+                                @if($money)
+                                    x-data="{ amount: $wire.get('{{ $modelName() }}') }" x-init="$nextTick(() => new Currency($refs.myInput, {{ $moneySettings() }}))"
+                                @endif
                              >
                                 {{-- PREFIX --}}
                                 @if($prefix)
@@ -123,14 +126,6 @@ class Input extends Component
                                 {{-- ICON LEFT --}}
                                 @if($icon)
                                     <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
-                                @endif
-
-                                {{-- MONEY SETUP --}}
-                                @if($money)
-                                    <div
-                                        class="w-full"
-                                        x-data="{ amount: $wire.get('{{ $modelName() }}') }" x-init="$nextTick(() => new Currency($refs.myInput, {{ $moneySettings() }}))"
-                                    >
                                 @endif
 
                                     {{-- INPUT --}}
@@ -152,14 +147,14 @@ class Input extends Component
                                         {{
                                             $attributes
                                                 ->merge(['type' => 'text'])
+                                                ->except('class')
                                                 ->except($money ? ['wire:model', 'wire:model.live'] : '')
                                         }}
                                     />
 
                                 {{-- HIDDEN MONEY INPUT + END MONEY SETUP --}}
                                 @if($money)
-                                        <input type="hidden" {{ $attributes->wire('model') }} />
-                                    </div>
+                                    <input type="hidden" {{ $attributes->wire('model') }} />
                                 @endif
 
                                 {{-- CLEAR ICON  --}}
