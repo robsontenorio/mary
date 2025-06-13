@@ -28,6 +28,7 @@ class Button extends Component
         public ?string $tooltipLeft = null,
         public ?string $tooltipRight = null,
         public ?string $tooltipBottom = null,
+        public ?bool $hidden = false,
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
         $this->tooltip = $this->tooltip ?? $this->tooltipLeft ?? $this->tooltipRight ?? $this->tooltipBottom;
@@ -45,6 +46,10 @@ class Button extends Component
 
     public function render(): View|Closure|string
     {
+        if ($this->hidden === true) {
+            return '';
+        }
+
         return <<<'BLADE'
                 @if($link)
                     <a href="{!! $link !!}"
