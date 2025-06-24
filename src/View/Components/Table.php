@@ -112,7 +112,7 @@ class Table extends Component
         }
 
         if ($format[0] == 'date' && $field) {
-            return Carbon::parse($field)->format($format[1]);
+            return Carbon::parse($field)->translatedFormat($format[1]);
         }
 
         return $field;
