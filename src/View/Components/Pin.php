@@ -16,10 +16,10 @@ class Pin extends Component
         public ?bool $numeric = false,
         public ?bool $hide = false,
         public ?string $hideType = "disc",
-        
+
         // Validations
         public ?string $errorField = null,
-        public ?string $errorClass = 'text-error',
+        public ?string $errorClass = 'text-error text-xs pt-2',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
 
@@ -31,7 +31,7 @@ class Pin extends Component
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
     }
-    
+
     public function errorFieldName(): ?string
     {
         return $this->errorField ?? $this->modelName();
@@ -108,7 +108,7 @@ class Pin extends Component
                                         inputmode="numeric"
                                         x-mask="9"
                                     @endif
-                                    {{ 
+                                    {{
                                         $attributes->whereDoesntStartWith('wire')->class([
                                             "input input-border !w-12 font-black text-xl text-center",
                                             "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
@@ -117,6 +117,7 @@ class Pin extends Component
                                 />
                             @endforeach
                         </div>
+
                         {{-- ERROR --}}
                         @if(!$omitError && $errors->has($errorFieldName()))
                             @foreach($errors->get($errorFieldName()) as $message)
