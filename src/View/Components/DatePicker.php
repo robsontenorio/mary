@@ -157,7 +157,7 @@ class DatePicker extends Component
                                     x-data="{instance: undefined}"
                                     x-init="instance = flatpickr($refs.input, {{ $setup() }});"
                                     @if(isset($config["mode"]) && $config["mode"] == "range" && $attributes->get('live'))
-                                        @change="const value = $event.target.value; if(value.split('to').length == 2) { $wire.set('{{ $modelName() }}', value) };"
+                                        @change="const value = $event.target.value; if(value.split(instance.l10n.rangeSeparator).length == 2) { $wire.set('{{ $modelName() }}', value) };"
                                     @endif
                                     x-on:livewire:navigating.window="instance.destroy();"
                                     class="w-full"
