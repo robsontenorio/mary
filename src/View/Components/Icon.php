@@ -37,14 +37,18 @@ class Icon extends Component
     {
         return <<<'BLADE'
                 @if(strlen($label ?? '') > 0)
-                    <div {{ $attributes->class(['inline-flex items-center gap-1']) }}>
-                        <x-svg :name="$icon()" class="inline w-5 h-5" />
-                        <div class="{{ $labelClasses() }}">
+                    <div class="inline-flex items-center gap-1">
+                @endif
+                    <x-svg
+                        :name="$icon()"
+                        {{ $attributes->class(['inline', 'w-5 h-5' => !Str::contains($attributes->get('class') ?? '', ['w-', 'h-']) ]) }}
+                    />
+
+                @if(strlen($label ?? '') > 0)
+                        <div class="{{ $labelClasses() }}" {{ $attributes->whereStartsWith('@') }}>
                             {{ $label }}
                         </div>
                     </div>
-                @else
-                    <x-svg :name="$icon()" {{ $attributes->class(['inline', 'w-5 h-5' => !Str::contains($attributes->get('class') ?? '', ['w-', 'h-']) ]) }} />
                 @endif
             BLADE;
     }
