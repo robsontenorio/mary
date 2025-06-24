@@ -13,7 +13,7 @@ class Tabs extends Component
     public function __construct(
         public ?string $id = null,
         public ?string $selected = null,
-        public string $labelClass = 'font-semibold',
+        public string $labelClass = 'font-semibold pb-1',
         public string $activeClass = 'border-b-[length:var(--border)] border-b-base-content/50',
         public string $labelDivClass = 'border-b-[length:var(--border)] border-b-base-content/10 flex overflow-x-auto',
         public string $tabsClass = 'relative w-full',
@@ -42,7 +42,7 @@ class Tabs extends Component
                                  }
                         }"
                         class="{{ $tabsClass }}"
-                        x-class="font-semibold border-b-[length:var(--border)] border-b-base-content/50 border-b-base-content/10 flex overflow-x-auto scrollbar-hide relative w-full"
+                        x-class="font-semibold pb-1 border-b-[length:var(--border)] border-b-base-content/50 border-b-base-content/10 flex overflow-x-auto scrollbar-hide relative w-full"
                     >
                         <!-- TAB LABELS -->
                         <div class="{{ $labelDivClass }}">
