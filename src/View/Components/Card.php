@@ -22,6 +22,7 @@ class Card extends Component
         public mixed $menu = null,
         public mixed $actions = null,
         public mixed $figure = null,
+        public string $bodyClass = 'grow-1'
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
@@ -90,7 +91,7 @@ class Card extends Component
                         </div>
                     @endif
 
-                    <div class="grow-1">
+                    <div @class([$bodyClass ?: 'grow-1'])>
                         {{ $slot }}
                     </div>
 
