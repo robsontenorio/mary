@@ -22,7 +22,7 @@ class Card extends Component
         public mixed $menu = null,
         public mixed $actions = null,
         public mixed $figure = null,
-        public string $bodyClass = 'grow-1'
+        public ?string $bodyClass = 'null'
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
