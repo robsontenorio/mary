@@ -16,6 +16,7 @@ class Group extends Component
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $hintClass = 'fieldset-label',
+        public ?string $checkedClass = 'neutral',
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
@@ -67,7 +68,7 @@ class Group extends Component
                                     {{ $attributes->whereStartsWith('wire:model') }}
                                     {{
                                         $attributes->class([
-                                            "join-item btn [&:checked]:btn-neutral",
+                                            "join-item btn [&:checked]:btn-$checkedClass",
                                             "!border-l-base-100" => data_get($option, 'disabled')
                                         ])
                                     }}
