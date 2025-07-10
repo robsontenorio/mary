@@ -26,6 +26,7 @@ class Password extends Component
         // Password
         public ?string $passwordIcon = 'o-eye-slash',
         public ?string $passwordVisibleIcon = 'o-eye',
+        public ?bool $showPasswordTabstop = false,
         public ?bool $right = false,
         public ?bool $onlyPassword = false,
 
@@ -127,10 +128,17 @@ class Password extends Component
                                 @if($icon)
                                     <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
                                 @elseif($placeToggleLeft())
-                                    <x-mary-button x-on:click="hidden = !hidden" class="btn-ghost btn-xs btn-circle -m-1">
-                                        <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
-                                        <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
-                                    </x-mary-button>
+                                    @if($showPasswordTabstop)
+                                        <x-mary-button tabindex="-1" x-on:click="hidden = !hidden" class="btn-ghost btn-xs btn-circle -m-1">
+                                            <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
+                                            <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
+                                        </x-mary-button>
+                                    @else
+                                        <x-mary-button x-on:click="hidden = !hidden" class="btn-ghost btn-xs btn-circle -m-1">
+                                            <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
+                                            <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
+                                        </x-mary-button>
+                                    @endif
                                 @endif
 
                                 {{-- INPUT --}}
@@ -155,10 +163,17 @@ class Password extends Component
                                 @if($iconRight)
                                     <x-mary-icon :name="$iconRight" @class(["pointer-events-none w-4 h-4 opacity-40", "!end-10" => $clearable]) />
                                 @elseif($placeToggleRight())
-                                    <x-mary-button x-on:click="hidden = !hidden" @class(["btn-ghost btn-xs btn-circle -m-1", "!end-9" => $clearable])>
-                                        <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
-                                        <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
-                                    </x-mary-button>
+                                    @if($showPasswordTabstop)
+                                        <x-mary-button tabindex="-1" x-on:click="hidden = !hidden" @class(["btn-ghost btn-xs btn-circle -m-1", "!end-9" => $clearable])>
+                                            <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
+                                            <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
+                                        </x-mary-button>
+                                    @else
+                                        <x-mary-button x-on:click="hidden = !hidden" @class(["btn-ghost btn-xs btn-circle -m-1", "!end-9" => $clearable])>
+                                            <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
+                                            <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
+                                        </x-mary-button>
+                                    @endif
                                 @endif
 
                                 {{-- SUFFIX --}}
