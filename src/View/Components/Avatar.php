@@ -24,6 +24,7 @@ class Avatar extends Component
         public ?string $image = '',
         public ?string $alt = '',
         public ?string $placeholder = '',
+        public ?string $fallbackImage = null,
 
         // Slots
         public ?string $title = null,
@@ -42,7 +43,7 @@ class Avatar extends Component
                         @if(empty($image))
                             <span class="text-xs" alt="{{ $alt }}">{{ $placeholder }}</span>
                         @else
-                            <img src="{{ $image }}" alt="{{ $alt }}" />
+                            <img src="{{ $image }}" alt="{{ $alt }}" @if($fallbackImage) onerror="this.onerror=null; this.src='{{ $fallbackImage }}'" @endif />
                         @endif
                     </div>
                 </div>
