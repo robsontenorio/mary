@@ -114,7 +114,7 @@ class Pin extends Component
                                     @endif
                                     {{
                                         $attributes->whereDoesntStartWith('wire')->class([
-                                            "input input-border !min-w-6 max-w-12 p-0 font-black text-xl text-center",
+                                            "input input-border min-w-6 max-w-12 p-0 font-bold text-xl text-center",
                                             "join-item" => $noGap,
                                             "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                                         ])
