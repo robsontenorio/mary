@@ -77,7 +77,7 @@ class Password extends Component
     {
         return (! $this->iconRight && $this->right) && ! $this->onlyPassword;
     }
-    
+
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
