@@ -19,6 +19,7 @@ class ListItem extends Component
         public ?bool $noSeparator = false,
         public ?bool $noHover = false,
         public ?string $link = null,
+        public ?string $fallbackAvatar = null,
 
         // Slots
         public mixed $actions = null,
@@ -49,7 +50,7 @@ class ListItem extends Component
                         <div class="py-3">
                             <div class="avatar">
                                 <div class="w-11 rounded-full">
-                                    <img src="{{ data_get($item, $avatar) }}" />
+                                    <img src="{{ data_get($item, $avatar) }}" @if($fallbackAvatar) onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}'" @endif />
                                 </div>
                             </div>
                         </div>
