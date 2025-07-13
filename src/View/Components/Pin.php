@@ -16,13 +16,6 @@ class Pin extends Component
         public ?bool $numeric = false,
         public ?bool $hide = false,
         public ?string $hideType = "disc",
-        public ?bool $noGap = false,
-
-        // Validations
-        public ?string $errorField = null,
-        public ?string $errorClass = 'text-error text-xs pt-2',
-        public ?bool $omitError = false,
-        public ?bool $firstErrorOnly = false,
 
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
@@ -31,11 +24,6 @@ class Pin extends Component
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
-    }
-
-    public function errorFieldName(): ?string
-    {
-        return $this->errorField ?? $this->modelName();
     }
 
     public function render(): View|Closure|string
@@ -89,10 +77,7 @@ class Pin extends Component
                                 }
                         }"
                     >
-                        <div
-                            @class(["flex", "join" => $noGap, "gap-3" => !$noGap])
-                            id="pin{{ $uuid }}"
-                        >
+                        <div class="flex gap-3" id="pin{{ $uuid }}">
                             @foreach(range(0, $size - 1) as $i)
                                 <input
                                     @style([
@@ -112,27 +97,11 @@ class Pin extends Component
                                         inputmode="numeric"
                                         x-mask="9"
                                     @endif
-                                    {{
-                                        $attributes->whereDoesntStartWith('wire')->class([
-                                            "input input-border min-w-6 max-w-12 p-0 font-bold text-xl text-center",
-                                            "join-item" => $noGap,
-                                            "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
-                                        ])
-                                    }}
+
+                                    {{ $attributes->whereDoesntStartWith('wire')->class(['input input-border !w-12 font-black text-xl text-center']) }}
                                 />
                             @endforeach
                         </div>
-
-                        {{-- ERROR --}}
-                        @if(!$omitError && $errors->has($errorFieldName()))
-                            @foreach($errors->get($errorFieldName()) as $message)
-                                @foreach(Arr::wrap($message) as $line)
-                                    <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
-                                    @break($firstErrorOnly)
-                                @endforeach
-                                @break($firstErrorOnly)
-                            @endforeach
-                        @endif
                     </div>
                 </div>
             HTML;
