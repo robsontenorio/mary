@@ -26,6 +26,7 @@ class Password extends Component
         // Password
         public ?string $passwordIcon = 'o-eye-slash',
         public ?string $passwordVisibleIcon = 'o-eye',
+        public ?bool $noTabStop = false,
         public ?bool $right = false,
         public ?bool $onlyPassword = false,
 
@@ -62,6 +63,11 @@ class Password extends Component
         return $this->errorField ?? $this->modelName();
     }
 
+    public function isDisabled(): bool
+    {
+        return $this->attributes->has('disabled') && $this->attributes->get('disabled') == true;
+    }
+    
     public function placeToggleLeft(): bool
     {
         return (! $this->icon && ! $this->right) && ! $this->onlyPassword;
@@ -71,7 +77,7 @@ class Password extends Component
     {
         return (! $this->iconRight && $this->right) && ! $this->onlyPassword;
     }
-
+    
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
@@ -106,9 +112,8 @@ class Password extends Component
                             @endif
 
                             {{-- THE LABEL THAT HOLDS THE INPUT --}}
-                            <div
-                                x-data="{ hidden: true }"
-
+                            <label
+                                x-data="{ hidden: true }"   
                                 {{
                                     $attributes->whereStartsWith('class')->class([
                                         "input w-full",
@@ -127,23 +132,21 @@ class Password extends Component
                                 @if($icon)
                                     <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
                                 @elseif($placeToggleLeft())
-                                    <x-mary-button x-on:click="hidden = !hidden" class="btn-ghost btn-xs btn-circle -m-1">
-                                        <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
-                                        <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
-                                    </x-mary-button>
+
                                 @endif
 
                                 {{-- INPUT --}}
                                 <input
                                     id="{{ $uuid }}"
                                     placeholder="{{ $attributes->get('placeholder') }} "
-                                    @if ($onlyPassword) type="password" @else x-bind:type="hidden ? 'password' : 'text'" @endif
+                                    type="password"
+                                    @if (!$onlyPassword) x-bind:type="hidden ? 'password' : 'text'" @endif
 
                                     @if($attributes->has('autofocus') && $attributes->get('autofocus') == true)
                                         autofocus
                                     @endif
 
-                                    {{ $attributes->except('type')->merge() }}
+                                    {{ $attributes->except(['class', 'type'])->merge() }}
                                 />
 
                                 {{-- CLEAR ICON  --}}
@@ -154,18 +157,25 @@ class Password extends Component
                                 {{-- ICON RIGHT / TOGGLE INPUT TYPE --}}
                                 @if($iconRight)
                                     <x-mary-icon :name="$iconRight" @class(["pointer-events-none w-4 h-4 opacity-40", "!end-10" => $clearable]) />
-                                @elseif($placeToggleRight())
-                                    <x-mary-button x-on:click="hidden = !hidden" @class(["btn-ghost btn-xs btn-circle -m-1", "!end-9" => $clearable])>
-                                        <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
-                                        <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
-                                    </x-mary-button>
                                 @endif
 
+                                @if ($placeToggleLeft() || $placeToggleRight())
+                                <x-mary-button
+                                    x-on:click="hidden = !hidden"
+                                    :disabled="$isDisabled()"
+                                    :tabindex="$noTabStop ? -1 : null"
+                                    @class(["btn-ghost btn-xs btn-circle -m-1", "order-first" => !$right])
+                                >
+                                    <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
+                                    <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
+                                </x-mary-button>
+                                @endif
+                                
                                 {{-- SUFFIX --}}
                                 @if($suffix)
                                     <span class="label">{{ $suffix }}</span>
                                 @endif
-                            </div>
+                            </label>
 
                             {{-- APPEND --}}
                             @if($append)
