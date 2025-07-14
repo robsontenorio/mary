@@ -91,7 +91,7 @@ class Card extends Component
                         </div>
                     @endif
 
-                    <div @class([$bodyClass ?: 'grow-1'])>
+                    <div @class([ 'grow-1', $bodyClass ])>
                         {{ $slot }}
                     </div>
 
