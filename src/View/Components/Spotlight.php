@@ -181,7 +181,7 @@ class Spotlight extends Component
                                                 <!-- AVATAR -->
                                                 <template x-if="item.avatar && !item.icon">
                                                     <div>
-                                                        <img :src="item.avatar" class="rounded-full w-11 h-11" @if($fallbackAvatar) onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}'" @endif />
+                                                        <img :src="item.avatar" class="rounded-full w-11 h-11" @if($fallbackAvatar) onerror="this.src='{{ $fallbackAvatar }}'" @endif />
                                                     </div>
                                                 </template>
                                                 <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0 mary-hideable">
