@@ -43,7 +43,7 @@ class Avatar extends Component
                         @if(empty($image))
                             <span class="text-xs" alt="{{ $alt }}">{{ $placeholder }}</span>
                         @else
-                            <img src="{{ $image }}" alt="{{ $alt }}" @if($fallbackImage) onerror="this.onerror=null; this.src='{{ $fallbackImage }}'" @endif />
+                            <img src="{{ $image }}" alt="{{ $alt }}" @if($fallbackImage) onerror="this.src='{{ $fallbackImage }}'" @endif />
                         @endif
                     </div>
                 </div>
