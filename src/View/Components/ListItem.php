@@ -50,7 +50,7 @@ class ListItem extends Component
                         <div class="py-3">
                             <div class="avatar">
                                 <div class="w-11 rounded-full">
-                                    <img src="{{ data_get($item, $avatar) }}" @if($fallbackAvatar) onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}'" @endif />
+                                    <img src="{{ data_get($item, $avatar) }}" @if($fallbackAvatar) onerror="this.src='{{ $fallbackAvatar }}'" @endif />
                                 </div>
                             </div>
                         </div>
