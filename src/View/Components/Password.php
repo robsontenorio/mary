@@ -131,8 +131,6 @@ class Password extends Component
                                 {{-- ICON LEFT / TOGGLE INPUT TYPE --}}
                                 @if($icon)
                                     <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 opacity-40" />
-                                @elseif($placeToggleLeft())
-
                                 @endif
 
                                 {{-- INPUT --}}
