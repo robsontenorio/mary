@@ -16,6 +16,7 @@ class Pin extends Component
         public ?bool $numeric = false,
         public ?bool $hide = false,
         public ?string $hideType = "disc",
+        public ?bool $noGap = false,
 
         // Validations
         public ?string $errorField = null,
@@ -88,7 +89,10 @@ class Pin extends Component
                                 }
                         }"
                     >
-                        <div class="flex gap-3" id="pin{{ $uuid }}">
+                        <div
+                            @class(["flex", "join" => $noGap, "gap-3" => !$noGap])
+                            id="pin{{ $uuid }}"
+                        >
                             @foreach(range(0, $size - 1) as $i)
                                 <input
                                     @style([
@@ -110,7 +114,8 @@ class Pin extends Component
                                     @endif
                                     {{
                                         $attributes->whereDoesntStartWith('wire')->class([
-                                            "input input-border !w-12 font-black text-xl text-center",
+                                            "input input-border min-w-6 max-w-12 p-0 font-bold text-xl text-center",
+                                            "join-item" => $noGap,
                                             "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
                                         ])
                                     }}
