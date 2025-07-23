@@ -26,7 +26,7 @@ class Password extends Component
         // Password
         public ?string $passwordIcon = 'o-eye-slash',
         public ?string $passwordVisibleIcon = 'o-eye',
-        public ?bool $noTabStop = false,
+        public ?bool $passwordIconTabindex = false,
         public ?bool $right = false,
         public ?bool $onlyPassword = false,
 
@@ -131,7 +131,7 @@ class Password extends Component
                                     <x-mary-button
                                         x-on:click="hidden = !hidden"
                                         class="btn-ghost btn-xs btn-circle -m-1"
-                                        :tabindex="$noTabStop ? -1 : null"
+                                        :tabindex="$passwordIconTabindex ? null : -1"
                                     >
                                         <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
                                         <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
@@ -162,8 +162,8 @@ class Password extends Component
                                 @elseif($placeToggleRight())
                                     <x-mary-button
                                         x-on:click="hidden = !hidden"
-                                        @class(["btn-ghost btn-xs btn-circle -m-1", "!end-9" => $clearable])>
-                                        :tabindex="$noTabStop ? -1 : null"
+                                        @class(["btn-ghost btn-xs btn-circle -m-1", "!end-9" => $clearable])
+                                        :tabindex="$passwordIconTabindex ? null : -1"
                                     >
                                         <x-mary-icon name="{{ $passwordIcon }}" x-show="hidden" class="w-4 h-4 opacity-40" />
                                         <x-mary-icon name="{{ $passwordVisibleIcon }}" x-show="!hidden" x-cloak class="w-4 h-4 opacity-40" />
