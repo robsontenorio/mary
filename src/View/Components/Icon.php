@@ -41,7 +41,7 @@ class Icon extends Component
                 @endif
                     <x-svg
                         :name="$icon()"
-                        {{ $attributes->class(['inline', 'w-5 h-5' => !Str::contains($attributes->get('class') ?? '', ['w-', 'h-']) ]) }}
+                        {{ $attributes->class(['inline flex-shrink-0', 'w-5 h-5' => !Str::contains($attributes->get('class') ?? '', ['w-', 'h-']) ]) }}
                     />
 
                 @if(strlen($label ?? '') > 0)
