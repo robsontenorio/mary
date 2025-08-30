@@ -28,7 +28,7 @@ class ToastException extends Exception
     public static function typedMessage(
         string $type,
         string $title,
-        string $description = null,
+        ?string $description = null,
         string $position = 'toast-top toast-end',
         string $icon = 'o-information-circle',
         string $css = 'alert-info',
@@ -49,7 +49,7 @@ class ToastException extends Exception
 
     public static function info(
         string $title,
-        string $description = null,
+        ?string $description = null,
         string $position = 'toast-top toast-end',
         string $icon = 'o-information-circle',
         string $css = 'alert-info',
@@ -68,7 +68,7 @@ class ToastException extends Exception
 
     public static function success(
         string $title,
-        string $description = null,
+        ?string $description = null,
         string $position = 'toast-top toast-end',
         string $icon = 'o-check-circle',
         string $css = 'alert-success',
@@ -87,7 +87,7 @@ class ToastException extends Exception
 
     public static function error(
         string $title,
-        string $description = null,
+        ?string $description = null,
         string $position = 'toast-top toast-end',
         string $icon = 'o-x-circle',
         string $css = 'alert-error',
@@ -106,7 +106,7 @@ class ToastException extends Exception
 
     public static function warning(
         string $title,
-        string $description = null,
+        ?string $description = null,
         string $position = 'toast-top toast-end',
         string $icon = 'o-exclamation-triangle',
         string $css = 'alert-warning',
