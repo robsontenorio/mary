@@ -40,9 +40,19 @@ class Tags extends Component
         return $this->attributes->whereStartsWith('wire:model')->first();
     }
 
-    public function errorFieldName(): ?string
+    public function errorFieldNames(): array
     {
-        return $this->errorField ?? $this->modelName();
+        if ($this->errorField) {
+            return [$this->errorField];
+        }
+
+        $model = $this->modelName();
+
+        if ($model) {
+            return [$model, "$model.*"];
+        }
+
+        return [];
     }
 
     public function isReadonly(): bool
@@ -167,7 +177,7 @@ class Tags extends Component
                                         "input w-full h-fit pl-2.5",
                                         "join-item" => $prepend || $append,
                                         "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
-                                        "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
+                                        "!input-error" => !$omitError && collect($errorFieldNames())->contains(fn($field) => $errors->has($field))
                                     ])
                                 }}
                              >
@@ -240,13 +250,17 @@ class Tags extends Component
                     </label>
 
                     {{-- ERROR --}}
-                    @if(!$omitError && $errors->has($errorFieldName()))
-                        @foreach($errors->get($errorFieldName()) as $message)
-                            @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
-                                @break($firstErrorOnly)
-                            @endforeach
-                            @break($firstErrorOnly)
+                    @if(!$omitError)
+                        @foreach($errorFieldNames() as $field)
+                            @if($errors->has($field))
+                                @foreach($errors->get($field) as $message)
+                                    @foreach(Arr::wrap($message) as $line)
+                                        <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
+                                        @break($firstErrorOnly)
+                                    @endforeach
+                                    @break($firstErrorOnly)
+                                @endforeach
+                            @endif
                         @endforeach
                     @endif
 
