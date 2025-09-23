@@ -20,6 +20,7 @@ class ListItem extends Component
         public ?bool $noHover = false,
         public ?string $link = null,
         public ?string $fallbackAvatar = null,
+        public ?string $paddingClass = null,
 
         // Slots
         public mixed $actions = null,
@@ -47,7 +48,7 @@ class ListItem extends Component
 
                     <!-- AVATAR -->
                     @if(data_get($item, $avatar))
-                        <div class="py-3">
+                        <div @class(["py-3", $paddingClass])>
                             <div class="avatar">
                                 <div class="w-11 rounded-full">
                                     <img src="{{ data_get($item, $avatar) }}" @if($fallbackAvatar) onerror="this.src='{{ $fallbackAvatar }}'" @endif />
@@ -74,7 +75,7 @@ class ListItem extends Component
                             <a href="{{ $link }}" wire:navigate>
                         @endif
 
-                        <div class="py-3">
+                        <div @class(["py-3", $paddingClass])>
                             <div @if(!is_string($value)) {{ $value->attributes->class(["font-semibold truncate"]) }} @else class="font-semibold truncate" @endif>
                                 {{ is_string($value) ? data_get($item, $value) : $value }}
                             </div>
