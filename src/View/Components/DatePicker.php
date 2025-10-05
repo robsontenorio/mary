@@ -19,6 +19,7 @@ class DatePicker extends Component
         public ?string $hint = null,
         public ?string $hintClass = 'fieldset-label',
         public ?bool $inline = false,
+        public ?bool $clearable = false,
         public ?array $config = [],
 
         // Slots
@@ -125,7 +126,58 @@ class DatePicker extends Component
                             <span class="font-semibold">{{ $label }}</span>
                         @endif
 
-                        <div class="w-full">
+                        <div 
+                            @click.outside = "clear()"
+                            @keyup.esc = "clear()"
+
+                            x-data="{
+                                instance: undefined,
+                                value: @entangle($attributes->wire('model')),
+                                isRange: {{ json_encode(isset($config['mode']) && $config['mode'] == 'range') }},
+                                focused: false,
+                                isLive: {{ json_encode($attributes->wire('model')->hasModifier('live')) }},
+
+                                init() {
+                                    $watch('value', value => { 
+                                        if (value.split(this.instance.l10n.rangeSeparator).length == 2 && this.isLive) { 
+                                            $wire.set('{{ $modelName() }}', value) 
+                                        }
+                                        
+                                        if (value !== '' || !this.isLive) {
+                                            return
+                                        }
+                                        
+                                        if (this.isRange) {
+                                            $wire.set('{{ $modelName() }}', '')
+                                            this.instance.close()
+                                        } else {
+                                            this.instance.close()
+                                        }
+                                    })
+                                },
+                                get isValueEmpty() {
+                                    return this.value == ''
+                                },
+                                clear() {
+                                    this.focused = false
+                                },
+                                reset() {
+                                    this.clear()
+                                    this.value = ''
+                                    this.instance.clear()
+                                    this.instance.close()
+                                },
+                                focus() {
+                                    if (this.isReadonly || this.isDisabled) {
+                                        return
+                                    }
+
+                                    this.focused = true
+                                },
+                            }"
+
+                            @class(["w-full", "join" => $prepend || $append])
+                        >
                             {{-- PREPEND --}}
                             @if($prepend)
                                 {{ $prepend }}
@@ -137,6 +189,10 @@ class DatePicker extends Component
                                     disabled
                                 @endif
 
+                                @if(!$isDisabled() && !$isReadonly())
+                                    @click="focus()"
+                                @endif
+
                                 {{
                                     $attributes->whereStartsWith('class')->class([
                                         "input w-full",
@@ -146,25 +202,29 @@ class DatePicker extends Component
                                     ])
                                 }}
                              >
-
                                 {{-- ICON LEFT --}}
                                 @if($icon)
                                     <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 -ml-1 opacity-40" />
                                 @endif
 
+                                {{-- PLACEHOLDER --}}
+                                <span :class="(focused || !isValueEmpty || !isRange || !isLive) && 'hidden'" class="text-base-content/40">
+                                    {{ $attributes->get('placeholder') }}
+                                </span>
+
                                 {{-- INPUT --}}
-                                <div
-                                    x-data="{instance: undefined}"
+                                <div 
                                     x-init="instance = flatpickr($refs.input, {{ $setup() }});"
-                                    @if(isset($config["mode"]) && $config["mode"] == "range" && $attributes->get('live'))
-                                        @change="const value = $event.target.value; if(value.split(instance.l10n.rangeSeparator).length == 2) { $wire.set('{{ $modelName() }}', value) };"
-                                    @endif
                                     x-on:livewire:navigating.window="instance.destroy();"
                                     class="w-full"
                                 >
                                     <input x-ref="input" {{ $attributes->merge(['type' => 'date']) }} />
                                 </div>
 
+                                {{-- CLEAR ICON --}}
+                                @if($clearable)
+                                    <x-mary-icon @click.prevent="reset()" x-show="!isValueEmpty" name="o-x-mark" class="cursor-pointer w-4 h-4 opacity-40"/>
+                                @endif
 
                                 {{-- ICON RIGHT --}}
                                 @if($iconRight)
