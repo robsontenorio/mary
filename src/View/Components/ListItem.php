@@ -46,7 +46,7 @@ class ListItem extends Component
                     @endif
 
                     <!-- AVATAR -->
-                    @if(data_get($item, $avatar))
+                    @if(data_get($item, $avatar) || $fallbackAvatar)
                         <div class="py-3">
                             <div class="avatar">
                                 <div class="w-11 rounded-full">
