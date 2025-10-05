@@ -138,6 +138,7 @@ class Spotlight extends Component
                                             id="{{ $uuid }}"
                                             x-model="value"
                                             x-ref="spotSearch"
+                                            name="spotSearch"
                                             placeholder=" {{ $searchText }}"
                                             class="w-full input my-2 border-none outline-none shadow-none border-transparent  focus:shadow-none focus:outline-none focus:border-transparent"
                                             @focus="$el.focus()"

@@ -47,8 +47,8 @@ class ListItem extends Component
                     @endif
 
                     <!-- AVATAR -->
-                    @if(data_get($item, $avatar))
-                        <div @class(["py-3", $paddingClass])>
+                    @if(data_get($item, $avatar) || $fallbackAvatar)
+                        <div class="py-3">
                             <div class="avatar">
                                 <div class="w-11 rounded-full">
                                     <img src="{{ data_get($item, $avatar) }}" @if($fallbackAvatar) onerror="this.src='{{ $fallbackAvatar }}'" @endif />
@@ -75,7 +75,7 @@ class ListItem extends Component
                             <a href="{{ $link }}" wire:navigate>
                         @endif
 
-                        <div @class(["py-3", $paddingClass])>
+                        <div class="py-3">
                             <div @if(!is_string($value)) {{ $value->attributes->class(["font-semibold truncate"]) }} @else class="font-semibold truncate" @endif>
                                 {{ is_string($value) ? data_get($item, $value) : $value }}
                             </div>
