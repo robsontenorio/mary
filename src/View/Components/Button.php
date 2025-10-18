@@ -28,6 +28,7 @@ class Button extends Component
         public ?string $tooltipLeft = null,
         public ?string $tooltipRight = null,
         public ?string $tooltipBottom = null,
+        public ?string $disable = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
         $this->tooltip = $this->tooltip ?? $this->tooltipLeft ?? $this->tooltipRight ?? $this->tooltipBottom;
@@ -71,6 +72,10 @@ class Button extends Component
                     @if($spinner)
                         wire:target="{{ $spinnerTarget() }}"
                         wire:loading.attr="disabled"
+                    @endif
+
+                    @if($disable === 'true' || $disable === '1')
+                        disabled
                     @endif
                 >
 
