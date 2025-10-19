@@ -17,6 +17,7 @@ class Spotlight extends Component
         public ?string $noResultsText = "Nothing found.",
         public ?string $url = null,
         public ?string $fallbackAvatar = null,
+        public ?bool $noWireNavigate = false,
 
         // Slots
         public mixed $append = null
@@ -172,7 +173,7 @@ class Spotlight extends Component
                             <div class="-mx-1 mt-1" @click="close()" @keydown.enter="close()">
                                 <template x-for="(item, index) in results" :key="index">
                                     <!-- ITEM -->
-                                    <a x-bind:href="item.link" class="mary-spotlight-element" wire:navigate tabindex="0">
+                                    <a x-bind:href="item.link" class="mary-spotlight-element" @if(!$noWireNavigate) wire:navigate @endif tabindex="0">
                                         <div class="p-3 hover:bg-base-200 border-t-[length:var(--border)] border-t-base-content/10" >
                                             <div class="flex gap-3 items-center">
                                                 <!-- ICON -->
