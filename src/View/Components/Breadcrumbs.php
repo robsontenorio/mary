@@ -50,22 +50,23 @@ class Breadcrumbs extends Component
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
-                <ul {{ $attributes->merge(['class' => 'flex items-center']) }} wire:key="{{ $uuid }}">
-                    @foreach($items as $element)
-
-                        {{-- Tooltip --}}
-                        <li
-                            @class(["lg:tooltip {$tooltipPosition($element)}" => $tooltip($element), "hidden sm:block" => !$loop->first && !$loop->last])
-
+            <nav aria-label="Breadcrumb">
+                <ol class="flex items-center" itemscope itemtype="https://schema.org/BreadcrumbList" wire:key="{{ $uuid }}">
+                    @foreach($items as $index => $element)
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"
+                            @class([
+                                "lg:tooltip {$tooltipPosition($element)}" => $tooltip($element),
+                                "hidden sm:block" => !$loop->first && !$loop->last
+                            ])
                             @if($tooltip($element))
                                 data-tip="{{ $tooltip($element) }}"
                             @endif
                         >
 
                             @if ($element['link'] ?? null)
-                                <a href="{{ $element['link'] }}" @if(!$noWireNavigate) wire:navigate @endif @class([$linkItemClass])>
+                                <a itemprop="item" href="{{ $element['link'] }}" @if(!$noWireNavigate) wire:navigate @endif @class([$linkItemClass])>
                             @else
-                                <span @class([$textItemClass])>
+                                <span itemprop="item" @class([$textItemClass]) @if($loop->last) aria-current="page" @endif>
                             @endif
 
                                 {{-- Icon --}}
@@ -73,8 +74,7 @@ class Breadcrumbs extends Component
                                     <x-mary-icon :name="$element['icon']" @class(["mb-0.5", $iconClass]) />
                                 @endif
 
-                                {{-- Text --}}
-                                <span>
+                                <span itemprop="name">
                                     {{ $element['label'] ?? null }}
                                 </span>
 
@@ -83,23 +83,27 @@ class Breadcrumbs extends Component
                             @else
                                 </span>
                             @endif
+
+                            <meta itemprop="position" content="{{ $index + 1 }}" />
                         </li>
 
-                        @if($loop->remaining == 1 && $loop->count > 2)
-                            <span class="sm:hidden">...</span>
+                        @if(!$loop->last)
+                            <li aria-hidden="true" @class([
+                                "flex items-center flex-shrink-0",
+                                "hidden sm:flex" => !$loop->first
+                            ])>
+                                <x-mary-icon :name="$separator" @class([$separatorClass]) />
+                            </li>
                         @endif
 
-                        {{-- Separator --}}
-                        <span @class([
-                                "hidden",
-                                "!block" => ($loop->first || $loop->remaining == 1) && $loop->count > 1,
-                                "sm:!block" => !$loop->last && $loop->count > 1
-                             ])
-                        >
-                            <x-mary-icon :name="$separator" @class([$separatorClass]) />
-                        </span>
+                        @if($loop->remaining == 1 && $loop->count > 2)
+                            <li aria-hidden="true" class="sm:hidden flex items-center flex-shrink-0">
+                                <span class="mx-1">...</span>
+                            </li>
+                        @endif
                     @endforeach
-                </ul>
-            BLADE;
+                </ol>
+            </nav>
+        BLADE;
     }
 }
