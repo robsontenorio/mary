@@ -263,7 +263,7 @@ class Choices extends Component
 
                                         {{
                                             $attributes->whereStartsWith('class')->class([
-                                                "select w-full min-h-fit pl-2.5",
+                                                "select w-full min-h-[var(--size)] h-auto pl-2.5",
                                                 "join-item" => $prepend || $append,
                                                 "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
                                                 "!select-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
