@@ -14,6 +14,7 @@ class Popover extends Component
         public ?string $id = null,
         public ?string $position = "bottom",
         public ?string $offset = "10",
+        public ?string $popoverClass= null,
 
         // Slots
         public mixed $trigger = null,
@@ -28,6 +29,7 @@ class Popover extends Component
         return <<<'HTML'
                 <div
                     x-cloak
+                    class="{{ $popoverClass }}"
                     x-data="{
                             open: false,
                             timer: null,
