@@ -24,6 +24,9 @@ class Input extends Component
         public ?bool $money = false,
         public ?string $locale = 'en-US',
 
+        public ?string $popover = null,
+        public ?string $popoverIcon = "o-question-mark-circle",
+
         // Slots
         public mixed $prepend = null,
         public mixed $append = null,
@@ -84,6 +87,18 @@ class Input extends Component
 
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
+                            @endif
+
+                            {{-- INPUT POPOVER --}}
+                            @if($popover)
+                                <x-popover position="top-start" offset="10" popoverClass="inline-block">
+                                    <x-slot:trigger>
+                                        <x-mary-icon :name="$popoverIcon" class="pointer-events-none w-4 h-4 opacity-40 rounded-lg" />
+                                    </x-slot:trigger>
+                                    <x-slot:content>
+                                        {{ $popover }}
+                                    </x-slot:content>
+                                </x-popover>
                             @endif
                         </legend>
                     @endif
