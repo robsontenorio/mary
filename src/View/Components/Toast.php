@@ -9,7 +9,7 @@ use Illuminate\View\Component;
 class Toast extends Component
 {
     public function __construct(
-        public string $position = 'toast-top toast-end'
+        public string $position = 'toast-top toast-end',
     ) {
     }
 
@@ -20,20 +20,41 @@ class Toast extends Component
                 @persist('mary-toaster')
                 <div
                     x-cloak
-                    x-data="{ show: false, timer: '', toast: ''}"
+                    x-data="{ show: false, timer: '', toast: '', maxProgress: 100, progress: 100, interval: null }"
                     @mary-toast.window="
-                                    clearTimeout(timer);
-                                    toast = $event.detail.toast
-                                    setTimeout(() => show = true, 100);
-                                    timer = setTimeout(() => show = false, $event.detail.toast.timeout);
-                                    "
+                        clearTimeout(timer);
+                        clearInterval(interval);
+                        
+                        progress = maxProgress;
+                        
+                        toast = $event.detail.toast;
+                        setTimeout(() => show = true, 100);
+                        
+                        const duration = toast.timeout;
+                        const intervalRefreshRate = 8; // high refresh rate to avoid jerky progression
+                        
+                        if(toast.progress) {
+                            const step = maxProgress / (duration / intervalRefreshRate);
+                            interval = setInterval(() => {
+                                progress = progress - step;
+                                if (progress <= 0) {
+                                    progress = 0;
+                                    clearInterval(interval);
+                                }
+                            }, intervalRefreshRate);
+                        }
+                        
+                        timer = setTimeout(() => {
+                            show = false;
+                        }, duration + 150); // 150 is for compensating the show delay to sync the progress with the toast timeout
+                        "
                 >
                     <div
-                        class="toast !whitespace-normal rounded-md fixed cursor-pointer z-[999]"
+                        class="toast !whitespace-normal rounded-md fixed cursor-pointer z-[999] overflow-hidden"
                         :class="toast.position || '{{ $position }}'"
                         x-show="show"
                         x-classes="alert alert-success alert-warning alert-error alert-info top-10 end-10 toast toast-top toast-bottom toast-center toast-end toast-middle toast-start"
-                        @click="show = false"
+                        @click="show = false; clearInterval(interval)"
                     >
                         <div class="alert gap-2" :class="toast.css">
                             <div x-html="toast.icon" class="hidden sm:inline-block"></div>
@@ -42,6 +63,13 @@ class Toast extends Component
                                 <div x-html="toast.description" class="text-xs"></div>
                             </div>
                         </div>
+                        <progress
+                            x-show="toast.progress"
+                            class="-mt-3 h-1 w-full progress"
+                            :class="toast.progressClass"
+                            :max="maxProgress"
+                            :value="progress">
+                        </progress>
                     </div>
                 </div>
 
