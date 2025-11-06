@@ -19,6 +19,7 @@ class Header extends Component
         public string $progressIndicatorClass = "progress-primary",
         public ?bool $withAnchor = false,
         public ?string $size = 'text-2xl',
+        public ?bool $useH1 = false,
 
         // Icon
         public ?string $icon = null,
@@ -46,21 +47,39 @@ class Header extends Component
                 <div id="{{ $anchor }}" {{ $attributes->class(["mb-10", "mary-header-anchor" => $withAnchor]) }}>
                     <div class="flex flex-wrap gap-5 justify-between items-center">
                         <div>
-                            <div @class(["flex", "items-center", "$size font-extrabold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
-                                @if($withAnchor)
-                                    <a href="#{{ $anchor }}">
-                                @endif
+                            @if($useH1)
+                                <h1 @class(["flex", "items-center", "$size font-extrabold", "pl-2" => $icon, is_string($title) ? '' : $title?->attributes->get('class') ]) >
+                                    @if($withAnchor)
+                                        <a href="#{{ $anchor }}">
+                                    @endif
 
-                                @if($icon)
-                                    <x-mary-icon name="{{ $icon }}" class="{{ $iconClasses }}" />
-                                @endif
+                                    @if($icon)
+                                        <x-mary-icon name="{{ $icon }}" class="{{ $iconClasses }}" />
+                                    @endif
 
-                                <span @class(["ml-2" => $icon])>{{ $title }}</span>
+                                    {{ $title }}
 
-                                @if($withAnchor)
-                                    </a>
-                                @endif
-                            </div>
+                                    @if($withAnchor)
+                                        </a>
+                                    @endif
+                                </h1>
+                            @else
+                                <div @class(["flex", "items-center", "$size font-extrabold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
+                                    @if($withAnchor)
+                                        <a href="#{{ $anchor }}">
+                                    @endif
+
+                                    @if($icon)
+                                        <x-mary-icon name="{{ $icon }}" class="{{ $iconClasses}}" />
+                                    @endif
+
+                                    <span @class(["ml-2" => $icon])>{{ $title }}</span>
+
+                                    @if($withAnchor)
+                                        </a>
+                                    @endif
+                                </div>
+                            @endif
 
                             @if($subtitle)
                                 <div @class(["text-base-content/50 text-sm mt-1", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
