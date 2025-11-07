@@ -333,7 +333,7 @@ class Choices extends Component
                                                  @endif
 
                                                 @if($searchable)
-                                                    @keydown.debounce.{{ $debounce }}="search($el.value, $event)"
+                                                    @input.debounce.{{ $debounce }}="search($el.value, $event)"
                                                 @endif
                                              />
                                         </div>
