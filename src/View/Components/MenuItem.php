@@ -19,6 +19,7 @@ class MenuItem extends Component
         public ?string $spinner = null,
         public ?string $link = null,
         public ?string $route = null,
+        public ?array $routeParams = [],
         public ?bool $external = false,
         public ?bool $noWireNavigate = false,
         public ?string $badge = null,
@@ -41,9 +42,20 @@ class MenuItem extends Component
         return $this->spinner;
     }
 
+    public function getHref(): ?string
+    {
+        if ($this->route) {
+            return route($this->route, $this->routeParams);
+        }
+
+        return $this->link;
+    }
+
     public function routeMatches(): bool
     {
-        if ($this->link == null) {
+        $href = $this->getHref();
+
+        if ($href == null) {
             return false;
         }
 
@@ -79,8 +91,8 @@ class MenuItem extends Component
                             ])
                         }}
 
-                        @if($link)
-                            href="{{ $link }}"
+                        @if($getHref())
+                            href="{{ $getHref() }}"
 
                             @if($external)
                                 target="_blank"
