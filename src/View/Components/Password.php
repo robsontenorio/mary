@@ -22,6 +22,7 @@ class Password extends Component
         public ?string $suffix = null,
         public ?bool $inline = false,
         public ?bool $clearable = false,
+        public ?string $autocomplete = null,
 
         // Password
         public ?string $passwordIcon = 'o-eye-slash',
@@ -146,6 +147,10 @@ class Password extends Component
 
                                     @if($attributes->has('autofocus') && $attributes->get('autofocus') == true)
                                         autofocus
+                                    @endif
+
+                                    @if($autocomplete)
+                                        autocomplete="{{ $autocomplete }}"
                                     @endif
 
                                     {{ $attributes->except('type')->merge() }}

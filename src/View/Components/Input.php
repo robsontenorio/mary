@@ -23,6 +23,7 @@ class Input extends Component
         public ?bool $clearable = false,
         public ?bool $money = false,
         public ?string $locale = 'en-US',
+        public ?string $autocomplete = null,
 
         // Slots
         public mixed $prepend = null,
@@ -140,6 +141,10 @@ class Input extends Component
 
                                         @if($attributes->has('autofocus') && $attributes->get('autofocus') == true)
                                             autofocus
+                                        @endif
+
+                                        @if($autocomplete)
+                                            autocomplete="{{ $autocomplete }}"
                                         @endif
 
                                         @if($money)
