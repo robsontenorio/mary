@@ -25,7 +25,7 @@ class ToastException extends Exception
 
     protected bool $preventDefault = true;
 
-    protected bool $progress = false;
+    protected bool $noProgress = false;
 
     protected ?string $progressClass = null;
 
@@ -37,7 +37,7 @@ class ToastException extends Exception
         string $icon = 'o-information-circle',
         string $css = 'alert-info',
         int $timeout = 3000,
-        bool $progress = false,
+        bool $noProgress = false,
         ?string $progressClass = null,
     ): self {
         $instance = new self(message: $title, code: 500);
@@ -49,7 +49,7 @@ class ToastException extends Exception
         $instance->icon = $icon;
         $instance->css = $css;
         $instance->timeout = $timeout;
-        $instance->progress = $progress;
+        $instance->noProgress = $noProgress;
         $instance->progressClass = $progressClass;
 
         return $instance;
@@ -62,7 +62,7 @@ class ToastException extends Exception
         string $icon = 'o-information-circle',
         string $css = 'alert-info',
         int $timeout = 3000,
-        bool $progress = false,
+        bool $noProgress = false,
         ?string $progressClass = null,
     ): self {
         return self::typedMessage(
@@ -73,7 +73,7 @@ class ToastException extends Exception
             icon: $icon,
             css: $css,
             timeout: $timeout,
-            progress: $progress,
+            noProgress: $noProgress,
             progressClass: $progressClass,
         );
     }
@@ -85,7 +85,7 @@ class ToastException extends Exception
         string $icon = 'o-check-circle',
         string $css = 'alert-success',
         int $timeout = 3000,
-        bool $progress = false,
+        bool $noProgress = false,
         ?string $progressClass = null,
     ): self {
         return self::typedMessage(
@@ -96,7 +96,7 @@ class ToastException extends Exception
             icon: $icon,
             css: $css,
             timeout: $timeout,
-            progress: $progress,
+            noProgress: $noProgress,
             progressClass: $progressClass,
         );
     }
@@ -108,7 +108,7 @@ class ToastException extends Exception
         string $icon = 'o-x-circle',
         string $css = 'alert-error',
         int $timeout = 3000,
-        bool $progress = false,
+        bool $noProgress = false,
         ?string $progressClass = null,
     ): self {
         return self::typedMessage(
@@ -119,7 +119,7 @@ class ToastException extends Exception
             icon: $icon,
             css: $css,
             timeout: $timeout,
-            progress: $progress,
+            noProgress: $noProgress,
             progressClass: $progressClass,
         );
     }
@@ -131,7 +131,7 @@ class ToastException extends Exception
         string $icon = 'o-exclamation-triangle',
         string $css = 'alert-warning',
         int $timeout = 3000,
-        bool $progress = false,
+        bool $noProgress = false,
         ?string $progressClass = null,
     ): self {
         return self::typedMessage(
@@ -142,7 +142,7 @@ class ToastException extends Exception
             icon: $icon,
             css: $css,
             timeout: $timeout,
-            progress: $progress,
+            noProgress: $noProgress,
             progressClass: $progressClass,
         );
     }
@@ -168,7 +168,7 @@ class ToastException extends Exception
                     'css' => $this->css,
                     'timeout' => $this->timeout,
 
-                    'progress' => $this->progress,
+                    'noProgress' => $this->noProgress,
                     'progressClass' => $this->progressClass,
                 ],
                 'prevent_default' => $this->preventDefault

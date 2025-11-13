@@ -15,7 +15,7 @@ trait Toast
         string $css = 'alert-info',
         int $timeout = 3000,
         ?string $redirectTo = null,
-        bool $progress = false,
+        bool $noProgress = false,
         ?string $progressClass = null,
     ) {
         $toast = [
@@ -26,7 +26,7 @@ trait Toast
             'icon' => Blade::render("<x-mary-icon class='w-7 h-7' name='".$icon."' />"),
             'css' => $css,
             'timeout' => $timeout,
-            'progress' => $progress,
+            'noProgress' => $noProgress,
             'progressClass' => $progressClass,
         ];
 
@@ -48,10 +48,10 @@ trait Toast
         string $css = 'alert-success',
         int $timeout = 3000,
         ?string $redirectTo = null,
-        bool $progress = false,
+        bool $noProgress = false,
         ?string $progressClass = null,
     ) {
-        return $this->toast('success', $title, $description, $position, $icon, $css, $timeout, $redirectTo, $progress, $progressClass);
+        return $this->toast('success', $title, $description, $position, $icon, $css, $timeout, $redirectTo, $noProgress, $progressClass);
     }
 
     public function warning(
@@ -62,10 +62,10 @@ trait Toast
         string $css = 'alert-warning',
         int $timeout = 3000,
         ?string $redirectTo = null,
-        bool $progress = false,
+        bool $noProgress = false,
         ?string $progressClass = null,
     ) {
-        return $this->toast('warning', $title, $description, $position, $icon, $css, $timeout, $redirectTo, $progress, $progressClass);
+        return $this->toast('warning', $title, $description, $position, $icon, $css, $timeout, $redirectTo, $noProgress, $progressClass);
     }
 
     public function error(
@@ -76,10 +76,10 @@ trait Toast
         string $css = 'alert-error',
         int $timeout = 3000,
         ?string $redirectTo = null,
-        bool $progress = false,
+        bool $noProgress = false,
         ?string $progressClass = null,
     ) {
-        return $this->toast('error', $title, $description, $position, $icon, $css, $timeout, $redirectTo, $progress, $progressClass);
+        return $this->toast('error', $title, $description, $position, $icon, $css, $timeout, $redirectTo, $noProgress, $progressClass);
     }
 
     public function info(
@@ -90,9 +90,9 @@ trait Toast
         string $css = 'alert-info',
         int $timeout = 3000,
         ?string $redirectTo = null,
-        bool $progress = false,
+        bool $noProgress = false,
         ?string $progressClass = null,
     ) {
-        return $this->toast('info', $title, $description, $position, $icon, $css, $timeout, $redirectTo, $progress, $progressClass);
+        return $this->toast('info', $title, $description, $position, $icon, $css, $timeout, $redirectTo, $noProgress, $progressClass);
     }
 }

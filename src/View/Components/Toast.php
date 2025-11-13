@@ -48,7 +48,7 @@ class Toast extends Component
                         },
                 
                         startProgress() {
-                            if (!this.toast.progress) return;
+                            if (this.toast.noProgress) return;
                 
                             const intervalRefreshRate = 8;
                             const step = this.progress / (this.remaining / intervalRefreshRate);
@@ -119,7 +119,7 @@ class Toast extends Component
                             </div>
                         </div>
                         <progress
-                            x-show="toast.progress"
+                            x-show="!toast.noProgress"
                             class="-mt-3 h-1 w-full progress"
                             :class="toast.progressClass"
                             :max="maxProgress"
