@@ -20,39 +20,94 @@ class Toast extends Component
                 @persist('mary-toaster')
                 <div
                     x-cloak
-                    x-data="{ show: false, timer: '', toast: '', maxProgress: 100, progress: 100, interval: null }"
-                    @mary-toast.window="
-                        clearTimeout(timer);
-                        clearInterval(interval);
-                        
-                        progress = maxProgress;
-                        
-                        toast = $event.detail.toast;
-                        setTimeout(() => show = true, 100);
-                        
-                        const duration = toast.timeout;
-                        const intervalRefreshRate = 8; // high refresh rate to avoid jerky progression
-                        
-                        if(toast.progress) {
-                            const step = maxProgress / (duration / intervalRefreshRate);
-                            interval = setInterval(() => {
-                                progress = progress - step;
-                                if (progress <= 0) {
-                                    progress = 0;
-                                    clearInterval(interval);
+                    x-data="{
+                        show: false,
+                        toast: {},
+                        timer: null,
+                        interval: null,
+                
+                        maxProgress: 100,
+                        progress: 100,
+                
+                        startTime: 0,
+                        remaining: 0,
+                
+                        start(toast) {
+                            this.clearTimers();
+                
+                            this.toast = toast;
+                            this.progress = this.maxProgress;
+                
+                            this.remaining = toast.timeout;
+                
+                            // delay for DOM initiation
+                            setTimeout(() => this.show = true, 50);
+                
+                            this.startProgress();
+                            this.startCloseTimer();
+                        },
+                
+                        startProgress() {
+                            if (!this.toast.progress) return;
+                
+                            const intervalRefreshRate = 8;
+                            const step = this.progress / (this.remaining / intervalRefreshRate);
+                
+                            this.startTime = Date.now();
+                
+                            this.interval = setInterval(() => {
+                                this.progress -= step;
+                                if (this.progress <= 0) {
+                                    this.progress = 0;
+                                    clearInterval();
                                 }
                             }, intervalRefreshRate);
+                        },
+                
+                        startCloseTimer() {
+                            this.startTime = Date.now();
+                
+                            this.timer = setTimeout(() => {
+                                this.close();
+                            }, this.remaining);
+                        },
+                
+                        pause() {
+                            if (!this.show) return;
+                
+                            const elapsed = Date.now() - this.startTime;
+                            this.remaining -= elapsed;
+                
+                            this.clearTimers();
+                        },
+                
+                        resume() {
+                            if (!this.show || this.remaining <= 0) return;
+                
+                            this.startProgress();
+                            this.startCloseTimer();
+                        },
+                
+                        close() {
+                            this.show = false;
+                            this.clearTimers();
+                        },
+                
+                        clearTimers() {
+                            clearTimeout(this.timer);
+                            clearInterval(this.interval);
+                            this.timer = null;
+                            this.interval = null;
                         }
-                        
-                        timer = setTimeout(() => {
-                            show = false;
-                        }, duration + 150); // 150 is for compensating the show delay to sync the progress with the toast timeout
-                        "
+                    }"
+                    @mary-toast.window="start($event.detail.toast)"
                 >
                     <div
                         class="toast !whitespace-normal rounded-md fixed cursor-pointer z-[999] overflow-hidden"
                         :class="toast.position || '{{ $position }}'"
                         x-show="show"
+                        @mouseenter="pause()"
+                        @mouseleave="resume()"
                         x-classes="alert alert-success alert-warning alert-error alert-info top-10 end-10 toast toast-top toast-bottom toast-center toast-end toast-middle toast-start"
                         @click="show = false; clearInterval(interval)"
                     >
