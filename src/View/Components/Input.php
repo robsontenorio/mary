@@ -23,7 +23,6 @@ class Input extends Component
         public ?bool $clearable = false,
         public ?bool $money = false,
         public ?string $locale = 'en-US',
-
         public ?string $popover = null,
         public ?string $popoverIcon = "o-question-mark-circle",
 
@@ -91,14 +90,14 @@ class Input extends Component
 
                             {{-- INPUT POPOVER --}}
                             @if($popover)
-                                <x-popover position="top-start" offset="10" popoverClass="inline-block">
+                                <x-mary-popover offset="5" position="top-start">
                                     <x-slot:trigger>
-                                        <x-mary-icon :name="$popoverIcon" class="pointer-events-none w-4 h-4 opacity-40 rounded-lg" />
+                                        <x-mary-icon :name="$popoverIcon" class="w-4 h-4 opacity-40 mb-0.5" />
                                     </x-slot:trigger>
                                     <x-slot:content>
                                         {{ $popover }}
                                     </x-slot:content>
-                                </x-popover>
+                                </x-mary-popover>
                             @endif
                         </legend>
                     @endif
