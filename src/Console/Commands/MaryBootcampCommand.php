@@ -4,7 +4,6 @@ namespace Mary\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Process;
 use RuntimeException;
 
 class MaryBootcampCommand extends Command
@@ -28,13 +27,6 @@ class MaryBootcampCommand extends Command
             return;
         }
 
-        // Make sure it have Livewire ant Volt
-        $this->info("Making sure you have Livewire and Volt ...\n");
-
-        Process::run("composer require livewire/livewire livewire/volt && php artisan volt:install", function (string $type, string $output) {
-            echo $output;
-        })->throw();
-
         // Copy stubs
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/2024_01_01_000001_bootcamp.php",
             "database{$this->ds}migrations{$this->ds}2024_01_01_000001_bootcamp.php");
@@ -54,7 +46,7 @@ class MaryBootcampCommand extends Command
         // Clear view cache
         Artisan::call('view:clear');
 
-        $this->info("\n✅   Done! Go back to Bootcamp page.\n");
+        $this->info("\n✅   Done! Go back to Bootcamp docs.\n");
     }
 
     private function copyFile(string $source, string $destination): void
