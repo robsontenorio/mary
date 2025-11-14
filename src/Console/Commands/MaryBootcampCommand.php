@@ -4,6 +4,7 @@ namespace Mary\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Process;
 use RuntimeException;
 
 class MaryBootcampCommand extends Command
@@ -26,6 +27,14 @@ class MaryBootcampCommand extends Command
 
             return;
         }
+
+        // Make sure it has Livewire
+        $this->info("Making sure you have Livewire installed ...\n");
+
+        // TODO: remove `beta` after Livewire release
+        Process::run("composer require livewire/livewire:^4.0@beta", function (string $type, string $output) {
+            echo $output;
+        })->throw();
 
         // Copy stubs
         $this->copyFile(__DIR__ . "/../../../stubs/bootcamp/2024_01_01_000001_bootcamp.php",
