@@ -165,6 +165,11 @@ class Choices extends Component
                                     return
                                 }
 
+                                if (!this.focused) {
+                                    this.highlightedIndex = 0
+                                    this.$nextTick(() => this.scrollToHighlighted())
+                                }
+
                                 this.focused = true
                                 this.$refs.searchInput.focus()
                             },
@@ -206,7 +211,7 @@ class Choices extends Component
 
                                 // Prevent search for this keys
                                 if (event && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Shift', 'CapsLock', 'Tab',
-                                              'Control', 'Alt', 'Home', 'End', 'PageUp', 'PageDown'].includes(event.key)) {
+                                              'Control', 'Alt', 'Home', 'End', 'PageUp', 'PageDown', 'Enter', 'Escape'].includes(event.key)) {
                                     return;
                                 }
 
@@ -215,15 +220,57 @@ class Choices extends Component
                                 @this.{{ str_contains($searchFunction, '(')
                                           ? preg_replace('/\((.*?)\)/', '(value, $1)', $searchFunction)
                                           : $searchFunction . '(value)'
-                                        }}.then(()=> this.resize())
+                                        }}.then(()=> {
+                                            this.resize();
+                                            this.highlightedIndex = 0;
+                                            this.scrollToHighlighted();
+                                        })
                             },
                             dispatchChangeEvent(detail) {
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
+                            },
+                            highlightedIndex: 0,
+                            getVisibleElements() {
+                                if (!this.$refs.choicesOptions) return [];
+                                return Array.from(this.$refs.choicesOptions.children)
+                                    .filter(el => !el.classList.contains('hidden'));
+                            },
+                            moveHighlight(delta) {
+                                let elements = this.getVisibleElements();
+                                if (elements.length === 0) return;
+                                this.highlightedIndex = (this.highlightedIndex + delta + elements.length) % elements.length;
+                                this.scrollToHighlighted();
+                            },
+                            setHighlight(index) {
+                                let elements = this.getVisibleElements();
+                                if (elements.length === 0) return;
+
+                                if (index >= elements.length) index = 0;
+                                if (index < 0) index = 0;
+
+                                this.highlightedIndex = index;
+
+                                elements.forEach((el, idx) => {
+                                    if (idx === this.highlightedIndex) {
+                                        el.classList.add('bg-primary', 'text-primary-content');
+                                    } else {
+                                        el.classList.remove('bg-primary', 'text-primary-content');
+                                    }
+                                });
+                            },
+                            scrollToHighlighted() {
+                                let elements = this.getVisibleElements();
+                                if (elements.length === 0) return;
+                                this.setHighlight(this.highlightedIndex);
+                                elements[this.highlightedIndex]?.scrollIntoView({ block: 'nearest' });
+                            },
+                            selectHighlighted() {
+                                let elements = this.getVisibleElements();
+                                if (elements.length > 0) {
+                                    elements[this.highlightedIndex]?.click();
+                                }
                             }
                         }"
-
-                        @keydown.up="$focus.previous()"
-                        @keydown.down="$focus.next()"
                     >
                         <fieldset class="fieldset py-0">
                             {{-- STANDARD LABEL --}}
@@ -315,7 +362,11 @@ class Choices extends Component
                                             <input
                                                 x-ref="searchInput"
                                                 @input="focus(); resize();"
-                                                @keydown.arrow-down.prevent="focus()"
+                                                @keydown.down.stop.prevent="focus(); moveHighlight(1)"
+                                                @keydown.up.stop.prevent="focus(); moveHighlight(-1)"
+                                                @keydown.enter.stop.prevent="selectHighlighted()"
+                                                @keydown.esc.stop.prevent="clear()"
+                                                @keydown.tab="clear()"
                                                 :required="isRequired && isSelectionEmpty"
                                                 class="w-1 !inline-block outline-hidden"
 
@@ -408,30 +459,31 @@ class Choices extends Component
                                     {{ $noResultText }}
                                 </div>
 
-                                @foreach($options as $option)
-                                    <div
-                                        wire:key="option-{{ data_get($option, $optionValue) }}"
-                                        @click="toggle({{ $getOptionValue($option) }}, true)"
-                                        @keydown.enter="toggle({{ $getOptionValue($option) }}, true)"
-                                        :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-base-content'"
-                                        class="border-s-4 border-base-content/10 focus:bg-base-200 focus:outline-none"
-                                        tabindex="0"
-                                    >
-                                        {{-- ITEM SLOT --}}
-                                        @if($item)
-                                            {{ $item($option) }}
-                                        @else
-                                            <x-mary-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar" />
-                                        @endif
+                                <div x-ref="choicesOptions">
+                                    @foreach($options as $option)
+                                        <div
+                                            wire:key="option-{{ data_get($option, $optionValue) }}"
+                                            @click="toggle({{ $getOptionValue($option) }}, true)"
+                                            @mouseenter="setHighlight(getVisibleElements().indexOf($el))"
+                                            :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-base-content'"
+                                            class="border-s-4 border-base-content/10"
+                                        >
+                                            {{-- ITEM SLOT --}}
+                                            @if($item)
+                                                {{ $item($option) }}
+                                            @else
+                                                <x-mary-list-item :item="$option" :value="$optionLabel" :sub-value="$optionSubLabel" :avatar="$optionAvatar" />
+                                            @endif
 
-                                        {{-- SELECTION SLOT --}}
-                                        @if($selection)
-                                            <span id="selection-{{ $uuid }}-{{ data_get($option, $optionValue) }}" class="hidden">
-                                                {{ $selection($option) }}
-                                            </span>
-                                        @endif
-                                    </div>
-                                @endforeach
+                                            {{-- SELECTION SLOT --}}
+                                            @if($selection)
+                                                <span id="selection-{{ $uuid }}-{{ data_get($option, $optionValue) }}" class="hidden">
+                                                    {{ $selection($option) }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>

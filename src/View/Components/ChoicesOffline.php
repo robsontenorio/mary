@@ -123,6 +123,8 @@ class ChoicesOffline extends Component
                                     let elements = document.querySelectorAll('.mary-choices-element');
                                     elements.forEach(el =>  el.remove());
                                 });
+
+                                this.$watch('search', () => this.lookup());
                             },
                             get selectedOptions() {
                                 return this.isSingle
@@ -156,6 +158,11 @@ class ChoicesOffline extends Component
                             focus() {
                                 if (this.isReadonly || this.isDisabled) {
                                     return
+                                }
+
+                                if (!this.focused) {
+                                    this.highlightedIndex = 0
+                                    this.$nextTick(() => this.scrollToHighlighted())
                                 }
 
                                 this.focused = true
@@ -201,36 +208,55 @@ class ChoicesOffline extends Component
 
                                 this.noResults = Array.from(this.$refs.choicesOptions.querySelectorAll('div > .hidden')).length ==
                                                  Array.from(this.$refs.choicesOptions.querySelectorAll('[search-value]')).length
+
+                                this.highlightedIndex = 0
+                                this.scrollToHighlighted()
                             },
                             dispatchChangeEvent(detail) {
                                 this.$refs.searchInput.dispatchEvent(new CustomEvent('change-selection', { bubbles: true, detail }))
                             },
-                            getFocusableElements() {
-                                return Array.from(this.$refs.choicesOptions.querySelectorAll('[tabindex]:not([disabled])'))
-                                    .filter(el => el.offsetParent !== null && getComputedStyle(el).visibility !== 'hidden')
+                            highlightedIndex: 0,
+                            getVisibleElements() {
+                                if (!this.$refs.choicesOptions) return [];
+                                return Array.from(this.$refs.choicesOptions.children)
+                                    .filter(el => !el.classList.contains('hidden'));
                             },
-                            focusNext() {
-                                let focusableElements = this.getFocusableElements()
-                                let index = focusableElements.indexOf(document.activeElement)
-                                let nextElement = focusableElements[index + 1]
-
-                                if (nextElement) {
-                                    nextElement.focus();
-                                }
+                            moveHighlight(delta) {
+                                let elements = this.getVisibleElements();
+                                if (elements.length === 0) return;
+                                this.highlightedIndex = (this.highlightedIndex + delta + elements.length) % elements.length;
+                                this.scrollToHighlighted();
                             },
-                            focusPrevious() {
-                                let focusableElements = this.getFocusableElements()
-                                let index = focusableElements.indexOf(document.activeElement)
-                                let prevElement = focusableElements[index - 1]
+                            setHighlight(index) {
+                                let elements = this.getVisibleElements();
+                                if (elements.length === 0) return;
 
-                                if (prevElement) {
-                                    prevElement.focus()
+                                if (index >= elements.length) index = 0;
+                                if (index < 0) index = 0;
+
+                                this.highlightedIndex = index;
+
+                                elements.forEach((el, idx) => {
+                                    if (idx === this.highlightedIndex) {
+                                        el.classList.add('bg-primary', 'text-primary-content');
+                                    } else {
+                                        el.classList.remove('bg-primary', 'text-primary-content');
+                                    }
+                                });
+                            },
+                            scrollToHighlighted() {
+                                let elements = this.getVisibleElements();
+                                if (elements.length === 0) return;
+                                this.setHighlight(this.highlightedIndex);
+                                elements[this.highlightedIndex]?.scrollIntoView({ block: 'nearest' });
+                            },
+                            selectHighlighted() {
+                                let elements = this.getVisibleElements();
+                                if (elements.length > 0) {
+                                    elements[this.highlightedIndex]?.click();
                                 }
                             }
                         }"
-
-                        @keydown.up="focusPrevious()"
-                        @keydown.down="focusNext()"
                     >
                         <fieldset class="fieldset py-0">
                             {{-- STANDARD LABEL --}}
@@ -323,9 +349,12 @@ class ChoicesOffline extends Component
                                                 :id="id"
                                                 x-ref="searchInput"
                                                 x-model="search"
-                                                @keyup="lookup()"
                                                 @input="focus(); resize();"
-                                                @keydown.arrow-down.prevent="focus()"
+                                                @keydown.down.stop.prevent="focus(); moveHighlight(1)"
+                                                @keydown.up.stop.prevent="focus(); moveHighlight(-1)"
+                                                @keydown.enter.stop.prevent="selectHighlighted()"
+                                                @keydown.esc.stop.prevent="clear()"
+                                                @keydown.tab="clear()"
                                                 :required="isRequired && isSelectionEmpty"
                                                 class="w-1 !inline-block outline-hidden"
 
@@ -418,11 +447,10 @@ class ChoicesOffline extends Component
                                                 id="option-{{ $uuid }}-{{ data_get($option, $optionValue) }}"
                                                 wire:key="option-{{ data_get($option, $optionValue) }}"
                                                 @click="toggle({{ $getOptionValue($option) }}, true)"
-                                                @keydown.enter="toggle({{ $getOptionValue($option) }}, true)"
+                                                @mouseenter="setHighlight(getVisibleElements().indexOf($el))"
                                                 :class="isActive({{ $getOptionValue($option) }}) && 'border-s-4 border-s-base-content'"
                                                 search-value="{{ data_get($option, $optionLabel) }}"
-                                                class="border-s-4 border-base-content/10 focus:bg-base-200 focus:outline-none"
-                                                tabindex="0"
+                                                class="border-s-4 border-base-content/10"
                                             >
                                                 {{-- ITEM SLOT --}}
                                                 @if($item)
