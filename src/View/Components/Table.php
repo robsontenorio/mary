@@ -356,7 +356,7 @@ class Table extends Component
                                             @if(data_get($row, $expandableCondition))
                                                 <x-mary-icon
                                                     name="o-chevron-down"
-                                                    ::class="isExpanded({{ $getKeyValue($row, 'expandableKey') }}) || '-rotate-90 !text-current'"
+                                                    ::class="isExpanded({{ $getKeyValue($row, 'expandableKey') }}) || 'ltr:-rotate-90 rtl:rotate-90 !text-current'"
                                                     class="cursor-pointer p-2 w-8 h-8 bg-base-300 rounded-lg"
                                                     @click="toggleExpand({{ $getKeyValue($row, 'expandableKey') }});" />
                                             @endif

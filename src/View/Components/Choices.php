@@ -25,6 +25,7 @@ class Choices extends Component
         public ?string $suffix = null,
 
         public ?bool $searchable = false,
+        public ?bool $noProgress = false,
         public ?bool $single = false,
         public ?bool $compact = false,
         public ?string $compactText = 'selected',
@@ -310,7 +311,7 @@ class Choices extends Component
 
                                         {{
                                             $attributes->whereStartsWith('class')->class([
-                                                "select w-full min-h-fit pl-2.5",
+                                                "select w-full min-h-[var(--size)] h-auto pl-2.5",
                                                 "join-item" => $prepend || $append,
                                                 "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
                                                 "!select-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
@@ -437,7 +438,9 @@ class Choices extends Component
                             >
 
                                 {{-- PROGRESS --}}
-                                <progress wire:loading wire:target="{{ preg_replace('/\((.*?)\)/', '', $searchFunction) }}" class="progress absolute top-0 h-0.5"></progress>
+                                @if(!$noProgress)
+                                    <progress wire:loading wire:target="{{ preg_replace('/\((.*?)\)/', '', $searchFunction) }}" class="progress absolute top-0 h-0.5"></progress>
+                                @endif
 
                                {{-- SELECT ALL --}}
                                @if($allowAll)

@@ -16,6 +16,8 @@ class Spotlight extends Component
         public ?string $searchText = "Search ...",
         public ?string $noResultsText = "Nothing found.",
         public ?string $url = null,
+        public ?string $fallbackAvatar = null,
+        public ?bool $noWireNavigate = false,
 
         // Slots
         public mixed $append = null
@@ -137,6 +139,7 @@ class Spotlight extends Component
                                             id="{{ $uuid }}"
                                             x-model="value"
                                             x-ref="spotSearch"
+                                            name="spotSearch"
                                             placeholder=" {{ $searchText }}"
                                             class="w-full input my-2 border-none outline-none shadow-none border-transparent  focus:shadow-none focus:outline-none focus:border-transparent"
                                             @focus="$el.focus()"
@@ -170,17 +173,17 @@ class Spotlight extends Component
                             <div class="-mx-1 mt-1" @click="close()" @keydown.enter="close()">
                                 <template x-for="(item, index) in results" :key="index">
                                     <!-- ITEM -->
-                                    <a x-bind:href="item.link" class="mary-spotlight-element" wire:navigate tabindex="0">
+                                    <a x-bind:href="item.link" class="mary-spotlight-element" @if(!$noWireNavigate) wire:navigate @endif tabindex="0">
                                         <div class="p-3 hover:bg-base-200 border-t-[length:var(--border)] border-t-base-content/10" >
                                             <div class="flex gap-3 items-center">
-                                                <!-- AVATAR -->
+                                                <!-- ICON -->
                                                 <template x-if="item.icon">
                                                     <div x-html="item.icon"></div>
                                                 </template>
                                                 <!-- AVATAR -->
                                                 <template x-if="item.avatar && !item.icon">
                                                     <div>
-                                                        <img :src="item.avatar" class="rounded-full w-11 h-11" />
+                                                        <img :src="item.avatar" class="rounded-full w-11 h-11" @if($fallbackAvatar) onerror="this.src='{{ $fallbackAvatar }}'" @endif />
                                                     </div>
                                                 </template>
                                                 <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0 mary-hideable">
