@@ -77,9 +77,11 @@ class Header extends Component
                             </div>
                         @endif
 
-                        <div @class(["flex items-center gap-3", is_string($actions) ? '' : $actions?->attributes->get('class') ]) >
-                            {{ $actions}}
-                        </div>
+                        @if($actions)
+                            <div @class(["flex items-center gap-3", is_string($actions) ? '' : $actions?->attributes->get('class') ]) >
+                                {{ $actions }}
+                            </div>
+                        @endif
                     </div>
 
                     @if($separator)
