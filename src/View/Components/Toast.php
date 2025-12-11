@@ -25,74 +25,85 @@ class Toast extends Component
                         toast: {},
                         timer: null,
                         interval: null,
-                
+
                         maxProgress: 100,
                         progress: 100,
-                
+                        initialProgress: 0,
+
                         startTime: 0,
                         remaining: 0,
-                
+
                         start(toast) {
                             this.clearTimers();
-                
+
                             this.toast = toast;
                             this.progress = this.maxProgress;
-                
+
                             this.remaining = toast.timeout;
-                
+
+                            this.initialProgress = this.progress;
+                            this.startTime = Date.now();
+
                             // delay for DOM initiation
                             setTimeout(() => this.show = true, 50);
-                
+
                             this.startProgress();
                             this.startCloseTimer();
                         },
-                
+
                         startProgress() {
                             if (this.toast.noProgress) return;
-                
+
                             const intervalRefreshRate = 8;
-                            const step = this.progress / (this.remaining / intervalRefreshRate);
-                
                             this.startTime = Date.now();
-                
+
+                            const startProgressValue = this.initialProgress;
+
                             this.interval = setInterval(() => {
-                                this.progress -= step;
+                                const elapsed = Date.now() - this.startTime;
+                                const ratio = elapsed / this.remaining;
+
+                                this.progress = startProgressValue * (1 - ratio);
+
                                 if (this.progress <= 0) {
                                     this.progress = 0;
-                                    clearInterval();
+                                    clearInterval(this.interval);
+                                    this.interval = null;
                                 }
                             }, intervalRefreshRate);
                         },
-                
+
                         startCloseTimer() {
                             this.startTime = Date.now();
-                
+
                             this.timer = setTimeout(() => {
                                 this.close();
                             }, this.remaining);
                         },
-                
+
                         pause() {
                             if (!this.show) return;
-                
+
                             const elapsed = Date.now() - this.startTime;
                             this.remaining -= elapsed;
-                
+
+                            this.initialProgress = this.progress;
+
                             this.clearTimers();
                         },
-                
+
                         resume() {
                             if (!this.show || this.remaining <= 0) return;
-                
+
                             this.startProgress();
                             this.startCloseTimer();
                         },
-                
+
                         close() {
                             this.show = false;
                             this.clearTimers();
                         },
-                
+
                         clearTimers() {
                             clearTimeout(this.timer);
                             clearInterval(this.interval);
