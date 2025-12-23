@@ -18,6 +18,21 @@ return [
     'prefix' => '',
 
     /**
+     * Route Settings
+     */
+    'routes' => [
+        'toggle_sidebar' => [
+            'enabled' => true,
+        ],
+        'spotlight' => [
+            'enabled' => true,
+        ],
+        'upload' => [
+            'enabled' => true,
+        ],
+    ],
+
+    /**
      * Default route prefix.
      *
      * Some maryUI components make network request to its internal routes.
