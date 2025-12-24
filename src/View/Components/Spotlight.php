@@ -188,11 +188,11 @@ class Spotlight extends Component
                                                 </template>
                                                 <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0 mary-hideable">
                                                     <!-- NAME -->
-                                                    <div x-text="item.name" class="font-semibold truncate"></div>
+                                                    <div x-html="item.name" class="font-semibold truncate"></div>
 
                                                     <!-- DESCRIPTION -->
                                                     <template x-if="item.description">
-                                                        <div x-text="item.description" class="text-base-content/50 text-sm truncate"></div>
+                                                        <div x-html="item.description" class="text-base-content/50 text-sm truncate"></div>
                                                     </template>
                                                 </div>
                                             </div>
