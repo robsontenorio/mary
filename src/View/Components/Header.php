@@ -11,6 +11,8 @@ class Header extends Component
 {
     public string $anchor = '';
 
+    public string $titleTag = 'div';
+
     public function __construct(
         public ?string $title = null,
         public ?string $subtitle = null,
@@ -19,6 +21,7 @@ class Header extends Component
         public string $progressIndicatorClass = "progress-primary",
         public ?bool $withAnchor = false,
         public ?string $size = 'text-2xl',
+        public ?bool $useH1 = false,
 
         // Icon
         public ?string $icon = null,
@@ -29,6 +32,7 @@ class Header extends Component
         public mixed $actions = null,
     ) {
         $this->anchor = Str::slug($title);
+        $this->titleTag = $useH1 ? 'h1' : 'div';
     }
 
     public function progressTarget(): ?string
@@ -46,7 +50,7 @@ class Header extends Component
                 <div id="{{ $anchor }}" {{ $attributes->class(["mb-10", "mary-header-anchor" => $withAnchor]) }}>
                     <div class="flex flex-wrap gap-5 justify-between items-center">
                         <div>
-                            <div @class(["flex", "items-center", "$size font-extrabold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
+                            {!! "<{$titleTag}" !!} @class(["flex", "items-center", "$size font-extrabold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
                                 @if($withAnchor)
                                     <a href="#{{ $anchor }}">
                                 @endif
@@ -60,7 +64,7 @@ class Header extends Component
                                 @if($withAnchor)
                                     </a>
                                 @endif
-                            </div>
+                            {!! "</{$titleTag}>" !!}
 
                             @if($subtitle)
                                 <div @class(["text-base-content/50 text-sm mt-1", is_string($subtitle) ? '' : $subtitle?->attributes->get('class') ]) >
