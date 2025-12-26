@@ -1,4 +1,4 @@
-<p align="center"><img width="200" src="https://github.com/robsontenorio/mary-ui.com/blob/main/public/mary.png?raw=true"></p>
+<p align="center"><img width="200" src="https://github.com/robsontenorio/mary-ui.com/blob/main/public/images/mary.png?raw=true"></p>
 
 <p align="center">
     <a href="https://packagist.org/packages/robsontenorio/mary">
