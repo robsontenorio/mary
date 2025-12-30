@@ -76,9 +76,19 @@ class Carousel extends Component
 
                 @if(!$withoutArrows)
                     <!-- previous button -->
-                    <x-mary-button icon="o-chevron-left"  @click="previous()" class="absolute cursor-pointer left-5 top-1/2 z-[2] btn-circle btn-sm" />
+                    <x-mary-button
+                        icon="o-chevron-left"
+                        aria-label="Previous image"
+                        @click="previous()"
+                        class="absolute cursor-pointer left-5 top-1/2 z-[2] btn-circle btn-sm"
+                    />
                     <!-- next button -->
-                    <x-mary-button icon="o-chevron-right"  @click="next()" class="absolute cursor-pointer right-5 top-1/2 z-[2] btn-circle btn-sm" />
+                    <x-mary-button
+                        icon="o-chevron-right"
+                        aria-label="Next image"
+                        @click="next()"
+                        class="absolute cursor-pointer right-5 top-1/2 z-[2] btn-circle btn-sm"
+                    />
                 @endif
 
                 <!-- slides -->
@@ -134,9 +144,14 @@ class Carousel extends Component
                 </div>
                 <!-- indicators -->
                 @if(! $withoutIndicators)
-                    <div class="absolute rounded-xl bottom-3 md:bottom-5 left-1/2 z-[2] flex -translate-x-1/2 gap-4 md:gap-3 bg-base-300 px-1.5 py-1 md:px-2" role="group" aria-label="slides" >
+                    <div class="absolute rounded-xl bottom-3 md:bottom-5 left-1/2 z-[2] flex -translate-x-1/2 gap-4 md:gap-6 bg-base-300 px-1.5 py-1 md:px-2" role="group" aria-label="slides" >
                         <template x-for="(slide, index) in slides">
-                            <button class="size-2.5 cursor-pointer rounded-full transition hover:scale-125" @click="currentSlideIndex = index + 1" :class="[currentSlideIndex === index + 1 ? 'bg-base-content' : 'bg-base-content/30']"></button>
+                            <button
+                                class="size-2.5 cursor-pointer rounded-full transition hover:scale-125"
+                                :aria-label="'Image ' + (index+1)"
+                                @click="currentSlideIndex = index + 1"
+                                :class="[currentSlideIndex === index + 1 ? 'bg-base-content' : 'bg-base-content/30']">
+                            </button>
                         </template>
                     </div>
                 @endif
