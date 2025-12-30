@@ -124,7 +124,11 @@ class Carousel extends Component
                             @endif
 
                             <!-- Image -->
-                            <img class="w-full h-full inset-0 object-cover" src="{{ data_get($slide, 'image') }}" />
+                            <img
+                                class="w-full h-full inset-0 object-cover"
+                                src="{{ data_get($slide, 'image') }}"
+                                fetchpriority="{{ $loop->first ? 'high' : 'low' }}"
+                            />
                         </div>
                     @endforeach
                 </div>
