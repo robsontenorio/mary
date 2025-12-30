@@ -137,6 +137,7 @@ class Carousel extends Component
                             <img
                                 class="w-full h-full inset-0 object-cover"
                                 src="{{ data_get($slide, 'image') }}"
+                                alt="{{ data_get($slide, 'alt') }}"
                                 fetchpriority="{{ $loop->first ? 'high' : 'low' }}"
                             />
                         </div>
@@ -144,7 +145,7 @@ class Carousel extends Component
                 </div>
                 <!-- indicators -->
                 @if(! $withoutIndicators)
-                    <div class="absolute rounded-xl bottom-3 md:bottom-5 left-1/2 z-[2] flex -translate-x-1/2 gap-4 md:gap-6 bg-base-300 px-1.5 py-1 md:px-2" role="group" aria-label="slides" >
+                    <div class="absolute rounded-xl bottom-3 md:bottom-5 left-1/2 z-[2] flex -translate-x-1/2 gap-4 md:gap-5 bg-base-300 px-1.5 py-1 md:px-2" role="group" aria-label="slides" >
                         <template x-for="(slide, index) in slides">
                             <button
                                 class="size-2.5 cursor-pointer rounded-full transition hover:scale-125"
