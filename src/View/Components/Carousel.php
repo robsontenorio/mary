@@ -138,6 +138,7 @@ class Carousel extends Component
                                 class="w-full h-full inset-0 object-cover"
                                 src="{{ data_get($slide, 'image') }}"
                                 alt="{{ data_get($slide, 'alt') }}"
+                                loading="{{ data_get($slide, 'lazy') ? 'lazy' : 'eager' }}"
                                 fetchpriority="{{ $loop->first ? 'high' : 'low' }}"
                             />
                         </div>
