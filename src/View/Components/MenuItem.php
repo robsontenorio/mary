@@ -110,7 +110,7 @@ class MenuItem extends Component
                     >
                         {{-- SPINNER --}}
                         @if($spinner)
-                            <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner w-5 h-5"></span>
+                            <span wire:loading wire:target="{{ $spinnerTarget() }}" class="loading loading-spinner loading-xs w-5 h-5 @if($icon) my-1 @endif"></span>
                         @endif
 
                         @if($icon)
