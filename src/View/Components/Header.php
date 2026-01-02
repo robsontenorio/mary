@@ -21,6 +21,7 @@ class Header extends Component
         public string $progressIndicatorClass = "progress-primary",
         public ?bool $withAnchor = false,
         public ?string $size = 'text-2xl',
+        public ?string $weight = 'font-extrabold',
         public ?bool $useH1 = false,
 
         // Icon
@@ -50,7 +51,7 @@ class Header extends Component
                 <div id="{{ $anchor }}" {{ $attributes->class(["mb-10", "mary-header-anchor" => $withAnchor]) }}>
                     <div class="flex flex-wrap gap-5 justify-between items-center">
                         <div>
-                            {!! "<{$titleTag}" !!} @class(["flex", "items-center", "$size font-extrabold", is_string($title) ? '' : $title?->attributes->get('class') ]) >
+                            {!! "<{$titleTag}" !!} @class(["flex", "items-center", "$size $weight", is_string($title) ? '' : $title?->attributes->get('class') ]) >
                                 @if($withAnchor)
                                     <a href="#{{ $anchor }}">
                                 @endif
