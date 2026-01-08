@@ -102,11 +102,11 @@ class DatePicker extends Component
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
-            <div wire:key="datepicker-{{ rand() }}">
-                @php
-                    // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
-                    $uuid = $uuid . $modelName()
-                @endphp
+            @php
+                // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
+                $uuid = $uuid . $modelName()
+            @endphp
+            <div wire:key="datepicker-{{ $uuid }}">
 
                 <fieldset class="fieldset py-0">
                     {{-- STANDARD LABEL --}}
@@ -126,7 +126,7 @@ class DatePicker extends Component
                             <span class="font-semibold">{{ $label }}</span>
                         @endif
 
-                        <div 
+                        <div
                             @click.outside = "clear()"
                             @keyup.esc = "clear()"
 
@@ -138,15 +138,15 @@ class DatePicker extends Component
                                 isLive: {{ json_encode($attributes->wire('model')->hasModifier('live')) }},
 
                                 init() {
-                                    $watch('value', value => { 
-                                        if (value.split(this.instance.l10n.rangeSeparator).length == 2 && this.isLive) { 
-                                            $wire.set('{{ $modelName() }}', value) 
+                                    $watch('value', value => {
+                                        if (value.split(this.instance.l10n.rangeSeparator).length == 2 && this.isLive) {
+                                            $wire.set('{{ $modelName() }}', value)
                                         }
-                                        
+
                                         if (value !== '' || !this.isLive) {
                                             return
                                         }
-                                        
+
                                         if (this.isRange) {
                                             $wire.set('{{ $modelName() }}', '')
                                             this.instance.close()
@@ -213,7 +213,7 @@ class DatePicker extends Component
                                 </span>
 
                                 {{-- INPUT --}}
-                                <div 
+                                <div
                                     x-init="instance = flatpickr($refs.input, {{ $setup() }});"
                                     x-on:livewire:navigating.window="instance.destroy();"
                                     class="w-full"
