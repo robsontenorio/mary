@@ -70,7 +70,7 @@ class DateTime extends Component
                             <span class="font-semibold">{{ $label }}</span>
                         @endif
 
-                        <div class="w-full">
+                        <div @class(["w-full", "join" => $prepend || $append])>
                             {{-- PREPEND --}}
                             @if($prepend)
                                 {{ $prepend }}
