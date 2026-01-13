@@ -13,6 +13,7 @@ class Spotlight extends Component
     public function __construct(
         public ?string $id = null,
         public ?string $shortcut = "meta.g",
+        public ?string $alternativeShortcut = "ctrl.g",
         public ?string $searchText = "Search ...",
         public ?string $noResultsText = "Nothing found.",
         public ?string $url = null,
@@ -117,6 +118,7 @@ class Spotlight extends Component
                         }"
 
                     @keydown.window.prevent.{{ $shortcut }}="show(); focus();"
+                    @keydown.window.prevent.{{ $alternativeShortcut }}="show(); focus();"
                     @keydown.escape="close()"
                     @keydown.up="$focus.previous()"
                     @keydown.down="$focus.next()"
