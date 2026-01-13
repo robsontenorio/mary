@@ -170,7 +170,7 @@ class Spotlight extends Component
                             </template>
 
                             <!-- RESULTS  -->
-                            <div class="-mx-1 mt-1" @click="close()" @keydown.enter="close()">
+                            <div class="-mx-1 mt-1" @click="close()" @keydown.enter="close()" x-ref="spotResults">
                                 <template x-for="(item, index) in results" :key="index">
                                     <!-- ITEM -->
                                     <a x-bind:href="item.link" class="mary-spotlight-element" @if(!$noWireNavigate) wire:navigate @endif tabindex="0">
