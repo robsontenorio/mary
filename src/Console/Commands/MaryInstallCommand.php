@@ -53,8 +53,7 @@ class MaryInstallCommand extends Command
     {
         $this->info("\nInstalling Livewire...\n");
 
-        // TODO: remove `beta` after Livewire release
-        Process::run("composer require livewire/livewire:^4.0@beta", function (string $type, string $output) {
+        Process::run("composer require livewire/livewire", function (string $type, string $output) {
             echo $output;
         })->throw();
     }

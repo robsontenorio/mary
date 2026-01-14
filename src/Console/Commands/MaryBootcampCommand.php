@@ -30,9 +30,8 @@ class MaryBootcampCommand extends Command
 
         // Make sure it has Livewire
         $this->info("Making sure you have Livewire installed ...\n");
-
-        // TODO: remove `beta` after Livewire release
-        Process::run("composer require livewire/livewire:^4.0@beta", function (string $type, string $output) {
+        
+        Process::run("composer require livewire/livewire", function (string $type, string $output) {
             echo $output;
         })->throw();
 

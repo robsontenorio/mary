@@ -170,7 +170,7 @@ class Choices extends Component
                                 this.$refs.searchInput.focus()
                             },
                             resize() {
-                                $refs.searchInput.style.width = ($refs.searchInput.value.length + 1) * 0.55 + 'rem'
+                                $nextTick(() => $refs.searchInput.style.width = ($refs.searchInput.value.length + 1) * 0.55 + 'rem')
                             },
                             isActive(id) {
                                 return this.isSingle
