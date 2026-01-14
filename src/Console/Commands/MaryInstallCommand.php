@@ -176,7 +176,7 @@ class MaryInstallCommand extends Command
 
         // Demo component and its route
         $this->createDirectoryIfNotExists("$pagesPath{$this->ds}users");
-        $this->copyFile(__DIR__ . "/../../../stubs/⚡index.blade.php", "$pagesPath{$this->ds}users{$this->ds}⚡index.blade.php");
+        $this->copyFile(__DIR__ . "/../../../stubs/⚡index.blade.php", "$pagesPath{$this->ds}users{$this->ds}index.blade.php");
         $this->copyFile(__DIR__ . "/../../../stubs/web.php", "$routes{$this->ds}web.php");
     }
 
