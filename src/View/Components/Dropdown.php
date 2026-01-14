@@ -33,6 +33,7 @@ class Dropdown extends Component
                 @click.outside="open = false"
                 :open="open"
                 @class([
+                    'overflow-visible',
                     'dropdown',
                     'dropdown-end' => ($noXAnchor && $right),
                     'dropdown-top' => ($noXAnchor && $top),

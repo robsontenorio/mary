@@ -13,6 +13,7 @@ class Spotlight extends Component
     public function __construct(
         public ?string $id = null,
         public ?string $shortcut = "meta.g",
+        public ?string $alternativeShortcut = "ctrl.g",
         public ?string $searchText = "Search ...",
         public ?string $noResultsText = "Nothing found.",
         public ?string $url = null,
@@ -117,6 +118,7 @@ class Spotlight extends Component
                         }"
 
                     @keydown.window.prevent.{{ $shortcut }}="show(); focus();"
+                    @keydown.window.prevent.{{ $alternativeShortcut }}="show(); focus();"
                     @keydown.escape="close()"
                     @keydown.up="$focus.previous()"
                     @keydown.down="$focus.next()"
@@ -170,7 +172,7 @@ class Spotlight extends Component
                             </template>
 
                             <!-- RESULTS  -->
-                            <div class="-mx-1 mt-1" @click="close()" @keydown.enter="close()">
+                            <div class="-mx-1 mt-1" @click="close()" @keydown.enter="close()" x-ref="spotResults">
                                 <template x-for="(item, index) in results" :key="index">
                                     <!-- ITEM -->
                                     <a x-bind:href="item.link" class="mary-spotlight-element" @if(!$noWireNavigate) wire:navigate @endif tabindex="0">
@@ -188,11 +190,11 @@ class Spotlight extends Component
                                                 </template>
                                                 <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0 mary-hideable">
                                                     <!-- NAME -->
-                                                    <div x-text="item.name" class="font-semibold truncate"></div>
+                                                    <div x-html="item.name" class="font-semibold truncate"></div>
 
                                                     <!-- DESCRIPTION -->
                                                     <template x-if="item.description">
-                                                        <div x-text="item.description" class="text-base-content/50 text-sm truncate"></div>
+                                                        <div x-html="item.description" class="text-base-content/50 text-sm truncate"></div>
                                                     </template>
                                                 </div>
                                             </div>
