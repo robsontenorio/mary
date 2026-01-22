@@ -10,14 +10,14 @@ class Modal extends Component
 {
     public function __construct(
         public ?string $id = '',
-        public ?string $title = null,
+        public mixed $title = null,
+        public ?string $subtitle = null,
         public ?string $boxClass = null,
         public ?bool $separator = false,
         public ?bool $persistent = false,
         public ?bool $withoutTrapFocus = false,
 
         // Slots
-        public mixed $header = null,
         public ?string $actions = null
     ) {
         //
@@ -56,12 +56,17 @@ class Modal extends Component
                             </form>
                         @endif
 
-                        @if($header)
-                            <div>
-                                {{ $header }}
+                        @if(is_string($title))
+                            <div class="mb-5">
+                                <h3 class="font-bold text-lg">{{ $title }}</h3>
+                                @isset($subtitle)
+                                    <div class="text-base-content/50 text-sm mt-1">
+                                        {{ $subtitle }}
+                                    </div>
+                                @endisset
                             </div>
-                        @elseif($title)
-                            <h3 class="font-bold text-lg mb-5">{{ $title }}</h3>
+                        @else
+                            {{ $title }}
                         @endif
 
                         <div>
