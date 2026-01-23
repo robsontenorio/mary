@@ -18,27 +18,24 @@ class MaryInstallCommand extends Command
 
     protected $ds = DIRECTORY_SEPARATOR;
 
-    public function handle()
+    public function handle(): void
     {
         $this->info("❤️  maryUI installer");
 
         // Laravel 12+
         $this->checkForLaravelVersion();
 
-        // Install Volt ?
-        $shouldInstallVolt = $this->askForVolt();
-
         //Yarn or Npm or Bun or Pnpm ?
         $packageManagerCommand = $this->askForPackageInstaller();
 
-        // Install Livewire/Volt
-        $this->installLivewire($shouldInstallVolt);
+        // Install Livewire
+        $this->installLivewire();
 
         // Setup Tailwind and Daisy
         $this->setupTailwindDaisy($packageManagerCommand);
 
         // Copy stubs if is brand-new project
-        $this->copyStubs($shouldInstallVolt);
+        $this->copyStubs();
 
         // Rename components if Jetstream or Breeze are detected
         $this->renameComponents();
@@ -52,20 +49,16 @@ class MaryInstallCommand extends Command
         $this->info("\n");
     }
 
-    public function installLivewire(string $shouldInstallVolt)
+    public function installLivewire(): void
     {
         $this->info("\nInstalling Livewire...\n");
 
-        $extra = $shouldInstallVolt == 'Yes'
-            ? ' livewire/volt && php artisan volt:install'
-            : '';
-
-        Process::run("composer require livewire/livewire $extra", function (string $type, string $output) {
+        Process::run("composer require livewire/livewire", function (string $type, string $output) {
             echo $output;
         })->throw();
     }
 
-    public function setupTailwindDaisy(string $packageManagerCommand)
+    public function setupTailwindDaisy(string $packageManagerCommand): void
     {
         /**
          * Install daisyUI + Tailwind
@@ -123,7 +116,7 @@ class MaryInstallCommand extends Command
      * If Jetstream or Breeze are detected we publish config file and add a global prefix to maryUI components,
      * in order to avoid name collision with existing components.
      */
-    public function renameComponents()
+    public function renameComponents(): void
     {
         $composerJson = File::get(base_path() . "/composer.json");
 
@@ -150,7 +143,7 @@ class MaryInstallCommand extends Command
     /**
      * Copy example demo stub if it is a brand-new project.
      */
-    public function copyStubs(string $shouldInstallVolt): void
+    public function copyStubs(): void
     {
         $composerJson = File::get(base_path() . "/composer.json");
         $hasKit = str($composerJson)->contains('jetstream') || str($composerJson)->contains('breeze') || str($composerJson)->contains('livewire/flux');
@@ -167,9 +160,8 @@ class MaryInstallCommand extends Command
 
         $routes = base_path() . "{$this->ds}routes";
         $appViewComponents = "app{$this->ds}View{$this->ds}Components";
-        $livewirePath = "app{$this->ds}Livewire";
-        $layoutsPath = "resources{$this->ds}views{$this->ds}components{$this->ds}layouts";
-        $livewireBladePath = "resources{$this->ds}views{$this->ds}livewire";
+        $layoutsPath = "resources{$this->ds}views{$this->ds}layouts";
+        $pagesPath = "resources{$this->ds}views{$this->ds}pages";
 
         // Blade Brand component
         $this->createDirectoryIfNotExists($appViewComponents);
@@ -180,19 +172,12 @@ class MaryInstallCommand extends Command
         $this->copyFile(__DIR__ . "/../../../stubs/app.blade.php", "{$layoutsPath}{$this->ds}app.blade.php");
 
         // Livewire blade views
-        $this->createDirectoryIfNotExists($livewireBladePath);
+        $this->createDirectoryIfNotExists($pagesPath);
 
         // Demo component and its route
-        if ($shouldInstallVolt == 'Yes') {
-            $this->createDirectoryIfNotExists("$livewireBladePath{$this->ds}users");
-            $this->copyFile(__DIR__ . "/../../../stubs/index.blade.php", "$livewireBladePath{$this->ds}users{$this->ds}index.blade.php");
-            $this->copyFile(__DIR__ . "/../../../stubs/web-volt.php", "$routes{$this->ds}web.php");
-        } else {
-            $this->createDirectoryIfNotExists($livewirePath);
-            $this->copyFile(__DIR__ . "/../../../stubs/Welcome.php", "{$livewirePath}{$this->ds}Welcome.php");
-            $this->copyFile(__DIR__ . "/../../../stubs/welcome.blade.php", "{$livewireBladePath}{$this->ds}welcome.blade.php");
-            $this->copyFile(__DIR__ . "/../../../stubs/web.php", "$routes{$this->ds}web.php");
-        }
+        $this->createDirectoryIfNotExists("$pagesPath{$this->ds}users");
+        $this->copyFile(__DIR__ . "/../../../stubs/index.blade.php", "$pagesPath{$this->ds}users{$this->ds}index.blade.php");
+        $this->copyFile(__DIR__ . "/../../../stubs/web.php", "$routes{$this->ds}web.php");
     }
 
     public function askForPackageInstaller(): string
@@ -232,18 +217,6 @@ class MaryInstallCommand extends Command
         return select(
             label: 'Install with ...',
             options: $options
-        );
-    }
-
-    /**
-     * Also install Volt?
-     */
-    public function askForVolt(): string
-    {
-        return select(
-            'Also install `livewire/volt` ?',
-            ['Yes', 'No'],
-            hint: 'No matter what is your choice, it always installs `livewire/livewire`'
         );
     }
 

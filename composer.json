@@ -13,7 +13,6 @@
     "keywords": [
         "laravel",
         "livewire",
-        "livewire 3",
         "livewire ui",
         "livewire ui components",
         "tallstack",
@@ -36,7 +35,7 @@
         "illuminate/support": "^10.0|^11.0|^12.0",
         "jfcherng/php-diff": "^6.15",
         "laravel/prompts": "^0|^1",
-        "blade-ui-kit/blade-heroicons": "^2.0"
+        "blade-ui-kit/blade-heroicons": "^2.6"
     },
     "require-dev": {
         "phpunit/phpunit": "^10|^11",
