@@ -102,11 +102,11 @@ class DatePicker extends Component
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
-            @php
-                // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
-                $uuid = $uuid . $modelName()
-            @endphp
-            <div wire:key="datepicker-{{ $uuid }}">
+            <div wire:key="datepicker-{{ rand() }}">
+                @php
+                    // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
+                    $uuid = $uuid . $modelName()
+                @endphp
 
                 <fieldset class="fieldset py-0">
                     {{-- STANDARD LABEL --}}
@@ -154,6 +154,12 @@ class DatePicker extends Component
                                             this.instance.close()
                                         }
                                     })
+                                },
+                                destroy() {
+                                    if (this.instance) {
+                                        this.instance.destroy()
+                                        this.instance = undefined
+                                    }
                                 },
                                 get isValueEmpty() {
                                     return this.value == ''
