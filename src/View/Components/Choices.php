@@ -25,6 +25,7 @@ class Choices extends Component
         public ?string $suffix = null,
 
         public ?bool $searchable = false,
+        public ?bool $noProgress = false,
         public ?bool $single = false,
         public ?bool $compact = false,
         public ?string $compactText = 'selected',
@@ -169,7 +170,7 @@ class Choices extends Component
                                 this.$refs.searchInput.focus()
                             },
                             resize() {
-                                $refs.searchInput.style.width = ($refs.searchInput.value.length + 1) * 0.55 + 'rem'
+                                $nextTick(() => $refs.searchInput.style.width = ($refs.searchInput.value.length + 1) * 0.55 + 'rem')
                             },
                             isActive(id) {
                                 return this.isSingle
@@ -386,7 +387,9 @@ class Choices extends Component
                             >
 
                                 {{-- PROGRESS --}}
-                                <progress wire:loading wire:target="{{ preg_replace('/\((.*?)\)/', '', $searchFunction) }}" class="progress absolute top-0 h-0.5"></progress>
+                                @if(!$noProgress)
+                                    <progress wire:loading wire:target="{{ preg_replace('/\((.*?)\)/', '', $searchFunction) }}" class="progress absolute top-0 h-0.5"></progress>
+                                @endif
 
                                {{-- SELECT ALL --}}
                                @if($allowAll)

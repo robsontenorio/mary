@@ -39,6 +39,7 @@ class Table extends Component
         public mixed $emptyText = 'No records found.',
         public string $containerClass = 'overflow-x-auto',
         public ?bool $noHover = false,
+        public ?bool $fluent = false,
 
         // Slots
         public mixed $actions = null,
@@ -356,7 +357,7 @@ class Table extends Component
                                             @if(data_get($row, $expandableCondition))
                                                 <x-mary-icon
                                                     name="o-chevron-down"
-                                                    ::class="isExpanded({{ $getKeyValue($row, 'expandableKey') }}) || '-rotate-90 !text-current'"
+                                                    ::class="isExpanded({{ $getKeyValue($row, 'expandableKey') }}) || 'ltr:-rotate-90 rtl:rotate-90 !text-current'"
                                                     class="cursor-pointer p-2 w-8 h-8 bg-base-300 rounded-lg"
                                                     @click="toggleExpand({{ $getKeyValue($row, 'expandableKey') }});" />
                                             @endif
@@ -381,7 +382,7 @@ class Table extends Component
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
                                                 @endif
 
-                                                {{ ${"cell_".$temp_key}($row)  }}
+                                                {{ ${"cell_".$temp_key}($fluent ? fluent($row) : $row) }}
 
                                                 @if($hasLink($header))
                                                     </a>
@@ -412,7 +413,7 @@ class Table extends Component
                                 @if($expandable)
                                     <tr wire:key="{{ $uuid }}-{{ $k }}--expand" class="!bg-inherit" :class="isExpanded({{ $getKeyValue($row, 'expandableKey') }}) || 'hidden'">
                                         <td :colspan="colspanSize">
-                                            {{ $expansion($row) }}
+                                            {{ $expansion($fluent ? fluent($row) : $row) }}
                                         </td>
                                     </tr>
                                 @endif

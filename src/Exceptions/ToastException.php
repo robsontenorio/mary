@@ -25,14 +25,20 @@ class ToastException extends Exception
 
     protected bool $preventDefault = true;
 
+    protected bool $noProgress = false;
+
+    protected ?string $progressClass = null;
+
     public static function typedMessage(
         string $type,
         string $title,
-        string $description = null,
+        ?string $description = null,
         string $position = 'toast-top toast-end',
         string $icon = 'o-information-circle',
         string $css = 'alert-info',
-        int $timeout = 3000
+        int $timeout = 3000,
+        bool $noProgress = false,
+        ?string $progressClass = null,
     ): self {
         $instance = new self(message: $title, code: 500);
 
@@ -43,17 +49,21 @@ class ToastException extends Exception
         $instance->icon = $icon;
         $instance->css = $css;
         $instance->timeout = $timeout;
+        $instance->noProgress = $noProgress;
+        $instance->progressClass = $progressClass;
 
         return $instance;
     }
 
     public static function info(
         string $title,
-        string $description = null,
+        ?string $description = null,
         string $position = 'toast-top toast-end',
         string $icon = 'o-information-circle',
         string $css = 'alert-info',
         int $timeout = 3000,
+        bool $noProgress = false,
+        ?string $progressClass = null,
     ): self {
         return self::typedMessage(
             type: 'info',
@@ -62,17 +72,21 @@ class ToastException extends Exception
             position: $position,
             icon: $icon,
             css: $css,
-            timeout: $timeout
+            timeout: $timeout,
+            noProgress: $noProgress,
+            progressClass: $progressClass,
         );
     }
 
     public static function success(
         string $title,
-        string $description = null,
+        ?string $description = null,
         string $position = 'toast-top toast-end',
         string $icon = 'o-check-circle',
         string $css = 'alert-success',
         int $timeout = 3000,
+        bool $noProgress = false,
+        ?string $progressClass = null,
     ): self {
         return self::typedMessage(
             type: 'success',
@@ -81,17 +95,21 @@ class ToastException extends Exception
             position: $position,
             icon: $icon,
             css: $css,
-            timeout: $timeout
+            timeout: $timeout,
+            noProgress: $noProgress,
+            progressClass: $progressClass,
         );
     }
 
     public static function error(
         string $title,
-        string $description = null,
+        ?string $description = null,
         string $position = 'toast-top toast-end',
         string $icon = 'o-x-circle',
         string $css = 'alert-error',
         int $timeout = 3000,
+        bool $noProgress = false,
+        ?string $progressClass = null,
     ): self {
         return self::typedMessage(
             type: 'error',
@@ -100,17 +118,21 @@ class ToastException extends Exception
             position: $position,
             icon: $icon,
             css: $css,
-            timeout: $timeout
+            timeout: $timeout,
+            noProgress: $noProgress,
+            progressClass: $progressClass,
         );
     }
 
     public static function warning(
         string $title,
-        string $description = null,
+        ?string $description = null,
         string $position = 'toast-top toast-end',
         string $icon = 'o-exclamation-triangle',
         string $css = 'alert-warning',
         int $timeout = 3000,
+        bool $noProgress = false,
+        ?string $progressClass = null,
     ): self {
         return self::typedMessage(
             type: 'warning',
@@ -119,7 +141,9 @@ class ToastException extends Exception
             position: $position,
             icon: $icon,
             css: $css,
-            timeout: $timeout
+            timeout: $timeout,
+            noProgress: $noProgress,
+            progressClass: $progressClass,
         );
     }
 
@@ -143,6 +167,9 @@ class ToastException extends Exception
                     'icon' => Blade::render("<x-mary-icon class='w-7 h-7' name='" . $this->icon . "' />"),
                     'css' => $this->css,
                     'timeout' => $this->timeout,
+
+                    'noProgress' => $this->noProgress,
+                    'progressClass' => $this->progressClass,
                 ],
                 'prevent_default' => $this->preventDefault
             ], $this->getCode());

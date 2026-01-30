@@ -250,6 +250,15 @@ class Tags extends Component
                         @endforeach
                     @endif
 
+                    {{-- MULTIPLE --}}
+                    @error($modelName().'.*')
+                        @foreach ($errors->get($modelName().'.*') as $fieldErrors)
+                            @foreach ($fieldErrors as $message)
+                                <div class="text-error" x-classes="text-error">{{ $message }}</div>
+                            @endforeach
+                        @endforeach
+                    @enderror
+
                     {{-- HINT --}}
                     @if($hint)
                         <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>

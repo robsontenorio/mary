@@ -33,7 +33,7 @@ class ListItem extends Component
             <div wire:key="{{ $uuid }}">
                 <div
                     {{ $attributes->class([
-                            "flex justify-start items-center gap-4 px-3",
+                            "flex justify-start items-center gap-4 px-3 py-3",
                             "hover:bg-base-200" => !$noHover,
                             "cursor-pointer" => $link
                         ])
@@ -46,8 +46,8 @@ class ListItem extends Component
                     @endif
 
                     <!-- AVATAR -->
-                    @if(data_get($item, $avatar))
-                        <div class="py-3">
+                    @if(data_get($item, $avatar) || $fallbackAvatar && is_string($avatar))
+                        <div>
                             <div class="avatar">
                                 <div class="w-11 rounded-full">
                                     <img src="{{ data_get($item, $avatar) }}" @if($fallbackAvatar) onerror="this.src='{{ $fallbackAvatar }}'" @endif />
@@ -57,7 +57,7 @@ class ListItem extends Component
                     @endif
 
                     @if(!is_string($avatar))
-                        <div {{ $avatar->attributes->class(["py-3"]) }}>
+                        <div {{ $avatar->attributes->class([]) }}>
                             {{ $avatar }}
                         </div>
                     @endif
@@ -69,12 +69,12 @@ class ListItem extends Component
                     @endif
 
                     <!-- CONTENT -->
-                    <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0 mary-hideable">
+                    <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate mary-hideable">
                         @if($link)
                             <a href="{{ $link }}" wire:navigate>
                         @endif
 
-                        <div class="py-3">
+                        <div>
                             <div @if(!is_string($value)) {{ $value->attributes->class(["font-semibold truncate"]) }} @else class="font-semibold truncate" @endif>
                                 {{ is_string($value) ? data_get($item, $value) : $value }}
                             </div>
@@ -94,7 +94,7 @@ class ListItem extends Component
                         @if($link && !Str::of($actions)->contains([':click', '@click' , 'href']))
                             <a href="{{ $link }}" wire:navigate>
                         @endif
-                            <div {{ $actions->attributes->class(["py-3 flex items-center gap-3 mary-hideable"]) }}>
+                            <div {{ $actions->attributes->class(["flex items-center gap-3 mary-hideable"]) }}>
                                     {{ $actions }}
                             </div>
 
