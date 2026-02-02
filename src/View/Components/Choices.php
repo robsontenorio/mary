@@ -40,6 +40,7 @@ class Choices extends Component
         public ?string $optionSubLabel = '',
         public ?string $optionAvatar = 'avatar',
         public ?bool $valuesAsString = false,
+        public ?bool $escapeValues = false,
         public ?string $height = 'max-h-64',
         public Collection|array $options = new Collection(),
         public ?string $noResultText = 'No results found.',
@@ -93,6 +94,12 @@ class Choices extends Component
         $value = data_get($option, $this->optionValue);
 
         if ($this->valuesAsString) {
+            return "'$value'";
+        }
+
+        if ($this->escapeValues) {
+            $value = addslashes($value);
+
             return "'$value'";
         }
 
