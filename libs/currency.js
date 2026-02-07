@@ -112,8 +112,7 @@ class Currency {
 
         this.unmaskedValue = `${i}.${d}`
 
-        return new Intl.NumberFormat(locales, options)
-            .format(this.unmaskedValue)
+        return new Intl.NumberFormat(locales, options).format(this.unmaskedValue)
     }
 
     onMasking(event) {
