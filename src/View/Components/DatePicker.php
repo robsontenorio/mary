@@ -224,7 +224,7 @@ class DatePicker extends Component
                                     x-on:livewire:navigating.window="instance.destroy();"
                                     class="w-full"
                                 >
-                                    <input x-ref="input" {{ $attributes->merge(['type' => 'text']) }} />
+                                    <input x-ref="input" {{ $attributes->merge(['type' => 'date']) }} />
                                 </div>
 
                                 {{-- CLEAR ICON --}}
