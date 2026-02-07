@@ -34,42 +34,35 @@ Come to say hello on [maryUI Discord](https://discord.gg/c2Dv8T2X2s)
 
 ## Contributing
 
-Clone the repository into some folder **inside your app**.
+Clone the repository into your project root.
 
 ```bash
-git clone git@github.com:robsontenorio/mary.git
+git clone git@github.com:robsontenorio/mary.git packages/mary
 ```
 
-Change `composer.json` from **your app**
+Add the local repository to composer config.
 
-<!-- @formatter:off -->
-```json
-"minimum-stability": "dev", // <- change to "dev"
-
-// Add this
-"repositories": {
-    "robsontenorio/mary": {
-        "type": "path",
-        "url": "/path/to/mary", // <- change the path
-        "options": {
-          "symlink": true
-        }
-    }
-}
+```bash
+composer config repositories.local '{"type": "path", "url": "packages/mary"}'
 ```
-<!-- @formatter:on -->
-
 
 Require the package again for local symlink.
 
 ```bash
-composer require robsontenorio/mary
+composer require robsontenorio/mary:@dev
 ```
 
 Start the dev server.
 
 ```bash
 yarn dev
+```
+
+You can roll back to the stable version by removing the local repository and requiring the package again.
+
+```bash
+composer config --unset repositories.local
+composer require robsontenorio/mary
 ```
 
 ## License
