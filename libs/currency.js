@@ -28,6 +28,7 @@ class Currency {
 
         // Add fraction on initial value if missing
         const parts = String(input.value).split('.')
+        
         input.value = parts.length === 1
             ? `${parts.shift()}.00`
             : `${parts.shift()}.${parts.pop().padEnd(2, '0')}`
