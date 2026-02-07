@@ -186,7 +186,7 @@ class Input extends Component
 
                                 {{-- HIDDEN MONEY INPUT + END MONEY SETUP --}}
                                 @if($money)
-                                        <input  {{ $attributes->wire('model') }} />
+                                        <input type="hidden" {{ $attributes->wire('model') }} />
                                     </div>
                                 @endif
 
