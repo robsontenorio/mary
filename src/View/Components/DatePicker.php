@@ -126,7 +126,7 @@ class DatePicker extends Component
                             <span class="font-semibold">{{ $label }}</span>
                         @endif
 
-                        <div 
+                        <div
                             @click.outside = "clear()"
                             @keyup.esc = "clear()"
 
@@ -138,15 +138,15 @@ class DatePicker extends Component
                                 isLive: {{ json_encode($attributes->wire('model')->hasModifier('live')) }},
 
                                 init() {
-                                    $watch('value', value => { 
-                                        if (value.split(this.instance.l10n.rangeSeparator).length == 2 && this.isLive) { 
-                                            $wire.set('{{ $modelName() }}', value) 
+                                    $watch('value', value => {
+                                        if (value.split(this.instance.l10n.rangeSeparator).length == 2 && this.isLive) {
+                                            $wire.set('{{ $modelName() }}', value)
                                         }
-                                        
+
                                         if (value !== '' || !this.isLive) {
                                             return
                                         }
-                                        
+
                                         if (this.isRange) {
                                             $wire.set('{{ $modelName() }}', '')
                                             this.instance.close()
@@ -154,6 +154,12 @@ class DatePicker extends Component
                                             this.instance.close()
                                         }
                                     })
+                                },
+                                destroy() {
+                                    if (this.instance) {
+                                        this.instance.destroy()
+                                        this.instance = undefined
+                                    }
                                 },
                                 get isValueEmpty() {
                                     return this.value == ''
@@ -213,7 +219,7 @@ class DatePicker extends Component
                                 </span>
 
                                 {{-- INPUT --}}
-                                <div 
+                                <div
                                     x-init="instance = flatpickr($refs.input, {{ $setup() }});"
                                     x-on:livewire:navigating.window="instance.destroy();"
                                     class="w-full"
