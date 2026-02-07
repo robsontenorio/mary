@@ -12,7 +12,11 @@ use function Laravel\Prompts\select;
 
 class MaryInstallCommand extends Command
 {
-    protected $signature = 'mary:install';
+    protected $signature = 'mary:install
+                            {--yarn : Use yarn as package manager}
+                            {--npm : Use npm as package manager}
+                            {--bun : Use bun as package manager}
+                            {--pnpm : Use pnpm as package manager}';
 
     protected $description = 'Command description';
 
@@ -190,26 +194,47 @@ class MaryInstallCommand extends Command
         $bun = Process::run($findCommand . ' bun')->output();
         $pnpm = Process::run($findCommand . ' pnpm')->output();
 
+        $yarnCommand = 'yarn add -D';
+        $npmCommand = 'npm install --save-dev';
+        $bunCommand = 'bun i -D';
+        $pnpmCommand = 'pnpm i -D';
+
         $options = [];
 
         if (Str::of($yarn)->isNotEmpty()) {
-            $options = array_merge($options, ['yarn add -D' => 'yarn']);
+            $options = array_merge($options, [$yarnCommand => 'yarn']);
+
+            if ($this->option('yarn')) {
+                return $yarnCommand;
+            }
         }
 
         if (Str::of($npm)->isNotEmpty()) {
-            $options = array_merge($options, ['npm install --save-dev' => 'npm']);
+            $options = array_merge($options, [$npmCommand => 'npm']);
+
+            if ($this->option('npm')) {
+                return $npmCommand;
+            }
         }
 
         if (Str::of($bun)->isNotEmpty()) {
-            $options = array_merge($options, ['bun i -D' => 'bun']);
+            $options = array_merge($options, [$bunCommand => 'bun']);
+
+            if ($this->option('bun')) {
+                return $bunCommand;
+            }
         }
 
         if (Str::of($pnpm)->isNotEmpty()) {
-            $options = array_merge($options, ['pnpm i -D' => 'pnpm']);
+            $options = array_merge($options, [$pnpmCommand => 'pnpm']);
+
+            if ($this->option('pnpm')) {
+                return $pnpmCommand;
+            }
         }
 
         if (count($options) == 0) {
-            $this->error("You need yarn or npm or bun or pnpm installed.");
+            $this->error("You need `yarn` or `npm` or `bun` or `pnpm` installed.");
 
             exit;
         }
