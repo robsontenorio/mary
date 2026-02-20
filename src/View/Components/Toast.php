@@ -114,7 +114,7 @@ class Toast extends Component
                     @mary-toast.window="start($event.detail.toast)"
                 >
                     <div
-                        class="toast !whitespace-normal rounded-md fixed cursor-pointer z-[999] overflow-hidden"
+                        class="toast !whitespace-normal rounded-box fixed cursor-pointer z-[999] overflow-hidden"
                         :class="toast.position || '{{ $position }}'"
                         x-show="show"
                         @mouseenter="pause()"
