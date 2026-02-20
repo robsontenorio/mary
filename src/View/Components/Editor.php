@@ -101,7 +101,10 @@ class Editor extends Component
                                     images_upload_url: uploadUrl,
                                     readonly: {{ json_encode($attributes->get('readonly') || $attributes->get('disabled')) }},
                                     skin: document.documentElement.getAttribute('class') == 'dark' ? 'oxide-dark' : 'oxide',
-                                    content_css: document.documentElement.getAttribute('class') == 'dark' ? 'dark' : 'default',
+                                    content_css: [
+                                        document.documentElement.getAttribute('class') == 'dark' ? 'dark' : 'default',
+                                        @if(isset($config['content_css'])) '{{ $config['content_css'] }}' @endif
+                                    ],
 
                                     @if($attributes->get('disabled'))
                                         content_style: 'body { opacity: 50% }',
