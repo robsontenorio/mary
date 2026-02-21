@@ -10,7 +10,7 @@ class Modal extends Component
 {
     public function __construct(
         public ?string $id = '',
-        public ?string $title = null,
+        public mixed $title = null,
         public ?string $subtitle = null,
         public ?string $boxClass = null,
         public ?bool $separator = false,
@@ -56,8 +56,17 @@ class Modal extends Component
                             </form>
                         @endif
 
-                        @if($title)
-                            <x-mary-header :title="$title" :subtitle="$subtitle" size="text-xl" :separator="$separator" class="!mb-5" />
+                        @if(is_string($title))
+                            <div class="mb-5">
+                                <h3 class="font-bold text-lg">{{ $title }}</h3>
+                                @isset($subtitle)
+                                    <div class="text-base-content/50 text-sm mt-1">
+                                        {{ $subtitle }}
+                                    </div>
+                                @endisset
+                            </div>
+                        @else
+                            {{ $title }}
                         @endif
 
                         <div>
