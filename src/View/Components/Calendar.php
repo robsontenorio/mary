@@ -38,7 +38,7 @@ class Calendar extends Component
             'displayDatesOutside' => false,
             'styles' => [
                 'calendar' => 'vc w-fit',
-                'grid' => 'vc-grid justify-around',
+                'grid' => 'vc-grid justify-center',
                 'column' => 'vc-column !min-w-fit !max-w-fit',
             ]
         ], $this->config));
