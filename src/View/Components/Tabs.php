@@ -39,9 +39,10 @@ class Tabs extends Component
                     >
                         <!-- TAB LABELS -->
                         <div class="{{ $labelDivClass }}">
-                            <template x-for="tab in tabs">
+                            <template x-for="tab in tabs" :key="tab.name">
                                 <a
                                     role="tab"
+                                    x-init="if (typeof tab == 'undefined') $el.remove()"
                                     x-html="tab.label"
                                      @click="tab.disabled ? null: selected = tab.name"
                                     :class="{ '{{ $activeClass }} tab-active': selected === tab.name, 'hidden': tab.hidden }"
