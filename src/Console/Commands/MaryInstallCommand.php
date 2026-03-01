@@ -16,7 +16,8 @@ class MaryInstallCommand extends Command
                             {--yarn : Use yarn as package manager}
                             {--npm : Use npm as package manager}
                             {--bun : Use bun as package manager}
-                            {--pnpm : Use pnpm as package manager}';
+                            {--pnpm : Use pnpm as package manager}
+                            {--no-css: Do not place changes on `app.css`}';
 
     protected $description = 'Command description';
 
@@ -78,6 +79,10 @@ class MaryInstallCommand extends Command
          */
         $cssPath = base_path() . "{$this->ds}resources{$this->ds}css{$this->ds}app.css";
         $css = File::get($cssPath);
+
+        if ($this->option('no-css')) {
+            return;
+        }
 
         $mary = <<<EOT
             \n\n
