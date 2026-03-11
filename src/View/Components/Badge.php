@@ -13,6 +13,8 @@ class Badge extends Component
     public function __construct(
         public ?string $id = null,
         public ?string $value = null,
+        public ?string $icon = null,
+        public ?string $iconRight = null,
 
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
@@ -22,7 +24,22 @@ class Badge extends Component
     {
         return <<<'HTML'
                 <div {{ $attributes->class(["badge"])}}>
-                    {{ $value }}
+                    <!-- ICON -->
+                    @if($icon)
+                        <x-mary-icon :name="$icon" />
+                    @endif
+
+                    <!-- VALUE / SLOT -->
+                    @if($value)
+                        {{ $value }}
+                    @else
+                        {{ $slot }}
+                    @endif
+
+                    <!-- ICON RIGHT -->
+                    @if($iconRight)
+                        <x-mary-icon :name="$iconRight" />
+                    @endif
                 </div>
             HTML;
     }
