@@ -15,6 +15,7 @@ class Collapse extends Component
         public ?string $name = null,
         public ?bool $collapsePlusMinus = false,
         public ?bool $separator = false,
+        public ?string $progressIndicator = null,
         public ?bool $noIcon = false,
 
         // Slots
@@ -22,6 +23,15 @@ class Collapse extends Component
         public mixed $content = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
+    }
+
+    public function progressTarget(): ?string
+    {
+        if ($this->progressIndicator == 1) {
+            return $this->attributes->whereStartsWith('progress-indicator')->first();
+        }
+
+        return $this->progressIndicator;
     }
 
     public function render(): View|Closure|string
@@ -61,6 +71,18 @@ class Collapse extends Component
                         <div {{ $content->attributes->merge(["class" => "collapse-content text-sm"]) }} wire:key="content-{{ $uuid }}">
                             @if($separator)
                                 <hr class="mb-3 border-t-[length:var(--border)] border-base-content/10" />
+
+                                @if($progressIndicator)
+                                    <div class="h-0.5 -mt-6.5 mb-6.5">
+                                        <progress
+                                            class="progress progress-primary w-full h-0.5"
+                                            wire:loading
+
+                                            @if($progressTarget())
+                                                wire:target="{{ $progressTarget() }}"
+                                             @endif></progress>
+                                    </div>
+                                @endif
                             @endif
 
                             {{ $content }}
