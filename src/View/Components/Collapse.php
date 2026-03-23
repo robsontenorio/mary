@@ -17,6 +17,7 @@ class Collapse extends Component
         public ?bool $separator = false,
         public ?string $progressIndicator = null,
         public ?bool $noIcon = false,
+        public ?bool $open = false,
 
         // Slots
         public mixed $heading = null,
@@ -45,8 +46,8 @@ class Collapse extends Component
                             'collapse border-[length:var(--border)] border-base-content/10',
                             'join-item' => !$noJoin,
                             'collapse-arrow' => !$collapsePlusMinus && !$noIcon,
-                            'collapse-plus' => $collapsePlusMinus && !$noIcon
-                        ])
+                            'collapse-plus' => $collapsePlusMinus && !$noIcon,
+                        ])->except(['open'])
                     }}
 
                     wire:key="collapse-{{ $uuid }}"
@@ -55,7 +56,7 @@ class Collapse extends Component
                         @if(isset($noJoin))
                             <input id="radio-{{ $uuid }}" type="radio" value="{{ $name }}" x-model="model" />
                         @else
-                            <input id="checkbox-{{ $uuid }}" {{ $attributes->wire('model') }} type="checkbox" />
+                            <input id="checkbox-{{ $uuid }}" {{ $attributes->wire('model') }} @if($open) checked @endif type="checkbox" />
                         @endif
 
                         <div
