@@ -15,13 +15,24 @@ class Collapse extends Component
         public ?string $name = null,
         public ?bool $collapsePlusMinus = false,
         public ?bool $separator = false,
+        public ?string $progressIndicator = null,
         public ?bool $noIcon = false,
+        public ?bool $open = false,
 
         // Slots
         public mixed $heading = null,
         public mixed $content = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
+    }
+
+    public function progressTarget(): ?string
+    {
+        if ($this->progressIndicator == 1) {
+            return $this->attributes->whereStartsWith('progress-indicator')->first();
+        }
+
+        return $this->progressIndicator;
     }
 
     public function render(): View|Closure|string
@@ -35,8 +46,8 @@ class Collapse extends Component
                             'collapse border-[length:var(--border)] border-base-content/10',
                             'join-item' => !$noJoin,
                             'collapse-arrow' => !$collapsePlusMinus && !$noIcon,
-                            'collapse-plus' => $collapsePlusMinus && !$noIcon
-                        ])
+                            'collapse-plus' => $collapsePlusMinus && !$noIcon,
+                        ])->except(['open'])
                     }}
 
                     wire:key="collapse-{{ $uuid }}"
@@ -45,7 +56,7 @@ class Collapse extends Component
                         @if(isset($noJoin))
                             <input id="radio-{{ $uuid }}" type="radio" value="{{ $name }}" x-model="model" />
                         @else
-                            <input id="checkbox-{{ $uuid }}" {{ $attributes->wire('model') }} type="checkbox" />
+                            <input id="checkbox-{{ $uuid }}" {{ $attributes->wire('model') }} @if($open) checked @endif type="checkbox" />
                         @endif
 
                         <div
@@ -61,6 +72,18 @@ class Collapse extends Component
                         <div {{ $content->attributes->merge(["class" => "collapse-content text-sm"]) }} wire:key="content-{{ $uuid }}">
                             @if($separator)
                                 <hr class="mb-3 border-t-[length:var(--border)] border-base-content/10" />
+
+                                @if($progressIndicator)
+                                    <div class="h-0.5 -mt-6.5 mb-6.5">
+                                        <progress
+                                            class="progress progress-primary w-full h-0.5"
+                                            wire:loading
+
+                                            @if($progressTarget())
+                                                wire:target="{{ $progressTarget() }}"
+                                             @endif></progress>
+                                    </div>
+                                @endif
                             @endif
 
                             {{ $content }}
