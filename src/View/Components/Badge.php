@@ -26,7 +26,7 @@ class Badge extends Component
                 <div {{ $attributes->class(["badge"])}}>
                     <!-- ICON -->
                     @if($icon)
-                        <x-mary-icon :name="$icon" />
+                        <x-mary-icon :name="$icon" class="h-4 w-4" />
                     @endif
 
                     <!-- VALUE / SLOT -->
@@ -38,7 +38,7 @@ class Badge extends Component
 
                     <!-- ICON RIGHT -->
                     @if($iconRight)
-                        <x-mary-icon :name="$iconRight" />
+                        <x-mary-icon :name="$iconRight" class="h-4 w-4" />
                     @endif
                 </div>
             HTML;
