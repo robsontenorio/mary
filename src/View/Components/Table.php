@@ -33,6 +33,8 @@ class Table extends Component
         public ?string $perPage = null,
         public ?array $perPageValues = [10, 20, 50, 100],
         public ?array $sortBy = [],
+        public ?array $customSortBy = [],
+        public ?string $customSortByName = "sortBy",
         public ?array $rowDecoration = [],
         public ?array $cellDecoration = [],
         public ?bool $showEmptyText = false,
@@ -86,7 +88,7 @@ class Table extends Component
     // Check if header is sortable
     public function isSortable(mixed $header): bool
     {
-        return count($this->sortBy) && ($header['sortable'] ?? true);
+        return (count($this->sortBy) || isset($this->customSortBy)) && ($header['sortable'] ?? true);
     }
 
     // Check if header is hidden
@@ -127,12 +129,24 @@ class Table extends Component
 
     // Check if is currently sorted by this header
     public function isSortedBy(mixed $header): bool
-    {
-        if (count($this->sortBy) == 0) {
+    { 
+        if (count($this->sortBy) == 0 && count($this->customSortBy) == 0) {
             return false;
         }
 
-        return $this->sortBy['column'] == ($header['sortBy'] ?? $header['key']);
+        $sortable = $this->getSortType() == 'custom' ? $this->customSortBy : $this->sortBy;
+
+        return $sortable['column'] == ($header['sortBy'] ?? $header['key']);
+    }
+
+    // Check sort type [default, custom]
+    protected function getSortType(): string
+    {
+        if(count($this->customSortBy)) {
+            return 'custom';
+        }
+
+        return 'default';
     }
 
     // Handle header sort
@@ -142,12 +156,14 @@ class Table extends Component
             return false;
         }
 
-        if (count($this->sortBy) == 0) {
+        $sortable = $this->getSortType() == 'custom' ? $this->customSortBy : $this->sortBy;
+
+        if (count($sortable) == 0) {
             return ['column' => '', 'direction' => ''];
         }
 
         $direction = $this->isSortedBy($header)
-            ? ($this->sortBy['direction'] == 'asc') ? 'desc' : 'asc'
+            ? ($sortable['direction'] == 'asc') ? 'desc' : 'asc'
             : 'asc';
 
         return ['column' => $header['sortBy'] ?? $header['key'], 'direction' => $direction];
@@ -309,13 +325,13 @@ class Table extends Component
                                     <th
                                         class="@if($isSortable($header)) cursor-pointer hover:bg-base-200 @endif {{ $header['class'] ?? ' ' }}"
 
-                                        @if($sortBy && $isSortable($header))
-                                            @click="$wire.set('sortBy', {column: '{{ $getSort($header)['column'] }}', direction: '{{ $getSort($header)['direction'] }}' })"
+                                        @if(($sortBy || $customSortBy) && $isSortable($header))
+                                            @click="$wire.set('{{ $customSortByName }}', {column: '{{ $getSort($header)['column'] }}', direction: '{{ $getSort($header)['direction'] }}' })"
                                         @endif
                                     >
                                         {{ isset(${"header_".$temp_key}) ? ${"header_".$temp_key}($header) : $header['label'] }}
 
-                                        @if($isSortable($header))
+                                        @if($isSortable($header) && $isSortedBy($header))
                                             <x-mary-icon :name="$isSortedBy($header) ? $getSort($header)['direction'] == 'asc' ? 'o-chevron-down' : 'o-chevron-up' : 'o-chevron-up-down'"  class="size-3! mb-1 ms-1" />
                                         @endif
                                     </th>
