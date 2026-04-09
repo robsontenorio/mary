@@ -24,9 +24,9 @@ class Input extends Component
         public ?bool $money = false,
         public ?string $locale = 'en-US',
 
-	    // Popover
+        // Popover
         public ?string $popover = null,
-        public ?string $popoverIcon = "o-question-mark-circle",
+        public ?string $popoverIcon = 'o-question-mark-circle',
         public ?string $popoverTriggerClass = '',
         public ?string $popoverContentClass = '',
 
@@ -40,17 +40,17 @@ class Input extends Component
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this)) . $id;
-    }
-
-    public function modelName(): ?string
-    {
-        return $this->attributes->whereStartsWith('wire:model')->first();
+        $this->uuid = 'mary'.md5(serialize($this)).$id;
     }
 
     public function errorFieldName(): ?string
     {
         return $this->errorField ?? $this->modelName();
+    }
+
+    public function modelName(): ?string
+    {
+        return $this->attributes->whereStartsWith('wire:model')->first();
     }
 
     public function isReadonly(): bool
@@ -68,8 +68,8 @@ class Input extends Component
         return json_encode([
             'init' => true,
             'maskOpts' => [
-                'locales' => $this->locale
-            ]
+                'locales' => $this->locale,
+            ],
         ]);
     }
 
@@ -86,7 +86,7 @@ class Input extends Component
                     {{-- STANDARD LABEL --}}
                     @if($label && !$inline)
                         <legend class="fieldset-legend mb-0.5">
-                            {{ $label }}
+                            <label for="{{ $uuid }}">{{ $label }}</label>
 
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
@@ -118,8 +118,8 @@ class Input extends Component
                                 {{ $prepend }}
                             @endif
 
-                            {{-- THE LABEL THAT HOLDS THE INPUT --}}
-                            <label
+                            {{-- THE CONTAINER THAT HOLDS THE INPUT --}}
+                            <div
                                 @if($isDisabled())
                                     disabled
                                 @endif
@@ -183,7 +183,11 @@ class Input extends Component
 
                                         {{
                                             $attributes
-                                                ->merge(['type' => 'text'])
+                                                ->merge([
+                                                    'type' => 'text',
+                                                    'aria-invalid' => ($errorFieldName() && $errors->has($errorFieldName()) && !$omitError) ? 'true' : 'false',
+                                                    'aria-errormessage' => $uuid . '_error0',
+                                                ])
                                                 ->except($money ? ['wire:model', 'wire:model.live', 'wire:model.blur'] : '')
                                         }}
                                     />
@@ -196,7 +200,7 @@ class Input extends Component
 
                                 {{-- CLEAR ICON  --}}
                                 @if($clearable)
-                                    <x-mary-icon x-on:click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="cursor-pointer w-4 h-4 opacity-40"/>
+                                    <x-mary-icon x-on:click="$wire.set('{{ $modelName() }}', '', {{ json_encode($attributes->wire('model')->hasModifier('live')) }})"  name="o-x-mark" class="cursor-pointer w-4 h-4 opacity-40" role="button" aria-label="Clear field"/>
                                 @endif
 
                                 {{-- ICON RIGHT --}}
@@ -208,7 +212,7 @@ class Input extends Component
                                 @if($suffix)
                                     <span class="label">{{ $suffix }}</span>
                                 @endif
-                            </label>
+                            </div>
 
                             {{-- APPEND --}}
                             @if($append)
@@ -220,8 +224,8 @@ class Input extends Component
                     {{-- ERROR --}}
                     @if(!$omitError && $errors->has($errorFieldName()))
                         @foreach($errors->get($errorFieldName()) as $message)
-                            @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
+                            @foreach(Arr::wrap($message) as $index => $line)
+                                <div id="{{ $uuid }}_error{{ $index }}" class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
                                 @break($firstErrorOnly)
                             @endforeach
                             @break($firstErrorOnly)
