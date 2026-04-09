@@ -19,7 +19,7 @@ class Tab extends Component
         public bool $disabled = false,
         public bool $hidden = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this)) . $id;
+        $this->uuid = 'mary'.md5(serialize($this)).$id;
     }
 
     public function tabLabel(string $label): string
@@ -28,7 +28,7 @@ class Tab extends Component
 
         if ($this->icon) {
             return Blade::render("
-                <x-mary-icon name='" . $this->icon . "' @class([
+                <x-mary-icon name='".$this->icon."' @class([
                 'me-2',
                 'whitespace-nowrap',
                 'text-base-content/30 cursor-not-allowed' => '$this->disabled'
@@ -58,7 +58,7 @@ class Tab extends Component
                         :class="{ 'tab-active': selected === '{{ $name }}' }"
                         data-name="{{ $name }}"
                         x-init="
-                                const newItem = { name: '{{ $name }}', label: {{ json_encode($tabLabel($label)) }}, disabled: {{ $disabled ? 'true' : 'false' }}, hidden: {{ $hidden ? 'true' : 'false' }} };
+                                const newItem = { name: '{{ $name }}', id: '{{ $uuid }}', label: {{ json_encode($tabLabel($label)) }}, disabled: {{ $disabled ? 'true' : 'false' }}, hidden: {{ $hidden ? 'true' : 'false' }} };
                                 const index = tabs.findIndex(item => item.name === '{{ $name }}');
                                 index !== -1 ? tabs[index] = newItem : tabs.push(newItem);
 
@@ -70,7 +70,7 @@ class Tab extends Component
                             "
                     ></a>
 
-                    <div x-show="selected === '{{ $name }}'" role="tabpanel" {{ $attributes->class("tab-content py-5 px-1") }}>
+                    <div x-show="selected === '{{ $name }}'" id="{{ $uuid }}" role="tabpanel" {{ $attributes->class("tab-content py-5 px-1") }}>
                         {{ $slot }}
                     </div>
                 HTML;
