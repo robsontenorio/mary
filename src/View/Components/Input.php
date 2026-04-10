@@ -24,9 +24,9 @@ class Input extends Component
         public ?bool $money = false,
         public ?string $locale = 'en-US',
 
-        // Popover
+	    // Popover
         public ?string $popover = null,
-        public ?string $popoverIcon = 'o-question-mark-circle',
+        public ?string $popoverIcon = "o-question-mark-circle",
         public ?string $popoverTriggerClass = '',
         public ?string $popoverContentClass = '',
 
@@ -40,17 +40,17 @@ class Input extends Component
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = 'mary'.md5(serialize($this)).$id;
-    }
-
-    public function errorFieldName(): ?string
-    {
-        return $this->errorField ?? $this->modelName();
+        $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
+    }
+
+    public function errorFieldName(): ?string
+    {
+        return $this->errorField ?? $this->modelName();
     }
 
     public function isReadonly(): bool
@@ -68,8 +68,8 @@ class Input extends Component
         return json_encode([
             'init' => true,
             'maskOpts' => [
-                'locales' => $this->locale,
-            ],
+                'locales' => $this->locale
+            ]
         ]);
     }
 
