@@ -43,7 +43,7 @@ class ChoicesOffline extends Component
         public Collection|array $options = new Collection(),
         public ?string $noResultText = 'No results found.',
 
-	    // Popover
+        // Popover
         public ?string $popover = null,
         public ?string $popoverIcon = "o-question-mark-circle",
         public ?string $popoverTriggerClass = '',
@@ -295,7 +295,7 @@ class ChoicesOffline extends Component
 
                                         {{
                                             $attributes->whereStartsWith('class')->class([
-                                                "select w-full min-h-[var(--size)] h-auto pl-2.5",
+                                                "select w-full min-h-[var(--size)] h-auto ps-2.5",
                                                 "join-item" => $prepend || $append,
                                                 "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
                                                 "!select-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError

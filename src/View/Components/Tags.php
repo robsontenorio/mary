@@ -22,7 +22,7 @@ class Tags extends Component
         public ?string $prefix = null,
         public ?string $suffix = null,
 
-	    // Popover
+        // Popover
         public ?string $popover = null,
         public ?string $popoverIcon = "o-question-mark-circle",
         public ?string $popoverTriggerClass = '',
@@ -182,7 +182,7 @@ class Tags extends Component
 
                                 {{
                                     $attributes->whereStartsWith('class')->class([
-                                        "input w-full h-fit pl-2.5",
+                                        "input w-full h-fit ps-2.5",
                                         "join-item" => $prepend || $append,
                                         "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
                                         "!input-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
