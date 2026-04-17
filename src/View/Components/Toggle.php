@@ -52,7 +52,11 @@ class Toggle extends Component
                                 {{
                                     $attributes->whereDoesntStartWith('id')
                                         ->class(["order-2" => $right])
-                                        ->merge(['class' => 'toggle'])
+                                        ->merge([
+                                            'class' => 'toggle',
+                                            'aria-invalid' => ($errorFieldName() && $errors->has($errorFieldName()) && !$omitError) ? 'true' : 'false',
+                                            'aria-errormessage' => $uuid . '_error0',
+                                        ])
                                 }}
                             />
 
@@ -62,13 +66,13 @@ class Toggle extends Component
                                     {{ $label }}
 
                                     @if($attributes->get('required'))
-                                        <span class="text-error">*</span>
+                                        <span class="text-error" aria-hidden="true">*</span>
                                     @endif
                                 </div>
 
                                 {{-- HINT --}}
                                 @if($hint)
-                                    <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
+                                    <div class="{{ $hintClass }}" x-classes="fieldset-label" role="note" aria-label="hint">{{ $hint }}</div>
                                 @endif
                             </div>
                         </label>
@@ -77,8 +81,8 @@ class Toggle extends Component
                     {{-- ERROR --}}
                     @if(!$omitError && $errors->has($errorFieldName()))
                         @foreach($errors->get($errorFieldName()) as $message)
-                            @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
+                            @foreach(Arr::wrap($message) as $index => $line)
+                                <div id="{{ $uuid }}_error{{ $index }}" class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
                                 @break($firstErrorOnly)
                             @endforeach
                             @break($firstErrorOnly)
