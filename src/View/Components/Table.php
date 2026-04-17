@@ -33,6 +33,7 @@ class Table extends Component
         public ?string $perPage = null,
         public ?array $perPageValues = [10, 20, 50, 100],
         public ?array $sortBy = [],
+        public string $sortByProperty = 'sortBy',
         public ?array $rowDecoration = [],
         public ?array $cellDecoration = [],
         public ?bool $showEmptyText = false,
@@ -310,7 +311,7 @@ class Table extends Component
                                         class="@if($isSortable($header)) cursor-pointer hover:bg-base-200 @endif {{ $header['class'] ?? ' ' }}"
 
                                         @if($sortBy && $isSortable($header))
-                                            @click="$wire.set('sortBy', {column: '{{ $getSort($header)['column'] }}', direction: '{{ $getSort($header)['direction'] }}' })"
+                                            @click="$wire.set('{{ $sortByProperty }}', {column: '{{ $getSort($header)['column'] }}', direction: '{{ $getSort($header)['direction'] }}' })"
                                         @endif
                                     >
                                         {{ isset(${"header_".$temp_key}) ? ${"header_".$temp_key}($header) : $header['label'] }}
