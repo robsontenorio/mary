@@ -20,6 +20,11 @@ class TimelineItem extends Component
         public ?bool $first = false,
         public ?bool $last = false,
 
+        public? string $connectorPendingClass = "border-s-base-300",
+        public? string $connectorActiveClass = "!border-s-primary",
+        public? string $bulletActiveClass = "!bg-primary",
+        public? string $bulletPendingClass = "bg-base-300",
+
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
@@ -29,21 +34,21 @@ class TimelineItem extends Component
         return <<<'HTML'
                 <div>
                     <!-- Last item `border cut` -->
-                    <div @class(["border-s-2 border-s-base-300 h-5 -mb-5" => $last, "!border-s-primary" => !$pending])>
+                    <div @class(["border-s-2 $connectorPendingClass h-5 -mb-5" => $last, $connectorActiveClass => !$pending])>
                     </div>
 
                     <!-- WRAPPER THAT ALSO ACTS A LINE CONNECTOR -->
                     <div @class([
-                            "border-s-2 border-s-base-300 ps-8 py-3",
-                            "!border-s-primary" => !$pending,
+                            "border-s-2 $connectorPendingClass ps-8 py-3",
+                            $connectorActiveClass => !$pending,
                             "pt-0" => $first,
                             "!border-s-0" => $last,
                          ])
                     >
                         <!-- BULLET -->
                         <div @class([
-                                "w-4 h-4 -mb-5 -ms-[41px] rounded-full bg-base-300",
-                                "bg-primary" => !$pending,
+                                "w-4 h-4 -mb-5 -ms-[41px] $bulletPendingClass rounded-full",
+                                $bulletActiveClass => !$pending,
                                 "!-ms-[39px]" => $last,
                                 "w-8 h-8 !-ms-[48px] -mb-7" => $icon
                              ])

@@ -10,6 +10,7 @@
  */
 class Currency {
     unmaskedValue = 0
+    maskedValue = 0
 
     constructor(input, opts = {}) {
         this.opts = {
@@ -21,20 +22,23 @@ class Currency {
             ...opts,
         }
 
-        if (input instanceof HTMLInputElement === false) {
+        if (!(input instanceof HTMLInputElement)) {
             throw new TypeError('The input should be a HTMLInputElement')
         }
 
         // Add fraction on initial value if missing
         const parts = String(input.value).split('.')
-        input.value = parts.length === 1 ? `${parts.shift()}.00` : `${parts.shift()}.${parts.pop().padEnd(2, '0')}`
+        
+        input.value = parts.length === 1
+            ? `${parts.shift()}.00`
+            : `${parts.shift()}.${parts.pop().padEnd(2, '0')}`
 
         this.input = input
         this.events = new Set()
 
         // Initialize
         if (this.opts.init) {
-            this.input.value = Currency.masking(this.input.value, this.opts.maskOpts)
+            this.mask()
         }
 
         // Listener
@@ -50,26 +54,42 @@ class Currency {
         }
     }
 
-    static getUnmasked() {
+    getUnmasked() {
         return this.unmaskedValue
     }
 
-    static position(v) {
+    getMasked() {
+        return this.maskedValue
+    }
+
+    position(v) {
         const nums = new Set(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'])
         const len = v.length
 
         let cc = 0
         for (let i = len - 1; i >= 0; i--) {
-            if (nums.has(v[i])) {
-                break
-            }
+            if (nums.has(v[i])) break
             cc++
         }
 
         return String(v).length - cc
     }
 
-    static masking(v, opts = {}) {
+    mask(value = null) {
+        if (value !== null) {
+            this.input.value = value
+        }
+
+        this.input.value = this.masking(this.input.value, this.opts.maskOpts)
+        this.maskedValue = this.input.value
+
+        const pos = this.position(this.input.value)
+        this.input.setSelectionRange(pos, pos)
+
+        return this.maskedValue
+    }
+
+    masking(v, opts = {}) {
         const {
             empty = false,
             locales = 'pt-BR',
@@ -101,13 +121,11 @@ class Currency {
             return
         }
 
-        this.input.value = Currency.masking(this.input.value, this.opts.maskOpts)
-        const pos = Currency.position(this.input.value)
-        this.input.setSelectionRange(pos, pos)
+        this.mask()
     }
 
     onClick() {
-        const pos = Currency.position(this.input.value)
+        const pos = this.position(this.input.value)
         this.input.focus()
         this.input.setSelectionRange(pos, pos)
     }
@@ -130,4 +148,3 @@ class Currency {
 if (!window.Currency) {
     window.Currency = Currency
 }
-

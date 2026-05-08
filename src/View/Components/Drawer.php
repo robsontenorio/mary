@@ -20,6 +20,7 @@ class Drawer extends Component
         public ?bool $withCloseButton = false,
         public ?bool $closeOnEscape = false,
         public ?bool $withoutTrapFocus = false,
+        public ?bool $withoutBackdropClose = false,
 
         //Slots
         public ?string $actions = null
@@ -79,7 +80,11 @@ class Drawer extends Component
 
                     <div class="drawer-side" >
                         <!-- Overlay effect , click outside -->
-                        <label for="{{ $id() }}" class="drawer-overlay"></label>
+                        @if($withoutBackdropClose)
+                            <div class="drawer-overlay pointer-events-none"></div>
+                        @else
+                            <label for="{{ $id() }}" class="drawer-overlay"></label>
+                        @endif
 
                         <!-- Content -->
                         <x-mary-card

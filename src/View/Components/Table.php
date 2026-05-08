@@ -33,12 +33,14 @@ class Table extends Component
         public ?string $perPage = null,
         public ?array $perPageValues = [10, 20, 50, 100],
         public ?array $sortBy = [],
+        public string $sortByProperty = 'sortBy',
         public ?array $rowDecoration = [],
         public ?array $cellDecoration = [],
         public ?bool $showEmptyText = false,
         public mixed $emptyText = 'No records found.',
         public string $containerClass = 'overflow-x-auto',
         public ?bool $noHover = false,
+        public ?bool $fluent = false,
 
         // Slots
         public mixed $actions = null,
@@ -309,7 +311,7 @@ class Table extends Component
                                         class="@if($isSortable($header)) cursor-pointer hover:bg-base-200 @endif {{ $header['class'] ?? ' ' }}"
 
                                         @if($sortBy && $isSortable($header))
-                                            @click="$wire.set('sortBy', {column: '{{ $getSort($header)['column'] }}', direction: '{{ $getSort($header)['direction'] }}' })"
+                                            @click="$wire.set('{{ $sortByProperty }}', {column: '{{ $getSort($header)['column'] }}', direction: '{{ $getSort($header)['direction'] }}' })"
                                         @endif
                                     >
                                         {{ isset(${"header_".$temp_key}) ? ${"header_".$temp_key}($header) : $header['label'] }}
@@ -381,7 +383,7 @@ class Table extends Component
                                                     <a href="{{ $redirectLink($row) }}" wire:navigate class="block py-3 px-4">
                                                 @endif
 
-                                                {{ ${"cell_".$temp_key}($row)  }}
+                                                {{ ${"cell_".$temp_key}($fluent ? fluent($row) : $row) }}
 
                                                 @if($hasLink($header))
                                                     </a>
@@ -412,7 +414,7 @@ class Table extends Component
                                 @if($expandable)
                                     <tr wire:key="{{ $uuid }}-{{ $k }}--expand" class="!bg-inherit" :class="isExpanded({{ $getKeyValue($row, 'expandableKey') }}) || 'hidden'">
                                         <td :colspan="colspanSize">
-                                            {{ $expansion($row) }}
+                                            {{ $expansion($fluent ? fluent($row) : $row) }}
                                         </td>
                                     </tr>
                                 @endif

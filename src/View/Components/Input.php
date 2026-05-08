@@ -24,6 +24,12 @@ class Input extends Component
         public ?bool $money = false,
         public ?string $locale = 'en-US',
 
+	    // Popover
+        public ?string $popover = null,
+        public ?string $popoverIcon = "o-question-mark-circle",
+        public ?string $popoverTriggerClass = '',
+        public ?string $popoverContentClass = '',
+
         // Slots
         public mixed $prepend = null,
         public mixed $append = null,
@@ -85,6 +91,18 @@ class Input extends Component
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
                             @endif
+
+                            {{-- INPUT POPOVER --}}
+                            @if($popover)
+                                <x-mary-popover offset="5" position="top-start">
+                                    <x-slot:trigger class="{{ $popoverTriggerClass }}">
+                                        <x-mary-icon :name="$popoverIcon" class="w-4 h-4 opacity-40 mb-0.5" />
+                                    </x-slot:trigger>
+                                    <x-slot:content class="{{ $popoverContentClass }}">
+                                        {{ $popover }}
+                                    </x-slot:content>
+                                </x-mary-popover>
+                            @endif
                         </legend>
                     @endif
 
@@ -129,7 +147,20 @@ class Input extends Component
                                 @if($money)
                                     <div
                                         class="w-full"
-                                        x-data="{ amount: $wire.get('{{ $modelName() }}') }" x-init="$nextTick(() => new Currency($refs.myInput, {{ $moneySettings() }}))"
+                                        x-data="{
+                                            amount: $wire.get('{{ $modelName() }}'),
+                                            currency: null,
+                                            init() {
+                                                $nextTick(() => this.currency = new Currency($refs.myInput, {{ $moneySettings() }}))
+                                                $watch('$wire.{{ $modelName() }}', (value) => {
+                                                    // When the model is updated from outside
+                                                    if (this.currency.getUnmasked() != value) {
+                                                        this.$refs.myInput.value = value
+                                                        this.currency.mask()
+                                                    }
+                                                });
+                                            }
+                                        }"
                                     >
                                 @endif
 
@@ -144,9 +175,9 @@ class Input extends Component
 
                                         @if($money)
                                             x-ref="myInput"
-                                            :value="amount"
-                                            x-on:input="$nextTick(() => $wire.set('{{ $modelName() }}', Currency.getUnmasked(), {{ json_encode($attributes->wire('model')->hasModifier('live')) }}))"
-                                            x-on:blur="$nextTick(() => $wire.set('{{ $modelName() }}', Currency.getUnmasked(), {{ json_encode($attributes->wire('model')->hasModifier('blur')) }}))"
+                                            x-model="amount"
+                                            x-on:input="$nextTick(() => $wire.set('{{ $modelName() }}', currency.getUnmasked(), {{ json_encode($attributes->wire('model')->hasModifier('live')) }}))"
+                                            x-on:blur="$nextTick(() => $wire.set('{{ $modelName() }}', currency.getUnmasked(), {{ json_encode($attributes->wire('model')->hasModifier('blur')) }}))"
                                             inputmode="numeric"
                                         @endif
 

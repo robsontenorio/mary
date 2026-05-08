@@ -22,6 +22,12 @@ class Radio extends Component
         public Collection|array $options = new Collection(),
         public ?bool $inline = false,
 
+	    // Popover
+        public ?string $popover = null,
+        public ?string $popoverIcon = "o-question-mark-circle",
+        public ?string $popoverTriggerClass = '',
+        public ?string $popoverContentClass = '',
+
         // Validations
         public ?string $errorField = null,
         public ?string $errorClass = 'text-error',
@@ -53,6 +59,18 @@ class Radio extends Component
 
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
+                            @endif
+                            
+                            {{-- INPUT POPOVER --}}
+                            @if($popover)
+                                <x-mary-popover offset="5" position="top-start">
+                                    <x-slot:trigger class="{{ $popoverTriggerClass }}">
+                                        <x-mary-icon :name="$popoverIcon" class="w-4 h-4 opacity-40 mb-0.5" />
+                                    </x-slot:trigger>
+                                    <x-slot:content class="{{ $popoverContentClass }}">
+                                        {{ $popover }}
+                                    </x-slot:content>
+                                </x-mary-popover>
                             @endif
                         </legend>
                     @endif

@@ -114,6 +114,7 @@ class MaryServiceProvider extends ServiceProvider
         Blade::component('mary-menu-item', MenuItem::class);
         Blade::component('mary-header', Header::class);
         Blade::component('mary-pagination', Pagination::class);
+        Blade::component('mary-popover', Popover::class);
 
         $prefix = config('mary.prefix');
 

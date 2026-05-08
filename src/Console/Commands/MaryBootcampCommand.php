@@ -28,10 +28,10 @@ class MaryBootcampCommand extends Command
             return;
         }
 
-        // Make sure it have Livewire ant Volt
-        $this->info("Making sure you have Livewire and Volt ...\n");
-
-        Process::run("composer require livewire/livewire livewire/volt && php artisan volt:install", function (string $type, string $output) {
+        // Make sure it has Livewire
+        $this->info("Making sure you have Livewire installed ...\n");
+        
+        Process::run("composer require livewire/livewire", function (string $type, string $output) {
             echo $output;
         })->throw();
 
@@ -54,7 +54,7 @@ class MaryBootcampCommand extends Command
         // Clear view cache
         Artisan::call('view:clear');
 
-        $this->info("\n✅   Done! Go back to Bootcamp page.\n");
+        $this->info("\n✅   Done! Go back to Bootcamp docs.\n");
     }
 
     private function copyFile(string $source, string $destination): void

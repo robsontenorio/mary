@@ -23,8 +23,8 @@ class Errors extends Component
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
-                <div>
-                    @if ($errors->any())
+                @if ($errors->any())
+                    <div>
                         <div {{ $attributes->class(["alert alert-error rounded rounded-sm"]) }} >
                             <div class="grid gap-3">
                                 <div class="flex gap-2">
@@ -50,8 +50,8 @@ class Errors extends Component
                                 </div>
                             </div>
                         </div>
-                    @endif
-            </div>
+                </div>
+            @endif
             BLADE;
     }
 }

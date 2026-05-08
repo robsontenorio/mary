@@ -17,6 +17,8 @@ class Dropdown extends Component
         public ?bool $right = false,
         public ?bool $top = false,
         public ?bool $noXAnchor = false,
+        public ?bool $scroll = false,
+        public ?string $maxHeight = 'max-h-96',
         // Slots
         public mixed $trigger = null
     ) {
@@ -31,6 +33,7 @@ class Dropdown extends Component
                 @click.outside="open = false"
                 :open="open"
                 @class([
+                    'overflow-visible',
                     'dropdown',
                     'dropdown-end' => ($noXAnchor && $right),
                     'dropdown-top' => ($noXAnchor && $top),
@@ -54,6 +57,8 @@ class Dropdown extends Component
                     @class([
                         'p-2','shadow','menu','z-[1]','border-[length:var(--border)]','border-base-content/10','bg-base-100', 'rounded-box','w-auto','min-w-max',
                         'dropdown-content' => $noXAnchor,
+                        $maxHeight => $scroll,
+                        'overflow-y-auto' => $scroll,
                     ])
                     @click="open = false"
                     @if(!$noXAnchor)

@@ -33,22 +33,16 @@ class Tabs extends Component
                                     @else
                                         @entangle($attributes->wire('model'))
                                     @endif
-                                 ,
-                                 init() {
-                                     // Fix weird issue when navigating back
-                                     document.addEventListener('livewire:navigating', () => {
-                                         document.querySelectorAll('.tab').forEach(el =>  el.remove());
-                                     });
-                                 }
                         }"
                         class="{{ $tabsClass }}"
                         x-class="font-semibold pb-1 border-b-[length:var(--border)] border-b-base-content/50 border-b-base-content/10 flex overflow-x-auto scrollbar-hide relative w-full"
                     >
                         <!-- TAB LABELS -->
                         <div class="{{ $labelDivClass }}">
-                            <template x-for="tab in tabs">
+                            <template x-for="tab in tabs" :key="tab.name">
                                 <a
                                     role="tab"
+                                    x-init="if (typeof tab == 'undefined') $el.remove()"
                                     x-html="tab.label"
                                      @click="tab.disabled ? null: selected = tab.name"
                                     :class="{ '{{ $activeClass }} tab-active': selected === tab.name, 'hidden': tab.hidden }"

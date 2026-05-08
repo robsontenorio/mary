@@ -69,7 +69,7 @@ class ListItem extends Component
                     @endif
 
                     <!-- CONTENT -->
-                    <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate w-0 mary-hideable">
+                    <div class="flex-1 overflow-hidden whitespace-nowrap text-ellipsis truncate mary-hideable">
                         @if($link)
                             <a href="{{ $link }}" wire:navigate>
                         @endif
