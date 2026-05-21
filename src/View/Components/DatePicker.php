@@ -228,7 +228,7 @@ class DatePicker extends Component
                              >
                                 {{-- ICON LEFT --}}
                                 @if($icon)
-                                    <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 -ml-1 opacity-40" />
+                                    <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 -ms-1 opacity-40" />
                                 @endif
 
                                 {{-- PLACEHOLDER --}}
