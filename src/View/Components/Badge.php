@@ -30,12 +30,8 @@ class Badge extends Component
                     @endif
 
                     <!-- VALUE / SLOT -->
-                    @if($value)
-                        {{ $value }}
-                    @else
-                        {{ $slot }}
-                    @endif
-
+                    {{ $value ??  $slot }}
+                    
                     <!-- ICON RIGHT -->
                     @if($iconRight)
                         <x-mary-icon :name="$iconRight" class="h-4 w-4" />
