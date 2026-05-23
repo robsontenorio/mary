@@ -38,20 +38,23 @@ class Tabs extends Component
                         x-class="font-semibold pb-1 border-b-[length:var(--border)] border-b-base-content/50 border-b-base-content/10 flex overflow-x-auto scrollbar-hide relative w-full"
                     >
                         <!-- TAB LABELS -->
-                        <div class="{{ $labelDivClass }}">
+                        <div class="{{ $labelDivClass }}" role="tablist" aria-label="Select a tab">
                             <template x-for="tab in tabs" :key="tab.name">
                                 <a
                                     role="tab"
                                     x-init="if (typeof tab == 'undefined') $el.remove()"
                                     x-html="tab.label"
-                                     @click="tab.disabled ? null: selected = tab.name"
+                                    @click="tab.disabled ? null: selected = tab.name"
                                     :class="{ '{{ $activeClass }} tab-active': selected === tab.name, 'hidden': tab.hidden }"
-                                    class="tab {{ $labelClass }}"></a>
+                                    class="tab {{ $labelClass }}"
+                                    :aria-controls="tab.id"
+                                    :aria-selected="selected === tab.name ? true : false"
+                                    :tabindex="selected === tab.name ? 0 : -1"></a>
                             </template>
                         </div>
 
                         <!-- TAB CONTENT -->
-                        <div role="tablist" {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["block"]) }}>
+                        <div {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["block"]) }}>
                             {{ $slot }}
                         </div>
                     </div>
