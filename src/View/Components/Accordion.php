@@ -11,22 +11,15 @@ class Accordion extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $id = null,
         public ?bool $noJoin = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this)) . $id;
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
-                <div
-                    x-data="{ model: @entangle($attributes->wire('model')) }"
-                    {{ $attributes->whereDoesntStartWith('wire:model')->merge(['class' => ($noJoin ? '' : 'join join-vertical w-full')]) }}
-                    wire:key="accordion-{{ $uuid }}"
-                >
-                        {{ $slot }}
-                </div>
+                <div x-data="{ model: @entangle($attributes->wire('model')) }" {{ $attributes->whereDoesntStartWith('wire:model')->merge(['class' => ($noJoin ? '' : 'join join-vertical w-full')]) }} wire:key="accordion-{{ $uuid }}">{{ $slot }}</div>
             BLADE;
     }
 }

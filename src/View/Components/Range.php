@@ -1,99 +1,42 @@
 <?php
-
 namespace Mary\View\Components;
-
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-
 class Range extends Component
 {
     public string $uuid;
-
     public function __construct(
-        public ?string $id = null,
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $hintClass = 'fieldset-label',
         public ?int $min = 0,
         public ?int $max = 100,
-
-	    // Popover
-        public ?string $popover = null,
-        public ?string $popoverIcon = "o-question-mark-circle",
-        public ?string $popoverTriggerClass = '',
-        public ?string $popoverContentClass = '',
-
         // Validations
         public ?string $errorField = null,
         public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this)) . $id;
+        $this->uuid = "mary" . md5(serialize($this));
     }
-
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
     }
-
     public function errorFieldName(): ?string
     {
         return $this->errorField ?? $this->modelName();
     }
-
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
             <div>
                 <fieldset class="fieldset py-0">
-                    {{-- STANDARD LABEL --}}
-                    @if($label)
-                        <legend class="fieldset-legend mb-0.5">
-                            {{ $label }}
-
-                            @if($attributes->get('required'))
-                                <span class="text-error">*</span>
-                            @endif
-                            
-                            {{-- INPUT POPOVER --}}
-                            @if($popover)
-                                <x-mary-popover offset="5" position="top-start">
-                                    <x-slot:trigger class="{{ $popoverTriggerClass }}">
-                                        <x-mary-icon :name="$popoverIcon" class="w-4 h-4 opacity-40 mb-0.5" />
-                                    </x-slot:trigger>
-                                    <x-slot:content class="{{ $popoverContentClass }}">
-                                        {{ $popover }}
-                                    </x-slot:content>
-                                </x-mary-popover>
-                            @endif
-                        </legend>
-                    @endif
-
-                    {{-- RANGE --}}
-                    <input
-                        type="range"
-                        min="{{ $min }}"
-                        max="{{ $max }}"
-                        {{ $attributes->merge(["class" => "range w-full", "id" => $uuid])->except('label', 'hint', 'min', 'max') }}
-                    />
-
-                    {{-- ERROR --}}
-                    @if(!$omitError && $errors->has($errorFieldName()))
-                        @foreach($errors->get($errorFieldName()) as $message)
-                            @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
-                                @break($firstErrorOnly)
-                            @endforeach
-                            @break($firstErrorOnly)
-                        @endforeach
-                    @endif
-
-                    {{-- HINT --}}
-                    @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
-                    @endif
+                    @if($label) <legend class="fieldset-legend mb-0.5"> {{ $label }} @if($attributes->get('required')) <span class="text-error">*</span> @endif </legend> @endif
+                    <input type="range" min="{{ $min }}" max="{{ $max }}" {{ $attributes->merge(["class" => "range w-full", "id" => $uuid])->except('label', 'hint', 'min', 'max') }} />
+                    @if(!$omitError && $errors->has($errorFieldName())) @foreach($errors->get($errorFieldName()) as $message) @foreach(Arr::wrap($message) as $line) <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div> @break($firstErrorOnly) @endforeach @break($firstErrorOnly) @endforeach @endif
+                    @if($hint) <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div> @endif
                 </fieldset>
             </div>
             BLADE;

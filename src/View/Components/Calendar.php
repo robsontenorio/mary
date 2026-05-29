@@ -13,7 +13,6 @@ class Calendar extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $id = null,
         public ?int $months = 1,
         public ?string $locale = 'en-EN',
         public ?bool $weekendHighlight = false,
@@ -21,29 +20,40 @@ class Calendar extends Component
         public ?array $config = [],
         public ?array $events = [],
     ) {
-        $this->uuid = "mary" . md5(serialize($this)) . $id;
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function setup(): string
     {
         $config = json_encode(array_merge([
             'type' => $this->months == 1 ? 'default' : 'multiple',
-            'displayMonthsCount' => $this->months,
-            'monthsToSwitch' => $this->months,
+            'months' => $this->months,
+            'jumpMonths' => $this->months,
             'popups' => $this->popups(),
-            'locale' => $this->locale,
-            'firstWeekday' => $this->sundayStart ? 0 : 1,
-            'selectedWeekends' => $this->weekendHighlight ? [0, 6] : [],
-            'selectionDatesMode' => false,
-            'displayDatesOutside' => false,
-            'styles' => [
-                'calendar' => 'vc w-fit',
-                'grid' => 'vc-grid justify-center',
-                'column' => 'vc-column !min-w-fit !max-w-fit',
-            ]
+            'settings' => [
+                'lang' => $this->locale,
+                'visibility' => [
+                    'daysOutside' => false,
+                    'weekend' => $this->weekendHighlight,
+                ],
+                'selection' => [
+                    'day' => false,
+                ],
+                'iso8601' => ! $this->sundayStart,
+            ],
+            'CSSClasses' => 'y',
+            'actions' => 'x',
         ], $this->config));
 
+        $config = $this->addCss($config);
+
         return $config;
+    }
+
+    // Extra CSS for responsive layout
+    public function addCss(string $config): string
+    {
+        return str_replace('"y"', '{"grid":"vanilla-calendar-grid flex flex-wrap justify-around","calendar":"vanilla-calendar"}', $config);
     }
 
     public function popups()
@@ -83,9 +93,7 @@ class Calendar extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <div wire:key="calendar-{{ rand() }}">
-                <div x-data x-init="const calendar = new window.VanillaCalendarPro.Calendar($el, {{ $setup() }}); calendar.init();"></div>
-            </div>
+            <div wire:key="calendar-{{ rand() }}"> <div x-data x-init="const calendar = new VanillaCalendar($el, {{ $setup() }}); calendar.init();" class="w-fit"></div> </div>
             HTML;
     }
 }

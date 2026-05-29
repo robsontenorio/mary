@@ -1,18 +1,13 @@
 <?php
-
 namespace Mary\View\Components;
-
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
-
 class Select extends Component
 {
     public string $uuid;
-
     public function __construct(
-        public ?string $id = null,
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $iconRight = null,
@@ -26,147 +21,47 @@ class Select extends Component
         public ?string $optionValue = 'id',
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
-
-	    // Popover
-        public ?string $popover = null,
-        public ?string $popoverIcon = "o-question-mark-circle",
-        public ?string $popoverTriggerClass = '',
-        public ?string $popoverContentClass = '',
-
         // Slots
         public mixed $prepend = null,
         public mixed $append = null,
-
         // Validations
         public ?string $errorField = null,
         public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this)) . $id;
+        $this->uuid = "mary" . md5(serialize($this));
     }
-
     public function modelName(): ?string
     {
         return $this->attributes->whereStartsWith('wire:model')->first();
     }
-
     public function errorFieldName(): ?string
     {
         return $this->errorField ?? $this->modelName();
     }
-
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
             <div>
-                @php
-                    // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
-                    $uuid = $uuid . $modelName()
-                @endphp
-
+                @php $uuid = $uuid . $modelName() @endphp
                 <fieldset class="fieldset py-0">
-                    {{-- STANDARD LABEL --}}
-                    @if($label && !$inline)
-                        <legend class="fieldset-legend mb-0.5">
-                            {{ $label }}
-
-                            @if($attributes->get('required'))
-                                <span class="text-error">*</span>
-                            @endif
-                            
-                            {{-- INPUT POPOVER --}}
-                            @if($popover)
-                                <x-mary-popover offset="5" position="top-start">
-                                    <x-slot:trigger class="{{ $popoverTriggerClass }}">
-                                        <x-mary-icon :name="$popoverIcon" class="w-4 h-4 opacity-40 mb-0.5" />
-                                    </x-slot:trigger>
-                                    <x-slot:content class="{{ $popoverContentClass }}">
-                                        {{ $popover }}
-                                    </x-slot:content>
-                                </x-mary-popover>
-                            @endif
-                        </legend>
-                    @endif
-
+                    @if($label && !$inline) <legend class="fieldset-legend mb-0.5"> {{ $label }} @if($attributes->get('required')) <span class="text-error">*</span> @endif </legend> @endif
                     <label @class(["floating-label" => $label && $inline])>
-                        {{-- FLOATING LABEL--}}
-                        @if ($label && $inline)
-                            <span class="font-semibold">{{ $label }}</span>
-                        @endif
-
+                        @if ($label && $inline) <span class="font-semibold">{{ $label }}</span> @endif
                         <div @class(["w-full", "join" => $prepend || $append])>
-                            {{-- PREPEND --}}
-                            @if($prepend)
-                                {{ $prepend }}
-                            @endif
-
-                            {{-- THE LABEL THAT HOLDS THE INPUT --}}
-                            <label
-                                {{
-                                    $attributes->whereStartsWith('class')->class([
-                                        "select w-full",
-                                        "join-item" => $prepend || $append,
-                                        "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
-                                        "!select-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
-                                    ])
-                                }}
-                             >
-
-                                {{-- PREFIX --}}
-                                @if($prefix)
-                                    <span class="label">{{ $prefix }}</span>
-                                @endif
-
-                                {{-- ICON LEFT --}}
-                                @if($icon)
-                                    <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 -ms-1 opacity-40" />
-                                @endif
-
-                                {{-- SELECT --}}
-                                <select id="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }}>
-                                    @if($placeholder)
-                                        <option value="{{ $placeholderValue }}">{{ $placeholder }}</option>
-                                    @endif
-
-                                    @foreach ($options as $option)
-                                        <option value="{{ data_get($option, $optionValue) }}" @if(data_get($option, 'disabled')) disabled @endif>{{ data_get($option, $optionLabel) }}</option>
-                                    @endforeach
-                                </select>
-
-                                {{-- ICON RIGHT --}}
-                                @if($iconRight)
-                                    <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 opacity-40" />
-                                @endif
-
-                                {{-- SUFFIX --}}
-                                @if($suffix)
-                                    <span class="label">{{ $suffix }}</span>
-                                @endif
-                            </label>
-
-                            {{-- APPEND --}}
-                            @if($append)
-                                {{ $append }}
-                            @endif
+                            @if($prepend) {{ $prepend }} @endif
+                            <label {{ $attributes->whereStartsWith('class')->class([ "select w-full", "join-item" => $prepend || $append, "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,                                         "!select-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError ]) }} >
+                                @if($prefix) <span class="label">{{ $prefix }}</span> @endif
+                                @if($icon) <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 -ml-1 opacity-40" /> @endif
+                                <select id="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }}> @if($placeholder) <option value="{{ $placeholderValue }}">{{ $placeholder }}</option> @endif @foreach ($options as $option) <option value="{{ data_get($option, $optionValue) }}" @if(data_get($option, 'disabled')) disabled @endif>{{ data_get($option, $optionLabel) }}</option> @endforeach </select>
+                                @if($iconRight) <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 opacity-40" /> @endif
+                                @if($suffix) <span class="label">{{ $suffix }}</span> @endif
+                            </label> @if($append) {{ $append }} @endif
                         </div>
                     </label>
-
-                    {{-- ERROR --}}
-                    @if(!$omitError && $errors->has($errorFieldName()))
-                        @foreach($errors->get($errorFieldName()) as $message)
-                            @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
-                                @break($firstErrorOnly)
-                            @endforeach
-                            @break($firstErrorOnly)
-                        @endforeach
-                    @endif
-
-                    {{-- HINT --}}
-                    @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
-                    @endif
+                    @if(!$omitError && $errors->has($errorFieldName())) @foreach($errors->get($errorFieldName()) as $message) @foreach(Arr::wrap($message) as $line) <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div> @break($firstErrorOnly) @endforeach @break($firstErrorOnly) @endforeach @endif
+                    @if($hint) <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div> @endif
                 </fieldset>
             </div>
             BLADE;

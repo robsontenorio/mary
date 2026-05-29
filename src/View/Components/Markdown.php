@@ -13,7 +13,6 @@ class Markdown extends Component
     public string $uploadUrl;
 
     public function __construct(
-        public ?string $id = null,
         public ?string $label = null,
         public ?string $hint = null,
         public ?string $hintClass = 'fieldset-label',
@@ -21,19 +20,13 @@ class Markdown extends Component
         public ?string $folder = 'markdown',
         public ?array $config = [],
 
-	    // Popover
-        public ?string $popover = null,
-        public ?string $popoverIcon = "o-question-mark-circle",
-        public ?string $popoverTriggerClass = '',
-        public ?string $popoverContentClass = '',
-
         // Validations
         public ?string $errorField = null,
         public ?string $errorClass = 'text-error',
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this)) . $id;
+        $this->uuid = "mary" . md5(serialize($this));
         $this->uploadUrl = route('mary.upload', absolute: false);
     }
 
@@ -55,23 +48,10 @@ class Markdown extends Component
             'uploadImage' => true,
             'imageAccept' => 'image/png, image/jpeg, image/gif, image/avif',
             'toolbar' => [
-                'heading',
-                'bold',
-                'italic',
-                'strikethrough',
-                '|',
-                'code',
-                'quote',
-                'unordered-list',
-                'ordered-list',
-                'horizontal-rule',
-                '|',
-                'link',
-                'upload-image',
-                'table',
-                '|',
-                'preview',
-                'side-by-side'
+                'heading', 'bold', 'italic', 'strikethrough', '|',
+                'code', 'quote', 'unordered-list', 'ordered-list', 'horizontal-rule', '|',
+                'link', 'upload-image', 'table', '|',
+                'preview', 'side-by-side'
             ],
         ], $this->config);
 
@@ -98,18 +78,6 @@ class Markdown extends Component
 
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
-                            @endif
-
-                            {{-- INPUT POPOVER --}}
-                            @if($popover)
-                                <x-mary-popover offset="5" position="top-start">
-                                    <x-slot:trigger class="{{ $popoverTriggerClass }}">
-                                        <x-mary-icon :name="$popoverIcon" class="w-4 h-4 opacity-40 mb-0.5" />
-                                    </x-slot:trigger>
-                                    <x-slot:content class="{{ $popoverContentClass }}">
-                                        {{ $popover }}
-                                    </x-slot:content>
-                                </x-mary-popover>
                             @endif
                         </legend>
                     @endif

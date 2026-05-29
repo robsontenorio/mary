@@ -12,7 +12,6 @@ class SelectGroup extends Component
     public string $uuid;
 
     public function __construct(
-        public ?string $id = null,
         public ?string $label = null,
         public ?string $icon = null,
         public ?string $iconRight = null,
@@ -25,12 +24,6 @@ class SelectGroup extends Component
         public ?string $optionLabel = 'name',
         public Collection|array $options = new Collection(),
 
-	    // Popover
-        public ?string $popover = null,
-        public ?string $popoverIcon = "o-question-mark-circle",
-        public ?string $popoverTriggerClass = '',
-        public ?string $popoverContentClass = '',
-
         // Slots
         public mixed $prepend = null,
         public mixed $append = null,
@@ -41,7 +34,7 @@ class SelectGroup extends Component
         public ?bool $omitError = false,
         public ?bool $firstErrorOnly = false,
     ) {
-        $this->uuid = "mary" . md5(serialize($this)) . $id;
+        $this->uuid = "mary" . md5(serialize($this));
     }
 
     public function modelName(): ?string
@@ -58,106 +51,20 @@ class SelectGroup extends Component
     {
         return <<<'BLADE'
             <div>
-                @php
-                    // We need this extra step to support models arrays. Ex: wire:model="emails.0"  , wire:model="emails.1"
-                    $uuid = $uuid . $modelName()
-                @endphp
+                @php $uuid = $uuid . $modelName() @endphp
 
                 <fieldset class="fieldset py-0">
-                    {{-- STANDARD LABEL --}}
-                    @if($label && !$inline)
-                        <legend class="fieldset-legend mb-0.5">
-                            {{ $label }}
-
-                            @if($attributes->get('required'))
-                                <span class="text-error">*</span>
-                            @endif
-                            
-                            {{-- INPUT POPOVER --}}
-                            @if($popover)
-                                <x-mary-popover offset="5" position="top-start">
-                                    <x-slot:trigger class="{{ $popoverTriggerClass }}">
-                                        <x-mary-icon :name="$popoverIcon" class="w-4 h-4 opacity-40 mb-0.5" />
-                                    </x-slot:trigger>
-                                    <x-slot:content class="{{ $popoverContentClass }}">
-                                        {{ $popover }}
-                                    </x-slot:content>
-                                </x-mary-popover>
-                            @endif
-                        </legend>
-                    @endif
-
+                    @if($label && !$inline) <legend class="fieldset-legend mb-0.5"> {{ $label }} @if($attributes->get('required')) <span class="text-error">*</span> @endif </legend> @endif
                     <label @class(["floating-label" => $label && $inline])>
-                        {{-- FLOATING LABEL--}}
-                        @if ($label && $inline)
-                            <span class="font-semibold">{{ $label }}</span>
-                        @endif
-
-                        <div @class(["w-full", "join" => $prepend || $append])>
-                            {{-- PREPEND --}}
-                            @if($prepend)
-                                {{ $prepend }}
-                            @endif
-
-                            {{-- THE LABEL THAT HOLDS THE INPUT --}}
-                            <label
-                                {{
-                                    $attributes->whereStartsWith('class')->class([
-                                        "select w-full",
-                                        "join-item" => $prepend || $append,
-                                        "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true,
-                                        "!select-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError
-                                    ])
-                                }}
-                             >
-
-                                {{-- ICON LEFT --}}
-                                @if($icon)
-                                    <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 -ms-1 opacity-40" />
-                                @endif
-
-                                {{-- SELECT --}}
-                                <select id="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }}>
-                                    @if($placeholder)
-                                        <option value="{{ $placeholderValue }}">{{ $placeholder }}</option>
-                                    @endif
-
-                                    @foreach (array_keys($options) as $option)
-                                      <optgroup label="{{ $option }}">
-                                        @foreach($options[$option] as $opts)
-                                          <option value="{{ $opts[$optionValue] }}">{{ $opts[$optionLabel] }}</option>
-                                        @endforeach
-                                    @endforeach
-                                </select>
-
-                                {{-- ICON RIGHT --}}
-                                @if($iconRight)
-                                    <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 opacity-40" />
-                                @endif
-                            </label>
-
-                            {{-- APPEND --}}
-                            @if($append)
-                                {{ $append }}
-                            @endif
+                        @if ($label && $inline) <span class="font-semibold">{{ $label }}</span> @endif
+                        <div @class(["w-full", "join" => $prepend || $append])> @if($prepend) {{ $prepend }} @endif
+                            <label {{ $attributes->whereStartsWith('class')->class([ "select w-full", "join-item" => $prepend || $append, "border-dashed" => $attributes->has("readonly") && $attributes->get("readonly") == true, "!select-error" => $errorFieldName() && $errors->has($errorFieldName()) && !$omitError ]) }} >
+                                @if($icon) <x-mary-icon :name="$icon" class="pointer-events-none w-4 h-4 -ml-1 opacity-40" /> @endif
+                                <select id="{{ $uuid }}" {{ $attributes->whereDoesntStartWith('class') }}> @if($placeholder) <option value="{{ $placeholderValue }}">{{ $placeholder }}</option> @endif  @foreach (array_keys($options) as $option) <optgroup label="{{ $option }}"> @foreach($options[$option] as $opts) <option value="{{ $opts[$optionValue] }}">{{ $opts[$optionLabel] }}</option> @endforeach @endforeach </select>
+                                @if($iconRight) <x-mary-icon :name="$iconRight" class="pointer-events-none w-4 h-4 opacity-40" /> @endif
+                            </label> @if($append) {{ $append }} @endif
                         </div>
-                    </label>
-
-                    {{-- HINT --}}
-                    @if($hint)
-                        <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div>
-                    @endif
-
-                    {{-- ERROR --}}
-                    @if(!$omitError && $errors->has($errorFieldName()))
-                        @foreach($errors->get($errorFieldName()) as $message)
-                            @foreach(Arr::wrap($message) as $line)
-                                <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div>
-                                @break($firstErrorOnly)
-                            @endforeach
-                            @break($firstErrorOnly)
-                        @endforeach
-                    @endif
+                    </label> @if($hint) <div class="{{ $hintClass }}" x-classes="fieldset-label">{{ $hint }}</div> @endif @if(!$omitError && $errors->has($errorFieldName())) @foreach($errors->get($errorFieldName()) as $message) @foreach(Arr::wrap($message) as $line) <div class="{{ $errorClass }}" x-class="text-error">{{ $line }}</div> @break($firstErrorOnly) @endforeach @break($firstErrorOnly) @endforeach @endif
                 </fieldset>
             </div>
             BLADE;
