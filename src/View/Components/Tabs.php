@@ -12,11 +12,12 @@ class Tabs extends Component
 
     public function __construct(
         public ?string $id = null,
-        public ?string $selected = null,
-        public string $labelClass = 'font-semibold pb-1',
-        public string $activeClass = 'border-b-[length:var(--border)] border-b-base-content/50',
-        public string $labelDivClass = 'border-b-[length:var(--border)] border-b-base-content/10 flex overflow-x-auto',
-        public string $tabsClass = 'relative w-full',
+        public bool $box = false,
+        public bool $lift = false,
+        public ?string $labelClass = null,
+        public ?string $activeClass = null,
+        public ?string $contentClass = null,
+        public string $tabsClass = 'scrollbar-none flex-nowrap overflow-x-auto',
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
@@ -25,35 +26,28 @@ class Tabs extends Component
     {
         return <<<'HTML'
                     <div
-                        x-data="{
-                                tabs: [],
-                                selected:
-                                    @if($selected)
-                                        '{{ $selected }}'
-                                    @else
-                                        @entangle($attributes->wire('model'))
-                                    @endif
-                        }"
-                        class="{{ $tabsClass }}"
-                        x-class="font-semibold pb-1 border-b-[length:var(--border)] border-b-base-content/50 border-b-base-content/10 flex overflow-x-auto scrollbar-hide relative w-full"
+                        x-data="{ tabs: [], selected: @entangle($attributes->wire('model')) }"
+                        x-class="scrollbar-none flex-nowrap overflow-x-auto"
+                        x-init="
+                             Array.from($refs.slot.children).forEach(tab => {
+                                 $refs.labels.appendChild(tab.querySelector('label'));
+                                 $refs.contents.appendChild(tab.querySelector('.tab-content'));
+                            });
+                        "
                     >
-                        <!-- TAB LABELS -->
-                        <div class="{{ $labelDivClass }}">
-                            <template x-for="tab in tabs" :key="tab.name">
-                                <a
-                                    role="tab"
-                                    x-init="if (typeof tab == 'undefined') $el.remove()"
-                                    x-html="tab.label"
-                                     @click="tab.disabled ? null: selected = tab.name"
-                                    :class="{ '{{ $activeClass }} tab-active': selected === tab.name, 'hidden': tab.hidden }"
-                                    class="tab {{ $labelClass }}"></a>
-                            </template>
+                        <!-- TABS -->
+                         <div
+                            x-ref="labels"
+                            {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["tabs", $tabsClass, "tabs-border" => !$box && !$lift , "tabs-lift" => $lift , "tabs-box" => $box]) }}
+                         >
                         </div>
 
-                        <!-- TAB CONTENT -->
-                        <div role="tablist" {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["block"]) }}>
+                        <!--  CONTENTS -->
+                         <div x-ref="contents"></div>
+
+                         <div data-tab x-ref="slot">
                             {{ $slot }}
-                        </div>
+                         </div>
                     </div>
                 HTML;
     }
