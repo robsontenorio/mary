@@ -4,7 +4,6 @@ namespace Mary\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Component;
 
 class Tab extends Component
@@ -18,60 +17,45 @@ class Tab extends Component
         public ?string $icon = null,
         public bool $disabled = false,
         public bool $hidden = false,
+        public ?string $badge = null,
+        public ?string $badgeClass = null,
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
-    }
-
-    public function tabLabel(string $label): string
-    {
-        $fromLabel = $this->label ? $this->label : $label;
-
-        if ($this->icon) {
-            return Blade::render("
-                <x-mary-icon name='" . $this->icon . "' @class([
-                'me-2',
-                'whitespace-nowrap',
-                'text-base-content/30 cursor-not-allowed' => '$this->disabled'
-                ])>
-                    <x-slot:label>
-                        {$fromLabel}
-                    </x-slot:label>
-                </x-mary-icon>
-            ");
-        }
-
-        return Blade::render("
-            <div @class([
-                'whitespace-nowrap',
-                'text-base-content/30 cursor-not-allowed' => '$this->disabled'
-                ])>
-                {$fromLabel}
-            </div>
-        ");
     }
 
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-                    <a
-                        class="hidden tab"
-                        :class="{ 'tab-active': selected === '{{ $name }}' }"
-                        data-name="{{ $name }}"
-                        x-init="
-                                const newItem = { name: '{{ $name }}', label: {{ json_encode($tabLabel($label)) }}, disabled: {{ $disabled ? 'true' : 'false' }}, hidden: {{ $hidden ? 'true' : 'false' }} };
-                                const index = tabs.findIndex(item => item.name === '{{ $name }}');
-                                index !== -1 ? tabs[index] = newItem : tabs.push(newItem);
+                    @aware(['lift', 'box', 'labelClass', 'contentClass', 'activeClass'])
 
-                                Livewire.hook('morph.removed', ({el}) => {
-                                    if (el.getAttribute('data-name') == '{{ $name }}'){
-                                        tabs = tabs.filter(i => i.name !== '{{ $name }}')
-                                    }
-                                })
-                            "
-                    ></a>
+                    <div>
+                        <label
+                            @class([
+                                "tab flex flex-nowrap items-center gap-3 whitespace-nowrap px-4",
+                                $labelClass,
+                                "hidden" => $hidden,
+                                "tab-disabled" => $disabled
+                             ])
+                            :class="{ '{{ $activeClass }}': selected === '{{ $name }}' }"
+                        >
+                            <input id="{{ ($id ?? $uuid).$name }}" type="radio" name="{{ ($id ?? $uuid).$name }}" value="{{ $name }}" x-model="selected" />
 
-                    <div x-show="selected === '{{ $name }}'" role="tabpanel" {{ $attributes->class("tab-content py-5 px-1") }}>
-                        {{ $slot }}
+                            @if($icon)
+                              <x-mary-icon :name="$icon"  />
+                            @endif
+
+                            {{ $label }}
+
+                            @if ($badge)
+                                <x-badge :value="$badge" @class(["badge-sm badge-soft", $badgeClass]) />
+                            @endif
+                        </label>
+                        <div
+                            x-show="selected == '{{ $name }}'"
+                            {{ $attributes->class(["tab-content py-5 px-3 border-t-base-content/10 block rounded-none", $contentClass]) }}
+                         >
+                            {{ $slot }}
+                        </div>
                     </div>
                 HTML;
     }
