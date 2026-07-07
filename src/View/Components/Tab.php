@@ -31,7 +31,7 @@ class Tab extends Component
                     <div>
                         <label
                             @class([
-                                "tab flex gap-3 flex-nowrap whitespace-nowrap px-5",
+                                "tab flex flex-nowrap items-center gap-3 whitespace-nowrap px-4",
                                 $labelClass,
                                 "hidden" => $hidden,
                                 "tab-disabled" => $disabled
@@ -47,12 +47,12 @@ class Tab extends Component
                             {{ $label }}
 
                             @if ($badge)
-                                <x-badge :value="$badge" @class(["badge-sm badge-primary", $badgeClass]) />
+                                <x-badge :value="$badge" @class(["badge-sm badge-soft", $badgeClass]) />
                             @endif
                         </label>
                         <div
                             x-show="selected == '{{ $name }}'"
-                            {{ $attributes->class(["tab-content bg-base-100 py-5 px-3 border-t-base-300 block rounded-none", $contentClass, "px-5 border-base-300 rounded!" => $lift || $box]) }}
+                            {{ $attributes->class(["tab-content py-5 px-3 border-t-base-content/10 block rounded-none", $contentClass]) }}
                          >
                             {{ $slot }}
                         </div>

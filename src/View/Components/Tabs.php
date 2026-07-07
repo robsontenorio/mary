@@ -12,8 +12,6 @@ class Tabs extends Component
 
     public function __construct(
         public ?string $id = null,
-        public bool $box = false,
-        public bool $lift = false,
         public ?string $labelClass = null,
         public ?string $activeClass = null,
         public ?string $contentClass = null,
@@ -30,21 +28,30 @@ class Tabs extends Component
                         x-class="scrollbar-none flex-nowrap overflow-x-auto"
                         x-init="
                              Array.from($refs.slot.children).forEach(tab => {
-                                 $refs.labels.appendChild(tab.querySelector('label'));
-                                 $refs.contents.appendChild(tab.querySelector('.tab-content'));
+                                const label = tab.querySelector('label');
+                                const content = tab.querySelector('.tab-content');
+
+                                if (label) {
+                                    $refs.labels.appendChild(label);
+                                }
+
+                                if (content) {
+                                    $refs.contents.appendChild(content);
+                                }
                             });
                         "
                     >
                         <!-- TABS -->
                          <div
                             x-ref="labels"
-                            {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["tabs", $tabsClass, "tabs-border" => !$box && !$lift , "tabs-lift" => $lift , "tabs-box" => $box]) }}
+                            {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["tabs tabs-border", $tabsClass]) }}
                          >
                         </div>
 
                         <!--  CONTENTS -->
                          <div x-ref="contents"></div>
 
+                        <!-- ORIGINAL DATA -->
                          <div data-tab x-ref="slot">
                             {{ $slot }}
                          </div>
