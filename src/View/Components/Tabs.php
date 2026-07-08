@@ -31,7 +31,7 @@ class Tabs extends Component
                                 Livewire.hook('morphed', ({ el }) => this.refresh() );
                             },
                             refresh() {
-                                Array.from($refs.slot.children).forEach(tab => {
+                                Array.from($refs.slot?.children ?? [])?.forEach(tab => {
                                     const label = tab.querySelector('label');
                                     const content = tab.querySelector('.tab-content');
 
