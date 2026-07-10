@@ -69,7 +69,7 @@ class Collapse extends Component
                         >
                             {{ $heading }}
                         </div>
-                        <div {{ $content->attributes->merge(["class" => "collapse-content text-sm"]) }} wire:key="content-{{ $uuid }}">
+                        <div {{ $content->attributes->merge(["class" => "collapse-content"]) }} wire:key="content-{{ $uuid }}">
                             @if($separator)
                                 <hr class="mb-3 border-t-[length:var(--border)] border-base-content/10" />
 
