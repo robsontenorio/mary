@@ -145,7 +145,7 @@ class Tags extends Component
                             @if($attributes->get('required'))
                                 <span class="text-error">*</span>
                             @endif
-                            
+
                             {{-- INPUT POPOVER --}}
                             @if($popover)
                                 <x-mary-popover offset="5" position="top-start">
@@ -163,7 +163,13 @@ class Tags extends Component
                     <label @class(["floating-label" => $label && $inline])>
                         {{-- FLOATING LABEL--}}
                         @if ($label && $inline)
-                            <span class="font-semibold">{{ $label }}</span>
+                            <span class="font-semibold">
+                                {{ $label }}
+
+                                @if($attributes->get('required'))
+                                    <span class="text-error">*</span>
+                                @endif
+                            </span>
                         @endif
 
                         <div @class(["w-full", "join" => $prepend || $append])>
@@ -283,6 +289,6 @@ class Tags extends Component
                     @endif
                 </fieldset>
             </div>
-        BLADE;
+            BLADE;
     }
 }
