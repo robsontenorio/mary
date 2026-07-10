@@ -47,7 +47,7 @@ class Tab extends Component
                             {{ $label }}
 
                             @if ($badge)
-                                <x-badge :value="$badge" @class(["badge-sm badge-soft", $badgeClass]) />
+                                <x-mary-badge :value="$badge" @class(["badge-sm badge-soft", $badgeClass]) />
                             @endif
                         </label>
                         <div
