@@ -37,7 +37,7 @@ class MenuSub extends Component
 
                 @if ($slot->isNotEmpty())
                 <li
-                @class(['menu-disabled' => $disabled])
+                @class(['menu-disabled' => $disabled, 'static!' => $horizontal])
                     x-data="
                     {
                         show: @if(($submenuActive || $open) && !$horizontal) true @else false @endif,
@@ -59,7 +59,11 @@ class MenuSub extends Component
                         @if($submenuActive && !$horizontal) open @endif
                         @if($horizontal) @click.outside="show = false" @endif
                     >
-                        <summary @click.prevent="toggle()" @class(["hover:text-inherit px-4 py-1.5 my-0.5 text-inherit", $activeBgColor => $submenuActive])>
+                        <summary
+                            @click.prevent="toggle()"
+                            @class(["hover:text-inherit px-4 py-1.5 my-0.5 text-inherit", $activeBgColor => $submenuActive])
+                            @if($horizontal) x-ref="sub" @endif
+                        >
                             @if($icon)
                                 <x-mary-icon :name="$icon" @class(['inline-flex my-0.5', $iconClasses]) />
                             @endif
@@ -67,7 +71,7 @@ class MenuSub extends Component
                             <span class="mary-hideable whitespace-nowrap truncate">{{ $title }}</span>
                         </summary>
 
-                        <ul @class(["mary-hideable",  "z-10 mt-1" => $horizontal])>
+                        <ul @class(["mary-hideable",  "z-10 mt-1" => $horizontal]) @if($horizontal) x-anchor.bottom-start="$refs.sub" @endif>
                             {{ $slot }}
                         </ul>
                     </details>
