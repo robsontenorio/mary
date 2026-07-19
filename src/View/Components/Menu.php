@@ -26,7 +26,7 @@ class Menu extends Component
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
-                <ul {{ $attributes->class(["menu w-full", "menu-horizontal" => $horizontal]) }} >
+                <ul {{ $attributes->class(["menu w-full", "menu-horizontal flex-nowrap overflow-x-auto scrollbar-none" => $horizontal]) }} >
                     @if($title)
                         <li class="menu-title text-inherit uppercase">
                             <div class="flex items-center gap-2">
