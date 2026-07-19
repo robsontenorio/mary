@@ -29,7 +29,7 @@ class MenuSub extends Component
         }
 
         return <<<'BLADE'
-                @aware(['activeBgColor' => 'bg-base-300'])
+                @aware(['horizontal' => false, 'activeBgColor' => 'bg-base-300'])
 
                 @php
                     $submenuActive = Str::contains($slot, 'mary-active-menu');
@@ -40,7 +40,7 @@ class MenuSub extends Component
                 @class(['menu-disabled' => $disabled])
                     x-data="
                     {
-                        show: @if($submenuActive || $open) true @else false @endif,
+                        show: @if(($submenuActive || $open) && !$horizontal) true @else false @endif,
                         toggle(){
                             // From parent Sidebar
                             if (this.collapsed) {
@@ -53,7 +53,12 @@ class MenuSub extends Component
                         }
                     }"
                 >
-                    <details :open="show" @if($submenuActive) open @endif @click.stop>
+                    <details
+                        :open="show"
+                        @click.stop
+                        @if($submenuActive && !$horizontal) open @endif
+                        @if($horizontal) @click.outside="show = false" @endif
+                    >
                         <summary @click.prevent="toggle()" @class(["hover:text-inherit px-4 py-1.5 my-0.5 text-inherit", $activeBgColor => $submenuActive])>
                             @if($icon)
                                 <x-mary-icon :name="$icon" @class(['inline-flex my-0.5', $iconClasses]) />
@@ -62,7 +67,7 @@ class MenuSub extends Component
                             <span class="mary-hideable whitespace-nowrap truncate">{{ $title }}</span>
                         </summary>
 
-                        <ul class="mary-hideable">
+                        <ul @class(["mary-hideable",  "z-10 mt-1" => $horizontal])>
                             {{ $slot }}
                         </ul>
                     </details>
