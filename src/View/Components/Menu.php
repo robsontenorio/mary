@@ -18,6 +18,7 @@ class Menu extends Component
         public ?bool $separator = false,
         public ?bool $activateByRoute = false,
         public ?string $activeBgColor = 'bg-base-300',
+        public ?bool $horizontal = false
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
@@ -25,7 +26,7 @@ class Menu extends Component
     public function render(): View|Closure|string
     {
         return <<<'BLADE'
-                <ul {{ $attributes->class(["menu w-full"]) }} >
+                <ul {{ $attributes->class(["menu w-full", "menu-horizontal flex-nowrap overflow-x-auto scrollbar-none" => $horizontal]) }} >
                     @if($title)
                         <li class="menu-title text-inherit uppercase">
                             <div class="flex items-center gap-2">

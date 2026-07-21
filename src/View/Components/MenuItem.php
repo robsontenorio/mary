@@ -80,7 +80,7 @@ class MenuItem extends Component
         }
 
         return <<<'BLADE'
-                @aware(['activateByRoute' => false, 'activeBgColor' => 'bg-base-300'])
+                @aware(['horizontal' => false, 'activateByRoute' => false, 'activeBgColor' => 'bg-base-300'])
 
                 <li @class(['menu-disabled' => $disabled])>
                     <a
@@ -120,7 +120,7 @@ class MenuItem extends Component
                         @endif
 
                         @if($title || $slot->isNotEmpty())
-                        <span class="mary-hideable whitespace-nowrap truncate">
+                        <span @class(["mary-hideable whitespace-nowrap", "truncate" => !$horizontal])>
                             @if($title)
                                 {{ $title }}
 
