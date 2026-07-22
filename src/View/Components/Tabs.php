@@ -33,14 +33,12 @@ class Tabs extends Component
                             refresh() {
                                 Array.from($refs.slot?.children ?? [])?.forEach(tab => {
                                     const label = tab.querySelector('label');
-                                    const content = tab.querySelector('.tab-content');
 
                                     if (label) {
-                                        $refs.labels.appendChild(label);
-                                    }
-
-                                    if (content) {
-                                        $refs.contents.appendChild(content);
+                                        $nextTick(() => {
+                                            $refs.labels.appendChild(label.cloneNode(true));
+                                            label.hidden = true
+                                        });
                                     }
                                 });
                             }
@@ -50,11 +48,8 @@ class Tabs extends Component
                         <!-- TABS -->
                          <div x-ref="labels" {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["tabs tabs-border", $tabsClass]) }}></div>
 
-                        <!--  CONTENTS -->
-                         <div x-ref="contents"></div>
-
                         <!-- ORIGINAL DATA -->
-                         <div data-tab x-ref="slot">
+                         <div x-ref="slot">
                             {{ $slot }}
                          </div>
                     </div>
