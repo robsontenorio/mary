@@ -29,8 +29,8 @@ class Tab extends Component
                     @aware(['uuid', 'labelClass', 'contentClass', 'activeClass'])
 
                     <div>
-                       <div wire:key="{{ $uuid }}-tab-{{ $name }}">
-                            <template x-teleport="#{{$uuid}}-labels">
+                       <div wire:key="{{ $uuid() }}-tab-{{ $name }}">
+                            <template x-teleport="#{{ $uuid() }}-labels">
                                 <label
                                     @class([
                                         "tab flex flex-nowrap items-center gap-3 whitespace-nowrap px-4",
