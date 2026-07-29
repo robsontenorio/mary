@@ -20,6 +20,11 @@ class Tabs extends Component
         $this->uuid = "mary" . md5(serialize($this)) . $id;
     }
 
+    public function uuid(): string
+    {
+        return $this->uuid.$this->attributes->wire('model')->value();
+    }
+
     public function render(): View|Closure|string
     {
         return <<<'HTML'
@@ -28,7 +33,7 @@ class Tabs extends Component
                         x-class="scrollbar-none flex-nowrap overflow-x-auto"
                     >
                         <!-- TABS -->
-                         <div id="{{ $uuid }}-labels" wire:ignore {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["tabs tabs-border", $tabsClass]) }}></div>
+                         <div id="{{ $uuid() }}-labels" wire:ignore {{ $attributes->except(['wire:model', 'wire:model.live'])->class(["tabs tabs-border", $tabsClass]) }}></div>
 
                         <!-- ORIGINAL DATA -->
                          <div>
