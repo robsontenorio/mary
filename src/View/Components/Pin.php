@@ -47,6 +47,15 @@ class Pin extends Component
                                 value: @entangle($attributes->wire('model')),
                                 inputs: [],
                                 init() {
+                                    // Sync inputs when value changes externally (e.g. server-side reset/prefill)
+                                    // Guarded to avoid re-writing inputs when the change originated from handlePin() itself.
+                                    this.$watch('value', (value) => {
+                                        if (value === this.inputs.join('')) {
+                                            return
+                                        }
+                                        this.inputs = value ? value.split('').slice(0, {{ $size }}) : []
+                                    })
+            
                                     // Copy & Paste
                                     document.getElementById('pin{{ $uuid }}').addEventListener('paste', (e) => {
                                         const paste = (e.clipboardData || window.clipboardData).getData('text');
