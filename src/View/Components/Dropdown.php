@@ -3,6 +3,7 @@
 namespace Mary\View\Components;
 
 use Closure;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
@@ -19,10 +20,15 @@ class Dropdown extends Component
         public ?bool $noXAnchor = false,
         public ?bool $scroll = false,
         public ?string $maxHeight = 'max-h-96',
+        public ?bool $popover = false,
         // Slots
         public mixed $trigger = null
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
+
+        if ($this->popover && $this->noXAnchor) {
+            throw new Exception("Cannot use `popover` combined with `no-x-anchor`.");
+        }
     }
 
     public function render(): View|Closure|string
@@ -59,10 +65,17 @@ class Dropdown extends Component
                         'dropdown-content' => $noXAnchor,
                         $maxHeight => $scroll,
                         'overflow-y-auto' => $scroll,
+                        'inset-auto m-0 [&[popover]_.mary-hideable]:!block' => $popover,
                     ])
                     @click="open = false"
+                    @if($popover)
+                        popover
+                        x-ref="content"
+                        @toggle="open = ($event.newState === 'open')"
+                        x-effect="open ? $refs.content.showPopover() : $refs.content.hidePopover()"
+                    @endif
                     @if(!$noXAnchor)
-                        x-anchor.{{ $right ? 'bottom-end' : 'bottom-start' }}="$refs.button"
+                        x-anchor{{ $popover ? '.fixed' : '' }}.{{ $right ? 'bottom-end' : 'bottom-start' }}="$refs.button"
                     @endif
                 >
                     <div wire:key="dropdown-slot-{{ $uuid }}">
