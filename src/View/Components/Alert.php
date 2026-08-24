@@ -38,7 +38,7 @@ class Alert extends Component
                 <div
                     wire:key="{{ $uuid }}"
                     {{ $attributes->whereDoesntStartWith('class') }}
-                    {{ $attributes->class(['alert rounded-md', 'shadow-md' => $shadow])}}
+                    {{ $attributes->class(['alert', 'shadow-md' => $shadow])}}
                     x-data="{ show: true }" x-show="show"
                 >
                     @if($icon)
