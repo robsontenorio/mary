@@ -139,7 +139,7 @@ class Choices extends Component
                             get selectedOptions() {
                                 return this.isSingle
                                     ? this.options.filter(i => i.{{ $optionValue }} == this.selection)
-                                    : this.selection.map(i => this.options.filter(o => o.{{ $optionValue }} == i)[0])
+                                    : this.selection?.map(i => this.options.filter(o => o.{{ $optionValue }} == i)[0])
                             },
                             get noResults() {
                                 if (!this.isSearchable || this.$refs.searchInput.value == '') {
@@ -148,15 +148,15 @@ class Choices extends Component
 
                                 return this.isSingle
                                         ? (this.selection && this.options.length  == 1) || (!this.selection && this.options.length == 0)
-                                        : this.options.length <= this.selection.length
+                                        : this.options.length <= this.selection?.length
                             },
                             get isAllSelected() {
-                                return this.options.length == this.selection.length
+                                return this.options.length == this.selection?.length
                             },
                             get isSelectionEmpty() {
                                 return this.isSingle
                                     ? this.selection == null || this.selection == ''
-                                    : this.selection.length == 0
+                                    : this.selection?.length == 0
                             },
                             selectAll() {
                                 this.selection = this.options.map(i => i.{{ $optionValue }})
@@ -188,7 +188,7 @@ class Choices extends Component
                             isActive(id) {
                                 return this.isSingle
                                     ? this.selection == id
-                                    : this.selection.includes(id)
+                                    : this.selection?.includes(id)
                             },
                             toggle(id, keepOpen = false) {
                                 if (this.isReadonly || this.isDisabled) {
@@ -199,9 +199,9 @@ class Choices extends Component
                                     this.selection = id
                                     this.focused = false
                                 } else {
-                                    this.selection.includes(id)
-                                        ? this.selection = this.selection.filter(i => i != id)
-                                        : this.selection.push(id)
+                                    this.selection?.includes(id)
+                                        ? this.selection = this.selection?.filter(i => i != id)
+                                        : this.selection?.push(id)
                                 }
 
                                 this.dispatchChangeEvent({ value: this.selection })
