@@ -83,10 +83,10 @@ class Table extends Component
     public function getAllIds(): array
     {
         if (is_array($this->rows)) {
-            return collect($this->rows)->pluck($this->selectableKey)->all();
+            return collect($this->rows)->when($this->selectableCondition, fn ($query) => $query->where($this->selectableCondition, true))->pluck($this->selectableKey)->all();
         }
 
-        return $this->rows->pluck($this->selectableKey)->all();
+        return $this->rows->when($this->selectableCondition, fn ($query) => $query->where($this->selectableCondition, true))->pluck($this->selectableKey)->all();
     }
 
     // Check if header is sortable
