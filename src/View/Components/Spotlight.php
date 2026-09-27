@@ -64,12 +64,12 @@ class Spotlight extends Component
                             },
                             show() {
                                 this.open = true;
-                                $refs.marySpotlightRef.showModal();
+                                $refs.marySpotlightRef?.showModal();
                             },
                             focus() {
                                 setTimeout(() => {
-                                    this.$refs.spotSearch.focus();
-                                    this.$refs.spotSearch.select();
+                                    this.$refs.spotSearch?.focus();
+                                    this.$refs.spotSearch?.select();
                                 }, 100)
                             },
                             updateQuery(query){
@@ -88,7 +88,7 @@ class Spotlight extends Component
                                 this.debounceTimer = setTimeout(() => fn(), waitTime)
                             },
                             async search() {
-                                $refs.spotSearch.focus()
+                                $refs.spotSearch?.focus()
 
                                 if (this.value == '') {
                                     this.results = []

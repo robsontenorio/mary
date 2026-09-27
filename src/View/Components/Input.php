@@ -109,7 +109,13 @@ class Input extends Component
                     <label @class(["floating-label" => $label && $inline])>
                         {{-- FLOATING LABEL--}}
                         @if ($label && $inline)
-                            <span class="font-semibold">{{ $label }}</span>
+                            <span class="font-semibold">
+                                {{ $label }}
+
+                                @if($attributes->get('required'))
+                                    <span class="text-error">*</span>
+                                @endif
+                            </span>
                         @endif
 
                         <div @class(["w-full", "join" => $prepend || $append])>

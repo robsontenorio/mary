@@ -14,7 +14,8 @@ class ImageGallery extends Component
         public array $images,
         public ?string $id = null,
         public ?bool $withArrows = false,
-        public ?bool $withIndicators = false
+        public ?bool $withIndicators = false,
+        public ?string $imgCss = null
 
     ) {
         $this->uuid = "mary" . md5(serialize($this)) . $id;
@@ -40,7 +41,7 @@ class ImageGallery extends Component
                     <div id="gallery-{{ $uuid }}" {{ $attributes->class("pswp-gallery pswp-gallery--single-column carousel") }} >
                         @foreach($images as $image)
                             <a
-                                class="carousel-item"
+                                class="carousel-item h-full"
                                 href="{{ $image }}"
                                 target="_blank"
                                 data-pswp-width="200"
@@ -48,7 +49,7 @@ class ImageGallery extends Component
                             >
                                 <img
                                     src="{{ $image }}"
-                                    class="object-cover hover:opacity-70"
+                                    @class(["object-cover h-full hover:opacity-70", $imgCss])
                                     onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)"
                                 />
                             </a>

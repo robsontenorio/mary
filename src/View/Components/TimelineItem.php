@@ -50,7 +50,8 @@ class TimelineItem extends Component
                                 "w-4 h-4 -mb-5 -ms-[41px] $bulletPendingClass rounded-full",
                                 $bulletActiveClass => !$pending,
                                 "!-ms-[39px]" => $last,
-                                "w-8 h-8 !-ms-[48px] -mb-7" => $icon
+                                "w-8 h-8 !-ms-[48px] -mb-7" => $icon,
+                                "-ms-[46px]!" => $last && $icon,
                              ])
                         >
                             <!-- ICON -->
