@@ -235,8 +235,8 @@ class Tags extends Component
                                         @input="focus(); resize();"
                                         @focus="focus()"
                                         @click.outside="clear()"
-                                        @keydown.enter.prevent="push()"
-                                        @keyup.prevent="if (event.key === ',') { push() }"
+                                        @keydown.enter.prevent="if (! event.isComposing && event.keyCode !== 229) { push() }"
+                                        @keyup.prevent="if (event.key === ',' && ! event.isComposing) { push() }"
                                     />
                                 </div>
 
