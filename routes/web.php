@@ -4,11 +4,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-Route::middleware('web')->prefix(config('mary.route_prefix'))->get('/mary/toogle-sidebar', function (Request $request) {
-    if ($request->collapsed) {
-        session(['mary-sidebar-collapsed' => $request->collapsed]);
+Route::middleware('web')->prefix(config('mary.route_prefix'))->post('/mary/toggle-sidebar', function (Request $request) {
+    if ($request->has('collapsed')) {
+        session(['mary-sidebar-collapsed' => $request->boolean('collapsed')]);
     }
-})->name('mary.toogle-sidebar');
+
+    return response()->noContent();
+})->name('mary.toggle-sidebar');
 
 Route::middleware('web')->prefix(config('mary.route_prefix'))->get('/mary/spotlight', function (Request $request) {
     return app()->make(config('mary.components.spotlight.class'))->search($request);
