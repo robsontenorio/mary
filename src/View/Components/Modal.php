@@ -16,6 +16,7 @@ class Modal extends Component
         public ?bool $separator = false,
         public ?bool $persistent = false,
         public ?bool $withoutTrapFocus = false,
+        public ?string $position = 'middle',
 
         // Slots
         public ?string $actions = null
@@ -27,7 +28,7 @@ class Modal extends Component
     {
         return <<<'HTML'
                 <dialog
-                    {{ $attributes->except('wire:model')->class(["modal"]) }}
+                    {{ $attributes->except('wire:model')->class(["modal", "modal-{$position}" => $position]) }}
 
                     @if($id)
                         id="{{ $id }}"
