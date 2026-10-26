@@ -10,6 +10,8 @@ class Main extends Component
 {
     public string $url;
 
+    public bool $collapsed;
+
     public function __construct(
 
         // Slots
@@ -22,7 +24,10 @@ class Main extends Component
         public ?string $collapseIcon = 'o-bars-3-bottom-right',
         public ?bool $collapsible = false,
     ) {
-        $this->url = route('mary.toogle-sidebar', absolute: false);
+        $this->url = route('mary.toggle-sidebar', absolute: false);
+
+        // Accepts booleans and legacy 'true' / 'false' strings; anything else is false
+        $this->collapsed = filter_var(session('mary-sidebar-collapsed', false), FILTER_VALIDATE_BOOLEAN);
     }
 
     public function render(): View|Closure|string
@@ -44,12 +49,42 @@ class Main extends Component
                         @if($sidebar)
                             <div
                                 x-data="{
-                                    collapsed: {{ session('mary-sidebar-collapsed', 'false') }},
-                                    collapseText: '{{ $collapseText }}',
+                                    collapsed: @js($collapsed),
+                                    saved: @js($collapsed),
+                                    saving: false,
                                     toggle() {
                                         this.collapsed = !this.collapsed;
-                                        fetch('{{ $url }}?collapsed=' + this.collapsed);
                                         this.$dispatch('sidebar-toggled', this.collapsed);
+                                        this.save();
+                                    },
+                                    save() {
+                                        if (this.saving || this.saved === this.collapsed) return;
+
+                                        const value = this.collapsed;
+                                        this.saving = true;
+
+                                        fetch(@js($url), {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Accept': 'application/json',
+                                                'X-CSRF-TOKEN': @js(csrf_token()),
+                                            },
+                                            body: JSON.stringify({ collapsed: value }),
+                                        })
+                                        .then(response => response.ok)
+                                        .catch(() => false)
+                                        .then(ok => {
+                                            this.saving = false;
+
+                                            if (ok) {
+                                                this.saved = value;
+                                                this.save();
+                                            } else if (this.collapsed !== this.saved) {
+                                                this.collapsed = this.saved;
+                                                this.$dispatch('sidebar-toggled', this.collapsed);
+                                            }
+                                        });
                                     }
                                 }"
 
@@ -67,8 +102,8 @@ class Main extends Component
                                     {{
                                         $sidebar->attributes->class([
                                             "flex flex-col !transition-all !duration-100 ease-out overflow-x-hidden overflow-y-auto h-screen",
-                                            "w-[62px] [&>*_summary::after]:hidden [&_.mary-hideable]:hidden [&_.display-when-collapsed]:block [&_.hidden-when-collapsed]:hidden" => session('mary-sidebar-collapsed') == 'true',
-                                            "w-[270px] [&>*_summary::after]:block [&_.mary-hideable]:block [&_.hidden-when-collapsed]:block [&_.display-when-collapsed]:hidden" => session('mary-sidebar-collapsed') != 'true',
+                                            "w-[62px] [&>*_summary::after]:hidden [&_.mary-hideable]:hidden [&_.display-when-collapsed]:block [&_.hidden-when-collapsed]:hidden" => $collapsed,
+                                            "w-[270px] [&>*_summary::after]:block [&_.mary-hideable]:block [&_.hidden-when-collapsed]:block [&_.display-when-collapsed]:hidden" => !$collapsed,
                                             "lg:h-[calc(100vh-65px)]" => $withNav
                                         ])
                                      }}
