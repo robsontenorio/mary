@@ -178,6 +178,23 @@ class DatePicker extends Component
                                             this.instance.close()
                                         }
                                     })
+
+                                    if (this.isRange) {
+                                        flatpickr.setDefaults({
+                                            onClose: [
+                                                function(selectedDates, dateStr, instance) {
+                                                    if (selectedDates.length == 2) {
+                                                        const startDate = instance.formatDate(selectedDates[0], instance.config.dateFormat);
+                                                        const endDate = instance.formatDate(selectedDates[1], instance.config.dateFormat);
+                                                        const separator = instance.l10n.rangeSeparator;
+
+                                                        // Update the input value to output both dates in order to trigger $watch value when the same date is selected
+                                                        instance.element.value = `${startDate}${separator}${endDate}`;
+                                                    }
+                                                }
+                                            ],
+                                        });
+                                    }
                                 },
                                 destroy() {
                                     if (this.instance) {
