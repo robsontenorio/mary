@@ -25,9 +25,14 @@ class Table extends Component
         public ?bool $noHeaders = false,
         public ?bool $selectable = false,
         public ?string $selectableKey = 'id',
+        public mixed $selectableCondition = null,
         public ?bool $expandable = false,
         public ?string $expandableKey = 'id',
         public mixed $expandableCondition = null,
+        public ?bool $sortable = false,
+        public ?string $sortableKey = 'id',
+        public mixed $sortableCondition = null,
+        public mixed $sortableMethod = null,
         public ?string $link = null,
         public ?bool $withPagination = false,
         public ?string $perPage = null,
@@ -78,10 +83,10 @@ class Table extends Component
     public function getAllIds(): array
     {
         if (is_array($this->rows)) {
-            return collect($this->rows)->pluck($this->selectableKey)->all();
+            return collect($this->rows)->when($this->selectableCondition, fn ($query) => $query->where($this->selectableCondition, true))->pluck($this->selectableKey)->all();
         }
 
-        return $this->rows->pluck($this->selectableKey)->all();
+        return $this->rows->when($this->selectableCondition, fn ($query) => $query->where($this->selectableCondition, true))->pluck($this->selectableKey)->all();
     }
 
     // Check if header is sortable
@@ -295,7 +300,11 @@ class Table extends Component
                                 <!-- EXPAND EXTRA HEADER -->
                                 @if($expandable)
                                     <th class="w-1"></th>
-                                 @endif
+                                @endif
+
+                                @if($sortable)
+                                    <th class="w-1"></th>
+                                @endif
 
                                 @foreach($headers as $header)
                                      @php
@@ -330,7 +339,11 @@ class Table extends Component
                         </thead>
 
                         <!-- ROWS -->
-                        <tbody>
+                        <tbody 
+                            @if($sortable)
+                                wire:sort="{{ $sortableMethod }}"
+                            @endif
+                        >
                             @foreach($rows as $k => $row)
                                 <tr
                                     wire:key="{{ $uuid }}-{{ $k }}"
@@ -342,13 +355,15 @@ class Table extends Component
                                     <!-- CHECKBOX -->
                                     @if($selectable)
                                         <td class="w-1">
-                                            <input
-                                                id="checkbox-{{ $uuid }}-{{ $k }}"
-                                                type="checkbox"
-                                                class="checkbox checkbox-sm"
-                                                value="{{ data_get($row, $selectableKey) }}"
-                                                x-model{{ $selectableModifier() }}="selection"
-                                                @click.stop="toggleCheck($el.checked, {{ json_encode($row) }})" />
+                                            @if(data_get($row, $selectableCondition))
+                                                <input
+                                                    id="checkbox-{{ $uuid }}-{{ $k }}"
+                                                    type="checkbox"
+                                                    class="checkbox checkbox-sm"
+                                                    value="{{ data_get($row, $selectableKey) }}"
+                                                    x-model{{ $selectableModifier() }}="selection"
+                                                    @click.stop="toggleCheck($el.checked, {{ json_encode($row) }})" />
+                                            @endif
                                         </td>
                                     @endif
 
@@ -363,7 +378,19 @@ class Table extends Component
                                                     @click="toggleExpand({{ $getKeyValue($row, 'expandableKey') }});" />
                                             @endif
                                         </td>
-                                     @endif
+                                    @endif
+
+                                    <!-- SORT ICON -->
+                                    @if($sortable)
+                                        <td class="w-1 pe-0 py-0">
+                                            @if(data_get($row, $sortableCondition))
+                                                <x-mary-icon
+                                                    wire:sort:item="{{ data_get($row, $sortableKey) }}"
+                                                    name="o-bars-3"
+                                                    class="cursor-grab active:cursor-grabbing p-2 w-8 h-8 bg-base-300 rounded-lg" />
+                                            @endif
+                                        </td>
+                                    @endif
 
                                     <!--  ROW VALUES -->
                                     @foreach($headers as $header)
